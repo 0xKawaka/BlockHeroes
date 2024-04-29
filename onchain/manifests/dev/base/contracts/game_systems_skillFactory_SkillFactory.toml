@@ -1,0 +1,9 @@
+kind = "DojoContract"
+class_hash = "0x50b6ae579ed6956b90c4d7c2d4b055f7a3a7c2b6c25b428573b1ef814221edb"
+original_class_hash = "0x50b6ae579ed6956b90c4d7c2d4b055f7a3a7c2b6c25b428573b1ef814221edb"
+base_class_hash = "0x0"
+abi = "manifests/dev/abis/base/contracts/game_systems_skillFactory_SkillFactory.json"
+reads = []
+writes = []
+computed = []
+name = "game::systems::skillFactory::SkillFactory"

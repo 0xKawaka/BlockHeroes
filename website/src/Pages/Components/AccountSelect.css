@@ -1,0 +1,41 @@
+.AccountSelectAndRegisterContainer {
+  padding-top: 5rem;
+}
+.AccountSelectAndRegisterButtonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.AccountSelectTitle {
+  font-size: 3rem;
+}
+
+.AccountSelectAccountList {
+  border-top: 0.2rem solid rgb(146, 113, 47);
+}
+
+.AccountSelectAccountContainer {
+  width: 50rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 0.2rem solid rgb(146, 113, 47);
+  border-top: none;
+  padding: 1.3rem;
+  cursor: pointer;
+}
+
+.AccountSelectRegisterButton {
+  font-size: 1.7rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: rgb(187, 148, 39);
+  font-weight: bold;
+  color: #ffffff;
+  cursor: pointer;
+  align-items: center;
+}

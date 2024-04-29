@@ -1,0 +1,9 @@
+kind = "DojoContract"
+class_hash = "0x2aa78cae3f7bf152d1fe09249f46baf5c964b2e519d449a47d507df952b162"
+original_class_hash = "0x2aa78cae3f7bf152d1fe09249f46baf5c964b2e519d449a47d507df952b162"
+base_class_hash = "0x0"
+abi = "manifests/dev/abis/base/contracts/game_systems_arenaBattles_ArenaBattles.json"
+reads = []
+writes = []
+computed = []
+name = "game::systems::arenaBattles::ArenaBattles"

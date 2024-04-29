@@ -1,0 +1,9 @@
+kind = "DojoContract"
+class_hash = "0x3bef97a424d27566fa7266215ec1f7c7fc9fe4b4ed0f0eb6979c2621696a47f"
+original_class_hash = "0x3bef97a424d27566fa7266215ec1f7c7fc9fe4b4ed0f0eb6979c2621696a47f"
+base_class_hash = "0x0"
+abi = "manifests/dev/abis/base/contracts/game_systems_battles_Battles.json"
+reads = []
+writes = []
+computed = []
+name = "game::systems::battles::Battles"

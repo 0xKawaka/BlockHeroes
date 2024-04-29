@@ -1,0 +1,15 @@
+.myHeroesContainer{
+  height: 100%;
+  /* background-color: rgb(24, 23, 23); */
+  color:white;
+  display: flex;
+  /* align-items:start; */
+}
+
+.myHeroesMenuAndHeroesListContainer {
+  width: 100%;
+}
+
+.myHeroesListContainer {
+  padding-top: 8rem;
+}

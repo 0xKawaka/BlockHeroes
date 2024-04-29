@@ -1,0 +1,15 @@
+.RuneMiniatureContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.RuneMiniatureRank {
+  position: absolute;
+}
+
+/* .RuneMiniatureImage {
+  width: 10rem;
+} */

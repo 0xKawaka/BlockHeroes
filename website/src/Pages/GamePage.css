@@ -1,0 +1,78 @@
+/* img {
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: -webkit-optimize-contrast;
+} */
+
+.GamePhaserContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 2rem;
+  /* font-weight: 520; */
+
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.GamePageContainer {
+  color: white;
+  height: 100%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+img {
+  pointer-events: none;
+}
+
+.ArrowBack {
+  pointer-events:all;
+}
+
+.GamePageTitleAndMenu {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.GamePageTitle {
+  height: 30rem;
+}
+
+.GamePageMenu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14rem;
+}
+
+.GamePageMenuButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.GamePageMenuButton {
+  cursor: pointer;
+}
+
+.GamePageMenuButtonIcon {
+  image-rendering: pixelated;
+  height: 13rem;
+}
+
+.ArrowBack {
+  cursor: pointer;
+  height: 5rem;
+}

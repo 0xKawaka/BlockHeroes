@@ -1,0 +1,415 @@
+[
+  {
+    "type": "impl",
+    "name": "DojoResourceProviderImpl",
+    "interface_name": "dojo::world::IDojoResourceProvider"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IDojoResourceProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "dojo_resource",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "WorldProviderImpl",
+    "interface_name": "dojo::world::IWorldProvider"
+  },
+  {
+    "type": "struct",
+    "name": "dojo::world::IWorldDispatcher",
+    "members": [
+      {
+        "name": "contract_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IWorldProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "world",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "dojo::world::IWorldDispatcher"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "SkillFactoryImpl",
+    "interface_name": "game::systems::skillFactory::ISkillFactory"
+  },
+  {
+    "type": "enum",
+    "name": "core::bool",
+    "variants": [
+      {
+        "name": "False",
+        "type": "()"
+      },
+      {
+        "name": "True",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "game::models::battle::entity::skill::damage::DamageType",
+    "variants": [
+      {
+        "name": "Flat",
+        "type": "()"
+      },
+      {
+        "name": "Percent",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "game::models::battle::entity::skill::damage::Damage",
+    "members": [
+      {
+        "name": "value",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "target",
+        "type": "core::bool"
+      },
+      {
+        "name": "aoe",
+        "type": "core::bool"
+      },
+      {
+        "name": "self",
+        "type": "core::bool"
+      },
+      {
+        "name": "damageType",
+        "type": "game::models::battle::entity::skill::damage::DamageType"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "game::models::battle::entity::skill::heal::HealType",
+    "variants": [
+      {
+        "name": "Flat",
+        "type": "()"
+      },
+      {
+        "name": "Percent",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "game::models::battle::entity::skill::heal::Heal",
+    "members": [
+      {
+        "name": "value",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "target",
+        "type": "core::bool"
+      },
+      {
+        "name": "aoe",
+        "type": "core::bool"
+      },
+      {
+        "name": "self",
+        "type": "core::bool"
+      },
+      {
+        "name": "healType",
+        "type": "game::models::battle::entity::skill::heal::HealType"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "game::models::battle::entity::skill::TargetType",
+    "variants": [
+      {
+        "name": "Ally",
+        "type": "()"
+      },
+      {
+        "name": "Enemy",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "game::models::battle::entity::skill::buff::BuffType",
+    "variants": [
+      {
+        "name": "SpeedUp",
+        "type": "()"
+      },
+      {
+        "name": "SpeedDown",
+        "type": "()"
+      },
+      {
+        "name": "AttackUp",
+        "type": "()"
+      },
+      {
+        "name": "AttackDown",
+        "type": "()"
+      },
+      {
+        "name": "DefenseUp",
+        "type": "()"
+      },
+      {
+        "name": "DefenseDown",
+        "type": "()"
+      },
+      {
+        "name": "Poison",
+        "type": "()"
+      },
+      {
+        "name": "Regen",
+        "type": "()"
+      },
+      {
+        "name": "Stun",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "game::models::battle::entity::skill::buff::Buff",
+    "members": [
+      {
+        "name": "buffType",
+        "type": "game::models::battle::entity::skill::buff::BuffType"
+      },
+      {
+        "name": "value",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "duration",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "target",
+        "type": "core::bool"
+      },
+      {
+        "name": "aoe",
+        "type": "core::bool"
+      },
+      {
+        "name": "self",
+        "type": "core::bool"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<game::models::battle::entity::skill::buff::Buff>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<game::models::battle::entity::skill::buff::Buff>"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "game::models::battle::entity::skill::Skill",
+    "members": [
+      {
+        "name": "name",
+        "type": "core::felt252"
+      },
+      {
+        "name": "cooldown",
+        "type": "core::integer::u8"
+      },
+      {
+        "name": "damage",
+        "type": "game::models::battle::entity::skill::damage::Damage"
+      },
+      {
+        "name": "heal",
+        "type": "game::models::battle::entity::skill::heal::Heal"
+      },
+      {
+        "name": "targetType",
+        "type": "game::models::battle::entity::skill::TargetType"
+      },
+      {
+        "name": "buffs",
+        "type": "core::array::Span::<game::models::battle::entity::skill::buff::Buff>"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "game::systems::skillFactory::ISkillFactory",
+    "items": [
+      {
+        "type": "function",
+        "name": "getSkill",
+        "inputs": [
+          {
+            "name": "name",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "game::models::battle::entity::skill::Skill"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getSkillSets",
+        "inputs": [
+          {
+            "name": "names",
+            "type": "core::array::Array::<core::felt252>"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<core::array::Array::<game::models::battle::entity::skill::Skill>>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getSkillSet",
+        "inputs": [
+          {
+            "name": "entityName",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<game::models::battle::entity::skill::Skill>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "initSkills",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "initSkillsBuffs",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "initHeroSkillNameSet",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "UpgradableImpl",
+    "interface_name": "dojo::components::upgradeable::IUpgradeable"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::components::upgradeable::IUpgradeable",
+    "items": [
+      {
+        "type": "function",
+        "name": "upgrade",
+        "inputs": [
+          {
+            "name": "new_class_hash",
+            "type": "core::starknet::class_hash::ClassHash"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::components::upgradeable::upgradeable::Upgraded",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "class_hash",
+        "type": "core::starknet::class_hash::ClassHash",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::components::upgradeable::upgradeable::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "Upgraded",
+        "type": "dojo::components::upgradeable::upgradeable::Upgraded",
+        "kind": "nested"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "game::systems::skillFactory::SkillFactory::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "UpgradeableEvent",
+        "type": "dojo::components::upgradeable::upgradeable::Event",
+        "kind": "nested"
+      }
+    ]
+  }
+]

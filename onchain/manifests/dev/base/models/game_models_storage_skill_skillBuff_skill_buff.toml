@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x464c800d6d2a24fe2e99f53f63e42a870a3bed8af7e4dadd45abd428a7a46fd"
+original_class_hash = "0x464c800d6d2a24fe2e99f53f63e42a870a3bed8af7e4dadd45abd428a7a46fd"
+abi = "manifests/dev/abis/base/models/game_models_storage_skill_skillBuff_skill_buff.json"
+name = "game::models::storage::skill::skillBuff::skill_buff"
+
+[[members]]
+name = "skillName"
+type = "felt252"
+key = true
+
+[[members]]
+name = "index"
+type = "u16"
+key = true
+
+[[members]]
+name = "buff"
+type = "Buff"
+key = false

@@ -1,0 +1,25 @@
+kind = "DojoModel"
+class_hash = "0x75a162c1d382e630203c9ad191f8209f1d38ae9bb72c9b1f5ff1348ce5958c8"
+original_class_hash = "0x75a162c1d382e630203c9ad191f8209f1d38ae9bb72c9b1f5ff1348ce5958c8"
+abi = "manifests/dev/abis/base/models/game_models_storage_level_levelInfos_level_infos.json"
+name = "game::models::storage::level::levelInfos::level_infos"
+
+[[members]]
+name = "map"
+type = "u16"
+key = true
+
+[[members]]
+name = "level"
+type = "u16"
+key = true
+
+[[members]]
+name = "energyCost"
+type = "u16"
+key = false
+
+[[members]]
+name = "enemiesCount"
+type = "u16"
+key = false

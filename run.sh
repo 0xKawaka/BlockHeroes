@@ -1,0 +1,1 @@
+gnome-terminal --title=api -- bash -c "cd api && node index; bash" && gnome-terminal --title=katana --tab -- bash -c "katana --disable-fee --invoke-max-steps 9000000; bash" && gnome-terminal --title=deploy --tab -- bash -c "cd onchain && sozo migrate; bash" && gnome-terminal --title=website -- bash -c "cd website && npm run start; bash"

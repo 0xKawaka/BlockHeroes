@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x22fb40e380e861d98ab4d24bd275eb5c1b8877aac8e3336228c48bfddf67ae4"
+original_class_hash = "0x22fb40e380e861d98ab4d24bd275eb5c1b8877aac8e3336228c48bfddf67ae4"
+abi = "manifests/dev/abis/base/models/game_models_account_heroes_heroes.json"
+name = "game::models::account::heroes::heroes"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "index"
+type = "u32"
+key = true
+
+[[members]]
+name = "hero"
+type = "Hero"
+key = false

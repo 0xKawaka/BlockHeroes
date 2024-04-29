@@ -1,0 +1,39 @@
+.LootPanelContainer {
+  font-size: 1.9rem;
+  display: flex;
+  flex-direction: row;
+  gap: 4rem;
+  align-items: center;
+}
+.LootCrystalsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 0.25rem solid rgb(51, 95, 160);
+  border-radius: 0.5rem;
+}
+
+.LootRuneContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 0.25rem solid;
+  border-radius: 0.5rem;
+  border-color: blueviolet;
+}
+
+.LootCrystalsContainer, .LootRuneContainer {
+  width: 8rem;
+  height: 8rem;
+}
+
+.LootCrystalsValue {
+  position: absolute;
+  bottom: 1.5rem;
+}
+
+.LootCrystalIcon {
+  width: 6.3rem;
+}

@@ -1,0 +1,9 @@
+kind = "DojoContract"
+class_hash = "0x6eeab87f5963f19463fe459bd22b8fdbf5c716dc4864f5ce9f8bf83e98bb95c"
+original_class_hash = "0x6eeab87f5963f19463fe459bd22b8fdbf5c716dc4864f5ce9f8bf83e98bb95c"
+base_class_hash = "0x0"
+abi = "manifests/dev/abis/base/contracts/game_systems_pvp_Pvp.json"
+reads = []
+writes = []
+computed = []
+name = "game::systems::pvp::Pvp"

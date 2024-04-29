@@ -1,0 +1,34 @@
+.RegisterContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5rem;
+}
+
+.RegisterInput {
+  font-size: 2.4rem;
+  width: 50rem;
+  height: 6rem;
+  border-radius: 0.5rem;
+  border: 0.2rem solid rgb(146, 113, 47);
+  background-color: rgb(204, 175, 117);
+  text-align: center;
+  outline: none;
+}
+
+.RegisterInputTitle {
+  font-family: RetroGaming;
+  font-size: 4.5rem;
+}
+
+.RegisterButton {
+  font-size: 2.3rem;
+  padding: 1.8rem;
+  border-radius: 0.5rem;
+  background-color: rgb(187, 148, 39);
+  font-weight: bold;
+  color: #ffffff;
+  cursor: pointer;
+  align-items: center;
+}

@@ -1,0 +1,291 @@
+[
+  {
+    "type": "impl",
+    "name": "DojoResourceProviderImpl",
+    "interface_name": "dojo::world::IDojoResourceProvider"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IDojoResourceProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "dojo_resource",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "WorldProviderImpl",
+    "interface_name": "dojo::world::IWorldProvider"
+  },
+  {
+    "type": "struct",
+    "name": "dojo::world::IWorldDispatcher",
+    "members": [
+      {
+        "name": "contract_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IWorldProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "world",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "dojo::world::IWorldDispatcher"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "LevelsImpl",
+    "interface_name": "game::systems::levels::ILevels"
+  },
+  {
+    "type": "enum",
+    "name": "core::bool",
+    "variants": [
+      {
+        "name": "False",
+        "type": "()"
+      },
+      {
+        "name": "True",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "game::models::hero::equippedRunes::EquippedRunes",
+    "members": [
+      {
+        "name": "isFirstRuneEquipped",
+        "type": "core::bool"
+      },
+      {
+        "name": "first",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "isSecondRuneEquipped",
+        "type": "core::bool"
+      },
+      {
+        "name": "second",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "isThirdRuneEquipped",
+        "type": "core::bool"
+      },
+      {
+        "name": "third",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "isFourthRuneEquipped",
+        "type": "core::bool"
+      },
+      {
+        "name": "fourth",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "isFifthRuneEquipped",
+        "type": "core::bool"
+      },
+      {
+        "name": "fifth",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "isSixthRuneEquipped",
+        "type": "core::bool"
+      },
+      {
+        "name": "sixth",
+        "type": "core::integer::u32"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "game::models::hero::Hero",
+    "members": [
+      {
+        "name": "id",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "name",
+        "type": "core::felt252"
+      },
+      {
+        "name": "level",
+        "type": "core::integer::u16"
+      },
+      {
+        "name": "rank",
+        "type": "core::integer::u16"
+      },
+      {
+        "name": "experience",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "runes",
+        "type": "game::models::hero::equippedRunes::EquippedRunes"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "game::systems::levels::ILevels",
+    "items": [
+      {
+        "type": "function",
+        "name": "init",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getEnemies",
+        "inputs": [
+          {
+            "name": "map",
+            "type": "core::integer::u16"
+          },
+          {
+            "name": "level",
+            "type": "core::integer::u16"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<game::models::hero::Hero>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getEnergyCost",
+        "inputs": [
+          {
+            "name": "map",
+            "type": "core::integer::u16"
+          },
+          {
+            "name": "level",
+            "type": "core::integer::u16"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u16"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "getEnemiesLevels",
+        "inputs": [
+          {
+            "name": "map",
+            "type": "core::integer::u16"
+          },
+          {
+            "name": "level",
+            "type": "core::integer::u16"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::array::Array::<core::integer::u16>"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "UpgradableImpl",
+    "interface_name": "dojo::components::upgradeable::IUpgradeable"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::components::upgradeable::IUpgradeable",
+    "items": [
+      {
+        "type": "function",
+        "name": "upgrade",
+        "inputs": [
+          {
+            "name": "new_class_hash",
+            "type": "core::starknet::class_hash::ClassHash"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::components::upgradeable::upgradeable::Upgraded",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "class_hash",
+        "type": "core::starknet::class_hash::ClassHash",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::components::upgradeable::upgradeable::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "Upgraded",
+        "type": "dojo::components::upgradeable::upgradeable::Upgraded",
+        "kind": "nested"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "game::systems::levels::Levels::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "UpgradeableEvent",
+        "type": "dojo::components::upgradeable::upgradeable::Event",
+        "kind": "nested"
+      }
+    ]
+  }
+]

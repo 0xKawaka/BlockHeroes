@@ -1,0 +1,55 @@
+kind = "DojoModel"
+class_hash = "0x12d664c52ac67053855af1d00b15bdff3c55d93956039a3155580ff8c321688"
+original_class_hash = "0x12d664c52ac67053855af1d00b15bdff3c55d93956039a3155580ff8c321688"
+abi = "manifests/dev/abis/base/models/game_models_account_account.json"
+name = "game::models::account::account"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "username"
+type = "felt252"
+key = false
+
+[[members]]
+name = "energy"
+type = "u16"
+key = false
+
+[[members]]
+name = "pvpEnergy"
+type = "u16"
+key = false
+
+[[members]]
+name = "crystals"
+type = "u32"
+key = false
+
+[[members]]
+name = "gems"
+type = "u32"
+key = false
+
+[[members]]
+name = "lastEnergyUpdateTimestamp"
+type = "u64"
+key = false
+
+[[members]]
+name = "lastPvpEnergyUpdateTimestamp"
+type = "u64"
+key = false
+
+[[members]]
+name = "runesCount"
+type = "u32"
+key = false
+
+[[members]]
+name = "heroesCount"
+type = "u32"
+key = false
