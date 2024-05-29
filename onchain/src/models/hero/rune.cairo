@@ -4,13 +4,15 @@ use starknet::{ContractAddress, get_block_timestamp};
 use debug::PrintTrait;
 
 use game::models::hero::rune::runeBonus::{RuneBonus, RuneBonusTrait, RuneBonusImpl};
-use game::models::baseStatistics;
 use game::models::account::{Account, AccountImpl};
-// use game::Contracts::EventEmitter::{IEventEmitterDispatcher, IEventEmitterDispatcherTrait};
+use game::models::events::{Event, RuneBonusEvent, RuneUpgraded};
+
+use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+
 use game::utils::random::rand32;
 
 
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 enum RuneType {
     First,
     Second,
@@ -20,7 +22,7 @@ enum RuneType {
     Sixth,
 }
 
-#[derive(starknet::Store, Copy, Drop, Serde, hash::LegacyHash, Introspect)]
+#[derive(Copy, Drop, Serde, hash::LegacyHash, Introspect)]
 enum RuneRarity {
     Common,
     Uncommon,
@@ -29,7 +31,7 @@ enum RuneRarity {
     Legendary,
 }
 
-#[derive(starknet::Store, Copy, Drop, Serde, PrintTrait, hash::LegacyHash, Introspect)]
+#[derive(Copy, Drop, Serde, PrintTrait, hash::LegacyHash, Introspect)]
 enum RuneStatistic {
     Health,
     Attack,
@@ -39,7 +41,7 @@ enum RuneStatistic {
     // CriticalDamage,
 }
 
-#[derive(starknet::Store, Introspect, Copy, Drop, Serde)]
+#[derive(Introspect, Copy, Drop, Serde)]
 struct Rune {
     id: u32,
     statistic: RuneStatistic,
@@ -156,7 +158,7 @@ fn getRandomIsPercent(seed: u64) -> bool {
 }
 
 trait RuneTrait {
-    fn upgrade(ref self: Rune, ref account: Account);
+    fn upgrade(ref self: Rune, world: IWorldDispatcher, ref account: Account);
     fn setEquippedBy(ref self: Rune, heroId: u32);
     fn unequip(ref self: Rune);
     fn isEquipped(self: Rune)-> bool;
@@ -171,7 +173,7 @@ trait RuneTrait {
 const maxRank: u32 = 16;
 
 impl RuneImpl of RuneTrait {
-    fn upgrade(ref self: Rune, ref account: Account) {
+    fn upgrade(ref self: Rune, world: IWorldDispatcher, ref account: Account) {
         assert(self.rank < maxRank, 'Rune already max rank');
 
         let crystalCost = self.computeCrystalCostUpgrade();
@@ -182,19 +184,47 @@ impl RuneImpl of RuneTrait {
         let seed = get_block_timestamp();
         if self.rank == 4 {
             self.rank4Bonus = runeBonus::new(getRandomStat(seed), getRandomIsPercent(seed));
-            // IEventEmitterDispatch.runeBonus(account.owner, self.id, self.rank, self.rank4Bonus.statisticToString(), self.rank4Bonus.isPercent);
+            emit!(world, (Event::RuneBonusEvent(RuneBonusEvent {
+                owner: account.owner,
+                id: self.id,
+                rank: self.rank,
+                procStat: self.rank4Bonus.statisticToString(),
+                isPercent: self.rank4Bonus.isPercent,
+            })));
         } else if self.rank == 8 {
             self.rank8Bonus = runeBonus::new(getRandomStat(seed), getRandomIsPercent(seed));
-            // IEventEmitterDispatch.runeBonus(account.owner, self.id, self.rank, self.rank8Bonus.statisticToString(), self.rank8Bonus.isPercent);
+            emit!(world, (Event::RuneBonusEvent(RuneBonusEvent {
+                owner: account.owner,
+                id: self.id,
+                rank: self.rank,
+                procStat: self.rank8Bonus.statisticToString(),
+                isPercent: self.rank8Bonus.isPercent,
+            })));
         } else if self.rank == 12 {
             self.rank12Bonus = runeBonus::new(getRandomStat(seed), getRandomIsPercent(seed));
-            // IEventEmitterDispatch.runeBonus(account.owner, self.id, self.rank, self.rank12Bonus.statisticToString(), self.rank12Bonus.isPercent);
+            emit!(world, (Event::RuneBonusEvent(RuneBonusEvent {
+                owner: account.owner,
+                id: self.id,
+                rank: self.rank,
+                procStat: self.rank12Bonus.statisticToString(),
+                isPercent: self.rank12Bonus.isPercent,
+            })));
         } else if self.rank == 16 {
             self.rank16Bonus = runeBonus::new(getRandomStat(seed), getRandomIsPercent(seed));
-            // IEventEmitterDispatch.runeBonus(account.owner, self.id, self.rank, self.rank16Bonus.statisticToString(), self.rank16Bonus.isPercent);
+            emit!(world, (Event::RuneBonusEvent(RuneBonusEvent {
+                owner: account.owner,
+                id: self.id,
+                rank: self.rank,
+                procStat: self.rank16Bonus.statisticToString(),
+                isPercent: self.rank16Bonus.isPercent,
+            })));
         }
-        // IEventEmitterDispatch.runeUpgraded(account.owner, self.id, self.rank, crystalCost);
-
+        emit!(world, (Event::RuneUpgraded(RuneUpgraded {
+            owner: account.owner,
+            id: self.id,
+            rank: self.rank,
+            crystalCost: crystalCost,
+        })));
     }
     fn setEquippedBy(ref self: Rune, heroId: u32) {
         assert(self.isEquipped() == false, 'Rune already equipped');

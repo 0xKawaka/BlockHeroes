@@ -8,7 +8,7 @@ use game::models::battle::entity::skill::damage::{DamageImpl};
 use game::models::battle::entity::skill::heal::{HealImpl};
 use game::models::battle::entity::{Entity, EntityTrait};
 use game::models::battle::{Battle, BattleImpl};
-// use game::Contracts::EventEmitter::{IEventEmitterDispatcher, IEventEmitterDispatcherTrait, IdAndValueEvent, SkillEventParams};
+use game::models::events::{IdAndValue, SkillEventParams};
 
 use game::utils::iVector::VecTrait;
 use game::utils::random::rand32;
@@ -19,7 +19,7 @@ use starknet::get_block_timestamp;
 use debug::PrintTrait;
 
 
-#[derive(starknet::Store, Copy, Drop, PartialEq, Serde, Introspect)]
+#[derive(Copy, Drop, PartialEq, Serde, Introspect)]
 enum TargetType {
     Ally,
     Enemy,
@@ -54,25 +54,21 @@ fn new(
 }
 
 trait SkillTrait {
-    // fn cast(self: Skill, skillIndex: u8, ref caster: Entity, ref battle: Battle) -> SkillEventParams;
-    // fn castOnTarget(self: Skill, skillIndex: u8, ref caster: Entity, ref target: Entity, ref battle: Battle) -> SkillEventParams;
-    // fn applyDamage(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValueEvent>;
-    // fn applyHeal(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValueEvent>;
-    fn cast(self: Skill, skillIndex: u8, ref caster: Entity, ref battle: Battle);
-    fn castOnTarget(self: Skill, skillIndex: u8, ref caster: Entity, ref target: Entity, ref battle: Battle);
+    fn cast(self: Skill, skillIndex: u8, ref caster: Entity, ref battle: Battle) -> SkillEventParams;
+    fn castOnTarget(self: Skill, skillIndex: u8, ref caster: Entity, ref target: Entity, ref battle: Battle) -> SkillEventParams;
+    fn applyDamage(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue>;
+    fn applyHeal(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue>;
     fn applyBuffs(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle);
-    fn applyDamage(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle);
-    fn applyHeal(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle);
     fn pickTarget(self: Skill, caster: Entity, ref battle: Battle) -> Entity;
     fn print(self: @Skill);
 }
 
 impl SkillImpl of SkillTrait {
-    fn cast(self: Skill, skillIndex: u8, ref caster: Entity, ref battle: Battle) {
+    fn cast(self: Skill, skillIndex: u8, ref caster: Entity, ref battle: Battle) -> SkillEventParams {
         let mut target = self.pickTarget(caster, ref battle);
         return self.castOnTarget(skillIndex, ref caster, ref target, ref battle);
     }
-    fn castOnTarget(self: Skill, skillIndex: u8, ref caster: Entity, ref target: Entity, ref battle: Battle) {
+    fn castOnTarget(self: Skill, skillIndex: u8, ref caster: Entity, ref target: Entity, ref battle: Battle) -> SkillEventParams {
         PrintTrait::print('caster');
         PrintTrait::print(caster.getIndex());
         PrintTrait::print('target');
@@ -96,7 +92,7 @@ impl SkillImpl of SkillTrait {
         if(target.index != caster.index) {
             battle.entities.set(target.getIndex(), target);
         }
-        // return SkillEventParams { casterId: caster.getIndex(), targetId: target.getIndex(), skillIndex, damages, heals};
+        return SkillEventParams { casterId: caster.getIndex(), targetId: target.getIndex(), skillIndex, damages, heals};
     }
     fn applyBuffs(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle) {
         let  mut i: u32 = 0;
@@ -109,14 +105,12 @@ impl SkillImpl of SkillTrait {
             i += 1;
         }
     }
-    fn applyDamage(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle) {
-        // return self.damage.apply(ref caster, ref target, ref battle);
-        self.damage.apply(ref caster, ref target, ref battle);
+    fn applyDamage(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue> {
+        return self.damage.apply(ref caster, ref target, ref battle);
         // TODO : ADD CRIT
     }
-    fn applyHeal(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle) {
-        // return self.heal.apply(ref caster, ref target, ref battle);
-        self.heal.apply(ref caster, ref target, ref battle);
+    fn applyHeal(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue> {
+        return self.heal.apply(ref caster, ref target, ref battle);
     }
     fn pickTarget(self: Skill, caster: Entity, ref battle: Battle) -> Entity {
         let mut seed = get_block_timestamp();

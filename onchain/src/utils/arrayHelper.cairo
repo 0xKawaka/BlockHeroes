@@ -1,3 +1,4 @@
+use core::array::ArrayTrait;
 use core::box::BoxTrait;
 use core::option::OptionTrait;
 use debug::PrintTrait;

@@ -1,4 +1,4 @@
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct TurnBar {
     entityIndex: u32,
     speed: u64,

@@ -1,6 +1,6 @@
 use game::models::battle::entity::statistics::{statModifier, statModifier::StatModifier, statModifier::StatModifierImpl};
 
-#[derive(starknet::Store, Drop, Copy, Serde, Introspect)]
+#[derive(Drop, Copy, Serde, Introspect)]
 struct Statistic {
     value: u64,
     malus: StatModifier,

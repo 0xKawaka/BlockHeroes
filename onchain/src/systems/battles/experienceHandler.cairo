@@ -1,11 +1,11 @@
-use game::systems::accounts::{IAccountsDispatcher, IAccountsDispatcherTrait};
-// use game::systems::EventEmitter::{IEventEmitterDispatcher, IEventEmitterDispatcherTrait};
+use game::systems::accounts::Accounts::AccountsImpl;
+use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 use starknet::ContractAddress;
 
 const levelZeroExperienceGiven: u32 = 100;
 const bonusExperiencePercentEnemyGivesPerLevel: u32 = 5;
 
-fn computeAndDistributeExperience(owner: ContractAddress, heroesIndexes: Array<u32>, enemyLevels: @Array<u16>, IAccountsDispatch: IAccountsDispatcher) {
+fn computeAndDistributeExperience(world: IWorldDispatcher, owner: ContractAddress, heroesIndexes: Array<u32>, enemyLevels: @Array<u16>) {
     let totalExperience = computeExperienceAmount(enemyLevels);
     let experiencePerHero = totalExperience / heroesIndexes.len();
     let mut i: u32 = 0;
@@ -13,7 +13,7 @@ fn computeAndDistributeExperience(owner: ContractAddress, heroesIndexes: Array<u
         if i == heroesIndexes.len() {
             break;
         }
-        IAccountsDispatch.addExperienceToHeroId(owner, *heroesIndexes[i], experiencePerHero);
+        AccountsImpl::addExperienceToHeroId(world, owner, *heroesIndexes[i], experiencePerHero);
         i += 1;
     };
 }

@@ -1,8 +1,8 @@
-// mod entityFactory;
-// mod pvp;
-// mod game;
-// mod battles;
-// mod arenaBattles;
+mod entityFactory;
+mod arena;
+mod game;
+mod settings;
+mod battles;
 mod accounts;
 mod skillFactory;
 mod levels;

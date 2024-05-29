@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x1b7dfa801354bd90f0103c5fed5bf7a0b60772b9e5c39663114066258768678"
+original_class_hash = "0x1b7dfa801354bd90f0103c5fed5bf7a0b60772b9e5c39663114066258768678"
+abi = "manifests/dev/abis/base/models/game_models_storage_battles_healthOnTurnProcStorage_battle_storage.json"
+name = "game::models::storage::battles::healthOnTurnProcStorage::battle_storage"
+
+[[members]]
+name = "owner"
+type = "u16"
+key = true
+
+[[members]]
+name = "entityIndex"
+type = "u16"
+key = false
+
+[[members]]
+name = "healthOnTurnProc"
+type = "HealthOnTurnProc"
+key = false

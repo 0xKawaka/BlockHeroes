@@ -1,34 +1,30 @@
 use game::models::battle::entity::skill::Skill;
+use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 
-#[dojo::interface]
 trait ISkillFactory {
-    fn getSkill(name: felt252) -> Skill;
-    fn getSkillSets(names: Array<felt252>) -> Array<Array<Skill>>;
-    fn getSkillSet(entityName: felt252) -> Array<Skill>;
-    fn initSkills();
-    fn initSkillsBuffs();
-    fn initHeroSkillNameSet();
+    fn getSkill(world: IWorldDispatcher, name: felt252) -> Skill;
+    fn getSkillSets(world: IWorldDispatcher, names: Array<felt252>) -> Array<Array<Skill>>;
+    fn getSkillSet(world: IWorldDispatcher, entityName: felt252) -> Array<Skill>;
+    fn initSkills(world: IWorldDispatcher);
+    fn initSkillsBuffs(world: IWorldDispatcher);
+    fn initHeroSkillNameSet(world: IWorldDispatcher);
 }
 
-#[dojo::contract]
 mod SkillFactory {
 
+    use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
     use core::array::ArrayTrait;
     use starknet::ContractAddress;
-    use game::utils::list::{List, ListTrait, ListImpl};
     use game::models::battle::entity::skill::SkillTrait;
     use game::models::hero::{Hero};
     use game::models::battle::{Entity, entity::EntityImpl, entity::EntityTrait, entity::AllyOrEnemy, entity::cooldowns::CooldownsTrait, entity::skillset};
     use game::models::battle::entity::{skill, skill::SkillImpl, skill::Skill, skill::TargetType, skill::damage, skill::heal, skill::buff, skill::buff::Buff, skill::buff::BuffType};
     use game::models::battle::entity::healthOnTurnProc::{HealthOnTurnProc, HealthOnTurnProcImpl};
-    use game::models::{baseStatistics, baseStatistics::BaseStatisticsImpl};
     use game::models::storage::skill::skillInfos::SkillInfos;
     use game::models::storage::skill::{skillNameSet::SkillNameSet, skillNameSet};
     use game::models::storage::skill::skillBuff::SkillBuff;
-    use debug::PrintTrait;
 
-    #[abi(embed_v0)]
-    impl SkillFactoryImpl of super::ISkillFactory<ContractState> {
+    impl SkillFactoryImpl of super::ISkillFactory {
         fn getSkill(world: IWorldDispatcher, name: felt252) -> Skill {
             let skillInfos = get!(world, name, (SkillInfos));
             let mut buffs: Array<Buff> = Default::default();
@@ -52,7 +48,7 @@ mod SkillFactory {
                     break;
                 }
                 let entityName = *names[i];
-                skills.append(self.getSkillSet(entityName));
+                skills.append(SkillFactoryImpl::getSkillSet(world, entityName));
                 i += 1;
             };
             return skills;
@@ -60,11 +56,12 @@ mod SkillFactory {
         fn getSkillSet(world: IWorldDispatcher, entityName: felt252) -> Array<Skill> {
             let skillNameSet = get!(world, entityName, (SkillNameSet));
             let mut skillSet: Array<Skill> = Default::default();
-            skillSet.append(self.getSkill(skillNameSet.skill0));
-            skillSet.append(self.getSkill(skillNameSet.skill1));
-            skillSet.append(self.getSkill(skillNameSet.skill2));
+            skillSet.append(SkillFactoryImpl::getSkill(world, skillNameSet.skill0));
+            skillSet.append(SkillFactoryImpl::getSkill(world, skillNameSet.skill1));
+            skillSet.append(SkillFactoryImpl::getSkill(world, skillNameSet.skill2));
             return skillSet;
         }
+        
         fn initSkills(world: IWorldDispatcher) {
             set!(
                 world,

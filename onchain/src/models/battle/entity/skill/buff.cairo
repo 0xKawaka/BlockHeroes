@@ -4,7 +4,7 @@ use game::utils::nullableVector::{NullableVectorImpl};
 use debug::PrintTrait;
 
 
-#[derive(starknet::Store, Copy, Drop, PartialEq, Serde, Introspect)]
+#[derive(Copy, Drop, PartialEq, Serde, Introspect)]
 enum BuffType {
     SpeedUp,
     SpeedDown,
@@ -17,7 +17,7 @@ enum BuffType {
     Stun,
 }
 
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct Buff {
     buffType: BuffType,
     value: u64,

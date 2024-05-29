@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x784aa3636075a5320f5037ee8d5de9deeb13535466c77a2fc9e06965e30173a"
+original_class_hash = "0x784aa3636075a5320f5037ee8d5de9deeb13535466c77a2fc9e06965e30173a"
+abi = "manifests/dev/abis/base/models/game_models_storage_arena_arenaAccount_arena_account.json"
+name = "game::models::storage::arena::arenaAccount::arena_account"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "rank"
+type = "u64"
+key = false
+
+[[members]]
+name = "lastClaimedRewards"
+type = "u64"
+key = false

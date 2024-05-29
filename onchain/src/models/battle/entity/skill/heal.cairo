@@ -4,10 +4,10 @@ use game::utils::iVector::VecTrait;
 
 use game::models::battle::{Battle, BattleTrait};
 use game::models::battle::entity::{Entity, EntityImpl, EntityTrait};
-// use game::Contracts::EventEmitter::IdAndValueEvent;
+use game::models::events::{IdAndValue};
 
 
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct Heal {
     value: u64,
     target: bool,
@@ -16,7 +16,7 @@ struct Heal {
     healType: HealType,
 }
 
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 enum HealType {
     Flat,
     Percent,
@@ -27,17 +27,15 @@ fn new(value: u64, target: bool, aoe: bool, self: bool, healType: HealType) -> H
 }
 
 trait HealTrait {
-    // fn apply(self: Heal, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValueEvent>;
-    fn apply(self: Heal, ref caster: Entity, ref target: Entity, ref battle: Battle);
+    fn apply(self: Heal, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue>;
     fn computeHeal(self: Heal, ref target: Entity) -> u64;
 }
 
 impl HealImpl of HealTrait {
-    fn apply(self: Heal, ref caster: Entity, ref target: Entity, ref battle: Battle) {
-        // let mut healByIdArray: Array<IdAndValueEvent> = Default::default();
+    fn apply(self: Heal, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue> {
+        let mut healByIdArray: Array<IdAndValue> = Default::default();
         if (self.value == 0) {
-            // return healByIdArray;
-            return;
+            return healByIdArray;
         }
 
         if (self.aoe) {
@@ -54,7 +52,7 @@ impl HealImpl of HealTrait {
                 if(caster.index == ally.getIndex()){
                     let heal = self.computeHeal(ref caster);
                     caster.takeHeal(heal);
-                    // healByIdArray.append(IdAndValueEvent { entityId: caster.index, value: heal });
+                    healByIdArray.append(IdAndValue { entityId: caster.index, value: heal });
                     i += 1;
                     continue;
                 }
@@ -62,14 +60,14 @@ impl HealImpl of HealTrait {
                 else if(target.index == ally.getIndex()) {
                     let heal = self.computeHeal(ref target);
                     target.takeHeal(heal);
-                    // healByIdArray.append(IdAndValueEvent { entityId: target.index, value: heal });
+                    healByIdArray.append(IdAndValue { entityId: target.index, value: heal });
                     i += 1;
                     continue;
                 }
 
                 let heal = self.computeHeal(ref ally);
                 ally.takeHeal(heal);
-                // healByIdArray.append(IdAndValueEvent { entityId: ally.index, value: heal });
+                healByIdArray.append(IdAndValue { entityId: ally.index, value: heal });
                 battle.entities.set(ally.index, ally);
                 i += 1;
             }
@@ -77,27 +75,26 @@ impl HealImpl of HealTrait {
             if (self.self) {
                 let heal = self.computeHeal(ref caster);
                 caster.takeHeal(heal);
-                // healByIdArray.append(IdAndValueEvent { entityId: caster.index, value: heal });
+                healByIdArray.append(IdAndValue { entityId: caster.index, value: heal });
             }
             if (self.target) {
                 // if already healed self and target is self, return
                 if(self.self && target.index == caster.index){
-                    // return healByIdArray;
-                    return;
+                    return healByIdArray;
                 }
                 if(target.index == caster.index) {
                     let heal = self.computeHeal(ref caster);
                     caster.takeHeal(heal);
-                    // healByIdArray.append(IdAndValueEvent { entityId: caster.index, value: heal });
+                    healByIdArray.append(IdAndValue { entityId: caster.index, value: heal });
                 }
                 else {
                     let heal = self.computeHeal(ref target);
                     target.takeHeal(heal);
-                    // healByIdArray.append(IdAndValueEvent { entityId: target.index, value: heal });
+                    healByIdArray.append(IdAndValue { entityId: target.index, value: heal });
                 }
             }
         }
-        // return healByIdArray;
+        return healByIdArray;
     }
     fn computeHeal(self: Heal, ref target: Entity) -> u64 {
         match self.healType {

@@ -1,4 +1,4 @@
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct StatModifier {
     value: u64,
     duration: u8,

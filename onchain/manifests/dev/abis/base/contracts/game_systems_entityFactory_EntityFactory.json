@@ -1,8 +1,84 @@
 [
   {
     "type": "impl",
+    "name": "DojoResourceProviderImpl",
+    "interface_name": "dojo::world::IDojoResourceProvider"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IDojoResourceProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "dojo_resource",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "WorldProviderImpl",
+    "interface_name": "dojo::world::IWorldProvider"
+  },
+  {
+    "type": "struct",
+    "name": "dojo::world::IWorldDispatcher",
+    "members": [
+      {
+        "name": "contract_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IWorldProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "world",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "dojo::world::IWorldDispatcher"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
     "name": "EntityFactoryImpl",
     "interface_name": "game::systems::entityFactory::IEntityFactory"
+  },
+  {
+    "type": "enum",
+    "name": "game::models::hero::rune::RuneStatistic",
+    "variants": [
+      {
+        "name": "Health",
+        "type": "()"
+      },
+      {
+        "name": "Attack",
+        "type": "()"
+      },
+      {
+        "name": "Defense",
+        "type": "()"
+      },
+      {
+        "name": "Speed",
+        "type": "()"
+      }
+    ]
   },
   {
     "type": "enum",
@@ -19,268 +95,156 @@
     ]
   },
   {
-    "type": "struct",
-    "name": "game::models::hero::equippedRunes::EquippedRunes",
-    "members": [
+    "type": "enum",
+    "name": "game::models::hero::rune::RuneRarity",
+    "variants": [
       {
-        "name": "isFirstRuneEquipped",
-        "type": "core::bool"
+        "name": "Common",
+        "type": "()"
       },
       {
-        "name": "first",
-        "type": "core::integer::u32"
+        "name": "Uncommon",
+        "type": "()"
       },
       {
-        "name": "isSecondRuneEquipped",
-        "type": "core::bool"
+        "name": "Rare",
+        "type": "()"
       },
       {
-        "name": "second",
-        "type": "core::integer::u32"
+        "name": "Epic",
+        "type": "()"
       },
       {
-        "name": "isThirdRuneEquipped",
-        "type": "core::bool"
+        "name": "Legendary",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "game::models::hero::rune::RuneType",
+    "variants": [
+      {
+        "name": "First",
+        "type": "()"
       },
       {
-        "name": "third",
-        "type": "core::integer::u32"
+        "name": "Second",
+        "type": "()"
       },
       {
-        "name": "isFourthRuneEquipped",
-        "type": "core::bool"
+        "name": "Third",
+        "type": "()"
       },
       {
-        "name": "fourth",
-        "type": "core::integer::u32"
+        "name": "Fourth",
+        "type": "()"
       },
       {
-        "name": "isFifthRuneEquipped",
-        "type": "core::bool"
+        "name": "Fifth",
+        "type": "()"
       },
       {
-        "name": "fifth",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "isSixthRuneEquipped",
-        "type": "core::bool"
-      },
-      {
-        "name": "sixth",
-        "type": "core::integer::u32"
+        "name": "Sixth",
+        "type": "()"
       }
     ]
   },
   {
     "type": "struct",
-    "name": "game::models::hero::Hero",
+    "name": "game::models::hero::rune::runeBonus::RuneBonus",
+    "members": [
+      {
+        "name": "statistic",
+        "type": "game::models::hero::rune::RuneStatistic"
+      },
+      {
+        "name": "isPercent",
+        "type": "core::bool"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "game::models::hero::rune::Rune",
     "members": [
       {
         "name": "id",
         "type": "core::integer::u32"
       },
       {
-        "name": "name",
-        "type": "core::felt252"
+        "name": "statistic",
+        "type": "game::models::hero::rune::RuneStatistic"
       },
       {
-        "name": "level",
-        "type": "core::integer::u16"
+        "name": "isPercent",
+        "type": "core::bool"
       },
       {
         "name": "rank",
-        "type": "core::integer::u16"
-      },
-      {
-        "name": "experience",
         "type": "core::integer::u32"
       },
       {
-        "name": "runes",
-        "type": "game::models::hero::equippedRunes::EquippedRunes"
-      }
-    ]
-  },
-  {
-    "type": "enum",
-    "name": "game::models::battle::entity::AllyOrEnemy",
-    "variants": [
-      {
-        "name": "Ally",
-        "type": "()"
+        "name": "rarity",
+        "type": "game::models::hero::rune::RuneRarity"
       },
       {
-        "name": "Enemy",
-        "type": "()"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "game::models::battle::entity::turnBar::TurnBar",
-    "members": [
-      {
-        "name": "entityIndex",
-        "type": "core::integer::u32"
+        "name": "runeType",
+        "type": "game::models::hero::rune::RuneType"
       },
       {
-        "name": "speed",
-        "type": "core::integer::u64"
-      },
-      {
-        "name": "turnbar",
-        "type": "core::integer::u64"
-      },
-      {
-        "name": "incrementStep",
-        "type": "core::integer::u64"
-      },
-      {
-        "name": "decimals",
-        "type": "core::integer::u64"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "game::utils::signedIntegers::i64::i64",
-    "members": [
-      {
-        "name": "mag",
-        "type": "core::integer::u64"
-      },
-      {
-        "name": "sign",
+        "name": "isEquipped",
         "type": "core::bool"
+      },
+      {
+        "name": "heroEquipped",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "rank4Bonus",
+        "type": "game::models::hero::rune::runeBonus::RuneBonus"
+      },
+      {
+        "name": "rank8Bonus",
+        "type": "game::models::hero::rune::runeBonus::RuneBonus"
+      },
+      {
+        "name": "rank12Bonus",
+        "type": "game::models::hero::rune::runeBonus::RuneBonus"
+      },
+      {
+        "name": "rank16Bonus",
+        "type": "game::models::hero::rune::runeBonus::RuneBonus"
       }
     ]
   },
   {
     "type": "struct",
-    "name": "game::models::battle::entity::statistics::statModifier::StatModifier",
+    "name": "game::models::storage::statistics::Statistics",
     "members": [
-      {
-        "name": "value",
-        "type": "core::integer::u64"
-      },
-      {
-        "name": "duration",
-        "type": "core::integer::u8"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "game::models::battle::entity::statistics::statistic::Statistic",
-    "members": [
-      {
-        "name": "value",
-        "type": "core::integer::u64"
-      },
-      {
-        "name": "malus",
-        "type": "game::models::battle::entity::statistics::statModifier::StatModifier"
-      },
-      {
-        "name": "bonus",
-        "type": "game::models::battle::entity::statistics::statModifier::StatModifier"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "game::models::battle::entity::statistics::Statistics",
-    "members": [
-      {
-        "name": "maxHealth",
-        "type": "core::integer::u64"
-      },
       {
         "name": "health",
-        "type": "game::utils::signedIntegers::i64::i64"
+        "type": "core::integer::u64"
       },
       {
         "name": "attack",
-        "type": "game::models::battle::entity::statistics::statistic::Statistic"
+        "type": "core::integer::u64"
       },
       {
         "name": "defense",
-        "type": "game::models::battle::entity::statistics::statistic::Statistic"
+        "type": "core::integer::u64"
       },
       {
         "name": "speed",
-        "type": "game::models::battle::entity::statistics::statistic::Statistic"
+        "type": "core::integer::u64"
       },
       {
-        "name": "criticalChance",
-        "type": "game::models::battle::entity::statistics::statistic::Statistic"
+        "name": "criticalRate",
+        "type": "core::integer::u64"
       },
       {
         "name": "criticalDamage",
-        "type": "game::models::battle::entity::statistics::statistic::Statistic"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "game::models::battle::entity::cooldowns::Cooldowns",
-    "members": [
-      {
-        "name": "skill1",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "skill2",
-        "type": "core::integer::u8"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "game::models::battle::entity::stunOnTurnProc::StunOnTurnProc",
-    "members": [
-      {
-        "name": "duration",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "stunned",
-        "type": "core::bool"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "game::models::battle::entity::Entity",
-    "members": [
-      {
-        "name": "index",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "name",
-        "type": "core::felt252"
-      },
-      {
-        "name": "turnBar",
-        "type": "game::models::battle::entity::turnBar::TurnBar"
-      },
-      {
-        "name": "statistics",
-        "type": "game::models::battle::entity::statistics::Statistics"
-      },
-      {
-        "name": "cooldowns",
-        "type": "game::models::battle::entity::cooldowns::Cooldowns"
-      },
-      {
-        "name": "stunOnTurnProc",
-        "type": "game::models::battle::entity::stunOnTurnProc::StunOnTurnProc"
-      },
-      {
-        "name": "allyOrEnemy",
-        "type": "game::models::battle::entity::AllyOrEnemy"
+        "type": "core::integer::u64"
       }
     ]
   },
@@ -290,67 +254,63 @@
     "items": [
       {
         "type": "function",
-        "name": "newEntities",
+        "name": "computeRunesBonuses",
         "inputs": [
           {
-            "name": "owner",
-            "type": "core::starknet::contract_address::ContractAddress"
+            "name": "runes",
+            "type": "core::array::Array::<game::models::hero::rune::Rune>"
           },
           {
-            "name": "startIndex",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "heroes",
-            "type": "core::array::Array::<game::models::hero::Hero>"
-          },
-          {
-            "name": "allyOrEnemy",
-            "type": "game::models::battle::entity::AllyOrEnemy"
+            "name": "baseStats",
+            "type": "game::models::storage::statistics::Statistics"
           }
         ],
         "outputs": [
           {
-            "type": "core::array::Array::<game::models::battle::entity::Entity>"
+            "type": "game::models::storage::statistics::Statistics"
           }
         ],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
-        "name": "newEntity",
-        "inputs": [
-          {
-            "name": "owner",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
-          {
-            "name": "index",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "hero",
-            "type": "game::models::hero::Hero"
-          },
-          {
-            "name": "allyOrEnemy",
-            "type": "game::models::battle::entity::AllyOrEnemy"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "game::models::battle::entity::Entity"
-          }
-        ],
-        "state_mutability": "external"
+        "name": "initBaseStatisticsDict",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
       },
       {
         "type": "function",
-        "name": "setAccountsAdrs",
+        "name": "initRunesTable",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "initBonusRunesTable",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "UpgradableImpl",
+    "interface_name": "dojo::components::upgradeable::IUpgradeable"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::components::upgradeable::IUpgradeable",
+    "items": [
+      {
+        "type": "function",
+        "name": "upgrade",
         "inputs": [
           {
-            "name": "accountsAdrs",
-            "type": "core::starknet::contract_address::ContractAddress"
+            "name": "new_class_hash",
+            "type": "core::starknet::class_hash::ClassHash"
           }
         ],
         "outputs": [],
@@ -359,14 +319,39 @@
     ]
   },
   {
-    "type": "constructor",
-    "name": "constructor",
-    "inputs": []
+    "type": "event",
+    "name": "dojo::components::upgradeable::upgradeable::Upgraded",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "class_hash",
+        "type": "core::starknet::class_hash::ClassHash",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::components::upgradeable::upgradeable::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "Upgraded",
+        "type": "dojo::components::upgradeable::upgradeable::Upgraded",
+        "kind": "nested"
+      }
+    ]
   },
   {
     "type": "event",
     "name": "game::systems::entityFactory::EntityFactory::Event",
     "kind": "enum",
-    "variants": []
+    "variants": [
+      {
+        "name": "UpgradeableEvent",
+        "type": "dojo::components::upgradeable::upgradeable::Event",
+        "kind": "nested"
+      }
+    ]
   }
 ]

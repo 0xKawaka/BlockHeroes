@@ -1,12 +1,12 @@
 use game::models::battle::entity::{EntityTrait, EntityImpl, Entity};
 
-#[derive(starknet::Store, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde, Introspect)]
 enum DamageOrHealEnum {
     Damage,
     Heal,
 }
 
-#[derive(starknet::Store, Copy, Drop)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct HealthOnTurnProc {
     entityIndex: u32,
     value: u64,

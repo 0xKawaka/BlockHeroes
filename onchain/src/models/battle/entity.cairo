@@ -24,23 +24,25 @@ use game::utils::signedIntegers::integerTrait::IntegerTrait;
 use game::utils::nullableVector::{VecTrait, NullableVector};
 use game::utils::signedIntegers::{i64::i64, i64::i64Impl};
 use game::utils::random::{rand8};
-use game::utils::list::{List, ListTrait};
-// use game::Contracts::EventEmitter::{IEventEmitterDispatcher, IEventEmitterDispatcherTrait, EventEmitter::BuffEvent, EventEmitter::EntityBuffEvent, SkillEventParams};
+
+use game::models::events::{Event, Skill, EndTurn, EntityBuffEvent};
+use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 
 use core::box::BoxTrait;
 use debug::PrintTrait;
 use starknet::get_block_timestamp;
 
 
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect, PartialEq)]
 enum AllyOrEnemy {
     Ally,
     Enemy,
 }
 
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct Entity {
     index: u32,
+    heroId: u32,
     name: felt252,
     turnBar: turnBar::TurnBar,
     statistics: statistics::Statistics,
@@ -49,9 +51,10 @@ struct Entity {
     allyOrEnemy: AllyOrEnemy,
 }
 
-fn new(index: u32, name: felt252, health: u64, attack: u64, defense: u64, speed: u64, criticalChance: u64, criticalDamage:u64, allyOrEnemy: AllyOrEnemy) -> Entity {
+fn new(index: u32, heroId: u32, name: felt252, health: u64, attack: u64, defense: u64, speed: u64, criticalChance: u64, criticalDamage:u64, allyOrEnemy: AllyOrEnemy) -> Entity {
     Entity {
         index: index,
+        heroId: heroId,
         name: name,
         statistics: statistics::new(health, attack, defense, speed, criticalChance, criticalDamage),
         turnBar: turnBar::new(index, speed),
@@ -62,9 +65,9 @@ fn new(index: u32, name: felt252, health: u64, attack: u64, defense: u64, speed:
 }
 
 trait EntityTrait {
-    fn playTurn(ref self: Entity, ref battle: Battle);
-    fn playTurnPlayer(ref self: Entity, skillIndex: u8, targetIndex: u32, ref battle: Battle);
-    fn endTurn(ref self: Entity, ref battle: Battle);
+    fn playTurn(ref self: Entity, world: IWorldDispatcher, ref battle: Battle);
+    fn playTurnPlayer(ref self: Entity, world: IWorldDispatcher, skillIndex: u8, targetIndex: u32, ref battle: Battle);
+    fn endTurn(ref self: Entity, world: IWorldDispatcher, ref battle: Battle);
     fn die(ref self: Entity, ref battle: Battle);
     fn pickSkill(ref self: Entity) -> u8;
     fn takeDamage(ref self: Entity, damage: u64);
@@ -81,11 +84,12 @@ trait EntityTrait {
     fn setOnCooldown(ref self: Entity, skillIndex: u8, duration: u8);
     // fn randCrit(ref self: Entity) -> bool;
     fn isStunned(ref self: Entity) -> bool;
-    fn isDead(ref self: Entity) -> bool;
-    // fn getEventBuffsArray(self: Entity) -> Array<EntityBuffEvent>;
-    // fn getEventStatisticsBuffsArray(self: Entity) -> Array<EntityBuffEvent>;
-    // fn getEventStatusArray(self: Entity) -> Array<EntityBuffEvent>;
-    // fn getEventStatisticsStatusArray(self: Entity) -> Array<EntityBuffEvent>;
+    fn isDead(self: @Entity) -> bool;
+    fn isAlly(self: @Entity) -> bool;
+    fn getEventBuffsArray(self: Entity) -> Array<EntityBuffEvent>;
+    fn getEventStatisticsBuffsArray(self: Entity) -> Array<EntityBuffEvent>;
+    fn getEventStatusArray(self: Entity) -> Array<EntityBuffEvent>;
+    fn getEventStatisticsStatusArray(self: Entity) -> Array<EntityBuffEvent>;
     fn getIndex(self: @Entity) -> u32;
     fn getTurnBar(self: @Entity) -> @TurnBar;
     fn getAttack(self: @Entity) -> u64;
@@ -99,7 +103,7 @@ trait EntityTrait {
 }
 
 impl EntityImpl of EntityTrait {
-    fn playTurn(ref self: Entity, ref battle: Battle) {
+    fn playTurn(ref self: Entity, world: IWorldDispatcher, ref battle: Battle) {
         if(self.isDead()) {
             self.die(ref battle);
             return;
@@ -111,7 +115,7 @@ impl EntityImpl of EntityTrait {
         self.cooldowns.reduceCooldowns();
         if(self.isStunned()){
             PrintTrait::print('stunned');
-            self.endTurn(ref battle);
+            self.endTurn(world, ref battle);
             return;
         }
         else {
@@ -127,28 +131,49 @@ impl EntityImpl of EntityTrait {
                     let skillSet = battle.skillSets.get(self.index).unwrap().unbox();
                     let skill = *skillSet.get(skillIndex.into()).unwrap().unbox();
                     let skillEventParams = skill.cast(skillIndex, ref self, ref battle);
-                    // IEventEmitterDispatch.skill(battle.owner, skillEventParams.casterId, skillEventParams.targetId, skillIndex, skillEventParams.damages, skillEventParams.heals, battle.checkAndProcessDeadEntities(IEventEmitterDispatch));
-                    self.endTurn(ref battle);
+                    emit!(world, (Event::Skill(Skill {
+                        owner: battle.owner,
+                        casterId: skillEventParams.casterId,
+                        targetId: skillEventParams.targetId,
+                        skillIndex: skillIndex,
+                        damages: skillEventParams.damages,
+                        heals: skillEventParams.heals,
+                        deaths: battle.checkAndProcessDeadEntities(),
+                    })));
+                    self.endTurn(world, ref battle);
                 },
             }
         }
     }
-    fn playTurnPlayer(ref self: Entity, skillIndex: u8, targetIndex: u32, ref battle: Battle) {
+    fn playTurnPlayer(ref self: Entity, world: IWorldDispatcher, skillIndex: u8, targetIndex: u32, ref battle: Battle) {
         let mut target = battle.getEntityByIndex(targetIndex);
         assert(!target.isDead(), 'Target is dead');
         assert(!self.cooldowns.isOnCooldown(skillIndex), 'Skill is on cooldown');
         let skillSet = battle.skillSets.get(self.index).unwrap().unbox();
         let skill = *skillSet.get(skillIndex.into()).unwrap().unbox();
         let skillEventParams = skill.castOnTarget(skillIndex, ref self, ref target, ref battle);
-        // IEventEmitterDispatch.skill(battle.owner, skillEventParams.casterId, skillEventParams.targetId, skillIndex, skillEventParams.damages, skillEventParams.heals, battle.checkAndProcessDeadEntities(IEventEmitterDispatch));
-        self.endTurn(ref battle);
+        emit!(world,(Event::Skill(Skill {
+            owner: battle.owner,
+            casterId: skillEventParams.casterId,
+            targetId: skillEventParams.targetId,
+            skillIndex: skillIndex,
+            damages: skillEventParams.damages,
+            heals: skillEventParams.heals,
+            deaths: battle.checkAndProcessDeadEntities(),
+        })));
+        self.endTurn(world, ref battle);
     }
-    fn endTurn(ref self: Entity, ref battle: Battle) {
+    fn endTurn(ref self: Entity, world: IWorldDispatcher, ref battle: Battle) {
         // self.setMaxHealthIfHealthIsGreater();
         self.processEndTurnProcs(ref battle);
         self.turnBar.resetTurn();
         battle.entities.set(self.getIndex(), self);
-        // IEventEmitterDispatch.endTurn(battle.owner, battle.getEventBuffsArray(), battle.getEventStatusArray(), battle.getEventSpeedsArray());
+        emit!(world, (Event::EndTurn(EndTurn {
+            owner: battle.owner,
+            buffs: battle.getEventBuffsArray(),
+            status: battle.getEventStatusArray(),
+            speeds: battle.getEventSpeedsArray(),
+        })));
     }
     fn die(ref self: Entity, ref battle: Battle) {
         PrintTrait::print('death');
@@ -267,48 +292,51 @@ impl EntityImpl of EntityTrait {
     fn isStunned(ref self: Entity) -> bool {
         self.stunOnTurnProc.isStunned()
     }
-    fn isDead(ref self: Entity) -> bool {
+    fn isDead(self: @Entity) -> bool {
         if (self.statistics.getHealth().min(i64Impl::new(0, false)) == self.statistics.getHealth()) {
             return true;
         }
         return false;
     }
-    // fn getEventBuffsArray(self: Entity) -> Array<EntityBuffEvent> {
-    //     return self.getEventStatisticsBuffsArray();
-    // }
-    // fn getEventStatisticsBuffsArray(self: Entity) -> Array<EntityBuffEvent> {
-    //     let mut buffsArray: Array<EntityBuffEvent> = Default::default();
-    //     if(self.statistics.attack.getBonusValue() > 0 && self.statistics.attack.bonus.duration > 0) {
-    //         buffsArray.append(EntityBuffEvent { name: 'attack', duration: self.statistics.attack.bonus.duration });
-    //     }
-    //     if(self.statistics.defense.getBonusValue() > 0 && self.statistics.defense.bonus.duration > 0) {
-    //         buffsArray.append(EntityBuffEvent { name: 'defense', duration: self.statistics.defense.bonus.duration });
-    //     }
-    //     if(self.statistics.speed.getBonusValue() > 0 && self.statistics.speed.bonus.duration > 0) {
-    //         buffsArray.append(EntityBuffEvent { name: 'speed', duration: self.statistics.speed.bonus.duration });
-    //     }
-    //     return buffsArray;
-    // }
-    // fn getEventStatusArray(self: Entity) -> Array<EntityBuffEvent> {
-    //     let mut statusArray: Array<EntityBuffEvent> = self.getEventStatisticsStatusArray();
-    //     if(self.stunOnTurnProc.isStunned()){
-    //         statusArray.append(EntityBuffEvent { name: 'stun', duration: self.stunOnTurnProc.duration })
-    //     }
-    //     return statusArray;
-    // }
-    // fn getEventStatisticsStatusArray(self: Entity) -> Array<EntityBuffEvent> {
-    //     let mut statusArray: Array<EntityBuffEvent> = Default::default();
-    //     if(self.statistics.attack.getMalusValue() > 0 && self.statistics.attack.malus.duration > 0) {
-    //         statusArray.append(EntityBuffEvent { name: 'attack', duration: self.statistics.attack.malus.duration });
-    //     }
-    //     if(self.statistics.defense.getMalusValue() > 0 && self.statistics.defense.malus.duration > 0) {
-    //         statusArray.append(EntityBuffEvent { name: 'defense', duration: self.statistics.defense.malus.duration });
-    //     }
-    //     if(self.statistics.speed.getMalusValue() > 0 && self.statistics.speed.malus.duration > 0) {
-    //         statusArray.append(EntityBuffEvent { name: 'speed', duration: self.statistics.speed.malus.duration });
-    //     }
-    //     return statusArray;
-    // }
+    fn isAlly(self: @Entity) -> bool {
+        return *self.allyOrEnemy == AllyOrEnemy::Ally;
+    }
+    fn getEventBuffsArray(self: Entity) -> Array<EntityBuffEvent> {
+        return self.getEventStatisticsBuffsArray();
+    }
+    fn getEventStatisticsBuffsArray(self: Entity) -> Array<EntityBuffEvent> {
+        let mut buffsArray: Array<EntityBuffEvent> = Default::default();
+        if(self.statistics.attack.getBonusValue() > 0 && self.statistics.attack.bonus.duration > 0) {
+            buffsArray.append(EntityBuffEvent { name: 'attack', duration: self.statistics.attack.bonus.duration });
+        }
+        if(self.statistics.defense.getBonusValue() > 0 && self.statistics.defense.bonus.duration > 0) {
+            buffsArray.append(EntityBuffEvent { name: 'defense', duration: self.statistics.defense.bonus.duration });
+        }
+        if(self.statistics.speed.getBonusValue() > 0 && self.statistics.speed.bonus.duration > 0) {
+            buffsArray.append(EntityBuffEvent { name: 'speed', duration: self.statistics.speed.bonus.duration });
+        }
+        return buffsArray;
+    }
+    fn getEventStatusArray(self: Entity) -> Array<EntityBuffEvent> {
+        let mut statusArray: Array<EntityBuffEvent> = self.getEventStatisticsStatusArray();
+        if(self.stunOnTurnProc.isStunned()){
+            statusArray.append(EntityBuffEvent { name: 'stun', duration: self.stunOnTurnProc.duration })
+        }
+        return statusArray;
+    }
+    fn getEventStatisticsStatusArray(self: Entity) -> Array<EntityBuffEvent> {
+        let mut statusArray: Array<EntityBuffEvent> = Default::default();
+        if(self.statistics.attack.getMalusValue() > 0 && self.statistics.attack.malus.duration > 0) {
+            statusArray.append(EntityBuffEvent { name: 'attack', duration: self.statistics.attack.malus.duration });
+        }
+        if(self.statistics.defense.getMalusValue() > 0 && self.statistics.defense.malus.duration > 0) {
+            statusArray.append(EntityBuffEvent { name: 'defense', duration: self.statistics.defense.malus.duration });
+        }
+        if(self.statistics.speed.getMalusValue() > 0 && self.statistics.speed.malus.duration > 0) {
+            statusArray.append(EntityBuffEvent { name: 'speed', duration: self.statistics.speed.malus.duration });
+        }
+        return statusArray;
+    }
     fn getIndex(self: @Entity) -> u32 {
         *self.index
     }

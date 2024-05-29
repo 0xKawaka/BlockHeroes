@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x585a8517710e77edbd03b4acb54af53efdb15abef6084b0d573b7046788b5ad"
+original_class_hash = "0x585a8517710e77edbd03b4acb54af53efdb15abef6084b0d573b7046788b5ad"
+abi = "manifests/dev/abis/base/models/game_models_storage_arena_gemsRewards_gems_rewards.json"
+name = "game::models::storage::arena::gemsRewards::gems_rewards"
+
+[[members]]
+name = "index"
+type = "u32"
+key = true
+
+[[members]]
+name = "minRank"
+type = "u64"
+key = false
+
+[[members]]
+name = "gems"
+type = "u64"
+key = false

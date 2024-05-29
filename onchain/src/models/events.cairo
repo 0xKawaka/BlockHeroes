@@ -18,11 +18,20 @@ enum Event {
 
     RuneMinted: RuneMinted,
     RuneUpgraded: RuneUpgraded,
-    RuneBonus: RuneBonus,
+    RuneBonusEvent: RuneBonusEvent,
 
     ArenaDefense: ArenaDefense,
     RankChange: RankChange,
     InitArena: InitArena,
+}
+
+#[derive(Destruct, Serde)]
+struct SkillEventParams {
+    casterId: u32,
+    targetId: u32,
+    skillIndex: u8,
+    damages: Array<IdAndValue>,
+    heals: Array<IdAndValue>,
 }
 
 #[derive(Drop, Serde, starknet::Event)]
@@ -30,7 +39,7 @@ struct NewBattle {
     owner: ContractAddress,
     healthsArray: Array<u64>,
 }
-#[derive(Drop, Serde, starknet::Event)]
+#[derive(Copy, Drop, Serde, starknet::Event)]
 struct BuffEvent {
     entityId: u32,
     name: felt252,
@@ -67,7 +76,7 @@ struct TurnBarEvent {
     value: u64,
 }
 
-#[derive(Drop, Serde, starknet::Event)]
+#[derive(Copy, Drop, Serde, starknet::Event)]
 struct EntityBuffEvent {
     name: felt252,
     duration: u8,
@@ -129,7 +138,7 @@ struct RuneUpgraded {
     crystalCost: u32,
 }
 #[derive(Drop, Serde, starknet::Event)]
-struct RuneBonus {
+struct RuneBonusEvent {
     owner: ContractAddress,
     id: u32,
     rank: u32,
@@ -150,5 +159,5 @@ struct RankChange {
 struct InitArena {
     owner: ContractAddress,
     rank: u64,
-    heroeIds: Span<u32>,
+    heroeIds: Array<u32>,
 }

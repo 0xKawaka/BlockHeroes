@@ -1,6 +1,60 @@
 [
   {
     "type": "impl",
+    "name": "DojoResourceProviderImpl",
+    "interface_name": "dojo::world::IDojoResourceProvider"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IDojoResourceProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "dojo_resource",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "WorldProviderImpl",
+    "interface_name": "dojo::world::IWorldProvider"
+  },
+  {
+    "type": "struct",
+    "name": "dojo::world::IWorldDispatcher",
+    "members": [
+      {
+        "name": "contract_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IWorldProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "world",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "dojo::world::IWorldDispatcher"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
     "name": "GameImpl",
     "interface_name": "game::systems::game::IGame"
   },
@@ -22,11 +76,11 @@
           }
         ],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
-        "name": "playPvpTurn",
+        "name": "playArenaTurn",
         "inputs": [
           {
             "name": "spellIndex",
@@ -38,7 +92,7 @@
           }
         ],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
@@ -49,7 +103,7 @@
             "type": "core::array::Array::<core::integer::u32>"
           },
           {
-            "name": "world",
+            "name": "map",
             "type": "core::integer::u16"
           },
           {
@@ -58,12 +112,16 @@
           }
         ],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
         "name": "playTurn",
         "inputs": [
+          {
+            "name": "map",
+            "type": "core::integer::u16"
+          },
           {
             "name": "spellIndex",
             "type": "core::integer::u8"
@@ -74,7 +132,7 @@
           }
         ],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
@@ -86,7 +144,7 @@
           }
         ],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
@@ -98,7 +156,7 @@
           }
         ],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
@@ -114,7 +172,7 @@
           }
         ],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
@@ -126,7 +184,7 @@
           }
         ],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
@@ -138,21 +196,21 @@
           }
         ],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
         "name": "mintHero",
         "inputs": [],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
         "name": "mintRune",
         "inputs": [],
         "outputs": [],
-        "state_mutability": "external"
+        "state_mutability": "view"
       },
       {
         "type": "function",
@@ -164,112 +222,54 @@
           }
         ],
         "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "setIAccountsDispatch",
-        "inputs": [
-          {
-            "name": "newAccountsAdrs",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "setIEntityFactoryDispatch",
-        "inputs": [
-          {
-            "name": "newEntityFactoryAdrs",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "setILevelsDispatch",
-        "inputs": [
-          {
-            "name": "newLevelsAdrs",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "setIBattlesDispatch",
-        "inputs": [
-          {
-            "name": "newBattleAdrs",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "setIPvpDispatch",
-        "inputs": [
-          {
-            "name": "newPvpAdrs",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "setIArenaBattlesDispatch",
-        "inputs": [
-          {
-            "name": "newPvpBattleAdrs",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "getAccountsAdrs",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
         "state_mutability": "view"
-      },
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "UpgradableImpl",
+    "interface_name": "dojo::components::upgradeable::IUpgradeable"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::components::upgradeable::IUpgradeable",
+    "items": [
       {
         "type": "function",
-        "name": "getEntityFactoryAdrs",
-        "inputs": [],
-        "outputs": [
+        "name": "upgrade",
+        "inputs": [
           {
-            "type": "core::starknet::contract_address::ContractAddress"
+            "name": "new_class_hash",
+            "type": "core::starknet::class_hash::ClassHash"
           }
         ],
-        "state_mutability": "view"
-      },
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::components::upgradeable::upgradeable::Upgraded",
+    "kind": "struct",
+    "members": [
       {
-        "type": "function",
-        "name": "getLevelsAdrs",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "state_mutability": "view"
+        "name": "class_hash",
+        "type": "core::starknet::class_hash::ClassHash",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::components::upgradeable::upgradeable::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "Upgraded",
+        "type": "dojo::components::upgradeable::upgradeable::Upgraded",
+        "kind": "nested"
       }
     ]
   },
@@ -277,6 +277,12 @@
     "type": "event",
     "name": "game::systems::game::Game::Event",
     "kind": "enum",
-    "variants": []
+    "variants": [
+      {
+        "name": "UpgradeableEvent",
+        "type": "dojo::components::upgradeable::upgradeable::Event",
+        "kind": "nested"
+      }
+    ]
   }
 ]

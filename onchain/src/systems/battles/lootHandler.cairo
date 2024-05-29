@@ -1,5 +1,6 @@
-use game::systems::accounts::{IAccountsDispatcher, IAccountsDispatcherTrait};
-// use game::systems::EventEmitter::{IEventEmitterDispatcher, IEventEmitterDispatcherTrait};
+use game::systems::accounts::Accounts::AccountsImpl;
+use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+use game::models::events::{Event, Loot};
 use starknet::{ContractAddress, get_block_timestamp};
 use game::utils::random::rand32;
 
@@ -7,7 +8,7 @@ const baseCrystalsGivenPerEnemy: u32 = 100;
 const crystalsBonusPercentPerLevel: u32 = 5;
 const runeLootChance: u32 = 6;
 
-fn computeAndDistributeLoot(owner: ContractAddress, enemyLevels: @Array<u16>, IAccountsDispatch: IAccountsDispatcher) {
+fn computeAndDistributeLoot(world: IWorldDispatcher, owner: ContractAddress, enemyLevels: @Array<u16>) {
     let mut totalLevel: u32 = 0;
     let mut i: u32 = 0;
     let enemiesLen = enemyLevels.len();
@@ -19,11 +20,14 @@ fn computeAndDistributeLoot(owner: ContractAddress, enemyLevels: @Array<u16>, IA
         i += 1;
     };
     let crystals: u32 = baseCrystalsGivenPerEnemy * enemiesLen + ((baseCrystalsGivenPerEnemy * (totalLevel - enemiesLen) * crystalsBonusPercentPerLevel) / 100);
-    IAccountsDispatch.increaseCrystals(owner, crystals);
+    AccountsImpl::increaseCrystals(world, owner, crystals);
     if(hasLootedRune()) {
-        IAccountsDispatch.mintRune(owner);
+        AccountsImpl::mintRune(world, owner);
     }
-    // IEventEmitterDispatch.loot(owner, crystals);
+    emit!(world, (Event::Loot(Loot {
+        owner: owner,
+        crystals: crystals,
+    })));
 }
 
 fn hasLootedRune() -> bool {

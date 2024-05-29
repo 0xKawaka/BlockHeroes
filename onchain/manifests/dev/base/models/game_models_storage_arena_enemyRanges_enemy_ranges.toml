@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x5e828829b9fe4ef7150ed1a5f3d108976ae53b2b5a2d504a0b0e9ab838062e8"
+original_class_hash = "0x5e828829b9fe4ef7150ed1a5f3d108976ae53b2b5a2d504a0b0e9ab838062e8"
+abi = "manifests/dev/abis/base/models/game_models_storage_arena_enemyRanges_enemy_ranges.json"
+name = "game::models::storage::arena::enemyRanges::enemy_ranges"
+
+[[members]]
+name = "index"
+type = "u32"
+key = true
+
+[[members]]
+name = "minRank"
+type = "u64"
+key = false
+
+[[members]]
+name = "range"
+type = "u64"
+key = false

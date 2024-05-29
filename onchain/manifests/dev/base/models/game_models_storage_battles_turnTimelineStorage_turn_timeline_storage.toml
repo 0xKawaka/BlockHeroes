@@ -1,0 +1,25 @@
+kind = "DojoModel"
+class_hash = "0x17346190dd7f031f30df6e0c8a1dc8e240f4fd98d8111667d1671466360c2ed"
+original_class_hash = "0x17346190dd7f031f30df6e0c8a1dc8e240f4fd98d8111667d1671466360c2ed"
+abi = "manifests/dev/abis/base/models/game_models_storage_battles_turnTimelineStorage_turn_timeline_storage.json"
+name = "game::models::storage::battles::turnTimelineStorage::turn_timeline_storage"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "map"
+type = "u16"
+key = true
+
+[[members]]
+name = "index"
+type = "u16"
+key = true
+
+[[members]]
+name = "entityIndex"
+type = "u16"
+key = false

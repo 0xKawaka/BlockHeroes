@@ -1,4 +1,4 @@
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct Cooldowns {
     skill1: u8,
     skill2: u8,

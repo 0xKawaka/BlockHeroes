@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x7820184d6b51d7b2488cf157c675696f7c296c485fce8552eabcac23e724f4e"
+original_class_hash = "0x7820184d6b51d7b2488cf157c675696f7c296c485fce8552eabcac23e724f4e"
+abi = "manifests/dev/abis/base/models/game_models_storage_arena_arenaConfig_arena_config.json"
+name = "game::models::storage::arena::arenaConfig::arena_config"
+
+[[members]]
+name = "id"
+type = "u8"
+key = true
+
+[[members]]
+name = "enemyRangesByRankLength"
+type = "u32"
+key = false
+
+[[members]]
+name = "gemsRewardsLength"
+type = "u32"
+key = false

@@ -1,259 +1,232 @@
 mod experienceHandler;
 mod lootHandler;
+mod battleFactory;
 
 use starknet::ContractAddress;
 use game::models::battle::entity::Entity;
+use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 
-#[starknet::interface]
-trait IBattles<TContractState> {
-    fn newBattle(ref self: TContractState, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, heroesIds: Array<u32>, world: u16, level: u16);
-    fn playTurn(ref self: TContractState, owner: ContractAddress, spellIndex: u8, targetIndex: u32);
-    fn setISkillFactoryDispatch(ref self: TContractState, skillFactoryAdrs: ContractAddress);
-    // fn setIEventEmitterDispatch(ref self: TContractState, eventEmitterAdrs: ContractAddress);
-    fn setIAccountsDispatch(ref self: TContractState, newAccountsAdrs: ContractAddress);
-    fn setILevelsDispatch(ref self: TContractState, newLevelsAdrs: ContractAddress);
+trait IBattles {
+    fn newArenaBattle(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, heroesIds: Array<u32>);
+    fn newBattle(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16);
+    fn playArenaTurn(world: IWorldDispatcher, owner: ContractAddress, spellIndex: u8, targetIndex: u32);
+    fn playTurn(world: IWorldDispatcher, owner: ContractAddress, map: u16, spellIndex: u8, targetIndex: u32);
 }
 
-#[starknet::contract]
 mod Battles {
-
-    use core::box::BoxTrait;
     use core::option::OptionTrait;
-    use core::array::ArrayTrait;
-    use core::debug::PrintTrait;
     use starknet::ContractAddress;
+    use game::utils::nullableVector::NullableVectorImpl;
 
     use game::models::battle::entity::skill::SkillTrait;
     use game::models::{battle,  battle::Battle, battle::BattleImpl, battle::BattleTrait};
     use game::models::battle::entity::{Entity, EntityImpl, skill::SkillImpl};
     use game::models::battle::entity::{turnBar::TurnBarImpl};
     use game::models::battle::entity::healthOnTurnProc::{HealthOnTurnProc, HealthOnTurnProcImpl};
+    use game::models::storage::battles::{healthOnTurnProcStorage::HealthOnTurnProcStorage, battleStorage::BattleStorage, entityStorage::EntityStorage, arenaBattleStorage::ArenaBattleStorage};
+    use game::models::storage::arena::arenaAccount::ArenaAccount;
+    use game::models::events::{Event, NewBattle};
+    use game::models::map::{MapTrait, Map};
+    use game::systems::levels::Levels::LevelsImpl;
+    use game::systems::arena::Arena::ArenaImpl;
+    use game::systems::skillFactory::SkillFactory::SkillFactoryImpl;
+    use super::battleFactory::BattleFactory::BattleFactoryImpl;
 
-    use game::utils::list::{List, ListTrait};
-    use game::utils::iVector::VecTrait;
-
-    use game::systems::skillFactory::{ISkillFactoryDispatcher, ISkillFactoryDispatcherTrait};
-    // use game::systems::EventEmitter::{IEventEmitterDispatcher, IEventEmitterDispatcherTrait};
-    use game::systems::accounts::{IAccountsDispatcher, IAccountsDispatcherTrait};
-    use game::systems::levels::{ILevelsDispatcher, ILevelsDispatcherTrait};
     use game::systems::battles::experienceHandler;
     use game::systems::battles::lootHandler;
+    use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 
-    #[storage]
-    struct Storage {
-        // Static datas : not changing during the battle
-        heroesIndexes: LegacyMap<ContractAddress, List<u32>>,
-        world: LegacyMap<ContractAddress, u16>,
-        level: LegacyMap<ContractAddress, u16>,
-
-        // Dynamic datas : changing during the battle
-        entities: LegacyMap<ContractAddress, List<Entity>>,
-        aliveEntities: LegacyMap<ContractAddress, List<u32>>,
-        deadEntities: LegacyMap<ContractAddress, List<u32>>,
-        turnTimeline: LegacyMap<ContractAddress, List<u32>>,
-        allies: LegacyMap<ContractAddress, List<u32>>,
-        enemies: LegacyMap<ContractAddress, List<u32>>,
-        healthOnTurnProcs: LegacyMap<(ContractAddress, u32), List<HealthOnTurnProc>>,
-        isBattleOver: LegacyMap<ContractAddress, bool>,
-        isWaitingForPlayerAction: LegacyMap<ContractAddress, bool>,
-
-        ISkillFactoryDispatch: ISkillFactoryDispatcher,
-        // IEventEmitterDispatch: IEventEmitterDispatcher,
-        IAccountsDispatch: IAccountsDispatcher,
-        ILevelsDispatch: ILevelsDispatcher,
-    }
-
-    #[abi(embed_v0)]
-    impl BattlesImpl of super::IBattles<ContractState> {
-        fn newBattle(ref self: ContractState, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, heroesIds: Array<u32>,  world: u16, level: u16) {
+    impl BattlesImpl of super::IBattles {
+        fn newArenaBattle(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, heroesIds: Array<u32>) {
             let alliesSpan = allyEntities.span();
             let enemiesSpan = allyEntities.span();
-            self.initBattleStorage(owner, allyEntities, enemyEntities, heroesIds, world, level);
-            // let IEventEmitterDispatch = self.IEventEmitterDispatch.read();
-            let mut battle = self.getBattle(owner);
+            InternalBattlesImpl::initArenaBattleStorage(world, owner, enemyOwner, allyEntities, enemyEntities);
+            let mut battle = BattleFactoryImpl::getBattle(world, owner, 0);
             let healthsArray = battle.getHealthsArray();
-            // IEventEmitterDispatch.newBattle(owner, healthsArray);
-            battle.battleLoop();
-            self.ifBattleIsOverHandle(owner, battle.isBattleOver, battle.isVictory);
-            self.storeBattleState(ref battle, owner);
+            emit!(world, (Event::NewBattle(NewBattle { owner: owner, healthsArray: healthsArray })));
+            battle.battleLoop(world);
+            InternalBattlesImpl::ifArenaBattleIsOverHandle(world, owner, battle.isBattleOver, battle.isVictory);
+            // InternalBattlesImpl::storeArenaBattleState(world, ref battle, owner);
         }
-        fn playTurn(ref self: ContractState, owner: ContractAddress, spellIndex: u8, targetIndex: u32) {
-            let mut battle = self.getBattle(owner);
-            battle.playTurn(spellIndex, targetIndex);
-            self.ifBattleIsOverHandle(owner, battle.isBattleOver, battle.isVictory);
-            self.storeBattleState(ref battle, owner);
+        fn newBattle(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16) {
+            let alliesSpan = allyEntities.span();
+            let enemiesSpan = allyEntities.span();
+            InternalBattlesImpl::initBattleStorage(world, owner, allyEntities, enemyEntities, map, level);
+            let mut battle = BattleFactoryImpl::getBattle(world, owner, map);
+            let healthsArray = battle.getHealthsArray();
+            emit!(world, (Event::NewBattle(NewBattle { owner: owner, healthsArray: healthsArray })));
+            battle.battleLoop(world);
+            InternalBattlesImpl::ifBattleIsOverHandle(world, owner, map, battle.isBattleOver, battle.isVictory);
+            InternalBattlesImpl::storeBattleState(world, ref battle, owner, map);
         }
-        fn setISkillFactoryDispatch(ref self: ContractState, skillFactoryAdrs: ContractAddress) {
-            self.ISkillFactoryDispatch.write(ISkillFactoryDispatcher { contract_address: skillFactoryAdrs });
+        fn playArenaTurn(world: IWorldDispatcher, owner: ContractAddress, spellIndex: u8, targetIndex: u32) {
+            let mut battle = BattleFactoryImpl::getBattle(world, owner, 0);
+            battle.playTurn(world, spellIndex, targetIndex);
+            InternalBattlesImpl::ifArenaBattleIsOverHandle(world, owner, battle.isBattleOver, battle.isVictory);
+            // InternalBattlesImpl::storeArenaBattleState(world, ref battle, owner);
         }
-        // fn setIEventEmitterDispatch(ref self: ContractState, eventEmitterAdrs: ContractAddress) {
-        //     self.IEventEmitterDispatch.write(IEventEmitterDispatcher { contract_address: eventEmitterAdrs });
-        // }
-        fn setIAccountsDispatch(ref self: ContractState, newAccountsAdrs: ContractAddress) {
-            self.IAccountsDispatch.write(IAccountsDispatcher { contract_address: newAccountsAdrs });
-        }
-        fn setILevelsDispatch(ref self: ContractState, newLevelsAdrs: ContractAddress) {
-            self.ILevelsDispatch.write(ILevelsDispatcher { contract_address: newLevelsAdrs });
+        fn playTurn(world: IWorldDispatcher, owner: ContractAddress, map: u16, spellIndex: u8, targetIndex: u32) {
+            let mut battle = BattleFactoryImpl::getBattle(world, owner, map);
+            battle.playTurn(world, spellIndex, targetIndex);
+            InternalBattlesImpl::ifBattleIsOverHandle(world, owner, map, battle.isBattleOver, battle.isVictory);
+            InternalBattlesImpl::storeBattleState(world, ref battle, owner, map);
         }
     }
 
     #[generate_trait]
-    impl InternalEntityFactoryImpl of InternalEntityFactoryTrait {
-        fn ifBattleIsOverHandle(ref self: ContractState, owner: ContractAddress, isBattleOver: bool, isVictory: bool) {
+    impl InternalBattlesImpl of InternalBattlesTrait {
+        fn getHeroesIdsByMap(world: IWorldDispatcher, owner: ContractAddress, map: u16) -> Array<u32> {
+            let entitiesCount = get!(world, (owner, map), BattleStorage).entitiesCount;
+            let mut i: u32 = 0;
+            let mut heroesIds: Array<u32> = Default::default();
+            loop {
+                if( i == entitiesCount ) {
+                    break;
+                }
+                let entityStorage = get!(world, (owner, map, i), EntityStorage);
+                heroesIds.append(entityStorage.entity.heroId);
+                i += 1;
+            };
+            return heroesIds;
+        }
+        fn ifBattleIsOverHandle(world: IWorldDispatcher, owner: ContractAddress, map: u16, isBattleOver: bool, isVictory: bool) {
             if(!isBattleOver || !isVictory) {
                 return;
             }
-            let heroesIndexes = self.heroesIndexes.read(owner);
-            let world = self.world.read(owner);
-            let level = self.level.read(owner);
-            let levels = self.ILevelsDispatch.read().getEnemiesLevels(world, level);
-            experienceHandler::computeAndDistributeExperience(owner, heroesIndexes.array(), @levels, self.IAccountsDispatch.read());
-            lootHandler::computeAndDistributeLoot(owner, @levels, self.IAccountsDispatch.read());
+            let heroesIds = InternalBattlesImpl::getHeroesIdsByMap(world, owner, map);
+            let battleStorage = get!(world, (owner, map), BattleStorage);
+            let levels = LevelsImpl::getEnemiesLevels(world, map, battleStorage.level);
+            experienceHandler::computeAndDistributeExperience(world, owner, heroesIds, @levels);
+            lootHandler::computeAndDistributeLoot(world, owner, @levels);
         }
-        fn initBattleStorage(ref self: ContractState, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, heroesIds: Array<u32>,  world: u16, level: u16) {
-            self.isBattleOver.write(owner, false);
-            self.isWaitingForPlayerAction.write(owner, false);
-            self.cleanLists(owner, allyEntities.len() + enemyEntities.len());
+        fn ifArenaBattleIsOverHandle(world: IWorldDispatcher, owner: ContractAddress, isBattleOver: bool, isVictory: bool) {
+            if(!isBattleOver || !isVictory) {
+                return;
+            }
+            let arenaBattleStorage = get!(world, owner, ArenaBattleStorage);
+            let arenaAccounnt = get!(world, owner, ArenaAccount);
+            ArenaImpl::swapRanks(world, owner, arenaBattleStorage.enemyOwner, arenaAccounnt.lastClaimedRewards);    
+        }
 
-            let mut heroesIndexes = self.heroesIndexes.read(owner);
-            heroesIndexes.from_array(@heroesIds);
-            self.world.write(owner, world);
-            self.level.write(owner, level);
+        fn initArenaBattleStorage(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>) {
+            set!(world,
+                (
+                    ArenaBattleStorage {
+                        owner: owner,
+                        enemyOwner: enemyOwner,
+                    }
+                )
+            );
+            InternalBattlesImpl::initBattleStorage(world, owner, allyEntities, enemyEntities, Map::Arena.toU16(), 0);
 
-            let mut entities = self.entities.read(owner);
-            let mut aliveEntities = self.aliveEntities.read(owner);
-            let mut deadEntities = self.deadEntities.read(owner);
-            let mut turnTimeline = self.turnTimeline.read(owner);
-            let mut allies = self.allies.read(owner);
-            let mut enemies = self.enemies.read(owner);
-
+        }
+        fn initBattleStorage(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16) {
+            set!(world,
+                (
+                    BattleStorage {
+                        owner: owner,
+                        map: map,
+                        level: level,
+                        entitiesCount: allyEntities.len() + enemyEntities.len(),
+                        aliveEntitiesCount: allyEntities.len() + enemyEntities.len(),
+                        isBattleOver: false,
+                        isWaitingForPlayerAction: false,
+                    }
+                )
+            );
             let mut i: u32 = 0;
             loop {
                 if( i == allyEntities.len() ) {
                     break;
                 }
-                let ally = *allyEntities[i];
-                entities.append(ally);
-                aliveEntities.append(ally.getIndex());
-                turnTimeline.append(ally.getIndex());
-                allies.append(ally.getIndex());
+                set!(world,
+                    (
+                        EntityStorage {
+                            owner: owner,
+                            map: map,
+                            entityIndex: allyEntities[i].getIndex(),
+                            entity: *allyEntities[i],
+                            healthOnTurnProcCount: 0,
+                        }
+                    )
+                );
                 i += 1;
             };
-
-            let mut i: u32 = 0;
+            i = 0;
             loop {
                 if( i == enemyEntities.len() ) {
                     break;
                 }
-                let enemy = *enemyEntities[i];
-                entities.append(enemy);
-                aliveEntities.append(enemy.getIndex());
-                turnTimeline.append(enemy.getIndex());
-                enemies.append(enemy.getIndex());
+                set!(world,
+                    (
+                        EntityStorage {
+                            owner: owner,
+                            map: map,
+                            entityIndex: enemyEntities[i].getIndex(),
+                            entity: *enemyEntities[i],
+                            healthOnTurnProcCount: 0,
+                        }
+                    )
+                );
                 i += 1;
             };
         }
-        fn storeBattleState(ref self: ContractState, ref battle: Battle, owner: ContractAddress) {
-            self.isWaitingForPlayerAction.write(owner, battle.isWaitingForPlayerAction);
-            self.isBattleOver.write(owner, battle.isBattleOver);
-            let mut entities = self.entities.read(owner);
-            entities.clean();
-            entities.from_array(@battle.entities.toArray());
-            let mut aliveEntities = self.aliveEntities.read(owner);
-            aliveEntities.clean();
-            aliveEntities.from_array(@battle.aliveEntities.toArray());
-            let mut deadEntities = self.deadEntities.read(owner);
-            deadEntities.clean();
-            deadEntities.from_array(@battle.deadEntities);
-            let mut turnTimeline = self.turnTimeline.read(owner);
-            turnTimeline.clean();
-            turnTimeline.from_array(@battle.turnTimeline.toArray());
-            let mut allies = self.allies.read(owner);
-            allies.clean();
-            allies.from_array(@battle.alliesIndexes);
-            let mut enemies = self.enemies.read(owner);
-            enemies.clean();
-            enemies.from_array(@battle.enemiesIndexes);
+        fn storeBattleState(world: IWorldDispatcher, ref battle: Battle, owner: ContractAddress, map: u16) {
+            let battleInfos = get!(world, (owner, map), BattleStorage);
+
+            set!(world,
+                (
+                    BattleStorage {
+                        owner: battleInfos.owner,
+                        map: battleInfos.map,
+                        level: battleInfos.level,
+                        entitiesCount: battle.entities.len(),
+                        aliveEntitiesCount: battle.aliveEntities.len(),
+                        isBattleOver: battle.isBattleOver,
+                        isWaitingForPlayerAction: battle.isWaitingForPlayerAction,
+                    }
+                )
+            );
+
             let mut i: u32 = 0;
             loop {
                 if( i == battle.entities.len() ) {
                     break;
                 }
-                let mut healthOnTurnProcs = self.healthOnTurnProcs.read((owner, i));
-                healthOnTurnProcs.clean();
-                healthOnTurnProcs.from_array(@battle.getHealthOnTurnProcsEntity(i));
-                i += 1;
-            };
-        }
-        fn getBattle(ref self: ContractState, owner: ContractAddress) -> Battle {
-            let entities = self.entities.read(owner).array();
-            let aliveEntities = self.aliveEntities.read(owner).array();
-            let deadEntities = self.deadEntities.read(owner).array();
-            let turnTimeline = self.turnTimeline.read(owner).array();
-            let allies = self.allies.read(owner).array();
-            let enemies = self.enemies.read(owner).array();
-            let healthOnTurnProcs = self.getHealthOnTurnProcs(owner);
-            let mut entitiesNames: Array<felt252> = Default::default();
-            let entitiesSpan = entities.span();
-            let mut i: u32 = 0;
-            loop {
-                if( i == entitiesSpan.len() ) {
-                    break;
-                }
-                let entity = *entitiesSpan[i];
-                entitiesNames.append(entity.name);
-                i += 1;
-            };
-            let skillSets = self.ISkillFactoryDispatch.read().getSkillSets(entitiesNames);
-
-            let battle = battle::new(entities, aliveEntities, deadEntities, turnTimeline, allies, enemies, healthOnTurnProcs, skillSets, false, self.isWaitingForPlayerAction.read(owner), owner);
-            return battle;
-        }
-        fn getHealthOnTurnProcs(ref self: ContractState, owner: ContractAddress) -> Array<HealthOnTurnProc> {
-            let mut healthOnTurnProcs: Array<HealthOnTurnProc> = Default::default();
-            let mut i: u32 = 0;
-            let entitiesCount = self.entities.read(owner).len();
-            loop {
-                if( i == entitiesCount ) {
-                    break;
-                }
-                let healthOnTurnProcEntity = self.healthOnTurnProcs.read((owner, i)).array();
+                let healthOnTurnProcsEntity: Array<HealthOnTurnProc> = battle.getHealthOnTurnProcsEntity(i);
+                set!(world,
+                    (
+                        EntityStorage {
+                            owner: battleInfos.owner,
+                            map: battleInfos.map,
+                            entityIndex: battle.entities.get(i).unwrap().getIndex(),
+                            entity: battle.entities.get(i).unwrap(),
+                            healthOnTurnProcCount: healthOnTurnProcsEntity.len(),
+                        },
+                    )
+                
+                );
                 let mut j: u32 = 0;
                 loop {
-                    if( j == healthOnTurnProcEntity.len() ) {
+                    if( j == healthOnTurnProcsEntity.len() ) {
                         break;
                     }
-                    healthOnTurnProcs.append(*healthOnTurnProcEntity[j]);
+                    set!(world,
+                        (
+                            HealthOnTurnProcStorage {
+                                owner: battleInfos.owner,
+                                map: battleInfos.map,
+                                entityIndex: battle.entities.get(i).unwrap().getIndex(),
+                                index: j,
+                                healthOnTurnProc: *healthOnTurnProcsEntity[j],
+                            }
+                        )
+                    );
                     j += 1;
                 };
                 i += 1;
             };
-            return healthOnTurnProcs;
-        }
-        fn cleanLists(ref self: ContractState, owner: ContractAddress, entitiesCount: u32) {
-            let mut heroesIndexes = self.heroesIndexes.read(owner);
-            heroesIndexes.clean();
-            let mut entities = self.entities.read(owner);
-            entities.clean();
-            let mut alivesEntities = self.aliveEntities.read(owner);
-            alivesEntities.clean();
-            let mut deadEntities = self.deadEntities.read(owner);
-            deadEntities.clean();
-            let mut turnTimeline = self.turnTimeline.read(owner);
-            turnTimeline.clean();
-            let mut allies = self.allies.read(owner);
-            allies.clean();
-            let mut enemies = self.enemies.read(owner);
-            enemies.clean();
-            let mut i: u32 = 0;
-            loop {
-                if( i == entitiesCount ) {
-                    break;
-                }
-                let mut healthOnTurnProcs = self.healthOnTurnProcs.read((owner, i));
-                healthOnTurnProcs.clean();
-                i += 1;
-            };
+            
         }
     }
 }

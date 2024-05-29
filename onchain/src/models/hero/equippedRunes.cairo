@@ -1,10 +1,9 @@
 use core::option::OptionTrait;
 
-use game::utils::list::{ListTrait, List};
 use game::models::hero::rune::{Rune, RuneImpl, RuneType};
 use debug::PrintTrait;
 
-#[derive(starknet::Store, Introspect, Copy, Drop, Serde)]
+#[derive(Introspect, Copy, Drop, Serde)]
 struct EquippedRunes {
     isFirstRuneEquipped: bool,
     first: u32,
@@ -38,8 +37,8 @@ fn new() -> EquippedRunes {
 }
 
 trait EquippedRunesTrait {
-    fn equipRune(ref self: EquippedRunes, ref rune: Rune, heroId: u32, ref runesList: List<Rune>);
-    fn handleEquipRune(ref self: EquippedRunes, isAnotherRuneAlreadyEquipped: bool, runeAlreadyEquippedId: u32, ref rune: Rune, heroId: u32, ref runesList: List<Rune>);
+    fn equipRune(ref self: EquippedRunes, ref rune: Rune, heroId: u32);
+    fn handleEquipRune(ref self: EquippedRunes, isAnotherRuneAlreadyEquipped: bool, runeAlreadyEquippedId: u32, ref rune: Rune, heroId: u32);
     fn equipRuneEmptySlot(ref self: EquippedRunes, ref rune: Rune, heroId: u32);
     fn unequipRune(ref self: EquippedRunes, ref rune: Rune, heroId: u32);
     fn getRunesIndexArray(self: EquippedRunes) -> Array<u32>;
@@ -47,17 +46,17 @@ trait EquippedRunesTrait {
 }
 
 impl EquippedRunesImpl of EquippedRunesTrait {
-    fn equipRune(ref self: EquippedRunes, ref rune: Rune, heroId: u32, ref runesList: List<Rune>) {
+    fn equipRune(ref self: EquippedRunes, ref rune: Rune, heroId: u32) {
         match rune.runeType {
-            RuneType::First => self.handleEquipRune(self.isFirstRuneEquipped, self.first, ref rune, heroId, ref runesList),
-            RuneType::Second => self.handleEquipRune(self.isSecondRuneEquipped, self.second, ref rune, heroId, ref runesList),
-            RuneType::Third => self.handleEquipRune(self.isThirdRuneEquipped, self.third, ref rune, heroId, ref runesList),
-            RuneType::Fourth => self.handleEquipRune(self.isFourthRuneEquipped, self.fourth, ref rune, heroId, ref runesList),
-            RuneType::Fifth => self.handleEquipRune(self.isFifthRuneEquipped, self.fifth, ref rune, heroId, ref runesList),
-            RuneType::Sixth => self.handleEquipRune(self.isSixthRuneEquipped, self.sixth, ref rune, heroId, ref runesList),
+            RuneType::First => self.handleEquipRune(self.isFirstRuneEquipped, self.first, ref rune, heroId),
+            RuneType::Second => self.handleEquipRune(self.isSecondRuneEquipped, self.second, ref rune, heroId),
+            RuneType::Third => self.handleEquipRune(self.isThirdRuneEquipped, self.third, ref rune, heroId),
+            RuneType::Fourth => self.handleEquipRune(self.isFourthRuneEquipped, self.fourth, ref rune, heroId),
+            RuneType::Fifth => self.handleEquipRune(self.isFifthRuneEquipped, self.fifth, ref rune, heroId),
+            RuneType::Sixth => self.handleEquipRune(self.isSixthRuneEquipped, self.sixth, ref rune, heroId),
         }
     }
-    fn handleEquipRune(ref self: EquippedRunes, isAnotherRuneAlreadyEquipped: bool, runeAlreadyEquippedId: u32, ref rune: Rune, heroId: u32, ref runesList: List<Rune>) {
+    fn handleEquipRune(ref self: EquippedRunes, isAnotherRuneAlreadyEquipped: bool, runeAlreadyEquippedId: u32, ref rune: Rune, heroId: u32) {
         // if(isAnotherRuneAlreadyEquipped) {
             // let mut runeAlreadyEquipped = runesList[runeAlreadyEquippedId];
             // runeAlreadyEquipped.unequip();

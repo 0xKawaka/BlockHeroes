@@ -8,7 +8,7 @@ use game::utils::signedIntegers::{i64::i64, i64::i64Impl};
 
 use debug::PrintTrait;
 
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct Statistics {
     maxHealth: u64,
     health: i64,

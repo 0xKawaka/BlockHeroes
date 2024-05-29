@@ -1,6 +1,6 @@
 kind = "DojoContract"
-class_hash = "0x3b68e46ce1dd930ae0f21e52f98547ca7b8615264418d088b1087a5209880b1"
-original_class_hash = "0x3b68e46ce1dd930ae0f21e52f98547ca7b8615264418d088b1087a5209880b1"
+class_hash = "0x53ad04e1465f0e5841d445c6bdf05363413073c9868036f68c171755ef6bbba"
+original_class_hash = "0x53ad04e1465f0e5841d445c6bdf05363413073c9868036f68c171755ef6bbba"
 base_class_hash = "0x0"
 abi = "manifests/dev/abis/base/contracts/game_systems_entityFactory_EntityFactory.json"
 reads = []

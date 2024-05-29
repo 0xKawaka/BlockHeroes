@@ -1,0 +1,30 @@
+kind = "DojoModel"
+class_hash = "0x400717b04ef75d82a768a28237dc8ec9fcb82e2a326e23ec13210b3d6bcf016"
+original_class_hash = "0x400717b04ef75d82a768a28237dc8ec9fcb82e2a326e23ec13210b3d6bcf016"
+abi = "manifests/dev/abis/base/models/game_models_storage_battles_entityStorage_entity_storage.json"
+name = "game::models::storage::battles::entityStorage::entity_storage"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "map"
+type = "u16"
+key = true
+
+[[members]]
+name = "entityIndex"
+type = "u32"
+key = true
+
+[[members]]
+name = "entity"
+type = "Entity"
+key = false
+
+[[members]]
+name = "healthOnTurnProcCount"
+type = "u32"
+key = false

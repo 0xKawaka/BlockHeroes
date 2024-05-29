@@ -5,7 +5,7 @@ use debug::PrintTrait;
 // i128 represents a 128-bit integer.
 // The mag field holds the absolute value of the integer.
 // The sign field is true for negative integers, and false for non-negative integers.
-#[derive(Serde, Copy, Drop, Hash, starknet::Store)]
+#[derive(Serde, Copy, Drop, Hash)]
 struct i128 {
     mag: u128,
     sign: bool,

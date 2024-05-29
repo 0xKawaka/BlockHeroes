@@ -1,0 +1,15 @@
+kind = "DojoModel"
+class_hash = "0x5f5d7ae5745b5f57bc8d9d0f07623ce328967823ca4ffbe2822f34cd924341"
+original_class_hash = "0x5f5d7ae5745b5f57bc8d9d0f07623ce328967823ca4ffbe2822f34cd924341"
+abi = "manifests/dev/abis/base/models/game_models_storage_statistics_baseStatistics_base_statistics.json"
+name = "game::models::storage::statistics::baseStatistics::base_statistics"
+
+[[members]]
+name = "heroName"
+type = "felt252"
+key = true
+
+[[members]]
+name = "statistics"
+type = "Statistics"
+key = false

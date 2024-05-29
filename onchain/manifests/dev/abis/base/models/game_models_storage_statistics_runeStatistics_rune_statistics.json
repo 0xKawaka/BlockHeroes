@@ -1,0 +1,283 @@
+[
+  {
+    "type": "impl",
+    "name": "DojoModelImpl",
+    "interface_name": "dojo::model::IDojoModel"
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<core::integer::u8>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<core::integer::u8>"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<core::felt252>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<core::felt252>"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "dojo::database::introspect::Struct",
+    "members": [
+      {
+        "name": "name",
+        "type": "core::felt252"
+      },
+      {
+        "name": "attrs",
+        "type": "core::array::Span::<core::felt252>"
+      },
+      {
+        "name": "children",
+        "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "dojo::database::introspect::Enum",
+    "members": [
+      {
+        "name": "name",
+        "type": "core::felt252"
+      },
+      {
+        "name": "attrs",
+        "type": "core::array::Span::<core::felt252>"
+      },
+      {
+        "name": "children",
+        "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "dojo::database::introspect::Ty",
+    "variants": [
+      {
+        "name": "Primitive",
+        "type": "core::felt252"
+      },
+      {
+        "name": "Struct",
+        "type": "dojo::database::introspect::Struct"
+      },
+      {
+        "name": "Enum",
+        "type": "dojo::database::introspect::Enum"
+      },
+      {
+        "name": "Tuple",
+        "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+      },
+      {
+        "name": "Array",
+        "type": "core::integer::u32"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "dojo::model::IDojoModel",
+    "items": [
+      {
+        "type": "function",
+        "name": "name",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "unpacked_size",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u32"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "packed_size",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::integer::u32"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "layout",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::array::Span::<core::integer::u8>"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "schema",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "dojo::database::introspect::Ty"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "rune_statisticsImpl",
+    "interface_name": "game::models::storage::statistics::runeStatistics::Irune_statistics"
+  },
+  {
+    "type": "enum",
+    "name": "game::models::hero::rune::RuneStatistic",
+    "variants": [
+      {
+        "name": "Health",
+        "type": "()"
+      },
+      {
+        "name": "Attack",
+        "type": "()"
+      },
+      {
+        "name": "Defense",
+        "type": "()"
+      },
+      {
+        "name": "Speed",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "game::models::hero::rune::RuneRarity",
+    "variants": [
+      {
+        "name": "Common",
+        "type": "()"
+      },
+      {
+        "name": "Uncommon",
+        "type": "()"
+      },
+      {
+        "name": "Rare",
+        "type": "()"
+      },
+      {
+        "name": "Epic",
+        "type": "()"
+      },
+      {
+        "name": "Legendary",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "enum",
+    "name": "core::bool",
+    "variants": [
+      {
+        "name": "False",
+        "type": "()"
+      },
+      {
+        "name": "True",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "game::models::storage::statistics::runeStatistics::RuneStatistics",
+    "members": [
+      {
+        "name": "statistic",
+        "type": "game::models::hero::rune::RuneStatistic"
+      },
+      {
+        "name": "rarity",
+        "type": "game::models::hero::rune::RuneRarity"
+      },
+      {
+        "name": "isPercent",
+        "type": "core::bool"
+      },
+      {
+        "name": "value",
+        "type": "core::integer::u32"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "game::models::storage::statistics::runeStatistics::Irune_statistics",
+    "items": [
+      {
+        "type": "function",
+        "name": "ensure_abi",
+        "inputs": [
+          {
+            "name": "model",
+            "type": "game::models::storage::statistics::runeStatistics::RuneStatistics"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "game::models::storage::statistics::runeStatistics::rune_statistics::Event",
+    "kind": "enum",
+    "variants": []
+  }
+]

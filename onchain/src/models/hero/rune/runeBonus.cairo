@@ -1,7 +1,7 @@
 use game::models::hero::rune::RuneStatistic;
 use debug::PrintTrait;
 
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct RuneBonus {
     statistic: RuneStatistic,
     isPercent: bool,

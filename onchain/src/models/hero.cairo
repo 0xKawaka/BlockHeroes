@@ -3,15 +3,16 @@ mod rune;
 
 use rune::{Rune, RuneImpl};
 use equippedRunes::{EquippedRunes, EquippedRunesImpl};
-use game::utils::list::List;
-// use game::Contracts::EventEmitter::{IEventEmitterDispatcher, IEventEmitterDispatcherTrait};
 use starknet::ContractAddress;
 use debug::PrintTrait;
+
+use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+use game::models::events::{Event, ExperienceGain};
 
 const levelZeroExperienceNeeded: u32 = 100;
 const bonusExperiencePercentRequirePerLevel: u32 = 10;
 
-#[derive(starknet::Store, Introspect, Copy, Drop, Serde)]
+#[derive(Introspect, Copy, Drop, Serde)]
 struct Hero {
     id: u32,
     name: felt252,
@@ -26,8 +27,8 @@ fn new(id: u32, name: felt252, level: u16, rank: u16) -> Hero {
 }
 
 trait HeroTrait {
-    fn gainExperience(ref self: Hero, experience: u32, owner: ContractAddress);
-    fn equipRune(ref self: Hero, ref rune: Rune, ref runesList: List<Rune>);
+    fn gainExperience(ref self: Hero,  world: IWorldDispatcher, experience: u32, owner: ContractAddress);
+    fn equipRune(ref self: Hero, ref rune: Rune);
     fn unequipRune(ref self: Hero, ref rune: Rune);
     fn getRunes(self: Hero) -> EquippedRunes;
     fn getRunesIndexArray(self: Hero) -> Array<u32>;
@@ -39,7 +40,7 @@ trait HeroTrait {
 }
 
 impl HeroImpl of HeroTrait {
-    fn gainExperience(ref self: Hero, experience: u32, owner: ContractAddress) {
+    fn gainExperience(ref self: Hero, world: IWorldDispatcher, experience: u32, owner: ContractAddress) {
         self.experience += experience;
         let mut requiredExperience = 0;
         // let previousLevel = self.level;
@@ -51,10 +52,10 @@ impl HeroImpl of HeroTrait {
             self.level += 1;
             self.experience -= requiredExperience;
         };
-        // IEventEmitterDispatch.experienceGain(owner, self.id, experience, self.level, self.experience);
+        emit!(world, (Event::ExperienceGain(ExperienceGain { owner: owner, entityId: self.id, experienceGained: experience, levelAfter: self.level, experienceAfter: self.experience })));
     }
-    fn equipRune(ref self: Hero, ref rune: Rune, ref runesList: List<Rune>) {
-        self.runes.equipRune(ref rune, self.id, ref runesList);
+    fn equipRune(ref self: Hero, ref rune: Rune) {
+        self.runes.equipRune(ref rune, self.id);
     }
     fn unequipRune(ref self: Hero, ref rune: Rune) {
         self.runes.unequipRune(ref rune, self.id);

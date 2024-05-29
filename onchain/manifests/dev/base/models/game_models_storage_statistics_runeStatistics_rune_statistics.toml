@@ -1,0 +1,25 @@
+kind = "DojoModel"
+class_hash = "0x25ecab6d5cea055034b6320921e40b8666918fc23655f0ad2bd344fa630a403"
+original_class_hash = "0x25ecab6d5cea055034b6320921e40b8666918fc23655f0ad2bd344fa630a403"
+abi = "manifests/dev/abis/base/models/game_models_storage_statistics_runeStatistics_rune_statistics.json"
+name = "game::models::storage::statistics::runeStatistics::rune_statistics"
+
+[[members]]
+name = "statistic"
+type = "RuneStatistic"
+key = true
+
+[[members]]
+name = "rarity"
+type = "RuneRarity"
+key = true
+
+[[members]]
+name = "isPercent"
+type = "bool"
+key = true
+
+[[members]]
+name = "value"
+type = "u32"
+key = false

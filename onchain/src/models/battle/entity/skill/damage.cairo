@@ -1,9 +1,9 @@
 use game::utils::iVector::VecTrait;
 use game::models::battle::{Battle, BattleTrait};
 use game::models::battle::entity::{Entity, EntityImpl, EntityTrait};
-// use game::Contracts::EventEmitter::IdAndValueEvent;
+use game::models::events::{IdAndValue};
 
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 struct Damage {
     value: u64,
     target: bool,
@@ -12,7 +12,7 @@ struct Damage {
     damageType: DamageType,
 }
 
-#[derive(starknet::Store, Copy, Drop, Serde, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
 enum DamageType {
     Flat,
     Percent,
@@ -23,17 +23,15 @@ fn new(value: u64, target: bool, aoe: bool, self: bool, damageType: DamageType) 
 }
 
 trait DamageTrait {
-    // fn apply(self: Damage, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValueEvent>;
-    fn apply(self: Damage, ref caster: Entity, ref target: Entity, ref battle: Battle);
+    fn apply(self: Damage, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue>;
     fn computeDamage(self: Damage, ref caster: Entity, ref target: Entity) -> u64;
 }
 
 impl DamageImpl of DamageTrait {
-    fn apply(self: Damage, ref caster: Entity, ref target: Entity, ref battle: Battle) {
-        // let mut damageByIdArray: Array<IdAndValueEvent> = Default::default();
+    fn apply(self: Damage, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue> {
+        let mut damageByIdArray: Array<IdAndValue> = Default::default();
         if (self.value == 0) {
-            // return damageByIdArray;
-            return;
+            return damageByIdArray;
         }
 
         if (self.aoe) {
@@ -51,14 +49,14 @@ impl DamageImpl of DamageTrait {
                 if(target.index == enemy.getIndex()) {
                     let damage = self.computeDamage(ref caster, ref target);
                     target.takeDamage(damage);
-                    // damageByIdArray.append(IdAndValueEvent { entityId: target.index, value: damage });
+                    damageByIdArray.append(IdAndValue { entityId: target.index, value: damage });
                     i += 1;
                     continue;
                 }
 
                 let damage = self.computeDamage(ref caster, ref enemy);
                 enemy.takeDamage(damage);
-                // damageByIdArray.append(IdAndValueEvent { entityId: enemy.index, value: damage });
+                damageByIdArray.append(IdAndValue { entityId: enemy.index, value: damage });
                 battle.entities.set(enemy.index, enemy);
                 i += 1;
             }
@@ -66,27 +64,26 @@ impl DamageImpl of DamageTrait {
             if (self.self) {
                 let damage = self.computeDamage(ref caster, ref caster);
                 caster.takeDamage(damage);
-                // damageByIdArray.append(IdAndValueEvent { entityId: caster.index, value: damage });
+                damageByIdArray.append(IdAndValue { entityId: caster.index, value: damage });
             }
             if (self.target) {
                 // if already damaged self and target is self, return
                 if(self.self && target.index == caster.index){
-                    // return damageByIdArray;
-                    return;
+                    return damageByIdArray;
                 }
                 if(target.index == caster.index) {
                     let damage = self.computeDamage(ref caster, ref caster);
                     caster.takeDamage(damage);
-                    // damageByIdArray.append(IdAndValueEvent { entityId: caster.index, value: damage });
+                    damageByIdArray.append(IdAndValue { entityId: caster.index, value: damage });
                 }
                 else {
                     let damage = self.computeDamage(ref caster, ref target);
                     target.takeDamage(damage);
-                    // damageByIdArray.append(IdAndValueEvent { entityId: target.index, value: damage });
+                    damageByIdArray.append(IdAndValue { entityId: target.index, value: damage });
                 }
             }
         }
-        // return damageByIdArray;
+        return damageByIdArray;
     }
     fn computeDamage(self: Damage, ref caster: Entity, ref target: Entity) -> u64 {
         match self.damageType {
