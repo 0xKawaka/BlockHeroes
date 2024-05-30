@@ -3,7 +3,8 @@ use game::models::battle::entity::skill::heal::Heal;
 use game::models::battle::entity::skill::TargetType;
 use game::models::battle::entity::Entity;
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model]
 struct SkillInfos {
     #[key]
     name: felt252,

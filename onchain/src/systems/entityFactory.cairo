@@ -33,7 +33,7 @@ mod EntityFactory {
                 if i == heroes.len() {
                     break;
                 }
-                let entity = EntityFactoryImpl::newEntity(world, owner, startIndex + i, *heroes[i], allyOrEnemy);
+                let entity = Self::newEntity(world, owner, startIndex + i, *heroes[i], allyOrEnemy);
                 entities.append(entity);
                 i += 1;
             };
@@ -44,7 +44,7 @@ mod EntityFactory {
             let baseStatsValues = baseStats.computeAllStatistics(hero.level, hero.rank);
             let runesIndex = hero.getRunesIndexArray();
             let runes = AccountsImpl::getRunes(world, owner, runesIndex);
-            let runesStatsValues = EntityFactoryImpl::computeRunesBonuses(world, runes, baseStatsValues);
+            let runesStatsValues = Self::computeRunesBonuses(world, runes, baseStatsValues);
 
             return entity::new(
                 index,
@@ -69,7 +69,6 @@ mod EntityFactory {
                 }
                 let rune: Rune = *runes[i];
                 let runeStatWithoutRank = get!(world, (rune.statistic, rune.rarity, rune.isPercent), (RuneStatistics)).value;
-                let test = rune.statistic;
                 let runeStat = runeStatWithoutRank + ((runeStatWithoutRank * rune.rank) / 10);
                 InternalEntityFactoryImpl::matchAndAddStat(ref runesTotalBonusStats, rune.statistic, runeStat.into(), rune.isPercent, baseStats);
                 if (rune.rank > 3) {

@@ -169,11 +169,11 @@ impl i64Zeroable of Zeroable<i64> {
     }
     #[inline(always)]
     fn is_zero(self: i64) -> bool {
-        self == i64Zeroable::zero()
+        self == Self::zero()
     }
     #[inline(always)]
     fn is_non_zero(self: i64) -> bool {
-        self != i64Zeroable::zero()
+        self != Self::zero()
     }
 }
 

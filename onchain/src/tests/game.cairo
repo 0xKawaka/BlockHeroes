@@ -18,10 +18,10 @@ mod tests {
         let mut models = array![heroes::TEST_CLASS_HASH, runes::TEST_CLASS_HASH, account::TEST_CLASS_HASH, entity_storage::TEST_CLASS_HASH];
         let world = spawn_test_world(models);
 
-        let game_contract_adrs = world.deploy_contract('salt', Game::TEST_CLASS_HASH.try_into().unwrap());
+        let game_contract_adrs = world.deploy_contract('salt', Game::TEST_CLASS_HASH.try_into().unwrap(), array![].span());
         let game = IGameDispatcher { contract_address: game_contract_adrs };
 
-        let settings_contract_adrs = world.deploy_contract('salt2', Settings::TEST_CLASS_HASH.try_into().unwrap());
+        let settings_contract_adrs = world.deploy_contract('salt2', Settings::TEST_CLASS_HASH.try_into().unwrap(), array![].span());
         let settings = ISettingsDispatcher { contract_address: settings_contract_adrs };
 
         settings.initSettings();

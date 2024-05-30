@@ -1,7 +1,8 @@
 use starknet::ContractAddress;
 use game::models::battle::entity::healthOnTurnProc::HealthOnTurnProc;
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model]
 struct HealthOnTurnProcStorage {
     #[key]
     owner: ContractAddress,

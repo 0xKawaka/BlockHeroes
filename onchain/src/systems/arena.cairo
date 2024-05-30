@@ -28,7 +28,7 @@ mod Arena {
             set!(world, ArenaAccount { owner: owner, rank: arenaCurrentRank, lastClaimedRewards: get_block_timestamp()});
             set!(world, ArenaCurrentRankIndex { id: 0, currentRankIndex: arenaCurrentRank + 1 });
 
-            ArenaImpl::setTeam(world, owner, heroeIds.span());
+            Self::setTeam(world, owner, heroeIds.span());
             emit!(world, (Event::InitArena(InitArena { owner: owner, rank: arenaCurrentRank, heroeIds: heroeIds })));
         }
 

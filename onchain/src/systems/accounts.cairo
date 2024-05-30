@@ -50,11 +50,10 @@ mod Accounts {
 
     use game::utils::random::rand32;
 
-
     #[abi(embed_v0)]
     impl AccountsImpl of super::IAccounts {
         fn equipRune(world: IWorldDispatcher, accountAdrs: ContractAddress, runeId: u32, heroId: u32) {
-            let mut acc = AccountsImpl::getAccount(world, accountAdrs);
+            let mut acc = Self::getAccount(world, accountAdrs);
             assert(acc.heroesCount > heroId, 'heroId out of range');
             assert(acc.runesCount > runeId, 'runeId out of range');
             let mut hero = get!(world, (acc.owner, heroId), (Heroes)).hero;
@@ -68,7 +67,7 @@ mod Accounts {
             );
         }
         fn unequipRune(world: IWorldDispatcher, accountAdrs: ContractAddress, runeId: u32) {
-            let mut acc = AccountsImpl::getAccount(world, accountAdrs);
+            let mut acc = Self::getAccount(world, accountAdrs);
             assert(acc.runesCount > runeId, 'runeId out of range');
             let mut rune = get!(world, (acc.owner, runeId), (Runes)).rune;
             assert(rune.isEquipped(), 'Rune not equipped');
@@ -82,7 +81,7 @@ mod Accounts {
             );
         }
         fn upgradeRune(world: IWorldDispatcher, accountAdrs: ContractAddress, runeId: u32) {
-            let mut acc = AccountsImpl::getAccount(world, accountAdrs);
+            let mut acc = Self::getAccount(world, accountAdrs);
             assert(acc.runesCount > runeId, 'runeId out of range');
             let mut rune = get!(world, (acc.owner, runeId), (Runes)).rune;
             rune.upgrade(world, ref acc);
@@ -94,7 +93,7 @@ mod Accounts {
             );
         }
         fn mintHero(world: IWorldDispatcher, accountAdrs: ContractAddress) {
-            let mut acc = AccountsImpl::getAccount(world, accountAdrs);
+            let mut acc = Self::getAccount(world, accountAdrs);
             let heroesPossible: Array<felt252> = array!['priest', 'assassin', 'knight', 'hunter'];
             let randIndex = rand32(get_block_timestamp(), heroesPossible.len());
             let heroName = *heroesPossible[randIndex];
@@ -104,14 +103,14 @@ mod Accounts {
             emit!(world, HeroMinted {owner: accountAdrs, id: acc.heroesCount - 1, name: heroName})
         }
         fn mintHeroAdmin(world: IWorldDispatcher, accountAdrs: ContractAddress, name: felt252, level: u16, rank: u16) {
-            let mut acc = AccountsImpl::getAccount(world, accountAdrs);
+            let mut acc = Self::getAccount(world, accountAdrs);
             set!(world, Heroes {owner: accountAdrs, index: acc.heroesCount, hero: hero::new(acc.heroesCount, name, level, rank)});
             acc.heroesCount += 1;
             set!(world, (acc));
             emit!(world, HeroMinted {owner: accountAdrs, id: acc.heroesCount - 1, name: name})
         }
         fn mintRune(world: IWorldDispatcher, accountAdrs: ContractAddress) {
-            let mut acc = AccountsImpl::getAccount(world, accountAdrs);
+            let mut acc = Self::getAccount(world, accountAdrs);
             let mintedRune = rune::new(acc.runesCount);
             set!(world, Runes {owner: accountAdrs, index: acc.runesCount, rune: mintedRune});
             acc.runesCount += 1;
@@ -123,38 +122,38 @@ mod Accounts {
             assert(acc.username == 0x0, 'Account already created');
             let mut acc = account::new(username, accountAdrs);
             emit!(world, NewAccount {owner: accountAdrs, username: username});
-            let heroesCount = AccountsImpl::mintStarterHeroes(world, accountAdrs);
-            let runesCount = AccountsImpl::mintStarterRunes(world, accountAdrs);
+            let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
+            let runesCount = Self::mintStarterRunes(world, accountAdrs);
             acc.heroesCount = heroesCount;
             acc.runesCount = runesCount;
             set!(world, (acc));
         }
         fn addExperienceToHeroId(world: IWorldDispatcher, accountAdrs: ContractAddress, heroId: u32, experience: u32) {
-            let acc = AccountsImpl::getAccount(world, accountAdrs);
+            let acc = Self::getAccount(world, accountAdrs);
             assert(acc.heroesCount > heroId, 'heroId out of range');
             let mut hero = get!(world, (accountAdrs, heroId), (Heroes)).hero;
             hero.gainExperience(world, experience, accountAdrs);
             set!(world, Heroes {owner: accountAdrs, index: heroId, hero: hero});
         }
         fn decreaseEnergy(world: IWorldDispatcher, accountAdrs: ContractAddress, energyCost: u16) {
-            let mut acc = AccountsImpl::getAccount(world, accountAdrs);
+            let mut acc = Self::getAccount(world, accountAdrs);
             acc.updateEnergy();
             acc.decreaseEnergy(energyCost);
             set!(world, (acc));
         }
         fn decreasePvpEnergy(world: IWorldDispatcher, accountAdrs: ContractAddress, energyCost: u16) {
-            let mut acc = AccountsImpl::getAccount(world, accountAdrs);
+            let mut acc = Self::getAccount(world, accountAdrs);
             acc.updatePvpEnergy();
             acc.decreasePvpEnergy(energyCost);
             set!(world, (acc));
         }
         fn increaseCrystals(world: IWorldDispatcher, accountAdrs: ContractAddress, crystalsToAdd: u32) {
-            let mut acc = AccountsImpl::getAccount(world, accountAdrs);
+            let mut acc = Self::getAccount(world, accountAdrs);
             acc.increaseCrystals(crystalsToAdd);
             set!(world, (acc));
         }
         fn decreaseCrystals(world: IWorldDispatcher, accountAdrs: ContractAddress, crystalsToSub: u32) {
-            let mut acc = AccountsImpl::getAccount(world, accountAdrs);
+            let mut acc = Self::getAccount(world, accountAdrs);
             acc.decreaseCrystals(crystalsToSub);
             set!(world, (acc));
         }

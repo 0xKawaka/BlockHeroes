@@ -1,6 +1,7 @@
 use game::models::hero::Hero;
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model]
 struct LevelEnemy {
     #[key]
     map: u16,

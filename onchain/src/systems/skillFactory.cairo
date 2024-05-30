@@ -48,7 +48,7 @@ mod SkillFactory {
                     break;
                 }
                 let entityName = *names[i];
-                skills.append(SkillFactoryImpl::getSkillSet(world, entityName));
+                skills.append(Self::getSkillSet(world, entityName));
                 i += 1;
             };
             return skills;
@@ -56,9 +56,9 @@ mod SkillFactory {
         fn getSkillSet(world: IWorldDispatcher, entityName: felt252) -> Array<Skill> {
             let skillNameSet = get!(world, entityName, (SkillNameSet));
             let mut skillSet: Array<Skill> = Default::default();
-            skillSet.append(SkillFactoryImpl::getSkill(world, skillNameSet.skill0));
-            skillSet.append(SkillFactoryImpl::getSkill(world, skillNameSet.skill1));
-            skillSet.append(SkillFactoryImpl::getSkill(world, skillNameSet.skill2));
+            skillSet.append(Self::getSkill(world, skillNameSet.skill0));
+            skillSet.append(Self::getSkill(world, skillNameSet.skill1));
+            skillSet.append(Self::getSkill(world, skillNameSet.skill2));
             return skillSet;
         }
         

@@ -13,7 +13,8 @@ use {starknet::ContractAddress, starknet::get_block_timestamp};
 const timeTickEnergy: u64 = 1200;
 const timeTickPvpEnergy: u64 = 1200;
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model]
 struct Account {
     #[key]
     owner: ContractAddress,

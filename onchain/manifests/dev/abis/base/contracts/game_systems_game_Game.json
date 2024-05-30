@@ -228,6 +228,24 @@
   },
   {
     "type": "impl",
+    "name": "IDojoInitImpl",
+    "interface_name": "game::systems::game::Game::IDojoInit"
+  },
+  {
+    "type": "interface",
+    "name": "game::systems::game::Game::IDojoInit",
+    "items": [
+      {
+        "type": "function",
+        "name": "dojo_init",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
     "name": "UpgradableImpl",
     "interface_name": "dojo::components::upgradeable::IUpgradeable"
   },

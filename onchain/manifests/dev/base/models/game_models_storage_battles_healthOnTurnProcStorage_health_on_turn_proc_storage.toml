@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x1fe7827dc804b244f4221b50f27aa4ca1fbac6dcbb05530d7505eed3ce51ad0"
-original_class_hash = "0x1fe7827dc804b244f4221b50f27aa4ca1fbac6dcbb05530d7505eed3ce51ad0"
+class_hash = "0x4692b7a84ab642b1c01846ffd39d6af3fb9925df548f783fd95d8051807dfbb"
+original_class_hash = "0x4692b7a84ab642b1c01846ffd39d6af3fb9925df548f783fd95d8051807dfbb"
 abi = "manifests/dev/abis/base/models/game_models_storage_battles_healthOnTurnProcStorage_health_on_turn_proc_storage.json"
 name = "game::models::storage::battles::healthOnTurnProcStorage::health_on_turn_proc_storage"
 

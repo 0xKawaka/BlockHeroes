@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x400717b04ef75d82a768a28237dc8ec9fcb82e2a326e23ec13210b3d6bcf016"
-original_class_hash = "0x400717b04ef75d82a768a28237dc8ec9fcb82e2a326e23ec13210b3d6bcf016"
+class_hash = "0x8229c3d9b1c3f36ee90cfbdb807c651c52ef0c1e6a123950f19f9a62aafd4d"
+original_class_hash = "0x8229c3d9b1c3f36ee90cfbdb807c651c52ef0c1e6a123950f19f9a62aafd4d"
 abi = "manifests/dev/abis/base/models/game_models_storage_battles_entityStorage_entity_storage.json"
 name = "game::models::storage::battles::entityStorage::entity_storage"
 
@@ -20,7 +20,7 @@ type = "u32"
 key = true
 
 [[members]]
-name = "entity"
+name = "entityVal"
 type = "Entity"
 key = false
 

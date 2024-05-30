@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x12d664c52ac67053855af1d00b15bdff3c55d93956039a3155580ff8c321688"
-original_class_hash = "0x12d664c52ac67053855af1d00b15bdff3c55d93956039a3155580ff8c321688"
+class_hash = "0x708bfcebe814f943681f1353e0d8625fac2fb8a4c85916cbbe98dec694689bd"
+original_class_hash = "0x708bfcebe814f943681f1353e0d8625fac2fb8a4c85916cbbe98dec694689bd"
 abi = "manifests/dev/abis/base/models/game_models_account_account.json"
 name = "game::models::account::account"
 

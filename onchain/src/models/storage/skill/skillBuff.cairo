@@ -1,6 +1,7 @@
 use game::models::battle::entity::skill::buff::Buff;
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model]
 struct SkillBuff {
     #[key]
     skillName: felt252,

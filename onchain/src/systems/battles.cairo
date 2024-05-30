@@ -38,8 +38,6 @@ mod Battles {
 
     impl BattlesImpl of super::IBattles {
         fn newArenaBattle(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, heroesIds: Array<u32>) {
-            let alliesSpan = allyEntities.span();
-            let enemiesSpan = allyEntities.span();
             InternalBattlesImpl::initArenaBattleStorage(world, owner, enemyOwner, allyEntities, enemyEntities);
             let mut battle = BattleFactoryImpl::getBattle(world, owner, 0);
             let healthsArray = battle.getHealthsArray();
@@ -49,8 +47,6 @@ mod Battles {
             // InternalBattlesImpl::storeArenaBattleState(world, ref battle, owner);
         }
         fn newBattle(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16) {
-            let alliesSpan = allyEntities.span();
-            let enemiesSpan = allyEntities.span();
             InternalBattlesImpl::initBattleStorage(world, owner, allyEntities, enemyEntities, map, level);
             let mut battle = BattleFactoryImpl::getBattle(world, owner, map);
             let healthsArray = battle.getHealthsArray();
@@ -84,7 +80,7 @@ mod Battles {
                     break;
                 }
                 let entityStorage = get!(world, (owner, map, i), EntityStorage);
-                heroesIds.append(entityStorage.entity.heroId);
+                heroesIds.append(entityStorage.entityVal.heroId);
                 i += 1;
             };
             return heroesIds;
@@ -93,7 +89,7 @@ mod Battles {
             if(!isBattleOver || !isVictory) {
                 return;
             }
-            let heroesIds = InternalBattlesImpl::getHeroesIdsByMap(world, owner, map);
+            let heroesIds = Self::getHeroesIdsByMap(world, owner, map);
             let battleStorage = get!(world, (owner, map), BattleStorage);
             let levels = LevelsImpl::getEnemiesLevels(world, map, battleStorage.level);
             experienceHandler::computeAndDistributeExperience(world, owner, heroesIds, @levels);
@@ -117,7 +113,7 @@ mod Battles {
                     }
                 )
             );
-            InternalBattlesImpl::initBattleStorage(world, owner, allyEntities, enemyEntities, Map::Arena.toU16(), 0);
+            Self::initBattleStorage(world, owner, allyEntities, enemyEntities, Map::Arena.toU16(), 0);
 
         }
         fn initBattleStorage(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16) {
@@ -145,7 +141,7 @@ mod Battles {
                             owner: owner,
                             map: map,
                             entityIndex: allyEntities[i].getIndex(),
-                            entity: *allyEntities[i],
+                            entityVal: *allyEntities[i],
                             healthOnTurnProcCount: 0,
                         }
                     )
@@ -163,7 +159,7 @@ mod Battles {
                             owner: owner,
                             map: map,
                             entityIndex: enemyEntities[i].getIndex(),
-                            entity: *enemyEntities[i],
+                            entityVal: *enemyEntities[i],
                             healthOnTurnProcCount: 0,
                         }
                     )
@@ -200,7 +196,7 @@ mod Battles {
                             owner: battleInfos.owner,
                             map: battleInfos.map,
                             entityIndex: battle.entities.get(i).unwrap().getIndex(),
-                            entity: battle.entities.get(i).unwrap(),
+                            entityVal: battle.entities.get(i).unwrap(),
                             healthOnTurnProcCount: healthOnTurnProcsEntity.len(),
                         },
                     )

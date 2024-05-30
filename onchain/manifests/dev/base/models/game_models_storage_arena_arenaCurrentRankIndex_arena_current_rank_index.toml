@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x10f62b2a04d413ed3cb15966f0d2dd56c68b04569cd5f176c7dd7b10bd29d14"
-original_class_hash = "0x10f62b2a04d413ed3cb15966f0d2dd56c68b04569cd5f176c7dd7b10bd29d14"
+class_hash = "0x330daa5ed958ba7d6dc2250fe93ceb87c69be34822458bdc0cf600f68311698"
+original_class_hash = "0x330daa5ed958ba7d6dc2250fe93ceb87c69be34822458bdc0cf600f68311698"
 abi = "manifests/dev/abis/base/models/game_models_storage_arena_arenaCurrentRankIndex_arena_current_rank_index.json"
 name = "game::models::storage::arena::arenaCurrentRankIndex::arena_current_rank_index"
 

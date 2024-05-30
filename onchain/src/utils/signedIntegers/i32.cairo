@@ -215,11 +215,11 @@ impl i32Zeroable of Zeroable<i32> {
     }
     #[inline(always)]
     fn is_zero(self: i32) -> bool {
-        self == i32Zeroable::zero()
+        self == Self::zero()
     }
     #[inline(always)]
     fn is_non_zero(self: i32) -> bool {
-        self != i32Zeroable::zero()
+        self != Self::zero()
     }
 }
 

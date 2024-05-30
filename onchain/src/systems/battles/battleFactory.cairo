@@ -22,15 +22,15 @@ mod BattleFactory {
     impl BattleFactoryImpl of IBattleFactory {
         fn getBattle(world: IWorldDispatcher, owner: ContractAddress, map: u16) -> Battle {
             let battleInfos = get!(world, (owner, map), BattleStorage);
-            return BattleFactoryImpl::newBattleFromBattleInfos(world, owner, map, battleInfos.entitiesCount, battleInfos.isWaitingForPlayerAction);
+            return Self::newBattleFromBattleInfos(world, owner, map, battleInfos.entitiesCount, battleInfos.isWaitingForPlayerAction);
         }
         fn newBattleFromBattleInfos(world: IWorldDispatcher, owner: ContractAddress, map: u16, entitiesCount: u32, isWaitingForPlayerAction: bool) -> Battle {
-            let entitiesArray = BattleFactoryImpl::getEntities(world, owner, map, entitiesCount);
+            let entitiesArray = Self::getEntities(world, owner, map, entitiesCount);
             let entities = entitiesArray.span();
-            let (aliveEntities, deadEntities) = BattleFactoryImpl::getAlivesAndDeadEntities(world, owner, entities);
+            let (aliveEntities, deadEntities) = Self::getAlivesAndDeadEntities(world, owner, entities);
             let turnTimeline = aliveEntities.clone();
-            let (allies, enemies) = BattleFactoryImpl::getAlliesAndEnemies(world, owner, entities);
-            let healthOnTurnProcs = BattleFactoryImpl::getHealthOnTurnProcs(world, owner, map);
+            let (allies, enemies) = Self::getAlliesAndEnemies(world, owner, entities);
+            let healthOnTurnProcs = Self::getHealthOnTurnProcs(world, owner, map);
             let mut entitiesNames: Array<felt252> = Default::default();
             let mut i: u32 = 0;
             loop {
@@ -89,7 +89,7 @@ mod BattleFactory {
                 if( i == entitiesCount ) {
                     break;
                 }
-                entities.append(get!(world, (owner, map, i), EntityStorage).entity);
+                entities.append(get!(world, (owner, map, i), EntityStorage).entityVal);
                 i += 1;
             };
             return entities;

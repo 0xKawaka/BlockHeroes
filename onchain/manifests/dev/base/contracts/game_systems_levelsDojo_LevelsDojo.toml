@@ -1,9 +1,0 @@
-kind = "DojoContract"
-class_hash = "0x571ece8637d0593db1ab098e246bdf188b7eb95f704bb387afeb76bad29185c"
-original_class_hash = "0x571ece8637d0593db1ab098e246bdf188b7eb95f704bb387afeb76bad29185c"
-base_class_hash = "0x0"
-abi = "manifests/dev/abis/base/contracts/game_systems_levelsDojo_LevelsDojo.json"
-reads = []
-writes = []
-computed = []
-name = "game::systems::levelsDojo::LevelsDojo"

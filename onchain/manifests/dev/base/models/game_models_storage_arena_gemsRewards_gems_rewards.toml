@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x585a8517710e77edbd03b4acb54af53efdb15abef6084b0d573b7046788b5ad"
-original_class_hash = "0x585a8517710e77edbd03b4acb54af53efdb15abef6084b0d573b7046788b5ad"
+class_hash = "0x63597f518cc1e47514e2f939b84e1f596f534f4d3f302dbc54c9e13c19a2d05"
+original_class_hash = "0x63597f518cc1e47514e2f939b84e1f596f534f4d3f302dbc54c9e13c19a2d05"
 abi = "manifests/dev/abis/base/models/game_models_storage_arena_gemsRewards_gems_rewards.json"
 name = "game::models::storage::arena::gemsRewards::gems_rewards"
 

@@ -159,10 +159,11 @@ export abstract class Sender {
     try {
       const contract = new Contract(GameAbi, GameAdrs, wallet);
       const tx = await contract.createAccount(username, { fee: 0, maxFee: 0 });
-      await wallet.waitForTransaction(tx.transaction_hash, {
+      let res = await wallet.waitForTransaction(tx.transaction_hash, {
         retryInterval: 200,
         successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
       });
+      console.log("res", res)
       return;
     }
     catch(error: any){

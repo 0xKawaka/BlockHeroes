@@ -1,7 +1,8 @@
 use game::models::hero::rune::Rune;
 use starknet::ContractAddress;
 
-#[derive(Copy, Drop, Serde, Model)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model]
 struct Runes {
     #[key]
     owner: ContractAddress,

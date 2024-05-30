@@ -7,6 +7,7 @@ import { useState } from "react"
 import { Account } from "starknet";
 import Burner from '../../Blockchain/Burner'
 import Storage from '../../Cookies/storage'
+import { RpcProvider } from "starknet";
 
 type RegisterProps = {
   setAccountWallet: React.Dispatch<React.SetStateAction<Account | undefined>>,
@@ -24,12 +25,13 @@ export default function Register({setAccountWallet}: RegisterProps) {
     setIsRegistering(true);
     if(process.env.REACT_APP_ENV == "DEV")
       Storage.clear();
+
     let accountInfos = await Burner.createBurnerAccount()
     console.log('new localWallet : ', accountInfos.account);
     await Sender.createAccount(accountInfos.account, username);
-    Burner.saveAccount(accountInfos.account.address, accountInfos.privateKey, accountInfos.publicKey, accountInfos.deployTx, username);
-    setIsRegistering(false);
-    setAccountWallet(accountInfos.account);
+    // Burner.saveAccount(accountInfos.account.address, accountInfos.privateKey, accountInfos.publicKey, accountInfos.deployTx, username);
+    // setIsRegistering(false);
+    // setAccountWallet(accountInfos.account);
   }
 
   return(

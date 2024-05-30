@@ -7,13 +7,13 @@ let ETHAdrs = "";
 if(process.env.REACT_APP_ENV == "DEV") {
   AccountsAdrs = "0x032fc741c29dd4d4a3183fcd9aa5e39dc97868c54edda39e624e95fe41d2a1d7";
   EventEmitterAdrs = "0x0624f7080c190670161bb6e2159638bf09450cd38d96914560202111db8ad970";
-  GameAdrs = "0x0227282d3fd97bf20edf89fe4076cdfde3e472dabea5b4ca9acf7f2db7ecbad6";
+  GameAdrs = "0x349651054fdd167d9cac22e2dc68f527c1eddcd7823ec779f3ae662eada3dc9";
   PvpAdrs = "0x00524dcd7345544db90388b18889e527f020923b025dd8617c17f97c7136fce8";
   ETHAdrs = "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
 }
 else if(process.env.REACT_APP_ENV == "TEST") {
   AccountsAdrs = "0x030a345c7e6db591c91604bcae4033c2543dce3aa51fb4fe295c012da4effc8a";
-  GameAdrs = "0x02138e2348c6e477be10b5b7f3a852b949efb66112f039afabaf2de641b79bd9";
+  GameAdrs = "0xa4117f22405c058510b817d4ff5a66cda3b63d379880d29ab377637bcd6581";
   ETHAdrs = "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
 }
 else if(process.env.REACT_APP_ENV == "PROD") {
@@ -25,4 +25,5 @@ else if(process.env.REACT_APP_ENV == "PROD") {
 }
 
 
+// export { AccountsAdrs, EventEmitterAdrs, GameAdrs, PvpAdrs, ETHAdrs }
 export { AccountsAdrs, EventEmitterAdrs, GameAdrs, PvpAdrs, ETHAdrs }

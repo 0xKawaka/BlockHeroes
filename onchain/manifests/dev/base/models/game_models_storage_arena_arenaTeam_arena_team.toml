@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x7e9ada936aa230258c9b0ffd78517b1d21d9adbe28f0842127f56a2fa850025"
-original_class_hash = "0x7e9ada936aa230258c9b0ffd78517b1d21d9adbe28f0842127f56a2fa850025"
+class_hash = "0x6637c18aa2dab2e38e38241ea82877d418607a36ff1318c0f3af62fa0570e34"
+original_class_hash = "0x6637c18aa2dab2e38e38241ea82877d418607a36ff1318c0f3af62fa0570e34"
 abi = "manifests/dev/abis/base/models/game_models_storage_arena_arenaTeam_arena_team.json"
 name = "game::models::storage::arena::arenaTeam::arena_team"
 

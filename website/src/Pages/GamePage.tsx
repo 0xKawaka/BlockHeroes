@@ -89,49 +89,50 @@ function GamePage({} : GamePageProps) {
         return;
       }
       let accountPromise = await Getter.getAccount(localWallet);
-      let heroesPromise = Getter.getAllHeroes(localWallet);
-      let runesPromise = Getter.getAllRunes(localWallet);
-      let pvpRankPromise = Getter.getPvpRank(localWallet);
-      let pvpDefenseTeamPromise = Getter.getTeam(localWallet);
-      let skillsDictPromise = ApiHandler.getSkillsDict();
-      let skillSetsPromise = ApiHandler.getSkillSets();
-      let baseStatsDictPromise = ApiHandler.getBaseStats();
-      let runeStatsDictPromise = ApiHandler.getRuneStats();
-      let [account, heroes, blockchainRunes, pvpRank, pvpDefenseTeam, skillsDictApi, skillSets, baseStatsDict, runeStatsDict] = await Promise.all([accountPromise, heroesPromise, runesPromise, pvpRankPromise, pvpDefenseTeamPromise, skillsDictPromise, skillSetsPromise, baseStatsDictPromise, runeStatsDictPromise]);
-      stateChangesHandler.setRuneStatsDict(runeStatsDict)
-      stateChangesHandler.setBaseStatsDict(baseStatsDict)
-      if(account){
-        let energyHandler = new EnergyHandler(setEnergy)
-        energyHandler.initEnergy(account.energyInfos.energy, account.energyInfos.lastEnergyUpdateTimestamp)
-        stateChangesHandler.setEnergyHandler(energyHandler)
-        let pvpEnergyHandler = new EnergyHandler(setPvpEnergy)
-        pvpEnergyHandler.initEnergy(account.energyInfos.pvpEnergy, account.energyInfos.lastPvpEnergyUpdateTimestamp)
-        stateChangesHandler.setPvpEnergyHandler(pvpEnergyHandler)
-        setGameAccount(account);
-        setPvpRank(pvpRank);
-        setDefensePvpHeroesIds(pvpDefenseTeam);
-        setHasAccount(true);
-      }
-      setStateChangesHandler(stateChangesHandler)
-      const skillsDict = SkillsHandler.formatSkills(skillsDictApi);
-      let runes = RuneFactory.createRunes(blockchainRunes, runeStatsDict);
-      let heroesWithSkillsAndStats = HeroesFactory.createHeroes(heroes, runes, skillsDict, skillSets, baseStatsDict);
-      setHeroesList(heroesWithSkillsAndStats);
-      setRunesList(runes);
-      setSkillsDict(skillsDict);
-      setSkillSets(skillSets);
-      setBaseStatsDict(baseStatsDict);
-      let battlesInfos = await ApiHandler.getBattlesInfos();
-      const battlesWithEnemyStatsAndSkills = HeroesFactory.createEnemyHeroes(battlesInfos, skillsDict, skillSets, baseStatsDict);
-      // console.log(battlesWithEnemyStatsAndSkills);
-      setWorldsBattlesList(battlesWithEnemyStatsAndSkills);
+      console.log(accountPromise)
+      // let heroesPromise = Getter.getAllHeroes(localWallet);
+      // let runesPromise = Getter.getAllRunes(localWallet);
+      // let pvpRankPromise = Getter.getPvpRank(localWallet);
+      // let pvpDefenseTeamPromise = Getter.getTeam(localWallet);
+      // let skillsDictPromise = ApiHandler.getSkillsDict();
+      // let skillSetsPromise = ApiHandler.getSkillSets();
+      // let baseStatsDictPromise = ApiHandler.getBaseStats();
+      // let runeStatsDictPromise = ApiHandler.getRuneStats();
+      // let [account, heroes, blockchainRunes, pvpRank, pvpDefenseTeam, skillsDictApi, skillSets, baseStatsDict, runeStatsDict] = await Promise.all([accountPromise, heroesPromise, runesPromise, pvpRankPromise, pvpDefenseTeamPromise, skillsDictPromise, skillSetsPromise, baseStatsDictPromise, runeStatsDictPromise]);
+      // stateChangesHandler.setRuneStatsDict(runeStatsDict)
+      // stateChangesHandler.setBaseStatsDict(baseStatsDict)
+      // if(account){
+      //   let energyHandler = new EnergyHandler(setEnergy)
+      //   energyHandler.initEnergy(account.energyInfos.energy, account.energyInfos.lastEnergyUpdateTimestamp)
+      //   stateChangesHandler.setEnergyHandler(energyHandler)
+      //   let pvpEnergyHandler = new EnergyHandler(setPvpEnergy)
+      //   pvpEnergyHandler.initEnergy(account.energyInfos.pvpEnergy, account.energyInfos.lastPvpEnergyUpdateTimestamp)
+      //   stateChangesHandler.setPvpEnergyHandler(pvpEnergyHandler)
+      //   setGameAccount(account);
+      //   setPvpRank(pvpRank);
+      //   setDefensePvpHeroesIds(pvpDefenseTeam);
+      //   setHasAccount(true);
+      // }
+      // setStateChangesHandler(stateChangesHandler)
+      // const skillsDict = SkillsHandler.formatSkills(skillsDictApi);
+      // let runes = RuneFactory.createRunes(blockchainRunes, runeStatsDict);
+      // let heroesWithSkillsAndStats = HeroesFactory.createHeroes(heroes, runes, skillsDict, skillSets, baseStatsDict);
+      // setHeroesList(heroesWithSkillsAndStats);
+      // setRunesList(runes);
+      // setSkillsDict(skillsDict);
+      // setSkillSets(skillSets);
+      // setBaseStatsDict(baseStatsDict);
+      // let battlesInfos = await ApiHandler.getBattlesInfos();
+      // const battlesWithEnemyStatsAndSkills = HeroesFactory.createEnemyHeroes(battlesInfos, skillsDict, skillSets, baseStatsDict);
+      // // console.log(battlesWithEnemyStatsAndSkills);
+      // setWorldsBattlesList(battlesWithEnemyStatsAndSkills);
     })();
   }, [localWallet]);
 
   return (
     <div className='GamePhaserContainer' id='GamePhaserContainer'>
       <div className='GamePageContainer' style={getGamePageContainerStyle(isBattleRunning)}>
-        {hasAccount && !isBattleRunning && <AccountOverview gameAccount={gameAccount} energy={energy} maxEnergy={5} pvpEnergy={pvpEnergy} maxPvpEnergy={5} stateChangesHandler={stateChangesHandler} />}
+        {/* {hasAccount && !isBattleRunning && <AccountOverview gameAccount={gameAccount} energy={energy} maxEnergy={5} pvpEnergy={pvpEnergy} maxPvpEnergy={5} stateChangesHandler={stateChangesHandler} />}
         {hasAccount && !showMyHeroes && !showWorldSelect && !showSummons && !showPvp &&
         <div className='GamePageTitleAndMenu'>
           <img className='GamePageTitle' src={title} />
@@ -162,7 +163,7 @@ function GamePage({} : GamePageProps) {
             </div>
           </div>
         </div>
-        }
+        } */}
         {localWallet === undefined &&
           <AccountSelect setAccountWallet={setAccountWallet} />
         }

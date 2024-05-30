@@ -3,7 +3,8 @@ const LEVEL_MULTIPLIER_BY_RANK: u64 = 10;
 
 use game::models::storage::{statistics, statistics::Statistics};
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model]
 struct BaseStatistics {
     #[key]
     heroName: felt252,

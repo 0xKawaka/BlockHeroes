@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x5f5d7ae5745b5f57bc8d9d0f07623ce328967823ca4ffbe2822f34cd924341"
-original_class_hash = "0x5f5d7ae5745b5f57bc8d9d0f07623ce328967823ca4ffbe2822f34cd924341"
+class_hash = "0x622a395be48de8cecdae34195bb20140b4f152e3bbd2523afde076bd193d5ef"
+original_class_hash = "0x622a395be48de8cecdae34195bb20140b4f152e3bbd2523afde076bd193d5ef"
 abi = "manifests/dev/abis/base/models/game_models_storage_statistics_baseStatistics_base_statistics.json"
 name = "game::models::storage::statistics::baseStatistics::base_statistics"
 
