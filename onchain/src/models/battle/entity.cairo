@@ -4,14 +4,12 @@ mod skill;
 mod healthOnTurnProc;
 mod stunOnTurnProc;
 mod cooldowns;
-mod skillset;
 
 use game::models::battle::entity::turnBar::{TurnBar};
 use game::models::battle::entity::healthOnTurnProc::{DamageOrHealEnum};
 use game::models::battle::entity::stunOnTurnProc::{StunOnTurnProcImpl};
 use game::models::battle::entity::skill::{SkillImpl, buff::BuffType};
 use game::models::battle::entity::cooldowns::{CooldownsImpl, CooldownsTrait};
-use game::models::battle::entity::skillset::{SkillSetImpl, SkillSetTrait};
 
 use game::models::battle::entity::statistics::statistic::{StatisticTrait, Statistic};
 use game::models::battle::entity::{stunOnTurnProc::StunOnTurnProcTrait, statistics::StatisticsTrait};
@@ -69,7 +67,7 @@ trait EntityTrait {
     fn playTurnPlayer(ref self: Entity, world: IWorldDispatcher, skillIndex: u8, targetIndex: u32, ref battle: Battle);
     fn endTurn(ref self: Entity, world: IWorldDispatcher, ref battle: Battle);
     fn die(ref self: Entity, ref battle: Battle);
-    fn pickSkill(ref self: Entity) -> u8;
+    fn pickSkill(ref self: Entity, skillsCount: u8) -> u8;
     fn takeDamage(ref self: Entity, damage: u64);
     fn takeHeal(ref self: Entity, heal: u64);
     fn takeHealAllowOverheal(ref self: Entity, heal: u64);
@@ -127,8 +125,8 @@ impl EntityImpl of EntityTrait {
                     battle.entities.set(self.getIndex(), self);
                 },
                 AllyOrEnemy::Enemy => {
-                    let skillIndex = self.pickSkill();
                     let skillSet = battle.skillSets.get(self.index).unwrap().unbox();
+                    let skillIndex = self.pickSkill(skillSet.len().try_into().unwrap());
                     let skill = *skillSet.get(skillIndex.into()).unwrap().unbox();
                     let skillEventParams = skill.cast(skillIndex, ref self, ref battle);
                     emit!(world, (Event::Skill(Skill {
@@ -232,19 +230,28 @@ impl EntityImpl of EntityTrait {
             i = i + 1;
         };
     }
-    fn pickSkill(ref self: Entity) -> u8 {
+    fn pickSkill(ref self: Entity, skillsCount: u8) -> u8 {
         let mut seed = get_block_timestamp();
-        if(self.cooldowns.isOnCooldown(1) && self.cooldowns.isOnCooldown(2)) {
+        if(skillsCount == 1) {
             return 0;
         }
-        let mut skillIndex = rand8(seed, 3);
+
+        let mut skillsNotOnCd: Array<u8> = array![0];
+        let mut i: u8 = 1;
         loop {
-            if(!self.cooldowns.isOnCooldown(skillIndex)) {
+            if(i >= skillsCount) {
                 break;
             }
-            skillIndex = rand8(seed, 3);
-            seed += 1;
+            if(!self.cooldowns.isOnCooldown(i)) {
+                skillsNotOnCd.append(i);
+            }
+            i = i + 1;
         };
+        if(skillsNotOnCd.len() == 1) {
+            return 0;
+        }
+        let skillsNotOnCdIndex = rand8(seed, skillsNotOnCd.len());
+        let skillIndex = *skillsNotOnCd[skillsNotOnCdIndex.into()];
         return skillIndex;
     }
     fn takeDamage(ref self: Entity, damage: u64) {

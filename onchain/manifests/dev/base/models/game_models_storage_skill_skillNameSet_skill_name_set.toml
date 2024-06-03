@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x380ecd9e601bc5acf2591907c128f7ecb6d2942c28496a466dba004378e0262"
-original_class_hash = "0x380ecd9e601bc5acf2591907c128f7ecb6d2942c28496a466dba004378e0262"
+class_hash = "0x567d5a971d197938d14e554a5ed265d4a4c6ffcb08ebd1decf8f18764430110"
+original_class_hash = "0x567d5a971d197938d14e554a5ed265d4a4c6ffcb08ebd1decf8f18764430110"
 abi = "manifests/dev/abis/base/models/game_models_storage_skill_skillNameSet_skill_name_set.json"
 name = "game::models::storage::skill::skillNameSet::skill_name_set"
 
@@ -10,16 +10,11 @@ type = "felt252"
 key = true
 
 [[members]]
-name = "skill0"
-type = "felt252"
-key = false
+name = "index"
+type = "u8"
+key = true
 
 [[members]]
-name = "skill1"
-type = "felt252"
-key = false
-
-[[members]]
-name = "skill2"
+name = "skill"
 type = "felt252"
 key = false

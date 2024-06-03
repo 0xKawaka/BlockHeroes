@@ -1,5 +1,6 @@
 use game::models::battle::entity::{Entity, AllyOrEnemy};
-use game::models::storage::{statistics, statistics::{Statistics, baseStatistics::BaseStatistics, runeStatistics::RuneStatistics, bonusRuneStatistics::BonusRuneStatistics}};
+use game::models::storage::{statistics, statistics::{Statistics, runeStatistics::RuneStatistics, bonusRuneStatistics::BonusRuneStatistics}};
+use game::models::storage::baseHero::BaseHero;
 use game::models::hero::{Hero, rune::Rune, rune::RuneStatistic};
 use starknet::ContractAddress;
 use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
@@ -8,7 +9,7 @@ trait IEntityFactory {
     fn newEntities(world: IWorldDispatcher, owner: ContractAddress, startIndex: u32, heroes: Array<Hero>, allyOrEnemy: AllyOrEnemy) -> Array<Entity>;
     fn newEntity(world: IWorldDispatcher, owner: ContractAddress, index: u32, hero: Hero, allyOrEnemy: AllyOrEnemy) -> Entity;
     fn computeRunesBonuses(world: IWorldDispatcher, runes: Array<Rune>, baseStats: Statistics) -> Statistics;
-    fn initBaseStatisticsDict(world: IWorldDispatcher);
+    fn initBaseHeroesDict(world: IWorldDispatcher);
     fn initRunesTable(world: IWorldDispatcher);
     fn initBonusRunesTable(world: IWorldDispatcher);
 }
@@ -19,10 +20,11 @@ mod EntityFactory {
 
     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
     use game::models::hero::{HeroTrait, Hero, rune::Rune, rune::RuneImpl, rune::RuneRarity, rune::RuneStatistic};
-    use game::models::battle::{entity, entity::Entity, entity::EntityImpl, entity::EntityTrait, entity::AllyOrEnemy, entity::cooldowns::CooldownsTrait, entity::skillset};
+    use game::models::battle::{entity, entity::Entity, entity::EntityImpl, entity::EntityTrait, entity::AllyOrEnemy, entity::cooldowns::CooldownsTrait};
     use game::models::battle::entity::{skill, skill::SkillImpl, skill::TargetType, skill::damage, skill::heal};
     use game::models::battle::entity::healthOnTurnProc::{HealthOnTurnProc, HealthOnTurnProcImpl};
-    use game::models::storage::{statistics, statistics::{baseStatistics, baseStatistics::Statistics, baseStatistics::BaseStatisticsImpl, baseStatistics::BaseStatistics, runeStatistics, runeStatistics::RuneStatistics, bonusRuneStatistics, bonusRuneStatistics::BonusRuneStatistics}};
+    use game::models::storage::{statistics, statistics::{runeStatistics, runeStatistics::RuneStatistics, bonusRuneStatistics, bonusRuneStatistics::BonusRuneStatistics}};
+    use game::models::storage::{baseHero, baseHero::{BaseHero, BaseHeroImpl, Statistics}};
     use game::systems::accounts::Accounts::AccountsImpl;
 
     impl EntityFactoryImpl of super::IEntityFactory {
@@ -40,7 +42,7 @@ mod EntityFactory {
             return entities;
         }
         fn newEntity(world: IWorldDispatcher, owner: ContractAddress, index: u32, hero: Hero, allyOrEnemy: AllyOrEnemy) -> Entity {
-            let baseStats = get!(world, (hero.name), (BaseStatistics));
+            let baseStats = get!(world, (hero.name), (BaseHero));
             let baseStatsValues = baseStats.computeAllStatistics(hero.level, hero.rank);
             let runesIndex = hero.getRunesIndexArray();
             let runes = AccountsImpl::getRunes(world, owner, runesIndex);
@@ -96,14 +98,14 @@ mod EntityFactory {
             return runesTotalBonusStats;
         }
 
-        fn initBaseStatisticsDict(world: IWorldDispatcher) {
+        fn initBaseHeroesDict(world: IWorldDispatcher) {
             set!(
                 world,
                 (
-                    BaseStatistics { heroName: 'assassin', statistics: statistics::new(1500, 200, 100, 185, 10, 100) },
-                    BaseStatistics { heroName: 'knight', statistics: statistics::new(2000, 120, 180, 150, 10, 100) },
-                    BaseStatistics { heroName: 'priest', statistics: statistics::new(1700, 150, 150, 160, 10, 100) },
-                    BaseStatistics { heroName: 'hunter', statistics: statistics::new(1500, 170, 130, 170, 10, 200) }
+                    BaseHero { heroName: 'assassin', statistics: statistics::new(1500, 200, 100, 185, 10, 100), skillsCount: 3 },
+                    BaseHero { heroName: 'knight', statistics: statistics::new(2000, 120, 180, 150, 10, 100), skillsCount: 3 },
+                    BaseHero { heroName: 'priest', statistics: statistics::new(1700, 150, 150, 160, 10, 100), skillsCount: 3 },
+                    BaseHero { heroName: 'hunter', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 }
                 )
             )
         }

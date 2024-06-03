@@ -24,6 +24,7 @@ import AccountOverview from './Components/AccountOverview'
 import EnergyHandler from './Classes/EnergyHandler'
 import AccountSelect from './Components/AccountSelect'
 import Pvp from './Components/Pvp'
+import { GameDojo } from '../Blockchain/Dojo/game'
 
 function getGamePageContainerStyle(isBattleRunning: boolean){
   if (isBattleRunning){
@@ -62,9 +63,18 @@ function GamePage({} : GamePageProps) {
   const [isBattleRunning, setIsBattleRunning] = useState<boolean>(false)
   const [stateChangesHandler, setStateChangesHandler] = useState<StateChangesHandler>(new StateChangesHandler(setHeroesList, setRunesList, setGameAccount, setShowMyHeroes, setShowWorldSelect, setIsBattleRunning))
 
-  // function handleNewAccount(){
-  //   setRefreshUseEffect(refreshUseEffect + 1)
-  // }
+
+  const params = {
+    rpcUrl: "http://0.0.0.0:5050",
+    toriiUrl: "http://0.0.0.0:8080",
+    relayUrl: "",
+    account: undefined,
+    worldAddress: "0x43f5a4477cb4fd56a23cf3ccf5172c95bd90caf1ed0813d4989f5e7449d102f",
+    gameAddress: "0x349651054fdd167d9cac22e2dc68f527c1eddcd7823ec779f3ae662eada3dc9",
+    settingsAddress: "0x1fbf77ab7d4a5ad70e732231d18d4bbaade6f280cc7d37bfc9116b2f29f0bec",
+  };
+
+  // const [gameDojo, setGameDojo] = useState<GameDojo>(new GameDojo(params));
 
   async function handleNewHeroEvent(hero: HeroBlockchain) {
     let heroInfos = HeroesFactory.createHero(hero!, [], skillsDict, skillSets, baseStatsDict)

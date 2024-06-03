@@ -319,30 +319,60 @@
   },
   {
     "type": "impl",
-    "name": "skill_name_setImpl",
-    "interface_name": "game::models::storage::skill::skillNameSet::Iskill_name_set"
+    "name": "base_heroImpl",
+    "interface_name": "game::models::storage::baseHero::Ibase_hero"
   },
   {
     "type": "struct",
-    "name": "game::models::storage::skill::skillNameSet::SkillNameSet",
+    "name": "game::models::storage::statistics::Statistics",
+    "members": [
+      {
+        "name": "health",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "attack",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "defense",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "speed",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "criticalRate",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "criticalDamage",
+        "type": "core::integer::u64"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "game::models::storage::baseHero::BaseHero",
     "members": [
       {
         "name": "heroName",
         "type": "core::felt252"
       },
       {
-        "name": "index",
-        "type": "core::integer::u8"
+        "name": "statistics",
+        "type": "game::models::storage::statistics::Statistics"
       },
       {
-        "name": "skill",
-        "type": "core::felt252"
+        "name": "skillsCount",
+        "type": "core::integer::u8"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "game::models::storage::skill::skillNameSet::Iskill_name_set",
+    "name": "game::models::storage::baseHero::Ibase_hero",
     "items": [
       {
         "type": "function",
@@ -350,7 +380,7 @@
         "inputs": [
           {
             "name": "model",
-            "type": "game::models::storage::skill::skillNameSet::SkillNameSet"
+            "type": "game::models::storage::baseHero::BaseHero"
           }
         ],
         "outputs": [],
@@ -360,7 +390,7 @@
   },
   {
     "type": "event",
-    "name": "game::models::storage::skill::skillNameSet::skill_name_set::Event",
+    "name": "game::models::storage::baseHero::base_hero::Event",
     "kind": "enum",
     "variants": []
   }

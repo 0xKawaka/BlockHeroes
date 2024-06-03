@@ -17,12 +17,13 @@ mod SkillFactory {
     use starknet::ContractAddress;
     use game::models::battle::entity::skill::SkillTrait;
     use game::models::hero::{Hero};
-    use game::models::battle::{Entity, entity::EntityImpl, entity::EntityTrait, entity::AllyOrEnemy, entity::cooldowns::CooldownsTrait, entity::skillset};
+    use game::models::battle::{Entity, entity::EntityImpl, entity::EntityTrait, entity::AllyOrEnemy, entity::cooldowns::CooldownsTrait};
     use game::models::battle::entity::{skill, skill::SkillImpl, skill::Skill, skill::TargetType, skill::damage, skill::heal, skill::buff, skill::buff::Buff, skill::buff::BuffType};
     use game::models::battle::entity::healthOnTurnProc::{HealthOnTurnProc, HealthOnTurnProcImpl};
     use game::models::storage::skill::skillInfos::SkillInfos;
     use game::models::storage::skill::{skillNameSet::SkillNameSet, skillNameSet};
     use game::models::storage::skill::skillBuff::SkillBuff;
+    use game::models::storage::baseHero::BaseHero;
 
     impl SkillFactoryImpl of super::ISkillFactory {
         fn getSkill(world: IWorldDispatcher, name: felt252) -> Skill {
@@ -54,11 +55,17 @@ mod SkillFactory {
             return skills;
         }
         fn getSkillSet(world: IWorldDispatcher, entityName: felt252) -> Array<Skill> {
-            let skillNameSet = get!(world, entityName, (SkillNameSet));
+            let skillsCount = get!(world, entityName, (BaseHero)).skillsCount;
             let mut skillSet: Array<Skill> = Default::default();
-            skillSet.append(Self::getSkill(world, skillNameSet.skill0));
-            skillSet.append(Self::getSkill(world, skillNameSet.skill1));
-            skillSet.append(Self::getSkill(world, skillNameSet.skill2));
+            let mut i: u8 = 0;
+            loop {
+                if(i == skillsCount) {
+                    break;
+                }
+                let skillName = get!(world, (entityName, i), (SkillNameSet)).skill;
+                skillSet.append(Self::getSkill(world, skillName));
+                i += 1;
+            };
             return skillSet;
         }
         
@@ -101,10 +108,18 @@ mod SkillFactory {
             set!(
                 world,
                 (
-                    SkillNameSet { heroName: 'knight', skill0: 'Attack Knight', skill1: 'Fire Swing', skill2: 'Fire Strike' },
-                    SkillNameSet { heroName: 'priest', skill0: 'Attack Priest', skill1: 'Water Heal', skill2: 'Water Shield' },
-                    SkillNameSet { heroName: 'hunter', skill0: 'Attack Hunter', skill1: 'Forest Senses', skill2: 'Arrows Rain' },
-                    SkillNameSet { heroName: 'assassin', skill0: 'Attack Assassin', skill1: 'Sand Strike', skill2: 'Sandstorm' },
+                    SkillNameSet { heroName: 'knight', index: 0, skill: 'Attack Knight'},
+                    SkillNameSet { heroName: 'knight', index: 1, skill: 'Fire Swing'},
+                    SkillNameSet { heroName: 'knight', index: 2, skill: 'Fire Strike'},
+                    SkillNameSet { heroName: 'priest', index: 0, skill: 'Attack Priest'},
+                    SkillNameSet { heroName: 'priest', index: 1, skill: 'Water Heal'},
+                    SkillNameSet { heroName: 'priest', index: 2, skill: 'Water Shield'},
+                    SkillNameSet { heroName: 'hunter', index: 0, skill: 'Attack Hunter'},
+                    SkillNameSet { heroName: 'hunter', index: 1, skill: 'Forest Senses'},
+                    SkillNameSet { heroName: 'hunter', index: 2, skill: 'Arrows Rain'},
+                    SkillNameSet { heroName: 'assassin', index: 0, skill: 'Attack Assassin'},
+                    SkillNameSet { heroName: 'assassin', index: 1, skill: 'Sand Strike'},
+                    SkillNameSet { heroName: 'assassin', index: 2, skill: 'Sandstorm'},
                 )
             );
         }

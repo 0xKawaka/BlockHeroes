@@ -28,7 +28,8 @@ export default function Register({setAccountWallet}: RegisterProps) {
 
     let accountInfos = await Burner.createBurnerAccount()
     console.log('new localWallet : ', accountInfos.account);
-    await Sender.createAccount(accountInfos.account, username);
+
+    // await Sender.createAccount(accountInfos.account, username);
     // Burner.saveAccount(accountInfos.account.address, accountInfos.privateKey, accountInfos.publicKey, accountInfos.deployTx, username);
     // setIsRegistering(false);
     // setAccountWallet(accountInfos.account);

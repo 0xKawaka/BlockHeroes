@@ -17,7 +17,7 @@ mod Settings {
             SkillFactoryImpl::initSkillsBuffs(world);
             SkillFactoryImpl::initHeroSkillNameSet(world);
             LevelsImpl::init(world);
-            EntityFactoryImpl::initBaseStatisticsDict(world);
+            EntityFactoryImpl::initBaseHeroesDict(world);
             EntityFactoryImpl::initRunesTable(world);
             EntityFactoryImpl::initBonusRunesTable(world);
             let minRankGems = array![1, 2, 4, 10];
