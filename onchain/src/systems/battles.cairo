@@ -95,8 +95,12 @@ mod Battles {
             let levels = LevelsImpl::getEnemiesLevels(world, map, battleStorage.level);
             experienceHandler::computeAndDistributeExperience(world, owner, heroesIds, @levels);
             lootHandler::computeAndDistributeLoot(world, owner, @levels);
-            set!(world, MapProgress { owner: owner, map: map, level: battleStorage.level + 1 });
+            let levelProgress = get!(world, owner, MapProgress).level;
+            if(levelProgress == battleStorage.level){
+                set!(world, MapProgress { owner: owner, map: map, level: battleStorage.level + 1 });
+            }
         }
+                
         fn ifArenaBattleIsOverHandle(world: IWorldDispatcher, owner: ContractAddress, isBattleOver: bool, isVictory: bool) {
             if(!isBattleOver || !isVictory) {
                 return;
