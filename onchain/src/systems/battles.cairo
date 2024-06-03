@@ -25,6 +25,7 @@ mod Battles {
     use game::models::battle::entity::healthOnTurnProc::{HealthOnTurnProc, HealthOnTurnProcImpl};
     use game::models::storage::battles::{healthOnTurnProcStorage::HealthOnTurnProcStorage, battleStorage::BattleStorage, entityStorage::EntityStorage, arenaBattleStorage::ArenaBattleStorage};
     use game::models::storage::arena::arenaAccount::ArenaAccount;
+    use game::models::storage::mapProgress::MapProgress;
     use game::models::events::{Event, NewBattle};
     use game::models::map::{MapTrait, Map};
     use game::systems::levels::Levels::LevelsImpl;
@@ -94,6 +95,7 @@ mod Battles {
             let levels = LevelsImpl::getEnemiesLevels(world, map, battleStorage.level);
             experienceHandler::computeAndDistributeExperience(world, owner, heroesIds, @levels);
             lootHandler::computeAndDistributeLoot(world, owner, @levels);
+            set!(world, MapProgress { owner: owner, map: map, level: battleStorage.level + 1 });
         }
         fn ifArenaBattleIsOverHandle(world: IWorldDispatcher, owner: ContractAddress, isBattleOver: bool, isVictory: bool) {
             if(!isBattleOver || !isVictory) {

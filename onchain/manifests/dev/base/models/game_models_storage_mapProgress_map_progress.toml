@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x18557e82747bc260280e84973eadd06c8723d511fee8c23706b3575e5d130f4"
+original_class_hash = "0x18557e82747bc260280e84973eadd06c8723d511fee8c23706b3575e5d130f4"
+abi = "manifests/dev/abis/base/models/game_models_storage_mapProgress_map_progress.json"
+name = "game::models::storage::mapProgress::map_progress"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "map"
+type = "u16"
+key = true
+
+[[members]]
+name = "level"
+type = "u16"
+key = false

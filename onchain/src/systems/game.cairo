@@ -15,6 +15,7 @@ trait IGame {
     fn mintRune();
     fn createAccount(username: felt252);
 }
+
 #[dojo::contract]
 mod Game {
     use core::array::ArrayTrait;
@@ -29,6 +30,7 @@ mod Game {
     use game::models::account::{Account, AccountImpl};
     use game::models::hero::{Hero, HeroImpl, HeroTrait};
     use game::models::battle::entity::{Entity, EntityImpl, EntityTrait, AllyOrEnemy};
+    use game::models::storage::mapProgress::MapProgress;
     use game::utils::nullableVector::{NullableVector, NullableVectorImpl, VecTrait};
 
     #[abi(embed_v0)]
@@ -51,6 +53,8 @@ mod Game {
         fn startBattle(world: IWorldDispatcher, heroesIds: Array<u32>, map: u16, level: u16) {
             assert(heroesIds.len() < 5 && heroesIds.len() > 0, '1 hero min, 4 heroes max');
             let caller = get_caller_address();
+            let progressLevel = get!(world, (caller, map), MapProgress).level;
+            assert(progressLevel >= level, 'level not unlocked');
             let energyCost = LevelsImpl::getEnergyCost(world, map, level);
             AccountsImpl::decreaseEnergy(world, caller, energyCost);
             let allyHeroes = AccountsImpl::getHeroes(world, caller, heroesIds.span());

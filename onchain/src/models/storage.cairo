@@ -4,3 +4,4 @@ mod statistics;
 mod arena;
 mod battles;
 mod baseHero;
+mod mapProgress;
