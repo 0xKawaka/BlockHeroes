@@ -1,7 +1,7 @@
 #[derive(Copy, Drop, Serde, Introspect)]
-struct StunOnTurnProc {
-    duration: u8,
-    stunned: bool,
+pub struct StunOnTurnProc {
+    pub duration: u8,
+    pub stunned: bool,
 }
 
 fn new(duration: u8) -> StunOnTurnProc {

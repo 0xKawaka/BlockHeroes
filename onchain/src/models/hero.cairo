@@ -13,13 +13,13 @@ const levelZeroExperienceNeeded: u32 = 100;
 const bonusExperiencePercentRequirePerLevel: u32 = 10;
 
 #[derive(Introspect, Copy, Drop, Serde)]
-struct Hero {
-    id: u32,
-    name: felt252,
-    level: u16,
-    rank: u16,
-    experience: u32,
-    runes: EquippedRunes,
+pub struct Hero {
+    pub id: u32,
+    pub name: felt252,
+    pub level: u16,
+    pub rank: u16,
+    pub experience: u32,
+    pub runes: EquippedRunes,
 }
 
 fn new(id: u32, name: felt252, level: u16, rank: u16) -> Hero {

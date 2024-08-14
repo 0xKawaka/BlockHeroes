@@ -5,13 +5,13 @@ use game::models::battle::entity::Entity;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct SkillInfos {
+pub struct SkillInfos {
     #[key]
-    name: felt252,
-    cooldown: u8,
-    damage: Damage,
-    heal: Heal,
-    targetType: TargetType,
-    accuracy: u16,
-    buffsCount: u16,
+    pub name: felt252,
+    pub cooldown: u8,
+    pub damage: Damage,
+    pub heal: Heal,
+    pub targetType: TargetType,
+    pub accuracy: u16,
+    pub buffsCount: u16,
 }

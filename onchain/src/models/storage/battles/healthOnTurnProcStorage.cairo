@@ -3,14 +3,14 @@ use game::models::battle::entity::healthOnTurnProc::HealthOnTurnProc;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct HealthOnTurnProcStorage {
+pub struct HealthOnTurnProcStorage {
     #[key]
-    owner: ContractAddress,
+    pub owner: ContractAddress,
     #[key]
-    map: u16,
+    pub map: u16,
     #[key]
-    entityIndex: u32,
+    pub entityIndex: u32,
     #[key]
-    index: u32,
-    healthOnTurnProc: HealthOnTurnProc,
+    pub index: u32,
+    pub healthOnTurnProc: HealthOnTurnProc,
 }

@@ -2,12 +2,12 @@ use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct TurnTimelineStorage {
+pub struct TurnTimelineStorage {
     #[key]
-    owner: ContractAddress,
+    pub owner: ContractAddress,
     #[key]
-    map: u16,
+    pub map: u16,
     #[key]
-    index: u16,
-    entityIndex: u16,
+    pub index: u16,
+    pub entityIndex: u16,
 }

@@ -1,0 +1,21 @@
+kind = "DojoModel"
+class_hash = "0x47329851acf2c13e1edbb3aae5cc0914072458fb5b8f99a4648e4de56a3e137"
+original_class_hash = "0x47329851acf2c13e1edbb3aae5cc0914072458fb5b8f99a4648e4de56a3e137"
+abi = "manifests/dev/base/abis/models/game-SkillNameSet-578ae399.json"
+tag = "game-SkillNameSet"
+manifest_name = "game-SkillNameSet-578ae399"
+
+[[members]]
+name = "heroName"
+type = "felt252"
+key = true
+
+[[members]]
+name = "index"
+type = "u8"
+key = true
+
+[[members]]
+name = "skill"
+type = "felt252"
+key = false

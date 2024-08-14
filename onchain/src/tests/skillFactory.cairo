@@ -1,7 +1,7 @@
 // #[cfg(test)]
 // mod skillFactoryTest {
 //     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
-//     use dojo::test_utils::{spawn_test_world, deploy_contract};
+//     use dojo::utils::test::{spawn_test_world, deploy_contract};
 //     // use game::systems::{skillFactory::{SkillFactory, SkillFactory::SkillFactoryImpl, ISkillFactoryDispatcherTrait, ISkillFactoryDispatcher}};
 //     use game::systems::{skillFactory::{SkillFactory, SkillFactory::SkillFactoryImpl}};
 //     use game::models::storage::skill::{skillBuff::{skill_buff, SkillBuff}, skillInfos::{skill_infos, SkillInfos}, skillNameSet::{skill_name_set, SkillNameSet}};
@@ -11,7 +11,7 @@
 //     fn setup_world() -> IWorldDispatcher {
 //         let mut models = array![skill_buff::TEST_CLASS_HASH, skill_infos::TEST_CLASS_HASH, skill_name_set::TEST_CLASS_HASH];
  
-//         let world = spawn_test_world(models);
+//         let world = spawn_test_world("game", models);
 //         world
 //     }
 
@@ -28,10 +28,10 @@
 //         let skill = SkillFactoryImpl::getSkill(world, 'Water Shield');
 //         assert(skill.cooldown == 4, 'skill cooldown should be 4');
 
-//         let skillSet: Array<Skill> = SkillFactoryImpl::getSkillSet(world, 'hunter');
-//         assert(skillSet.len() == 3, 'skillSet len');
+//         // let skillSet: Array<Skill> = SkillFactoryImpl::getSkillSet(world, 'hunter');
+//         // assert(skillSet.len() == 3, 'skillSet len');
 
-//         let skillSets: Array<Array<Skill>> = SkillFactoryImpl::getSkillSets(world, array!['hunter', 'priest']);
-//         assert(skillSets[1].len() == 3, 'skillSets[1] len');
+//         // let skillSets: Array<Array<Skill>> = SkillFactoryImpl::getSkillSets(world, array!['hunter', 'priest']);
+//         // assert(skillSets[1].len() == 3, 'skillSets[1] len');
 //     }
 // }

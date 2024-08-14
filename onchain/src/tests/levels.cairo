@@ -1,7 +1,7 @@
 // #[cfg(test)]
 // mod levelsTest {
 //     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
-//     use dojo::test_utils::{spawn_test_world, deploy_contract};
+//     use dojo::utils::test::{spawn_test_world, deploy_contract};
 //     // use game::systems::{levels::{Levels, Levels::LevelsImpl, ILevelsDispatcherTrait, ILevelsDispatcher}};
 //     use game::systems::{levels::{Levels, Levels::LevelsImpl}};
 //     use game::models::storage::level::{levelEnemy::{level_enemy, LevelEnemy}, levelInfos::{level_infos, LevelInfos}};
@@ -10,7 +10,7 @@
 //     fn setup_world() -> IWorldDispatcher {
 //         let mut models = array![level_enemy::TEST_CLASS_HASH, level_infos::TEST_CLASS_HASH];
  
-//         let world = spawn_test_world(models);
+//         let world = spawn_test_world("game", models);
 //         world
 //     }
 

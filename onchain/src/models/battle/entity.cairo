@@ -32,21 +32,21 @@ use starknet::get_block_timestamp;
 
 
 #[derive(Copy, Drop, Serde, Introspect, PartialEq)]
-enum AllyOrEnemy {
+pub enum AllyOrEnemy {
     Ally,
     Enemy,
 }
 
 #[derive(Copy, Drop, Serde, Introspect)]
-struct Entity {
-    index: u32,
-    heroId: u32,
-    name: felt252,
-    turnBar: turnBar::TurnBar,
-    statistics: statistics::Statistics,
-    cooldowns: cooldowns::Cooldowns,
-    stunOnTurnProc: stunOnTurnProc::StunOnTurnProc,
-    allyOrEnemy: AllyOrEnemy,
+pub struct Entity {
+    pub index: u32,
+    pub heroId: u32,
+    pub name: felt252,
+    pub turnBar: turnBar::TurnBar,
+    pub statistics: statistics::Statistics,
+    pub cooldowns: cooldowns::Cooldowns,
+    pub stunOnTurnProc: stunOnTurnProc::StunOnTurnProc,
+    pub allyOrEnemy: AllyOrEnemy,
 }
 
 fn new(index: u32, heroId: u32, name: felt252, health: u64, attack: u64, defense: u64, speed: u64, criticalChance: u64, criticalDamage:u64, allyOrEnemy: AllyOrEnemy) -> Entity {

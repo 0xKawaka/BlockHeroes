@@ -2,10 +2,10 @@ use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct ArenaTeam {
+pub struct ArenaTeam {
     #[key]
-    owner: ContractAddress,
+    pub owner: ContractAddress,
     #[key]
-    index: u32,
-    heroIndex: u32,
+    pub index: u32,
+    pub heroIndex: u32,
 }

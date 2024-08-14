@@ -2,14 +2,14 @@ use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct BattleStorage {
+pub struct BattleStorage {
     #[key]
-    owner: ContractAddress,
+    pub owner: ContractAddress,
     #[key]
-    map: u16,
-    level: u16,
-    entitiesCount: u32,
-    aliveEntitiesCount: u32,
-    isBattleOver: bool,
-    isWaitingForPlayerAction: bool,
+    pub map: u16,
+    pub level: u16,
+    pub entitiesCount: u32,
+    pub aliveEntitiesCount: u32,
+    pub isBattleOver: bool,
+    pub isWaitingForPlayerAction: bool,
 }

@@ -5,11 +5,11 @@ use game::models::storage::{statistics, statistics::Statistics};
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct BaseHero {
+pub struct BaseHero {
     #[key]
-    heroName: felt252,
-    statistics: Statistics,
-    skillsCount: u8,
+    pub heroName: felt252,
+    pub statistics: Statistics,
+    pub skillsCount: u8,
 }
 
 fn new(

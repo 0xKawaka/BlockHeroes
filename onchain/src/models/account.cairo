@@ -15,18 +15,18 @@ const timeTickPvpEnergy: u64 = 1200;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct Account {
+pub struct Account {
     #[key]
-    owner: ContractAddress,
-    username: felt252,
-    energy: u16,
-    pvpEnergy: u16,
-    crystals: u32,
-    gems: u32,
-    lastEnergyUpdateTimestamp: u64,
-    lastPvpEnergyUpdateTimestamp: u64,
-    runesCount: u32,
-    heroesCount: u32,
+    pub owner: ContractAddress,
+    pub username: felt252,
+    pub energy: u16,
+    pub pvpEnergy: u16,
+    pub crystals: u32,
+    pub gems: u32,
+    pub lastEnergyUpdateTimestamp: u64,
+    pub lastPvpEnergyUpdateTimestamp: u64,
+    pub runesCount: u32,
+    pub heroesCount: u32,
 }
 
 const maxEnergy: u16 = 5;

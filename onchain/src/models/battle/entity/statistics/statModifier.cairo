@@ -1,7 +1,7 @@
 #[derive(Copy, Drop, Serde, Introspect)]
-struct StatModifier {
-    value: u64,
-    duration: u8,
+pub struct StatModifier {
+    pub value: u64,
+    pub duration: u8,
 }
 
 fn new(value: u64, duration: u8) -> StatModifier {

@@ -2,9 +2,9 @@ use game::models::hero::rune::RuneStatistic;
 use debug::PrintTrait;
 
 #[derive(Copy, Drop, Serde, Introspect)]
-struct RuneBonus {
-    statistic: RuneStatistic,
-    isPercent: bool,
+pub struct RuneBonus {
+    pub statistic: RuneStatistic,
+    pub isPercent: bool,
 }
 
 fn new(statistic: RuneStatistic, isPercent: bool) -> RuneBonus {

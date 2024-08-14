@@ -9,14 +9,14 @@ use game::utils::signedIntegers::{i64::i64, i64::i64Impl};
 use debug::PrintTrait;
 
 #[derive(Copy, Drop, Serde, Introspect)]
-struct Statistics {
-    maxHealth: u64,
-    health: i64,
-    attack: statistic::Statistic,
-    defense: statistic::Statistic,
-    speed: statistic::Statistic,
-    criticalChance: statistic::Statistic,
-    criticalDamage: statistic::Statistic,
+pub struct Statistics {
+    pub maxHealth: u64,
+    pub health: i64,
+    pub attack: statistic::Statistic,
+    pub defense: statistic::Statistic,
+    pub speed: statistic::Statistic,
+    pub criticalChance: statistic::Statistic,
+    pub criticalDamage: statistic::Statistic,
 }
 
 fn new(

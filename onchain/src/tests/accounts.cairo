@@ -1,7 +1,7 @@
 // #[cfg(test)]
 // mod accountsTest {
 //     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
-//     use dojo::test_utils::{spawn_test_world, deploy_contract};
+//     use dojo::utils::test::{spawn_test_world, deploy_contract};
 //     // use game::systems::{accounts::{Accounts, Accounts::AccountsImpl, IAccountsDispatcherTrait, IAccountsDispatcher}};
 //     use game::systems::{accounts::{Accounts, Accounts::AccountsImpl}};
 //     use game::models::account::{heroes::{heroes, Heroes}, runes::{runes, Runes}};
@@ -11,8 +11,7 @@
 
 //     fn setup_world() -> IWorldDispatcher {
 //         let mut models = array![heroes::TEST_CLASS_HASH, runes::TEST_CLASS_HASH, account::TEST_CLASS_HASH];
- 
-//         let world = spawn_test_world(models);
+//         let world = spawn_test_world("game", models);
 //         world
 //     }
 

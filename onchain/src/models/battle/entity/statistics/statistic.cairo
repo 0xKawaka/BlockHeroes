@@ -1,10 +1,10 @@
 use game::models::battle::entity::statistics::{statModifier, statModifier::StatModifier, statModifier::StatModifierImpl};
 
 #[derive(Drop, Copy, Serde, Introspect)]
-struct Statistic {
-    value: u64,
-    malus: StatModifier,
-    bonus: StatModifier,
+pub struct Statistic {
+    pub value: u64,
+    pub malus: StatModifier,
+    pub bonus: StatModifier,
 }
 
 fn new(value: u64) -> Statistic {

@@ -1,5 +1,4 @@
 use core::array::ArrayTrait;
-
 use game::utils::iVector::VecTrait;
 
 use game::models::battle::{Battle, BattleTrait};
@@ -8,16 +7,16 @@ use game::models::events::{IdAndValue};
 
 
 #[derive(Copy, Drop, Serde, Introspect)]
-struct Heal {
-    value: u64,
-    target: bool,
-    aoe: bool,
-    self: bool,
-    healType: HealType,
+pub struct Heal {
+    pub value: u64,
+    pub target: bool,
+    pub aoe: bool,
+    pub self: bool,
+    pub healType: HealType,
 }
 
 #[derive(Copy, Drop, Serde, Introspect)]
-enum HealType {
+pub enum HealType {
     Flat,
     Percent,
 }

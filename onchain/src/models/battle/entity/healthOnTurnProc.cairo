@@ -1,17 +1,17 @@
 use game::models::battle::entity::{EntityTrait, EntityImpl, Entity};
 
 #[derive(Copy, Drop, Serde, Introspect)]
-enum DamageOrHealEnum {
+pub enum DamageOrHealEnum {
     Damage,
     Heal,
 }
 
 #[derive(Copy, Drop, Serde, Introspect)]
-struct HealthOnTurnProc {
-    entityIndex: u32,
-    value: u64,
-    duration: u8,
-    damageOrHeal: DamageOrHealEnum,
+pub struct HealthOnTurnProc {
+    pub entityIndex: u32,
+    pub value: u64,
+    pub duration: u8,
+    pub damageOrHeal: DamageOrHealEnum,
 }
 
 fn new(entityIndex: u32, value: u64, duration: u8, damageOrHeal: DamageOrHealEnum) -> HealthOnTurnProc {

@@ -2,14 +2,14 @@ use game::models::hero::{HeroTrait, Hero, rune::Rune, rune::RuneImpl, rune::Rune
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct RuneStatistics {
+pub struct RuneStatistics {
     #[key]
-    statistic: RuneStatistic,
+    pub statistic: RuneStatistic,
     #[key]
-    rarity: RuneRarity,
+    pub rarity: RuneRarity,
     #[key]
-    isPercent: bool,
-    value: u32,
+    pub isPercent: bool,
+    pub value: u32,
 }
 
 fn new(statistic: RuneStatistic, rarity: RuneRarity, isPercent: bool, value: u32) -> RuneStatistics {

@@ -1,4 +1,4 @@
-#[derive(Introspect, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
 enum Map {
     Campaign,
     Arena,

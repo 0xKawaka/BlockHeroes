@@ -1,7 +1,7 @@
 #[derive(Copy, Drop, Serde, Introspect)]
-struct Cooldowns {
-    skill1: u8,
-    skill2: u8,
+pub struct Cooldowns {
+    pub skill1: u8,
+    pub skill2: u8,
     // skill3: u8,
 }
 

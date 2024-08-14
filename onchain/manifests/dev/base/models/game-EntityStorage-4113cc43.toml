@@ -1,0 +1,31 @@
+kind = "DojoModel"
+class_hash = "0x3afbd5921b42e43dff8a7d607100f8619a3084f0de58ab9ad7858f58203094f"
+original_class_hash = "0x3afbd5921b42e43dff8a7d607100f8619a3084f0de58ab9ad7858f58203094f"
+abi = "manifests/dev/base/abis/models/game-EntityStorage-4113cc43.json"
+tag = "game-EntityStorage"
+manifest_name = "game-EntityStorage-4113cc43"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "map"
+type = "u16"
+key = true
+
+[[members]]
+name = "entityIndex"
+type = "u32"
+key = true
+
+[[members]]
+name = "entityVal"
+type = "Entity"
+key = false
+
+[[members]]
+name = "healthOnTurnProcCount"
+type = "u32"
+key = false

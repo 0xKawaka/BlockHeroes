@@ -3,13 +3,13 @@ use game::models::battle::entity::Entity;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct EntityStorage {
+pub struct EntityStorage {
     #[key]
-    owner: ContractAddress,
+    pub owner: ContractAddress,
     #[key]
-    map: u16,
+    pub map: u16,
     #[key]
-    entityIndex: u32,
-    entityVal: Entity,
-    healthOnTurnProcCount: u32,
+    pub entityIndex: u32,
+    pub entityVal: Entity,
+    pub healthOnTurnProcCount: u32,
 }

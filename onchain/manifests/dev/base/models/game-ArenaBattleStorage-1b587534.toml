@@ -1,0 +1,16 @@
+kind = "DojoModel"
+class_hash = "0x1014163565a4d66f82a64cb5b08360c5f17282f2c17a85eb3c12087116562ee"
+original_class_hash = "0x1014163565a4d66f82a64cb5b08360c5f17282f2c17a85eb3c12087116562ee"
+abi = "manifests/dev/base/abis/models/game-ArenaBattleStorage-1b587534.json"
+tag = "game-ArenaBattleStorage"
+manifest_name = "game-ArenaBattleStorage-1b587534"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "enemyOwner"
+type = "ContractAddress"
+key = false

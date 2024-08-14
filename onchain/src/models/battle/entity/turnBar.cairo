@@ -1,10 +1,10 @@
 #[derive(Copy, Drop, Serde, Introspect)]
-struct TurnBar {
-    entityIndex: u32,
-    speed: u64,
-    turnbar: u64,
-    incrementStep: u64,
-    decimals: u64,
+pub struct TurnBar {
+    pub entityIndex: u32,
+    pub speed: u64,
+    pub turnbar: u64,
+    pub incrementStep: u64,
+    pub decimals: u64,
 }
 
 fn new(entityIndex: u32, speed: u64) -> TurnBar {

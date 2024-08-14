@@ -1,7 +1,7 @@
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct ArenaCurrentRankIndex {
+pub struct ArenaCurrentRankIndex {
     #[key]
-    id: u8,
-    currentRankIndex: u64,
+    pub id: u8,
+    pub currentRankIndex: u64,
 }

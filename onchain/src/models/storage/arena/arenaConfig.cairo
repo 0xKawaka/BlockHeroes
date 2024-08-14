@@ -1,8 +1,8 @@
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct ArenaConfig {
+pub struct ArenaConfig {
     #[key]
-    id: u8,
-    enemyRangesByRankLength: u32,
-    gemsRewardsLength: u32,
+    pub id: u8,
+    pub enemyRangesByRankLength: u32,
+    pub gemsRewardsLength: u32,
 }

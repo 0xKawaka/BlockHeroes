@@ -1,23 +1,25 @@
 // #[cfg(test)]
 // mod entityFactoryTest {
 //     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
-//     use dojo::test_utils::{spawn_test_world, deploy_contract};
+//     use dojo::utils::test::{spawn_test_world, deploy_contract};
 //     // use game::systems::{entityFactory::{EntityFactory, EntityFactory::EntityFactoryImpl, IEntityFactoryDispatcherTrait, IEntityFactoryDispatcher}};
 //     use game::systems::{entityFactory::{EntityFactory, EntityFactory::EntityFactoryImpl}};
 //     use game::systems::{accounts::{Accounts, Accounts::AccountsImpl}};
 //     use game::models::account::{Account, AccountImpl, AccountTrait, account};
-//     use game::models::storage::statistics::{baseStatistics::base_statistics, runeStatistics::rune_statistics, bonusRuneStatistics::bonus_rune_statistics};
+//     use game::models::storage::statistics::{runeStatistics::rune_statistics, bonusRuneStatistics::bonus_rune_statistics};
+//     use game::models::storage::{baseHero::base_hero};
 //     use game::models::hero::{Hero, HeroImpl, HeroTrait};
 //     use game::models::account::{heroes::{heroes, Heroes}, runes::{runes, Runes}};
 //     use game::models::hero::{rune, rune::RuneRarity, rune::RuneType, rune::RuneStatistic};
 //     use game::models::storage::{statistics, statistics::Statistics};
+    
 //     use game::models::battle::entity::skill::Skill;
 //     use game::models::battle::{entity, entity::Entity, entity::EntityImpl, entity::EntityTrait, entity::AllyOrEnemy};
 
 //     fn setup_world() -> IWorldDispatcher {
-//         let mut models = array![base_statistics::TEST_CLASS_HASH, rune_statistics::TEST_CLASS_HASH, bonus_rune_statistics::TEST_CLASS_HASH, heroes::TEST_CLASS_HASH, runes::TEST_CLASS_HASH, account::TEST_CLASS_HASH];
+//         let mut models = array![base_hero::TEST_CLASS_HASH, rune_statistics::TEST_CLASS_HASH, bonus_rune_statistics::TEST_CLASS_HASH, heroes::TEST_CLASS_HASH, runes::TEST_CLASS_HASH, account::TEST_CLASS_HASH];
  
-//         let world = spawn_test_world(models);
+//         let world = spawn_test_world("game", models);
 //         world
 //     }
 
@@ -27,7 +29,7 @@
 //         let caller = starknet::contract_address_const::<0x0>();
 //         let world = setup_world();
 
-//         EntityFactoryImpl::initBaseStatisticsDict(world);
+//         EntityFactoryImpl::initBaseHeroesDict(world);
 //         EntityFactoryImpl::initRunesTable(world);
 //         EntityFactoryImpl::initBonusRunesTable(world);
 

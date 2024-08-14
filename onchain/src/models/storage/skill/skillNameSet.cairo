@@ -1,11 +1,11 @@
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct SkillNameSet {
+pub struct SkillNameSet {
     #[key]
-    heroName: felt252,
+    pub heroName: felt252,
     #[key]
-    index: u8,
-    skill: felt252,
+    pub index: u8,
+    pub skill: felt252,
 }
 
 fn new(hero_name: felt252, index: u8, skill: felt252) -> SkillNameSet {

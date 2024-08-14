@@ -35,8 +35,10 @@ mod Game {
 
     #[abi(embed_v0)]
     impl GameImpl of super::IGame<ContractState> {
-        fn startPvpBattle(world: IWorldDispatcher, enemyOwner: ContractAddress, heroesIds: Array<u32>) {
+        fn startPvpBattle(world: @IWorldDispatcher, enemyOwner: ContractAddress, heroesIds: Array<u32>) {
             assert(heroesIds.len() < 5 && heroesIds.len() > 0, '1 hero min, 4 heroes max');
+            AccountsImpl::hasAccount(world, get_caller_address());
+            //check haspvpaccount
             let caller = get_caller_address();
             ArenaImpl::isEnemyInRange(world, caller, enemyOwner);
             AccountsImpl::decreasePvpEnergy(world, caller, 1);
@@ -47,11 +49,12 @@ mod Game {
             let enemyEntities = EntityFactoryImpl::newEntities(world, enemyOwner, allyEntities.len(), enemyHeroes, AllyOrEnemy::Enemy);
             BattlesImpl::newArenaBattle(world, caller, enemyOwner, allyEntities, enemyEntities, heroesIds);
         }
-        fn playArenaTurn(world: IWorldDispatcher, spellIndex: u8, targetIndex: u32) {
+        fn playArenaTurn(world: @IWorldDispatcher, spellIndex: u8, targetIndex: u32) {
             BattlesImpl::playArenaTurn(world, get_caller_address(), spellIndex, targetIndex);
         }
-        fn startBattle(world: IWorldDispatcher, heroesIds: Array<u32>, map: u16, level: u16) {
+        fn startBattle(world: @IWorldDispatcher, heroesIds: Array<u32>, map: u16, level: u16) {
             assert(heroesIds.len() < 5 && heroesIds.len() > 0, '1 hero min, 4 heroes max');
+            AccountsImpl::hasAccount(world, get_caller_address());
             let caller = get_caller_address();
             let progressLevel = get!(world, (caller, map), MapProgress).level;
             assert(progressLevel >= level, 'level not unlocked');
@@ -64,38 +67,38 @@ mod Game {
             let enemyEntities = EntityFactoryImpl::newEntities(world, caller, allyEntities.len(), enemyHeroes, AllyOrEnemy::Enemy);
             BattlesImpl::newBattle(world, caller, allyEntities, enemyEntities, map, level);
         }
-        fn playTurn(world: IWorldDispatcher, map: u16, spellIndex: u8, targetIndex: u32) {
+        fn playTurn(world: @IWorldDispatcher, map: u16, spellIndex: u8, targetIndex: u32) {
             BattlesImpl::playTurn(world, get_caller_address(), map, spellIndex, targetIndex);
         }
-        fn initPvp(world: IWorldDispatcher, heroesIds: Array<u32>) {
+        fn initPvp(world: @IWorldDispatcher, heroesIds: Array<u32>) {
             assert(heroesIds.len() < 5 && heroesIds.len() > 0, '1 hero min, 4 heroes max');
             AccountsImpl::hasAccount(world, get_caller_address());
             //add assert
             AccountsImpl::isOwnerOfHeroes(world, get_caller_address(), heroesIds.span());
             ArenaImpl::initAccount(world, get_caller_address(), heroesIds);
         }
-        fn setPvpTeam(world: IWorldDispatcher, heroesIds: Array<u32>) {
+        fn setPvpTeam(world: @IWorldDispatcher, heroesIds: Array<u32>) {
             assert(heroesIds.len() < 5 && heroesIds.len() > 0, '1 hero min, 4 heroes max');
             AccountsImpl::hasAccount(world, get_caller_address());
             AccountsImpl::isOwnerOfHeroes(world, get_caller_address(), heroesIds.span());
             ArenaImpl::setTeam(world, get_caller_address(), heroesIds.span());
         }
-        fn equipRune(world: IWorldDispatcher, runeId: u32, heroId: u32) {
+        fn equipRune(world: @IWorldDispatcher, runeId: u32, heroId: u32) {
             AccountsImpl::equipRune(world, get_caller_address(), runeId, heroId);
         }
-        fn unequipRune(world: IWorldDispatcher, runeId: u32) {
+        fn unequipRune(world: @IWorldDispatcher, runeId: u32) {
             AccountsImpl::unequipRune(world, get_caller_address(), runeId);
         }
-        fn upgradeRune(world: IWorldDispatcher, runeId: u32) {
+        fn upgradeRune(world: @IWorldDispatcher, runeId: u32) {
             AccountsImpl::upgradeRune(world, get_caller_address(), runeId);
         }
-        fn mintHero(world: IWorldDispatcher) {
+        fn mintHero(world: @IWorldDispatcher) {
             AccountsImpl::mintHero(world, get_caller_address());
         }
-        fn mintRune(world: IWorldDispatcher) {
+        fn mintRune(world: @IWorldDispatcher) {
             AccountsImpl::mintRune(world, get_caller_address());
         }
-        fn createAccount(world: IWorldDispatcher, username: felt252) {
+        fn createAccount(world: @IWorldDispatcher, username: felt252) {
             AccountsImpl::createAccount(world,  username, get_caller_address());
         }
     }

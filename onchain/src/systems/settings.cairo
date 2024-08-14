@@ -12,7 +12,7 @@ mod Settings {
 
     #[abi(embed_v0)]
     impl SettingsImpl of super::ISettings<ContractState> {
-        fn initSettings(world: IWorldDispatcher) {
+        fn initSettings(world: @IWorldDispatcher) {
             SkillFactoryImpl::initSkills(world);
             SkillFactoryImpl::initSkillsBuffs(world);
             SkillFactoryImpl::initHeroSkillNameSet(world);

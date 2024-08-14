@@ -20,7 +20,7 @@ use debug::PrintTrait;
 
 
 #[derive(Copy, Drop, PartialEq, Serde, Introspect)]
-enum TargetType {
+pub enum TargetType {
     Ally,
     Enemy,
 }

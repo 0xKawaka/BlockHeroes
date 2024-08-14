@@ -1,0 +1,21 @@
+kind = "DojoModel"
+class_hash = "0x522ce5559ca1bdc03d0c99a5b12ef046130812dae8fdefbed66039a5c97ef9"
+original_class_hash = "0x522ce5559ca1bdc03d0c99a5b12ef046130812dae8fdefbed66039a5c97ef9"
+abi = "manifests/dev/base/abis/models/game-ArenaConfig-55fabecf.json"
+tag = "game-ArenaConfig"
+manifest_name = "game-ArenaConfig-55fabecf"
+
+[[members]]
+name = "id"
+type = "u8"
+key = true
+
+[[members]]
+name = "enemyRangesByRankLength"
+type = "u32"
+key = false
+
+[[members]]
+name = "gemsRewardsLength"
+type = "u32"
+key = false

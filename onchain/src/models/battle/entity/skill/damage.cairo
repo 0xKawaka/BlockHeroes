@@ -4,16 +4,16 @@ use game::models::battle::entity::{Entity, EntityImpl, EntityTrait};
 use game::models::events::{IdAndValue};
 
 #[derive(Copy, Drop, Serde, Introspect)]
-struct Damage {
-    value: u64,
-    target: bool,
-    aoe: bool,
-    self: bool,
-    damageType: DamageType,
+pub struct Damage {
+    pub value: u64,
+    pub target: bool,
+    pub aoe: bool,
+    pub self: bool,
+    pub damageType: DamageType,
 }
 
 #[derive(Copy, Drop, Serde, Introspect)]
-enum DamageType {
+pub enum DamageType {
     Flat,
     Percent,
 }

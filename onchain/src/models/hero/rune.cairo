@@ -13,7 +13,7 @@ use game::utils::random::rand32;
 
 
 #[derive(Copy, Drop, Serde, Introspect)]
-enum RuneType {
+pub enum RuneType {
     First,
     Second,
     Third,
@@ -22,8 +22,9 @@ enum RuneType {
     Sixth,
 }
 
-#[derive(Copy, Drop, Serde, hash::LegacyHash, Introspect)]
-enum RuneRarity {
+// #[derive(Copy, Drop, Serde, hash::LegacyHash, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
+pub enum RuneRarity {
     Common,
     Uncommon,
     Rare,
@@ -31,8 +32,9 @@ enum RuneRarity {
     Legendary,
 }
 
-#[derive(Copy, Drop, Serde, PrintTrait, hash::LegacyHash, Introspect)]
-enum RuneStatistic {
+// #[derive(Copy, Drop, Serde, PrintTrait, hash::LegacyHash, Introspect)]
+#[derive(Copy, Drop, Serde, Introspect)]
+pub enum RuneStatistic {
     Health,
     Attack,
     Defense,
@@ -42,19 +44,19 @@ enum RuneStatistic {
 }
 
 #[derive(Introspect, Copy, Drop, Serde)]
-struct Rune {
-    id: u32,
-    statistic: RuneStatistic,
-    isPercent: bool,
-    rank: u32,
-    rarity: RuneRarity,
-    runeType: RuneType,
-    isEquipped: bool,
-    heroEquipped: u32,
-    rank4Bonus: RuneBonus,
-    rank8Bonus: RuneBonus,
-    rank12Bonus: RuneBonus,
-    rank16Bonus: RuneBonus,
+pub struct Rune {
+    pub id: u32,
+    pub statistic: RuneStatistic,
+    pub isPercent: bool,
+    pub rank: u32,
+    pub rarity: RuneRarity,
+    pub runeType: RuneType,
+    pub isEquipped: bool,
+    pub heroEquipped: u32,
+    pub rank4Bonus: RuneBonus,
+    pub rank8Bonus: RuneBonus,
+    pub rank12Bonus: RuneBonus,
+    pub rank16Bonus: RuneBonus,
 }
 
 const RUNE_STAT_COUNT: u32 = 4;

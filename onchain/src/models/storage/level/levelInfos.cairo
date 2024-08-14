@@ -1,10 +1,10 @@
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct LevelInfos {
+pub struct LevelInfos {
     #[key]
-    map: u16,
+    pub map: u16,
     #[key]
-    level: u16,
-    energyCost: u16,
-    enemiesCount: u16,
+    pub level: u16,
+    pub energyCost: u16,
+    pub enemiesCount: u16,
 }

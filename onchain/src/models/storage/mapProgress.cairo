@@ -2,10 +2,10 @@ use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct MapProgress {
+pub struct MapProgress {
     #[key]
-    owner: ContractAddress,
+    pub owner: ContractAddress,
     #[key]
-    map: u16,
-    level: u16,
+    pub map: u16,
+    pub level: u16,
 }

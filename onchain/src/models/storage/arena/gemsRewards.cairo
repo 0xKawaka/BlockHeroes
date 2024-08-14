@@ -1,8 +1,8 @@
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct GemsRewards {
+pub struct GemsRewards {
     #[key]
-    index: u32,
-    minRank: u64,
-    gems: u64,
+    pub index: u32,
+    pub minRank: u64,
+    pub gems: u64,
 }

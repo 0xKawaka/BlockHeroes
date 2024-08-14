@@ -3,10 +3,10 @@ use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct Runes {
+pub struct Runes {
     #[key]
-    owner: ContractAddress,
+    pub owner: ContractAddress,
     #[key]
-    index: u32,
-    rune: Rune,
+    pub index: u32,
+    pub rune: Rune,
 }

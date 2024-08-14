@@ -1,0 +1,16 @@
+kind = "DojoModel"
+class_hash = "0x2913da6d0ab9ff9222f02ed81aa3134c85683628890eb8d78f16ab26b714f74"
+original_class_hash = "0x2913da6d0ab9ff9222f02ed81aa3134c85683628890eb8d78f16ab26b714f74"
+abi = "manifests/dev/base/abis/models/game-ArenaCurrentRankIndex-59625102.json"
+tag = "game-ArenaCurrentRankIndex"
+manifest_name = "game-ArenaCurrentRankIndex-59625102"
+
+[[members]]
+name = "id"
+type = "u8"
+key = true
+
+[[members]]
+name = "currentRankIndex"
+type = "u64"
+key = false

@@ -4,19 +4,19 @@ use game::models::hero::rune::{Rune, RuneImpl, RuneType};
 use debug::PrintTrait;
 
 #[derive(Introspect, Copy, Drop, Serde)]
-struct EquippedRunes {
-    isFirstRuneEquipped: bool,
-    first: u32,
-    isSecondRuneEquipped: bool,
-    second: u32,
-    isThirdRuneEquipped: bool,
-    third: u32,
-    isFourthRuneEquipped: bool,
-    fourth: u32,
-    isFifthRuneEquipped: bool,
-    fifth: u32,
-    isSixthRuneEquipped: bool,
-    sixth: u32,
+pub struct EquippedRunes {
+    pub isFirstRuneEquipped: bool,
+    pub first: u32,
+    pub isSecondRuneEquipped: bool,
+    pub second: u32,
+    pub isThirdRuneEquipped: bool,
+    pub third: u32,
+    pub isFourthRuneEquipped: bool,
+    pub fourth: u32,
+    pub isFifthRuneEquipped: bool,
+    pub fifth: u32,
+    pub isSixthRuneEquipped: bool,
+    pub sixth: u32,
 }
 
 fn new() -> EquippedRunes {

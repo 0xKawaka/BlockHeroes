@@ -5,7 +5,7 @@ use debug::PrintTrait;
 
 
 #[derive(Copy, Drop, PartialEq, Serde, Introspect)]
-enum BuffType {
+pub enum BuffType {
     SpeedUp,
     SpeedDown,
     AttackUp,
@@ -18,13 +18,13 @@ enum BuffType {
 }
 
 #[derive(Copy, Drop, Serde, Introspect)]
-struct Buff {
-    buffType: BuffType,
-    value: u64,
-    duration: u8,
-    target: bool,
-    aoe: bool,
-    self: bool,
+pub struct Buff {
+    pub buffType: BuffType,
+    pub value: u64,
+    pub duration: u8,
+    pub target: bool,
+    pub aoe: bool,
+    pub self: bool,
 }
 
 fn new(buffType: BuffType, value: u64, duration: u8, target: bool, aoe: bool, self: bool) -> Buff {

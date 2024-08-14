@@ -1,0 +1,10 @@
+kind = "DojoContract"
+class_hash = "0x2c62ba56ffd9dd99a115b5428b2a38eeede4d63d8b1c0967a34c6005b9127cd"
+original_class_hash = "0x2c62ba56ffd9dd99a115b5428b2a38eeede4d63d8b1c0967a34c6005b9127cd"
+base_class_hash = "0x0"
+abi = "manifests/dev/base/abis/contracts/game-Game-1a8648a1.json"
+reads = []
+writes = []
+init_calldata = []
+tag = "game-Game"
+manifest_name = "game-Game-1a8648a1"
