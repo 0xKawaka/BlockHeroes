@@ -1,0 +1,41 @@
+.navBarContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 1%;
+  padding-top : 0.5%;
+  padding-bottom : 0.5%;
+  /* height: 6%; */
+  /* background-color: black; */
+  color: white;
+}
+
+.walletContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.connectButton, .disconnectButton  {
+  display: inline-block;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+}
+
+.connectButton {
+  border: 0.2rem rgb(22, 168, 66) solid;
+  background-color: rgb(41, 172, 80);
+}
+.disconnectButton {
+  border: 0.2rem rgb(55, 91, 146) solid;
+  background-color: rgb(74, 121, 192);
+}
+
+
+

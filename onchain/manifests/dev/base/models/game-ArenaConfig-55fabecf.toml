@@ -1,8 +1,9 @@
 kind = "DojoModel"
-class_hash = "0x522ce5559ca1bdc03d0c99a5b12ef046130812dae8fdefbed66039a5c97ef9"
-original_class_hash = "0x522ce5559ca1bdc03d0c99a5b12ef046130812dae8fdefbed66039a5c97ef9"
+class_hash = "0x776a006bc59c8c05d915a3688495cc00852e752b52e403d9802d1a84ddc5f5e"
+original_class_hash = "0x776a006bc59c8c05d915a3688495cc00852e752b52e403d9802d1a84ddc5f5e"
 abi = "manifests/dev/base/abis/models/game-ArenaConfig-55fabecf.json"
 tag = "game-ArenaConfig"
+qualified_path = "game::models::storage::arena::arenaConfig::arena_config"
 manifest_name = "game-ArenaConfig-55fabecf"
 
 [[members]]

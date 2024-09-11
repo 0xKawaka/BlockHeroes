@@ -1,0 +1,725 @@
+[world]
+kind = "WorldContract"
+class_hash = "0xa349b743d361ce4567361475a89b84a386bb383448c6926954e5fe0b525597"
+original_class_hash = "0xa349b743d361ce4567361475a89b84a386bb383448c6926954e5fe0b525597"
+abi = "manifests/dev/deployment/abis/dojo-world.json"
+address = "0x4ccbc6da0b26ca909183ad69df4cf35b3c8c8492a5a791fd5eda13ce3c55c50"
+transaction_hash = "0x42eb40e40ee5d1d6f6538fe3fcb727c21d4ec4f7d15475dbccda46653ea3895"
+block_number = 3
+seed = "game"
+manifest_name = "dojo-world"
+
+[world.metadata]
+profile_name = "dev"
+rpc_url = "http://localhost:5050/"
+
+[base]
+kind = "Class"
+class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+original_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/dojo-base.json"
+tag = "dojo-base"
+manifest_name = "dojo-base"
+
+[[contracts]]
+kind = "DojoContract"
+address = "0x1f355961284c21fced60460e371443a9b3a192b3e5ae755ed9428dbbb4ba68f"
+class_hash = "0x3c8e0e8638d65df14939a1f1a053b2e1fadcbdfd5e005bc8efd631e197476e8"
+original_class_hash = "0x3c8e0e8638d65df14939a1f1a053b2e1fadcbdfd5e005bc8efd631e197476e8"
+base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/contracts/game-Game-1a8648a1.json"
+reads = []
+writes = ["ns:game"]
+init_calldata = []
+tag = "game-Game"
+systems = [
+    "startPvpBattle",
+    "playArenaTurn",
+    "startBattle",
+    "playTurn",
+    "initPvp",
+    "setPvpTeam",
+    "equipRune",
+    "unequipRune",
+    "upgradeRune",
+    "mintHero",
+    "mintRune",
+    "createAccount",
+]
+manifest_name = "game-Game-1a8648a1"
+
+[[contracts]]
+kind = "DojoContract"
+address = "0x7db0ee87b66abc2184e93e5f322d9753aa2dd71890cd1ffddfacebde2cbc49e"
+class_hash = "0xa4ec276dde4291975b97704ec2a3648305fb63a995ec628f19c9e3b90b3a18"
+original_class_hash = "0xa4ec276dde4291975b97704ec2a3648305fb63a995ec628f19c9e3b90b3a18"
+base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/contracts/game-Settings-4d1bc91c.json"
+reads = []
+writes = ["ns:game"]
+init_calldata = []
+tag = "game-Settings"
+systems = []
+manifest_name = "game-Settings-4d1bc91c"
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x5388e791d17d2b6c196edabb8f09bf9e280f18fabe81dc9672f72b561d0729f"
+original_class_hash = "0x5388e791d17d2b6c196edabb8f09bf9e280f18fabe81dc9672f72b561d0729f"
+abi = "manifests/dev/deployment/abis/models/game-Account-29dd3dd7.json"
+tag = "game-Account"
+qualified_path = "game::models::account::account"
+manifest_name = "game-Account-29dd3dd7"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "username"
+type = "felt252"
+key = false
+
+[[models.members]]
+name = "energy"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "pvpEnergy"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "crystals"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "gems"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "lastEnergyUpdateTimestamp"
+type = "u64"
+key = false
+
+[[models.members]]
+name = "lastPvpEnergyUpdateTimestamp"
+type = "u64"
+key = false
+
+[[models.members]]
+name = "runesCount"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "heroesCount"
+type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x31cc37133ed62dd2786a6ead1bd0242201066a1a377e6e1849a49aaa823ac58"
+original_class_hash = "0x31cc37133ed62dd2786a6ead1bd0242201066a1a377e6e1849a49aaa823ac58"
+abi = "manifests/dev/deployment/abis/models/game-ArenaAccount-1173c598.json"
+tag = "game-ArenaAccount"
+qualified_path = "game::models::storage::arena::arenaAccount::arena_account"
+manifest_name = "game-ArenaAccount-1173c598"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "rank"
+type = "u64"
+key = false
+
+[[models.members]]
+name = "lastClaimedRewards"
+type = "u64"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x4f20f42a8159c8ce2dc4817e048b73e153e563631cd94847d9ed0bfc8a26bf1"
+original_class_hash = "0x4f20f42a8159c8ce2dc4817e048b73e153e563631cd94847d9ed0bfc8a26bf1"
+abi = "manifests/dev/deployment/abis/models/game-ArenaBattleStorage-1b587534.json"
+tag = "game-ArenaBattleStorage"
+qualified_path = "game::models::storage::battles::arenaBattleStorage::arena_battle_storage"
+manifest_name = "game-ArenaBattleStorage-1b587534"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "enemyOwner"
+type = "ContractAddress"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x776a006bc59c8c05d915a3688495cc00852e752b52e403d9802d1a84ddc5f5e"
+original_class_hash = "0x776a006bc59c8c05d915a3688495cc00852e752b52e403d9802d1a84ddc5f5e"
+abi = "manifests/dev/deployment/abis/models/game-ArenaConfig-55fabecf.json"
+tag = "game-ArenaConfig"
+qualified_path = "game::models::storage::arena::arenaConfig::arena_config"
+manifest_name = "game-ArenaConfig-55fabecf"
+
+[[models.members]]
+name = "id"
+type = "u8"
+key = true
+
+[[models.members]]
+name = "enemyRangesByRankLength"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "gemsRewardsLength"
+type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x27f0215feda0a55a83068be6ccdc41dfb4e9adb3bf8a46ef07e238c01ab0e71"
+original_class_hash = "0x27f0215feda0a55a83068be6ccdc41dfb4e9adb3bf8a46ef07e238c01ab0e71"
+abi = "manifests/dev/deployment/abis/models/game-ArenaCurrentRankIndex-59625102.json"
+tag = "game-ArenaCurrentRankIndex"
+qualified_path = "game::models::storage::arena::arenaCurrentRankIndex::arena_current_rank_index"
+manifest_name = "game-ArenaCurrentRankIndex-59625102"
+
+[[models.members]]
+name = "id"
+type = "u8"
+key = true
+
+[[models.members]]
+name = "currentRankIndex"
+type = "u64"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x10885ebdee55ba7c139183494b463521d9e49a4e5ec8ea638b2f295b731f63d"
+original_class_hash = "0x10885ebdee55ba7c139183494b463521d9e49a4e5ec8ea638b2f295b731f63d"
+abi = "manifests/dev/deployment/abis/models/game-ArenaTeam-72603bca.json"
+tag = "game-ArenaTeam"
+qualified_path = "game::models::storage::arena::arenaTeam::arena_team"
+manifest_name = "game-ArenaTeam-72603bca"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "index"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "heroIndex"
+type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x15205dc9df776e52e06082fc0738ced681aafa8c5bf77f821f54e5c033533a8"
+original_class_hash = "0x15205dc9df776e52e06082fc0738ced681aafa8c5bf77f821f54e5c033533a8"
+abi = "manifests/dev/deployment/abis/models/game-BaseHero-17593f72.json"
+tag = "game-BaseHero"
+qualified_path = "game::models::storage::baseHero::base_hero"
+manifest_name = "game-BaseHero-17593f72"
+
+[[models.members]]
+name = "heroName"
+type = "felt252"
+key = true
+
+[[models.members]]
+name = "statistics"
+type = "Statistics"
+key = false
+
+[[models.members]]
+name = "skillsCount"
+type = "u8"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x3366b7583195591982f44d17f6710496e43dda52efffdde396fd809dd5ae0fe"
+original_class_hash = "0x3366b7583195591982f44d17f6710496e43dda52efffdde396fd809dd5ae0fe"
+abi = "manifests/dev/deployment/abis/models/game-BattleStorage-3e3288d7.json"
+tag = "game-BattleStorage"
+qualified_path = "game::models::storage::battles::battleStorage::battle_storage"
+manifest_name = "game-BattleStorage-3e3288d7"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "map"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "level"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "entitiesCount"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "aliveEntitiesCount"
+type = "u32"
+key = false
+
+[[models.members]]
+name = "isBattleOver"
+type = "bool"
+key = false
+
+[[models.members]]
+name = "isWaitingForPlayerAction"
+type = "bool"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x5457fae973d05b74df7d0489884610983273bc296dd63f723b7d6e1c9faef6a"
+original_class_hash = "0x5457fae973d05b74df7d0489884610983273bc296dd63f723b7d6e1c9faef6a"
+abi = "manifests/dev/deployment/abis/models/game-BonusRuneStatistics-597cd1c6.json"
+tag = "game-BonusRuneStatistics"
+qualified_path = "game::models::storage::statistics::bonusRuneStatistics::bonus_rune_statistics"
+manifest_name = "game-BonusRuneStatistics-597cd1c6"
+
+[[models.members]]
+name = "statistic"
+type = "RuneStatistic"
+key = true
+
+[[models.members]]
+name = "rarity"
+type = "RuneRarity"
+key = true
+
+[[models.members]]
+name = "isPercent"
+type = "bool"
+key = true
+
+[[models.members]]
+name = "value"
+type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x73357dc71979b36dcfdf54709e478ad6f0f545d933c1d0c7c5bae24a5bc62e7"
+original_class_hash = "0x73357dc71979b36dcfdf54709e478ad6f0f545d933c1d0c7c5bae24a5bc62e7"
+abi = "manifests/dev/deployment/abis/models/game-EnemyRanges-28af3414.json"
+tag = "game-EnemyRanges"
+qualified_path = "game::models::storage::arena::enemyRanges::enemy_ranges"
+manifest_name = "game-EnemyRanges-28af3414"
+
+[[models.members]]
+name = "index"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "minRank"
+type = "u64"
+key = false
+
+[[models.members]]
+name = "range"
+type = "u64"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x663b139e6d0f06435b31e4b5b4ce55b40f084d2f65d7a890042d1754d7a8e03"
+original_class_hash = "0x663b139e6d0f06435b31e4b5b4ce55b40f084d2f65d7a890042d1754d7a8e03"
+abi = "manifests/dev/deployment/abis/models/game-EntityStorage-4113cc43.json"
+tag = "game-EntityStorage"
+qualified_path = "game::models::storage::battles::entityStorage::entity_storage"
+manifest_name = "game-EntityStorage-4113cc43"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "map"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "entityIndex"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "entityVal"
+type = "Entity"
+key = false
+
+[[models.members]]
+name = "healthOnTurnProcCount"
+type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x62e8be1ffeeab2d0bf749a5222fcd9d4bf5711de4a7d03d06052c8375ad7fbf"
+original_class_hash = "0x62e8be1ffeeab2d0bf749a5222fcd9d4bf5711de4a7d03d06052c8375ad7fbf"
+abi = "manifests/dev/deployment/abis/models/game-GemsRewards-7f7e8419.json"
+tag = "game-GemsRewards"
+qualified_path = "game::models::storage::arena::gemsRewards::gems_rewards"
+manifest_name = "game-GemsRewards-7f7e8419"
+
+[[models.members]]
+name = "index"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "minRank"
+type = "u64"
+key = false
+
+[[models.members]]
+name = "gems"
+type = "u64"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x62e4ff4ff470a43cbfe96c82b2eb2873f65725a4a0825030b880abf47a0fb28"
+original_class_hash = "0x62e4ff4ff470a43cbfe96c82b2eb2873f65725a4a0825030b880abf47a0fb28"
+abi = "manifests/dev/deployment/abis/models/game-HealthOnTurnProcStorage-6fad5dfd.json"
+tag = "game-HealthOnTurnProcStorage"
+qualified_path = "game::models::storage::battles::healthOnTurnProcStorage::health_on_turn_proc_storage"
+manifest_name = "game-HealthOnTurnProcStorage-6fad5dfd"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "map"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "entityIndex"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "index"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "healthOnTurnProc"
+type = "HealthOnTurnProc"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x3d8dafd576a30d21231958206689f1d7b9403b44dc1416a6736d0c2682e4e7b"
+original_class_hash = "0x3d8dafd576a30d21231958206689f1d7b9403b44dc1416a6736d0c2682e4e7b"
+abi = "manifests/dev/deployment/abis/models/game-Heroes-3404b465.json"
+tag = "game-Heroes"
+qualified_path = "game::models::account::heroes::heroes"
+manifest_name = "game-Heroes-3404b465"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "index"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "hero"
+type = "Hero"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0xea0fc72193129804e1a4f1422d8b541e32528cef7dd6efd11970860cfa8515"
+original_class_hash = "0xea0fc72193129804e1a4f1422d8b541e32528cef7dd6efd11970860cfa8515"
+abi = "manifests/dev/deployment/abis/models/game-LevelEnemy-7ad791f7.json"
+tag = "game-LevelEnemy"
+qualified_path = "game::models::storage::level::levelEnemy::level_enemy"
+manifest_name = "game-LevelEnemy-7ad791f7"
+
+[[models.members]]
+name = "map"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "level"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "index"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "hero"
+type = "Hero"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x224c5a1b4956fcec1bf44b7916d0d09ace009d918964e6c319e50d2169214a5"
+original_class_hash = "0x224c5a1b4956fcec1bf44b7916d0d09ace009d918964e6c319e50d2169214a5"
+abi = "manifests/dev/deployment/abis/models/game-LevelInfos-305d29c6.json"
+tag = "game-LevelInfos"
+qualified_path = "game::models::storage::level::levelInfos::level_infos"
+manifest_name = "game-LevelInfos-305d29c6"
+
+[[models.members]]
+name = "map"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "level"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "energyCost"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "enemiesCount"
+type = "u16"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x4c7f5da1fc1c6aec2f2a112a4ba56170142889b2f006b90168224936b50bcfc"
+original_class_hash = "0x4c7f5da1fc1c6aec2f2a112a4ba56170142889b2f006b90168224936b50bcfc"
+abi = "manifests/dev/deployment/abis/models/game-MapProgress-1bbf0d3a.json"
+tag = "game-MapProgress"
+qualified_path = "game::models::storage::mapProgress::map_progress"
+manifest_name = "game-MapProgress-1bbf0d3a"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "map"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "level"
+type = "u16"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x4bcd00743468b53dffabdcf32ae893873ec234111e45feddba680e603d00ef1"
+original_class_hash = "0x4bcd00743468b53dffabdcf32ae893873ec234111e45feddba680e603d00ef1"
+abi = "manifests/dev/deployment/abis/models/game-RuneStatistics-52b3fecd.json"
+tag = "game-RuneStatistics"
+qualified_path = "game::models::storage::statistics::runeStatistics::rune_statistics"
+manifest_name = "game-RuneStatistics-52b3fecd"
+
+[[models.members]]
+name = "statistic"
+type = "RuneStatistic"
+key = true
+
+[[models.members]]
+name = "rarity"
+type = "RuneRarity"
+key = true
+
+[[models.members]]
+name = "isPercent"
+type = "bool"
+key = true
+
+[[models.members]]
+name = "value"
+type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x580b7aa0d66c1a22334418b1212fdedb86ea7eb91f5781af3912e95fe7b4c59"
+original_class_hash = "0x580b7aa0d66c1a22334418b1212fdedb86ea7eb91f5781af3912e95fe7b4c59"
+abi = "manifests/dev/deployment/abis/models/game-Runes-34b26885.json"
+tag = "game-Runes"
+qualified_path = "game::models::account::runes::runes"
+manifest_name = "game-Runes-34b26885"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "index"
+type = "u32"
+key = true
+
+[[models.members]]
+name = "rune"
+type = "Rune"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x42bae82fae9719e3065e889cc496af51a2da1faeac6eb04089b3fe07dd12998"
+original_class_hash = "0x42bae82fae9719e3065e889cc496af51a2da1faeac6eb04089b3fe07dd12998"
+abi = "manifests/dev/deployment/abis/models/game-SkillBuff-4cc3679b.json"
+tag = "game-SkillBuff"
+qualified_path = "game::models::storage::skill::skillBuff::skill_buff"
+manifest_name = "game-SkillBuff-4cc3679b"
+
+[[models.members]]
+name = "skillName"
+type = "felt252"
+key = true
+
+[[models.members]]
+name = "index"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "buff"
+type = "Buff"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x12e7c2128ef58937885a3ee23be41d68edfda472126517eea5118e79ce986e2"
+original_class_hash = "0x12e7c2128ef58937885a3ee23be41d68edfda472126517eea5118e79ce986e2"
+abi = "manifests/dev/deployment/abis/models/game-SkillInfos-28bcfd48.json"
+tag = "game-SkillInfos"
+qualified_path = "game::models::storage::skill::skillInfos::skill_infos"
+manifest_name = "game-SkillInfos-28bcfd48"
+
+[[models.members]]
+name = "name"
+type = "felt252"
+key = true
+
+[[models.members]]
+name = "cooldown"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "damage"
+type = "Damage"
+key = false
+
+[[models.members]]
+name = "heal"
+type = "Heal"
+key = false
+
+[[models.members]]
+name = "targetType"
+type = "TargetType"
+key = false
+
+[[models.members]]
+name = "accuracy"
+type = "u16"
+key = false
+
+[[models.members]]
+name = "buffsCount"
+type = "u16"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x29f228b120649be26c9d120e42f5c5b3399385406dd35bc67f6b00c8b9c9091"
+original_class_hash = "0x29f228b120649be26c9d120e42f5c5b3399385406dd35bc67f6b00c8b9c9091"
+abi = "manifests/dev/deployment/abis/models/game-SkillNameSet-578ae399.json"
+tag = "game-SkillNameSet"
+qualified_path = "game::models::storage::skill::skillNameSet::skill_name_set"
+manifest_name = "game-SkillNameSet-578ae399"
+
+[[models.members]]
+name = "heroName"
+type = "felt252"
+key = true
+
+[[models.members]]
+name = "index"
+type = "u8"
+key = true
+
+[[models.members]]
+name = "skill"
+type = "felt252"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x2c3f5999d32014291464f32b03b55d2925082e1716926436d9bc4c4e711e78d"
+original_class_hash = "0x2c3f5999d32014291464f32b03b55d2925082e1716926436d9bc4c4e711e78d"
+abi = "manifests/dev/deployment/abis/models/game-TurnTimelineStorage-64578faf.json"
+tag = "game-TurnTimelineStorage"
+qualified_path = "game::models::storage::battles::turnTimelineStorage::turn_timeline_storage"
+manifest_name = "game-TurnTimelineStorage-64578faf"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "map"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "index"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "entityIndex"
+type = "u16"
+key = false

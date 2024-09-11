@@ -31,7 +31,8 @@ mod tests {
             level_enemy::TEST_CLASS_HASH, level_infos::TEST_CLASS_HASH,
             bonus_rune_statistics::TEST_CLASS_HASH, rune_statistics::TEST_CLASS_HASH,
         ];
-        let world = spawn_test_world("game", models);
+        // let world = spawn_test_world("game", models);
+        let world = spawn_test_world!();
 
         let game_contract_adrs = world.deploy_contract('salt', Game::TEST_CLASS_HASH.try_into().unwrap());
         let game = IGameDispatcher { contract_address: game_contract_adrs };

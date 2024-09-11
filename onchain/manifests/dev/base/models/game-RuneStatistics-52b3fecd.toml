@@ -1,8 +1,9 @@
 kind = "DojoModel"
-class_hash = "0x54c261160226288093627fb0f99ab6128d9f7a62552f9edb3d64fa83130cd65"
-original_class_hash = "0x54c261160226288093627fb0f99ab6128d9f7a62552f9edb3d64fa83130cd65"
+class_hash = "0x4bcd00743468b53dffabdcf32ae893873ec234111e45feddba680e603d00ef1"
+original_class_hash = "0x4bcd00743468b53dffabdcf32ae893873ec234111e45feddba680e603d00ef1"
 abi = "manifests/dev/base/abis/models/game-RuneStatistics-52b3fecd.json"
 tag = "game-RuneStatistics"
+qualified_path = "game::models::storage::statistics::runeStatistics::rune_statistics"
 manifest_name = "game-RuneStatistics-52b3fecd"
 
 [[members]]

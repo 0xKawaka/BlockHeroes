@@ -1,8 +1,9 @@
 kind = "DojoModel"
-class_hash = "0x3edd65302f3351d9e2e4638b9bb501d35b92ef513a0585820ca43fe4e51f24c"
-original_class_hash = "0x3edd65302f3351d9e2e4638b9bb501d35b92ef513a0585820ca43fe4e51f24c"
+class_hash = "0x224c5a1b4956fcec1bf44b7916d0d09ace009d918964e6c319e50d2169214a5"
+original_class_hash = "0x224c5a1b4956fcec1bf44b7916d0d09ace009d918964e6c319e50d2169214a5"
 abi = "manifests/dev/base/abis/models/game-LevelInfos-305d29c6.json"
 tag = "game-LevelInfos"
+qualified_path = "game::models::storage::level::levelInfos::level_infos"
 manifest_name = "game-LevelInfos-305d29c6"
 
 [[members]]

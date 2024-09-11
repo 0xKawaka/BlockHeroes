@@ -1,0 +1,12 @@
+.RunePlaceholderContainer {
+  border: 0.1rem solid #ffffff;
+  width: 8.5rem;
+  height: 8.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.TransparentRuneImg {
+  opacity: 0.4;
+}

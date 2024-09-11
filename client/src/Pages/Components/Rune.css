@@ -1,0 +1,64 @@
+.RuneContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: 1.3rem;
+}
+.RuneImageStatisticsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 3rem;
+}
+
+.RuneStatisticsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 7rem;
+  font-size: 2.2rem;
+  font-family: RetroGaming;
+}
+
+.RuneStatistic {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.RuneButtonsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.RuneButton, .RuneButtonUpgrade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+  text-align: center;
+  width: 14rem;
+  padding: 0.3rem;
+  border: 0.1rem solid white;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.RuneButtonUpgradeCrystalValue {
+  display: flex;
+  align-items: center;
+}
+
+.RuneButtonUpgradeCrystalIcon {
+  width : 2.4rem;
+}
+
+.RuneButton:hover, .RuneButtonUpgrade:hover {
+  background-color: white;
+  color: black;
+}

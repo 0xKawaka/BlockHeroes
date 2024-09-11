@@ -1,0 +1,16 @@
+.ProgressExperienceEmpty {
+  background-color: #e0e0e0;
+  border-radius: 5px;
+}
+
+.ProgressExperienceFilled {
+  background-color: #ff9800;
+  border-radius: 5px;
+}
+
+.ProgressExperienceText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+}

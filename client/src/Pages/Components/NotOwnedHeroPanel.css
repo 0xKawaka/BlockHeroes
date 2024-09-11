@@ -1,0 +1,15 @@
+.NotOwnedBaseStatsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  font-size: 2.3rem;
+}
+
+.NotOwnedBaseSingleStatContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 30rem;
+}

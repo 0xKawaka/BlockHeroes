@@ -1,8 +1,9 @@
 kind = "DojoModel"
-class_hash = "0xc1d8bfcc20c5936d8679fb5cbe43675bf3fea6aa8f94b39a9a5a4cf5aa2416"
-original_class_hash = "0xc1d8bfcc20c5936d8679fb5cbe43675bf3fea6aa8f94b39a9a5a4cf5aa2416"
+class_hash = "0x5388e791d17d2b6c196edabb8f09bf9e280f18fabe81dc9672f72b561d0729f"
+original_class_hash = "0x5388e791d17d2b6c196edabb8f09bf9e280f18fabe81dc9672f72b561d0729f"
 abi = "manifests/dev/base/abis/models/game-Account-29dd3dd7.json"
 tag = "game-Account"
+qualified_path = "game::models::account::account"
 manifest_name = "game-Account-29dd3dd7"
 
 [[members]]

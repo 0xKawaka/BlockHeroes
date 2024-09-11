@@ -1,8 +1,9 @@
 kind = "DojoModel"
-class_hash = "0x3335c9d2e97663677d5852d4f4922fd933166938b229791c2a1f34288921490"
-original_class_hash = "0x3335c9d2e97663677d5852d4f4922fd933166938b229791c2a1f34288921490"
+class_hash = "0x15205dc9df776e52e06082fc0738ced681aafa8c5bf77f821f54e5c033533a8"
+original_class_hash = "0x15205dc9df776e52e06082fc0738ced681aafa8c5bf77f821f54e5c033533a8"
 abi = "manifests/dev/base/abis/models/game-BaseHero-17593f72.json"
 tag = "game-BaseHero"
+qualified_path = "game::models::storage::baseHero::base_hero"
 manifest_name = "game-BaseHero-17593f72"
 
 [[members]]

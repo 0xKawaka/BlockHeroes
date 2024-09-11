@@ -1,0 +1,42 @@
+.AccountOverview {
+  width: 100%;
+  font-size: 2.6rem;
+  position: absolute;
+  right: 3%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4rem;
+}
+
+.EnergyContainer, .CrystalsContainer, .GemsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 2.2rem;
+}
+
+.CrystalsContainer, .GemsContainer {
+  flex-direction: row;
+}
+
+.EnergyValueIconContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  /* align-items: center; */
+  cursor: pointer;
+}
+
+.EnergyIcon, .CrystalsIcon, .GemsIcon {
+  height: 3rem;
+}
+
+.EnergyTooltip {
+  font-family: RetroGaming;
+  position: absolute;
+  top: 4rem;
+  font-size: 1.6rem;
+  text-align: center;
+}

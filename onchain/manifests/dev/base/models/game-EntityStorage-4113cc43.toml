@@ -1,8 +1,9 @@
 kind = "DojoModel"
-class_hash = "0x3afbd5921b42e43dff8a7d607100f8619a3084f0de58ab9ad7858f58203094f"
-original_class_hash = "0x3afbd5921b42e43dff8a7d607100f8619a3084f0de58ab9ad7858f58203094f"
+class_hash = "0x663b139e6d0f06435b31e4b5b4ce55b40f084d2f65d7a890042d1754d7a8e03"
+original_class_hash = "0x663b139e6d0f06435b31e4b5b4ce55b40f084d2f65d7a890042d1754d7a8e03"
 abi = "manifests/dev/base/abis/models/game-EntityStorage-4113cc43.json"
 tag = "game-EntityStorage"
+qualified_path = "game::models::storage::battles::entityStorage::entity_storage"
 manifest_name = "game-EntityStorage-4113cc43"
 
 [[members]]

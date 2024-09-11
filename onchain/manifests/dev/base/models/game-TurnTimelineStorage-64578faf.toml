@@ -1,8 +1,9 @@
 kind = "DojoModel"
-class_hash = "0xa97d1550b23466c50e2cabcad1523afa55d84baaf0ec1ff9624ea82da59f90"
-original_class_hash = "0xa97d1550b23466c50e2cabcad1523afa55d84baaf0ec1ff9624ea82da59f90"
+class_hash = "0x2c3f5999d32014291464f32b03b55d2925082e1716926436d9bc4c4e711e78d"
+original_class_hash = "0x2c3f5999d32014291464f32b03b55d2925082e1716926436d9bc4c4e711e78d"
 abi = "manifests/dev/base/abis/models/game-TurnTimelineStorage-64578faf.json"
 tag = "game-TurnTimelineStorage"
+qualified_path = "game::models::storage::battles::turnTimelineStorage::turn_timeline_storage"
 manifest_name = "game-TurnTimelineStorage-64578faf"
 
 [[members]]

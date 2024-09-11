@@ -1,6 +1,0 @@
-computed = [  ]
-name = "game::systems::game::Game"
-reads = [ ]
-writes = [ "Account", "Heroes", "Runes", "ArenaAccount", "ArenaConfig", "ArenaCurrentRankIndex", "ArenaTeam", "EnemyRanges", "GemsRewards", "ArenaBattleStorage", "BattleStorage", "EntityStorage", "HealthOnTurnProcStorage", "TurnTimelineStorage", "LevelEnemy", "LevelInfos", "SkillBuff", "SkillInfos", "SkillNameSet", "BaseHero", "BonusRuneStatistics", "RuneStatistics", "MapProgress" ]
-init_calldata = []
-

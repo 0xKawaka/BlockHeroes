@@ -1,0 +1,36 @@
+.SpellsPanelContainer {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: flex-start;
+  height: 100%;
+  gap: 2rem;
+}
+
+.SpellContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  border: 1px solid white;
+  padding: 0.4rem 1rem 0.4rem 0.4rem;
+}
+
+.SpellsPanelSpellDescriptionContainer {
+  width: 40rem;
+  font-size: 1.4rem;
+}
+
+.SpellsPanelSpellName {
+  font-size: 2rem;
+}
+
+.SpellsPanelSpellCooldown {
+  font-size: 1.6rem;
+}
+
+.SpellsPanelSpellImg {
+  width: 10rem;
+  height: 10rem;
+}

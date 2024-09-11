@@ -1,0 +1,126 @@
+.AccountSelectAndRegisterContainer {
+  padding-top: 5rem;
+}
+.AccountSelectAndRegisterButtonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.AccountSelectTitle {
+  font-size: 4rem;
+}
+
+.AccountSelectAccountList {
+  border-top: 0.2rem solid rgb(146, 113, 47);
+}
+
+.AccountSelectAccountContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+
+.AccountSelectAccountUsername {
+  border: 0.2rem solid rgb(146, 113, 47);
+  padding: 1.3rem;
+  border-top: none;
+  cursor: pointer;
+  width: 50rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.AccountSelectClearButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 0.2rem solid rgb(146, 113, 47);
+  background-color: rgb(146, 113, 47);
+  border-top: none;
+  padding: 1.3rem;
+  cursor: pointer;
+  gap: 2rem;
+}
+
+.AccountSelectRegisterButton {
+  font-size: 2.3rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: rgb(207, 155, 9);
+  font-weight: bold;
+  color: #ffffff;
+  cursor: pointer;
+  align-items: center;
+}
+
+.ClipboardButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.ClipboardExportButton {
+  font-size: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: rgb(145, 123, 62);
+  font-weight: bold;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.AccountSelectRemovePopup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+  background-color: rgb(146, 113, 47);
+  color: #ffffff;
+  position: absolute;
+  width: 100vw;
+  top: 15%;
+}
+
+.AccountSelectRemovePopupTitle {
+  font-size: 2.2rem;
+}
+
+.AccountSelectRemovePopupAddress {
+  font-size: 1.7rem;
+}
+
+.AccountSelectRemovePopupButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.AccountSelectRemovePopupButton {
+  font-size: 1.7rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: rgb(187, 148, 39);
+  font-weight: bold;
+  color: #ffffff;
+  cursor: pointer;
+}
+/* <div className={"clipboardMsg" + clipboardStatus.isError ? "Error" : "Success"}> */
+
+.clipboardMsgError {
+  color: #ff0000;
+}
+.clipboardMsgSuccess {
+  color:#00ff00;
+} 
