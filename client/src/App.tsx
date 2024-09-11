@@ -2,12 +2,7 @@ import './App.css'
 import Home from './Pages/Home'
 import { HashRouter as Router, Route, Link, Routes } from 'react-router-dom'
 import GamePage from './Pages/GamePage'
-
-import { setup, SetupResult } from "./dojo/setup.ts";
-import { DojoProvider } from "./dojo/DojoContext.tsx";
-import { dojoConfig } from "../dojoConfig.ts";
-
-const setupResult = await setup(dojoConfig);
+import DojoWrapper from './Pages/DojoWrapper'
 
 function App() {
   return (
@@ -15,9 +10,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/game" element={
-            <DojoProvider value={setupResult}>
-              <GamePage />
-            </DojoProvider>
+            <DojoWrapper />
           } />
         </Routes>
     </Router>

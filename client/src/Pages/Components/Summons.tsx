@@ -5,41 +5,40 @@ import Soul from "../../assets/misc/soul.png"
 import SummonChest from "../../assets/misc/summonChest.png"
 import SummonChestGif from "../../assets/gif/summonChest.gif"
 import { Sender } from "../../Blockchain/Sender"
-import { StarknetWindowObject } from "get-starknet"
-import { Account } from "starknet"
 import { useState } from "react"
 import { Getter } from "../../Blockchain/Getter"
 import { HeroBlockchain } from "../../Types/blockchainTypes"
 import HeroMiniature from "./HeroMiniature"
 import portraitsDict from "../../assets/portraits/portraitsDict"
+import { BurnerAccount } from "@dojoengine/create-burner"
 
 type SummonsProps = {
-  localWallet: Account
+  account: BurnerAccount,
   setShowSummons: React.Dispatch<React.SetStateAction<boolean>>
   handleNewHeroEvent: (hero: HeroBlockchain) => void
 }
 
-export default function Summons({localWallet, setShowSummons, handleNewHeroEvent }: SummonsProps) {
+export default function Summons({account, setShowSummons, handleNewHeroEvent }: SummonsProps) {
   const [isSummoning, setIsSummoning] = useState(false);
   const [showSummongAnimation, setShowSummonAnimation] = useState(false);
   const [showSummonResult, setShowSummonResult] = useState(false);
   const [heroSummoned, setHeroSummoned] = useState<HeroBlockchain>();
 
   async function handleSummon() {
-    setShowSummonResult(false);
-    setIsSummoning(true);
-    const {id, name} = await Sender.mintHero(localWallet);
-    let hero = await Getter.getHero(localWallet, id);
-    if(!hero)
-      return;
-    setHeroSummoned(hero);
-    setShowSummonAnimation(true);
-    await new Promise(r => setTimeout(r, 1900));
-    setShowSummonResult(true);
-    setIsSummoning(false);
-    await new Promise(r => setTimeout(r, 700));
-    handleNewHeroEvent(hero);
-    setShowSummonAnimation(false);
+    // setShowSummonResult(false);
+    // setIsSummoning(true);
+    // const {id, name} = await Sender.mintHero(account);
+    // let hero = await Getter.getHero(account, id);
+    // if(!hero)
+    //   return;
+    // setHeroSummoned(hero);
+    // setShowSummonAnimation(true);
+    // await new Promise(r => setTimeout(r, 1900));
+    // setShowSummonResult(true);
+    // setIsSummoning(false);
+    // await new Promise(r => setTimeout(r, 700));
+    // handleNewHeroEvent(hero);
+    // setShowSummonAnimation(false);
   }
 
   return(

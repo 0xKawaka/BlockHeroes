@@ -84,10 +84,41 @@ mod SkillFactory {
                     SkillInfos { name: 'Forest Senses', cooldown: 3, damage: damage::new(0, false, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Ally, accuracy: 1, buffsCount: 2 },
                     SkillInfos { name: 'Attack Assassin', cooldown: 0, damage: damage::new(100, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
                     SkillInfos { name: 'Sand Strike', cooldown: 2, damage: damage::new(200, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 1 },
-                    SkillInfos { name: 'Sandstorm', cooldown: 4, damage: damage::new(100, false, true, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 1 }
+                    SkillInfos { name: 'Sandstorm', cooldown: 4, damage: damage::new(100, false, true, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 1 },
+                    SkillInfos { name: 'Attack Diana', cooldown: 0, damage: damage::new(100, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Nature Call', cooldown: 3, damage: damage::new(0, false, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Ally, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Wind Pierce', cooldown: 3, damage: damage::new(280, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Attack Elric', cooldown: 0, damage: damage::new(100, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Holy Bastion', cooldown: 4, damage: damage::new(0, false, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Ally, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Divine Hammer', cooldown: 3, damage: damage::new(230, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Attack Nereus', cooldown: 0, damage: damage::new(100, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Tide Strike', cooldown: 3, damage: damage::new(200, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Wave Slash', cooldown: 3, damage: damage::new(200, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Attack Rex', cooldown: 0, damage: damage::new(100, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Chum Challenge', cooldown: 3, damage: damage::new(0, false, true, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Ally, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Anchor Stomps', cooldown: 3, damage: damage::new(200, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Attack Celeste', cooldown: 0, damage: damage::new(100, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Ice Shatter', cooldown: 3, damage: damage::new(150, false, true, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Snow Storm', cooldown: 4, damage: damage::new(100, false, true, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Attack Oakheart', cooldown: 0, damage: damage::new(100, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Lignum Hammer', cooldown: 3, damage: damage::new(200, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Buloke Wall', cooldown: 4, damage: damage::new(0, false, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Ally, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Attack Sylvara', cooldown: 0, damage: damage::new(100, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Silvan Chant', cooldown: 3, damage: damage::new(0, false, false, false, damage::DamageType::Flat), heal: skill::heal::new(10, false, true, false, heal::HealType::Percent), targetType: TargetType::Ally, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Astral Beam', cooldown: 3, damage: damage::new(200, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Attack Bane', cooldown: 0, damage: damage::new(100, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Raging Fire', cooldown: 3, damage: damage::new(200, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Meteor Strike', cooldown: 3, damage: damage::new(160, false, true, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Attack Ember', cooldown: 0, damage: damage::new(0, false, false, false, damage::DamageType::Flat), heal: skill::heal::new(5, true, false, false, heal::HealType::Percent), targetType: TargetType::Ally, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Ember Infusion', cooldown: 3, damage: damage::new(0, false, false, false, damage::DamageType::Flat), heal: skill::heal::new(5, true, false, false, heal::HealType::Percent), targetType: TargetType::Ally, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Fiery Shower', cooldown: 3, damage: damage::new(200, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Attack Molten', cooldown: 0, damage: damage::new(100, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Blazing Rage', cooldown: 3, damage: damage::new(0, false, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Ally, accuracy: 1, buffsCount: 0 },
+                    SkillInfos { name: 'Volcano Flurry', cooldown: 3, damage: damage::new(200, true, false, false, damage::DamageType::Flat), heal: skill::heal::new(0, false, false, false, heal::HealType::Percent), targetType: TargetType::Enemy, accuracy: 1, buffsCount: 0 },
                 )
             );
         }
+
         fn initSkillsBuffs(world: IWorldDispatcher) {
             set!(
                 world,
@@ -100,10 +131,27 @@ mod SkillFactory {
                     SkillBuff { skillName: 'Forest Senses', index: 0, buff: buff::new(BuffType::AttackUp, 80, 2, false, false, true) },
                     SkillBuff { skillName: 'Forest Senses', index: 1, buff: buff::new(BuffType::SpeedUp, 80, 2, false, false, true) },
                     SkillBuff { skillName: 'Sand Strike', index: 0, buff: buff::new(BuffType::AttackUp, 50, 2, false, false, true) },
-                    SkillBuff { skillName: 'Sandstorm', index: 0, buff: buff::new(BuffType::SpeedDown, 20, 2, false, true, false) }
+                    SkillBuff { skillName: 'Sandstorm', index: 0, buff: buff::new(BuffType::SpeedDown, 20, 2, false, true, false) },
+                    SkillBuff { skillName: 'Nature Call', index: 0, buff: buff::new(BuffType::SpeedUp, 40, 2, false, true, false) },
+                    SkillBuff { skillName: 'Holy Bastion', index: 0, buff: buff::new(BuffType::DefenseUp, 50, 3, false, true, false) },
+                    SkillBuff { skillName: 'Divine Hammer', index: 0, buff: buff::new(BuffType::SpeedDown, 50, 2, true, false, false) },
+                    SkillBuff { skillName: 'Divine Hammer', index: 1, buff: buff::new(BuffType::AttackDown, 50, 2, true, false, false) },
+                    SkillBuff { skillName: 'Tide Strike', index: 0, buff: buff::new(BuffType::AttackUp, 50, 2, false, true, false) },
+                    SkillBuff { skillName: 'Chum Challenge', index: 0, buff: buff::new(BuffType::DefenseUp, 60, 2, false, false, true) },
+                    SkillBuff { skillName: 'Snow Storm', index: 0, buff: buff::new(BuffType::SpeedDown, 50, 2, false, true, false) },   
+                    SkillBuff { skillName: 'Lignum Hammer', index: 0, buff: buff::new(BuffType::Stun, 0, 1, true, false, false) },
+                    SkillBuff { skillName: 'Buloke Wall', index: 0, buff: buff::new(BuffType::DefenseUp, 50, 2, false, true, false) },
+                    SkillBuff { skillName: 'Silvan Chant', index: 0, buff: buff::new(BuffType::Regen, 3, 2, false, true, false) },
+                    SkillBuff { skillName: 'Astral Beam', index: 0, buff: buff::new(BuffType::AttackDown, 50, 2, true, false, false) },
+                    SkillBuff { skillName: 'Raging Fire', index: 0, buff: buff::new(BuffType::SpeedDown, 50, 2, true, false, false) },
+                    SkillBuff { skillName: 'Ember Infusion', index: 0, buff: buff::new(BuffType::SpeedUp, 20, 2, false, true, false) },
+                    SkillBuff { skillName: 'Ember Infusion', index: 1, buff: buff::new(BuffType::AttackUp, 20, 2, false, true, false) },
+                    SkillBuff { skillName: 'Blazing Rage', index: 0, buff: buff::new(BuffType::DefenseUp, 60, 2, true, false, false) },
+                    SkillBuff { skillName: 'Blazing Rage', index: 1, buff: buff::new(BuffType::AttackUp, 60, 2, true, false, false) }
                 )
             );
         }
+
         fn initHeroSkillNameSet(world: IWorldDispatcher) {
             set!(
                 world,
@@ -120,6 +168,36 @@ mod SkillFactory {
                     SkillNameSet { heroName: 'assassin', index: 0, skill: 'Attack Assassin'},
                     SkillNameSet { heroName: 'assassin', index: 1, skill: 'Sand Strike'},
                     SkillNameSet { heroName: 'assassin', index: 2, skill: 'Sandstorm'},
+                    SkillNameSet { heroName: 'diana', index: 0, skill: 'Attack Diana'},
+                    SkillNameSet { heroName: 'diana', index: 1, skill: 'Nature Call'},
+                    SkillNameSet { heroName: 'diana', index: 2, skill: 'Wind Pierce'},
+                    SkillNameSet { heroName: 'elric', index: 0, skill: 'Attack Elric'},
+                    SkillNameSet { heroName: 'elric', index: 1, skill: 'Holy Bastion'},
+                    SkillNameSet { heroName: 'elric', index: 2, skill: 'Divine Hammer'},
+                    SkillNameSet { heroName: 'nereus', index: 0, skill: 'Attack Nereus'},
+                    SkillNameSet { heroName: 'nereus', index: 1, skill: 'Tide Strike'},
+                    SkillNameSet { heroName: 'nereus', index: 2, skill: 'Wave Slash'},
+                    SkillNameSet { heroName: 'rex', index: 0, skill: 'Attack Rex'},
+                    SkillNameSet { heroName: 'rex', index: 1, skill: 'Chum Challenge'},
+                    SkillNameSet { heroName: 'rex', index: 2, skill: 'Anchor Stomps'},
+                    SkillNameSet { heroName: 'celeste', index: 0, skill: 'Attack Celeste'},
+                    SkillNameSet { heroName: 'celeste', index: 1, skill: 'Ice Shatter'},
+                    SkillNameSet { heroName: 'celeste', index: 2, skill: 'Snow Storm'},
+                    SkillNameSet { heroName: 'oakheart', index: 0, skill: 'Attack Oakheart'},
+                    SkillNameSet { heroName: 'oakheart', index: 1, skill: 'Lignum Hammer'},
+                    SkillNameSet { heroName: 'oakheart', index: 2, skill: 'Buloke Wall'},
+                    SkillNameSet { heroName: 'sylvara', index: 0, skill: 'Attack Sylvara'},
+                    SkillNameSet { heroName: 'sylvara', index: 1, skill: 'Silvan Chant'},
+                    SkillNameSet { heroName: 'sylvara', index: 2, skill: 'Astral Beam'},
+                    SkillNameSet { heroName: 'bane', index: 0, skill: 'Attack Bane'},
+                    SkillNameSet { heroName: 'bane', index: 1, skill: 'Raging Fire'},
+                    SkillNameSet { heroName: 'bane', index: 2, skill: 'Meteor Strike'},
+                    SkillNameSet { heroName: 'ember', index: 0, skill: 'Attack Ember'},
+                    SkillNameSet { heroName: 'ember', index: 1, skill: 'Ember Infusion'},
+                    SkillNameSet { heroName: 'ember', index: 2, skill: 'Fiery Shower'},
+                    SkillNameSet { heroName: 'molten', index: 0, skill: 'Attack Molten'},
+                    SkillNameSet { heroName: 'molten', index: 1, skill: 'Blazing Rage'},
+                    SkillNameSet { heroName: 'molten', index: 2, skill: 'Volcano Flurry'}
                 )
             );
         }

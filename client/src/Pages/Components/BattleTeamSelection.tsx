@@ -15,9 +15,11 @@ import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import StateChangesHandler from "../State/StateChangesHandler"
 import { Getter } from "../../Blockchain/Getter"
 import EnergyHandler from "../Classes/EnergyHandler"
+import { BurnerAccount } from "@dojoengine/create-burner"
 
 
 type BattleTeamSelectionProps = {
+  account: BurnerAccount,
   energy: number,
   worldId:number,
   battleId:number,
@@ -27,14 +29,13 @@ type BattleTeamSelectionProps = {
   energyCost: number,
   heroesList: Array<HeroInfos>
   selectedHeroesIds: number[],
-  localWallet: Account,
   eventHandler: GameEventHandler
   setSelectedHeroesIds: React.Dispatch<React.SetStateAction<number[]>>
   setPhaserRunning: React.Dispatch<React.SetStateAction<boolean>>
   stateChangesHandler: StateChangesHandler
 }
 
-export default function BattleTeamSelection({energy, worldId, battleId, enemiesNames, enemiesLevels, energyCost, heroesList, selectedHeroesIds, localWallet, eventHandler, setSelectedHeroesIds, setPhaserRunning, stateChangesHandler }: BattleTeamSelectionProps) {
+export default function BattleTeamSelection({account, energy, worldId, battleId, enemiesNames, enemiesLevels, energyCost, heroesList, selectedHeroesIds, eventHandler, setSelectedHeroesIds, setPhaserRunning, stateChangesHandler }: BattleTeamSelectionProps) {
   const [isStartingBattle, setIsStartingBattle] =  useState<boolean>(false)
   const notSelectedHeroesList = heroesList.filter(hero => !selectedHeroesIds.includes(hero.id))
 
@@ -47,27 +48,27 @@ export default function BattleTeamSelection({energy, worldId, battleId, enemiesN
     }
   }
   async function handlePlayClick() {
-    if(selectedHeroesIds.length == 0){
-      console.log("Can't start battle without heroes")
-      return;
-    }
-    if(energy < energyCost){
-      console.log("Not enough energy")
-      return;
-    }
-    setIsStartingBattle(true)
-    eventHandler.reset()
-    const isBattleStarted = await Sender.startBattle(localWallet, selectedHeroesIds, worldId, battleId, eventHandler);
-    if(isBattleStarted) {
-      setIsStartingBattle(false)
-      setPhaserRunning(true)
-      const energyInfos = await Getter.getEnergyInfos(localWallet);
-      console.log("energyInfos: ", energyInfos)
-      stateChangesHandler.updateEnergyHandler(energyInfos.energy, energyInfos.lastEnergyUpdateTimestamp)
-    }
-    else {
-      setIsStartingBattle(false)
-    }
+    // if(selectedHeroesIds.length == 0){
+    //   console.log("Can't start battle without heroes")
+    //   return;
+    // }
+    // if(energy < energyCost){
+    //   console.log("Not enough energy")
+    //   return;
+    // }
+    // setIsStartingBattle(true)
+    // eventHandler.reset()
+    // const isBattleStarted = await Sender.startBattle(localWallet, selectedHeroesIds, worldId, battleId, eventHandler);
+    // if(isBattleStarted) {
+    //   setIsStartingBattle(false)
+    //   setPhaserRunning(true)
+    //   const energyInfos = await Getter.getEnergyInfos(localWallet);
+    //   console.log("energyInfos: ", energyInfos)
+    //   stateChangesHandler.updateEnergyHandler(energyInfos.energy, energyInfos.lastEnergyUpdateTimestamp)
+    // }
+    // else {
+    //   setIsStartingBattle(false)
+    // }
   }
 
   return(
@@ -121,7 +122,7 @@ export default function BattleTeamSelection({energy, worldId, battleId, enemiesN
       </div>
       }
     </div>
-    <HeroesList heroesList={notSelectedHeroesList} handleHeroClick={handleHeroClick} heroesWidth="7.5rem"/> 
+    {/* <HeroesList heroesList={notSelectedHeroesList} baseHeroesNotOwned={[]} handleHeroClick={handleHeroClick} heroesWidth="7.5rem"/>  */}
   </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Account } from "starknet";
+import { Account, TransactionFinalityStatus } from "starknet";
 import {
     Entity,
     Has,
@@ -12,7 +12,6 @@ import { ClientComponents } from "./createClientComponents";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import type { IWorld } from "./typescript/contracts.gen";
 import stringToFelt252 from "../Pages/utils/stringToFelt252";
-
 // import { Direction } from "./typescript/models.gen";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
@@ -24,58 +23,25 @@ export function createSystemCalls(
     world: World
 ) {
     const createAccount = async (account: Account, username: string) => {
-        // const entityId = getEntityIdFromKeys([
-        //     BigInt(account.address),
-        // ]) as Entity;
-
-        // const movesId = uuid();
-        // Moves.addOverride(movesId, {
-        //     entity: entityId,
-        //     value: {
-        //         player: BigInt(entityId),
-        //         remaining:
-        //             (getComponentValue(Moves, entityId)?.remaining || 0) + 100,
-        //     },
-        // });
-
-        // const positionId = uuid();
-        // Position.addOverride(positionId, {
-        //     entity: entityId,
-        //     value: {
-        //         player: BigInt(entityId),
-        //         vec: {
-        //             x: 10 + (getComponentValue(Position, entityId)?.vec.x || 0),
-        //             y: 10 + (getComponentValue(Position, entityId)?.vec.y || 0),
-        //         },
-        //     },
-        // });
-
         try {
             await client.Game.createAccount({
                 account,
                 username,
             });
-            // await client.actions.spawn({
-            //     account,
+            // await new Promise<void>((resolve) => {
+            //     defineSystem(
+            //         world,
+            //         [
+            //             Has(Account),
+            //             HasValue(Account, { owner: BigInt(account.address) }),
+            //         ],
+            //         () => {
+            //             resolve();
+            //         }
+            //     );
             // });
-
-            // Wait for the indexer to update the entity
-            // By doing this we keep the optimistic UI in sync with the actual state
-            await new Promise<void>((resolve) => {
-                defineSystem(
-                    world,
-                    [
-                        Has(Account),
-                        HasValue(Account, { owner: BigInt(account.address) }),
-                    ],
-                    () => {
-                        resolve();
-                    }
-                );
-            });
         } catch (e) {
             console.log(e);
-
         } 
         // finally {
         //     Position.removeOverride(positionId);
@@ -83,34 +49,67 @@ export function createSystemCalls(
         // }
     };
 
-    // const move = async (account: Account, direction: Direction) => {
-    //     try {
-    //         await client.actions.move({
-    //             account,
-    //             direction,
-    //         });
+    async function equipRune(account: Account, runeId: number, heroId: number) {
+        try {
+            let txRes = await client.Game.equipRune({
+                account,
+                runeId,
+                heroId,
+            });
+            await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 200,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            return true;
 
-    //         // Wait for the indexer to update the entity
-    //         // By doing this we keep the optimistic UI in sync with the actual state
-    //         await new Promise<void>((resolve) => {
-    //             defineSystem(
-    //                 world,
-    //                 [
-    //                     Has(Moves),
-    //                     HasValue(Moves, { player: BigInt(account.address) }),
-    //                 ],
-    //                 () => {
-    //                     resolve();
-    //                 }
-    //             );
-    //         });
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // };
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+
+    }
+
+    async function unequipRune(account: Account, runeId: number) {
+        try {
+            let txRes = await client.Game.unequipRune({
+                account,
+                runeId,
+            });
+            await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 200,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            return true;
+
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    async function upgradeRune(account: Account, runeId: number) {
+        try {
+            let txRes = await client.Game.upgradeRune({
+                account,
+                runeId,
+            });
+            let res = await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 200,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            console.log(res)
+            return true;
+
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
 
     return {
         createAccount,
-        // move,
+        equipRune,
+        unequipRune,
+        upgradeRune,
     };
 }

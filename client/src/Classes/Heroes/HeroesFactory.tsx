@@ -19,7 +19,7 @@ export abstract class HeroesFactory {
     })
     return baseHeroes;
   }
-  
+
   public static createHeroes(heroes: Array<HeroBlockchain>, runes: Array<RuneInfos>, skillsDict: SkillsDict, skillSets: SkillSets, baseStatsDict: BaseStatsDict): Array<HeroInfos> {
     let heroesWithStatsAndSkills = new Array<HeroInfos>();
     heroes.forEach((hero) => {
@@ -98,22 +98,22 @@ export abstract class HeroesFactory {
     runes.forEach((rune) => {
       rune.statistics.forEach((stat, i) => {
         switch (stat) {
-          case "health":
+          case "Health":
             bonusStats.health += truncOrRoundDecimalPoint(rune.isPercent[i] ? baseStats.health * rune.values[i] / 100  : rune.values[i]);
             break;
-          case "attack":
+          case "Attack":
             bonusStats.attack += truncOrRoundDecimalPoint(rune.isPercent[i] ? baseStats.attack * rune.values[i] / 100  : rune.values[i]);
             break;
-          case "defense":
+          case "Defense":
             bonusStats.defense += truncOrRoundDecimalPoint(rune.isPercent[i] ? baseStats.defense * rune.values[i] / 100  : rune.values[i]);
             break;
-          case "speed":
+          case "Speed":
             bonusStats.speed += truncOrRoundDecimalPoint(rune.isPercent[i] ? baseStats.speed * rune.values[i] / 100  : rune.values[i]);
             break;
-          case "criticalChance":
+          case "CriticalChance":
             bonusStats.criticalChance += truncOrRoundDecimalPoint(rune.isPercent[i] ? baseStats.criticalChance * rune.values[i] / 100  : rune.values[i]);
             break;
-          case "criticalDamage":
+          case "CriticalDamage":
             bonusStats.criticalDamage += truncOrRoundDecimalPoint(rune.isPercent[i] ? baseStats.criticalDamage * rune.values[i] / 100  : rune.values[i]);
             break;
           default:

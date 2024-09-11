@@ -1,5 +1,4 @@
 import { log } from "console"
-import { Sender } from "../../Blockchain/Sender"
 import RuneFactory from "../../Classes/Runes/RuneFactory"
 import { HeroInfos, RuneInfos, RunesList } from "../../Types/apiTypes"
 import StateChangesHandler from "../State/StateChangesHandler"
@@ -9,6 +8,7 @@ import { useState } from "react"
 import { Account } from "starknet"
 import crystalImg from "../../assets/icons/crystal.png"
 import { BurnerAccount } from "@dojoengine/create-burner"
+import { useDojo } from "../../dojo/useDojo"
 
 type RuneProps = {
   account: BurnerAccount,
@@ -34,34 +34,33 @@ export default function Rune({account, runesList, heroesList, rune, equipped, im
   const [showWrongShapeTooltip, setShowWrongShapeTooltip] = useState<boolean>(false)
   const [isUpgrading, setIsUpgrading] = useState<boolean>(false)
   const [isEquipping, setIsEquipping] = useState<boolean>(false)
+  const {setup: {systemCalls: { equipRune, unequipRune, upgradeRune }}} = useDojo();
 
   async function handleEquipRune(rune: RuneInfos, heroId: number){
-    // setIsEquipping(true)
-    // const isSuccess = await Sender.equipRune(localWallet, rune.id, heroId)
-    // if(isSuccess)
-    //   stateChangesHandler.updateRuneEquip(rune, heroId, runesList, heroesList)
-    // setIsEquipping(false)
-    // console.log("Equip rune: ", rune.id, " on hero: ", heroId)
+    setIsEquipping(true)
+    const isSuccess = await equipRune(account.account, rune.id, heroId)
+    if(isSuccess)
+      stateChangesHandler.updateRuneEquip(rune, heroId, runesList, heroesList)
+    setIsEquipping(false)
   }
   
   async function handleUnequipRune(rune: RuneInfos){
-    // setIsEquipping(true)
-    // const isSuccess = await Sender.unequipRune(localWallet, rune)
-    // if(isSuccess)
-    //   stateChangesHandler.updateRuneUnequip(rune, runesList, heroesList)
-    // setIsEquipping(false)
-    // console.log("Unequip rune:", rune.id)
+    setIsEquipping(true)
+    const isSuccess = await unequipRune(account.account, rune.id)
+    if(isSuccess)
+      stateChangesHandler.updateRuneUnequip(rune, runesList, heroesList)
+    setIsEquipping(false)
   }
   
-  async function handleUpgradeRune(localWallet: Account, rune: RuneInfos){
+  async function handleUpgradeRune(account: Account, rune: RuneInfos){
     setIsUpgrading(true)
-    const upgradeRuneDatas = await Sender.upgradeRune(localWallet, rune)
-    if(upgradeRuneDatas.success == false){
-      console.log("Upgrade rune failed")
-      return
-    }
-    stateChangesHandler.updateRuneUpgrade(rune, upgradeRuneDatas.bonus, runesList, heroesList)
-    stateChangesHandler.updateCrystals(upgradeRuneDatas.crystalCost)
+    const upgradeRuneDatas = await upgradeRune(account, rune.id)
+    // if(upgradeRuneDatas.success == false){
+    //   console.log("Upgrade rune failed")
+    //   return
+    // }
+    // stateChangesHandler.updateRuneUpgrade(rune, upgradeRuneDatas.bonus, runesList, heroesList)
+    // stateChangesHandler.updateCrystals(upgradeRuneDatas.crystalCost)
     setIsUpgrading(false)
   }
 
@@ -82,8 +81,7 @@ export default function Rune({account, runesList, heroesList, rune, equipped, im
       </div>
       <div className="RuneButtonsContainer">
         {rune.rank < maxRankRune && 
-        // <div className="RuneButtonUpgrade" onClick={() => isUpgrading ? undefined : handleUpgradeRune(localWallet, rune)}>
-        <div className="RuneButtonUpgrade">
+        <div className="RuneButtonUpgrade" onClick={() => isUpgrading ? undefined : handleUpgradeRune(account.account, rune)}>
           <div className="RuneButtonUpgradeText"> {isUpgrading ? "Upgrading" : "Upgrade"}</div>
           <div className="RuneButtonUpgradeCrystalValue">
             {200 + rune.rank * 200}

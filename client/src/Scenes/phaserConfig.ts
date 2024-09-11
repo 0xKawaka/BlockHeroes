@@ -5,9 +5,10 @@ import BattleLoader from './BattleLoader'
 import FontLoader from './FontLoader'
 import Entity from '../Classes/Entity/Entity'
 import GameEventHandler from '../Blockchain/event/GameEventHandler'
-import { Account } from 'starknet'
+// import { Account } from 'starknet'
+import { BurnerAccount } from '@dojoengine/create-burner'
 
-function getPhaserConfig(eventHandler: GameEventHandler, localWallet: Account, walletAdrs:string, parentContainer:string, worldId:number, battleId:number, selectedTeam: Entity[], selectedHeroesIds:number[], enemiesTeam: Entity[]): Phaser.Types.Core.GameConfig{
+function getPhaserConfig(eventHandler: GameEventHandler, account: BurnerAccount, walletAdrs:string, parentContainer:string, worldId:number, battleId:number, selectedTeam: Entity[], selectedHeroesIds:number[], enemiesTeam: Entity[]): Phaser.Types.Core.GameConfig{
   const Config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     parent: parentContainer,
@@ -29,7 +30,7 @@ function getPhaserConfig(eventHandler: GameEventHandler, localWallet: Account, w
   
     callbacks: {
       preBoot: function (game) {
-        game.registry.merge({"eventHandler": eventHandler, "localWallet": localWallet, "walletAdrs": walletAdrs, "worldId": worldId, "battleId": battleId, "selectedTeam": selectedTeam, "selectedHeroesIds": selectedHeroesIds, "enemiesTeam": enemiesTeam});
+        game.registry.merge({"eventHandler": eventHandler, "account": account, "walletAdrs": walletAdrs, "worldId": worldId, "battleId": battleId, "selectedTeam": selectedTeam, "selectedHeroesIds": selectedHeroesIds, "enemiesTeam": enemiesTeam});
       }
     }
   }

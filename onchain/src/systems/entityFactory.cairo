@@ -105,7 +105,17 @@ mod EntityFactory {
                     BaseHero { heroName: 'assassin', statistics: statistics::new(1500, 200, 100, 185, 10, 100), skillsCount: 3 },
                     BaseHero { heroName: 'knight', statistics: statistics::new(2000, 120, 180, 150, 10, 100), skillsCount: 3 },
                     BaseHero { heroName: 'priest', statistics: statistics::new(1700, 150, 150, 160, 10, 100), skillsCount: 3 },
-                    BaseHero { heroName: 'hunter', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 }
+                    BaseHero { heroName: 'hunter', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'diana', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'elric', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'nereus', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'rex', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'celeste', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'oakheart', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'sylvara', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'bane', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'ember', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'molten', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
                 )
             )
         }

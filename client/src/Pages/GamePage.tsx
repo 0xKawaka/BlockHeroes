@@ -2,18 +2,18 @@ import './GamePage.css'
 // import ApiHandler from '../Classes/IO/ApiHandler'
 import { useState, useEffect, useMemo } from 'react'
 // import {RunesList, BattlesInfosDict, HeroInfos, GameAccount, SkillsDict, SkillSets, BaseStatsDict, RuneInfos} from '../Types/apiTypes'
-// import WorldSelect from './Components/WorldSelect'
+import WorldSelect from './Components/WorldSelect'
 import title from '../assets/misc/BlockHeroes_Title.png'
 import collectionIcon from '../assets/icons/Menu_CollectionIcon.png'
 import battleIcon from '../assets/icons/Menu_BattleIcon.png'
 import summonIcon from '../assets/icons/Menu_SummonIcon.png'
 import mapIcon from '../assets/icons/Menu_MapIcon.png'
 // import { computeBonusStats } from './utils/statisticsCompute'
-// import Summons from './Components/Summons'
+import Summons from './Components/Summons'
 // import { Getter } from '../Blockchain/Getter'
 import { BaseHeroInfos, HeroesFactory } from '../Classes/Heroes/HeroesFactory'
 // import Register from './Components/Register'
-// import { HeroBlockchain } from '../Types/blockchainTypes'
+import { HeroBlockchain } from '../Types/blockchainTypes'
 import MyHeroes from './Components/MyHeroes'
 import RuneFactory from '../Classes/Runes/RuneFactory'
 import runeStats from '../GameDatas/Statistics/runeStats'
@@ -24,8 +24,9 @@ import StateChangesHandler from './State/StateChangesHandler'
 import AccountOverview from './Components/AccountOverview'
 // import EnergyHandler from './Classes/EnergyHandler'
 import AccountSelect from './Components/AccountSelect'
+import { worldsBattlesList } from '../GameDatas/Levels/battlesInfos'
 // import Pvp from './Components/Pvp'
-// import { GameDojo } from '../Blockchain/Dojo/game'
+// import { GameDojo, GameAccount } from '../Blockchain/Dojo/game';
 
 import { useDojo } from "../dojo/useDojo";
 import { useComponentValue, useQuerySync } from "@dojoengine/react";
@@ -91,12 +92,12 @@ function GamePage({} : GamePageProps) {
   // };
 
 
-  // async function handleNewHeroEvent(hero: HeroBlockchain) {
-  //   let heroInfos = HeroesFactory.createHero(hero!, [], skillsDict, skillSets, baseStatsDict)
-  //   let newHeroesList = [...heroesList]
-  //   newHeroesList.push(heroInfos)
-  //   setHeroesList(newHeroesList)
-  // }
+  async function handleNewHeroEvent(hero: HeroBlockchain) {
+    let heroInfos = HeroesFactory.createHero(hero!, [], skillsDict, skillSets, baseStats)
+    let newHeroes = [...heroes]
+    newHeroes.push(heroInfos)
+    setHeroes(newHeroes)
+  }
 
   // async function reloadPvpInfos() {
   //   let pvpRankPromise = Getter.getPvpRank(localWallet!);
@@ -106,7 +107,7 @@ function GamePage({} : GamePageProps) {
   //   setDefensePvpHeroesIds(pvpDefenseTeam);
   // }
 
-  const {setup: {systemCalls: { createAccount }, clientComponents: {Account, Runes, Heroes}, toriiClient, contractComponents}, account} = useDojo();
+  const {setup: {systemCalls: { createAccount, equipRune }, clientComponents: {Account, Runes, Heroes}, toriiClient, contractComponents}, account} = useDojo();
 
   useEffect(() => {
     if(!accountSelected) {
@@ -232,16 +233,15 @@ function GamePage({} : GamePageProps) {
         }
         
         {showMyHeroes &&
-          // <MyHeroes heroesList={heroesList} runesList={runesList} account={account} stateChangesHandler={stateChangesHandler}/>
           <MyHeroes account={account} heroesList={heroes} runesList={runes} baseHeroes={baseHeroes} stateChangesHandler={stateChangesHandler}/>
         }
-        {/* {showWorldSelect &&
-          <WorldSelect energy={energy} worldsBattlesList={worldsBattlesList} heroesList={heroesList} runesList={runesList} localWallet={localWallet!} stateChangesHandler={stateChangesHandler} />
+        {showWorldSelect &&
+          <WorldSelect account={account} gameAccount={gameAccount} worldsBattlesList={worldsBattlesList} heroesList={heroes} runesList={runes} stateChangesHandler={stateChangesHandler} />
         }
         {showSummons &&
-          <Summons localWallet={localWallet!} setShowSummons={setShowSummons} handleNewHeroEvent={handleNewHeroEvent} />
+          <Summons account={account} setShowSummons={setShowSummons} handleNewHeroEvent={handleNewHeroEvent} />
         }
-        {showPvp &&
+        {/* {showPvp &&
           <Pvp localWallet={localWallet!} rank={pvpRank} heroesList={heroesList} defensePvpHeroesIds={defensePvpHeroesIds} setShowPvp={setShowPvp} reloadPvpInfos={reloadPvpInfos} />
         } */}
       </div>

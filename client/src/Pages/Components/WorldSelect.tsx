@@ -1,4 +1,4 @@
-import { HeroInfos, HeroesStatsDict, RunesList, BattlesInfosDict, GameAccount } from "../../Types/apiTypes"
+import { HeroInfos, HeroesStatsDict, RunesList, BattlesInfosDict } from "../../Types/apiTypes"
 import "./WorldSelect.css"
 import ArrowBack from "../../assets/misc/arrowback.png"
 import { useState } from "react"
@@ -6,18 +6,20 @@ import BattlesSelect from "./BattlesSelect"
 import { Account } from "starknet"
 import StateChangesHandler from "../State/StateChangesHandler"
 import EnergyHandler from "../Classes/EnergyHandler"
+import { BurnerAccount } from "@dojoengine/create-burner"
+import { GameAccount } from '../../Types/toriiTypes'
 
 
 type WorldSelectProps = {
-  energy: number
+  account: BurnerAccount,
+  gameAccount: GameAccount,
   worldsBattlesList: BattlesInfosDict
   heroesList: Array<HeroInfos>
   runesList: RunesList
-  localWallet: Account
   stateChangesHandler: StateChangesHandler
 }
 
-export default function WorldSelect({ energy, worldsBattlesList, heroesList, runesList, localWallet, stateChangesHandler }: WorldSelectProps) {
+export default function WorldSelect({account, gameAccount, worldsBattlesList, heroesList, runesList, stateChangesHandler }: WorldSelectProps) {
 
   const [worldId, setWorldId] = useState<number>(-1)
 
@@ -41,7 +43,7 @@ export default function WorldSelect({ energy, worldsBattlesList, heroesList, run
       </div>
     }
     {worldId !== -1 &&
-      <BattlesSelect energy={energy} worldId={worldId} battlesList={worldsBattlesList[worldId]} heroesList={heroesList} runesList={runesList} localWallet={localWallet} setWorldId={setWorldId} stateChangesHandler={stateChangesHandler} />
+      <BattlesSelect account={account} energy={gameAccount.energy} worldId={worldId} battlesList={worldsBattlesList[worldId]} heroesList={heroesList} runesList={runesList} setWorldId={setWorldId} stateChangesHandler={stateChangesHandler} />
     }
   </div>
   )

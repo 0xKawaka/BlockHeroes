@@ -6,6 +6,7 @@ import ExperiencePanel from "./ExperiencePanel"
 import LootItem from "./LootItem"
 import { useEffect } from "react"
 import LootPanel from "./LootPanel"
+import emblemPng from "../../assets/lootItems/emblem.png"
 
 type EndBattlePanelProps = {
   title:string,
@@ -18,7 +19,7 @@ type EndBattlePanelProps = {
 }
 
 const imagesByItemName: {[key: string]: string} = {
-  "Emblem": require("../../assets/lootItems/emblem.png"),
+  "Emblem": emblemPng,
 }
 
 export default function EndBattlePanel({title, eventHandler, heroesList, heroesBeforeExperienceGained, setWinOrLose, setIsLootPanelVisible, stateChangesHandler}: EndBattlePanelProps) {

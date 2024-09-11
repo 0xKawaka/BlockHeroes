@@ -7,8 +7,10 @@ import Entity from "../../Classes/Entity/Entity"
 import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import { Account } from "starknet"
 import StateChangesHandler from "../State/StateChangesHandler"
+import { BurnerAccount } from "@dojoengine/create-burner"
 
 type BattlePageProps = {
+  account: BurnerAccount,
   worldId: number
   battleId: number
   selectedTeam: Entity[]
@@ -17,7 +19,6 @@ type BattlePageProps = {
   heroesList: Array<HeroInfos>
   runesList: RunesList
   eventHandler: GameEventHandler
-  localWallet: Account
   setPhaserRunning: React.Dispatch<React.SetStateAction<boolean>>
   stateChangesHandler: StateChangesHandler
   setIsLootPanelVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -25,7 +26,7 @@ type BattlePageProps = {
   setHeroesBeforeExperienceGained: React.Dispatch<React.SetStateAction<HeroInfos[]>>
 }
 
-export default function BattlePage({worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam, heroesList, runesList, eventHandler, localWallet, setPhaserRunning, stateChangesHandler, setIsLootPanelVisible, setWinOrLose, setHeroesBeforeExperienceGained}: BattlePageProps) {
+export default function BattlePage({account, worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam, heroesList, runesList, eventHandler, setPhaserRunning, stateChangesHandler, setIsLootPanelVisible, setWinOrLose, setHeroesBeforeExperienceGained}: BattlePageProps) {
 
   function handleStartFight() {
     const heroesBeforeExperienceGained = structuredClone(heroesList.filter(hero => selectedHeroesIds.some(id => id === hero.id)))
@@ -33,7 +34,7 @@ export default function BattlePage({worldId, battleId, selectedTeam, selectedHer
     stateChangesHandler.setIsBattleRunning(true)
     setPhaserRunning(true)
     setIsLootPanelVisible(false)
-    const phaserGame = new Phaser.Game(getPhaserConfig(eventHandler, localWallet, "0xtest", "GamePhaserContainer", worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam))
+    const phaserGame = new Phaser.Game(getPhaserConfig(eventHandler, account, "0xtest", "GamePhaserContainer", worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam))
     phaserGame.events.on('destroy', () => {
       onDestroyProcs()
     })
