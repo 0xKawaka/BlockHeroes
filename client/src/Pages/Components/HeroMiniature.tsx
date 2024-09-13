@@ -10,12 +10,12 @@ type HeroMiniatureProps = {
 
 export default function HeroMiniature({image, rank, level, imageWidth, owned= true}: HeroMiniatureProps) {
 
-  const bottomGap = parseInt(imageWidth.slice(0, -2)) * 0.02 + "rem"
+  // const bottomGap = parseInt(imageWidth.slice(0, -2)) * 0.02 + "rem"
 
   return(
   <div className="HeroMiniatureContainer">
     <img className={owned ? "HeroMiniatureImage" : "HeroMiniatureGrayedImage"} src={image} style={{width: imageWidth}}/>
-    {level && <div className="HeroMiniatureLevel" style={{bottom: bottomGap}}>Lvl {level}</div>}
+    {level && <div className="HeroMiniatureLevel">Lvl {level}</div>}
   </div>
   )
 }

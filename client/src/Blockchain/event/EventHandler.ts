@@ -6,7 +6,8 @@ export default abstract class EventHandler {
   static parseRuneBonusEvent(rawEvent: RawEvent): RuneBonusEvent {
     const id = Number(rawEvent.data[1]);
     const rank = Number(rawEvent.data[2]);
-    const procStat = shortString.decodeShortString(rawEvent.data[3]);
+    let procStat = shortString.decodeShortString(rawEvent.data[3]);
+    procStat = procStat.charAt(0).toUpperCase() + procStat.slice(1);
     const isPercent = Boolean(Number(rawEvent.data[4]));
     return {owner: rawEvent.keys[0], id: id, rank: rank, procStat: procStat, isPercent: isPercent};
   }

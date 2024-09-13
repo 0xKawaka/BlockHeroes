@@ -6,9 +6,9 @@ import { BaseHeroInfos } from "../../Classes/Heroes/HeroesFactory"
 
 type HeroesListProps = {
   heroesList: Array<HeroInfos>
-  baseHeroesNotOwned: Array<BaseHeroInfos>
+  baseHeroesNotOwned?: Array<BaseHeroInfos>
   handleHeroClick(heroId: number): void
-  handleNotOwnedHeroClick(names: string): void
+  handleNotOwnedHeroClick?(names: string): void
   heroesWidth: string
 }
 

@@ -7,12 +7,11 @@ import HeroesList from "./HeroesList"
 import ArrowBack from "../../assets/misc/arrowback.png"
 import { Account } from 'starknet'
 import StateChangesHandler from '../State/StateChangesHandler'
-import { BurnerAccount } from '@dojoengine/create-burner'
 import { BaseHeroInfos } from '../../Classes/Heroes/HeroesFactory'
 import NotOwnedHeroPanel from './NotOwnedHeroPanel'
 
 type MyHeroesProps = {
-  account: BurnerAccount,
+  account: Account,
   heroesList: Array<HeroInfos>
   runesList: Array<RuneInfos>
   baseHeroes: BaseHeroInfos[]

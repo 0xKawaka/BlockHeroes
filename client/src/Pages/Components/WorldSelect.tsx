@@ -6,12 +6,11 @@ import BattlesSelect from "./BattlesSelect"
 import { Account } from "starknet"
 import StateChangesHandler from "../State/StateChangesHandler"
 import EnergyHandler from "../Classes/EnergyHandler"
-import { BurnerAccount } from "@dojoengine/create-burner"
 import { GameAccount } from '../../Types/toriiTypes'
 
 
 type WorldSelectProps = {
-  account: BurnerAccount,
+  account: Account,
   gameAccount: GameAccount,
   worldsBattlesList: BattlesInfosDict
   heroesList: Array<HeroInfos>

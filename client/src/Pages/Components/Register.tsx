@@ -9,16 +9,19 @@ import Burner from '../../Blockchain/Burner'
 import Storage from '../../Cookies/storage'
 import { RpcProvider } from "starknet";
 import { BurnerAccount } from "@dojoengine/create-burner"
+import { useDojo } from "../../dojo/useDojo"
 
 type RegisterProps = {
   account: BurnerAccount,
   setAccountSelected: React.Dispatch<React.SetStateAction<boolean>>
-  createAccount: (account: Account, username: string) => Promise<void>
+  setBlockchainAccount: React.Dispatch<React.SetStateAction<Account>>
 } 
 const regex = /[^a-zA-Z0-9]/g;
-export default function Register({account, setAccountSelected, createAccount}: RegisterProps) {
+export default function Register({account, setAccountSelected,  setBlockchainAccount}: RegisterProps) {
   const [username, setUsername] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
+
+  const {setup: {systemCalls: { createAccount }}} = useDojo();
 
   function handleInputChange(event: any) {
     setUsername(event.target.value.replace(regex, ''))
@@ -26,11 +29,15 @@ export default function Register({account, setAccountSelected, createAccount}: R
 
   async function handleRegister(username: string) {
     setIsRegistering(true);
-    // account.list().map((acc) => {
-    //   console.log(acc.address)
-    // })
+    console.log("account :", account.account.address)
     account.create()
-    createAccount(account.account, username)
+    console.log("account_aftercreate :", account.account.address)
+    setBlockchainAccount(account.account)
+    let res = await createAccount(account.account, username)
+    if(res) {
+      console.log("Account created successfully")
+    }
+    await new Promise(resolve => setTimeout(resolve, 1000));
     setIsRegistering(false);
     setAccountSelected(true);
   }

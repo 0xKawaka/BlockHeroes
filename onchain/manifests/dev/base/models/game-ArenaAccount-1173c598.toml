@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x31cc37133ed62dd2786a6ead1bd0242201066a1a377e6e1849a49aaa823ac58"
-original_class_hash = "0x31cc37133ed62dd2786a6ead1bd0242201066a1a377e6e1849a49aaa823ac58"
+class_hash = "0x795810946caa05cccf1ae1b91f46200e6f1016123c4e04ca9a7eac5e70bc865"
+original_class_hash = "0x795810946caa05cccf1ae1b91f46200e6f1016123c4e04ca9a7eac5e70bc865"
 abi = "manifests/dev/base/abis/models/game-ArenaAccount-1173c598.json"
 tag = "game-ArenaAccount"
 qualified_path = "game::models::storage::arena::arenaAccount::arena_account"
@@ -19,4 +19,9 @@ key = false
 [[members]]
 name = "lastClaimedRewards"
 type = "u64"
+key = false
+
+[[members]]
+name = "teamSize"
+type = "u32"
 key = false

@@ -12,11 +12,11 @@ import { GameAccount } from "../../Types/toriiTypes"
 type AccountSelectProps = {
   account: BurnerAccount,
   setAccountSelected: React.Dispatch<React.SetStateAction<boolean>>
-  createAccount: (account: Account, username: string) => Promise<void>
+  setBlockchainAccount: React.Dispatch<React.SetStateAction<Account>>
   allAccountsDict: {[key: string]: GameAccount}
 }
 
-export default function AccountSelect({account, createAccount, allAccountsDict, setAccountSelected}: AccountSelectProps) {
+export default function AccountSelect({account, allAccountsDict, setAccountSelected, setBlockchainAccount}: AccountSelectProps) {
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [removePopup, setRemovePopup] = useState<boolean>(false);
   const [adrsToRemove, setAdrsToRemove] = useState<string>("");
@@ -32,6 +32,7 @@ export default function AccountSelect({account, createAccount, allAccountsDict, 
   // }
 
   // const accounts = Burner.getAllAccounts();
+
 
   const showRemovePopup = (address: string) => {
     setRemovePopup(true);
@@ -61,6 +62,9 @@ export default function AccountSelect({account, createAccount, allAccountsDict, 
 
   const handleAccountSelected = (accountAdrs: string) => {
     account.select(accountAdrs);
+    console.log("selected account adrs: ", accountAdrs)
+    console.log("selected account: ", account.account.address)
+    setBlockchainAccount(account.account);
     setAccountSelected(true);
   }
   
@@ -182,7 +186,7 @@ useEffect(() => {
         </div>
       </div>
     }
-    {showRegister && !removePopup && <Register account={account} setAccountSelected={setAccountSelected} createAccount={createAccount} />}
+    {showRegister && !removePopup && <Register account={account} setAccountSelected={setAccountSelected} setBlockchainAccount={setBlockchainAccount} />}
   </div>
   )
 }

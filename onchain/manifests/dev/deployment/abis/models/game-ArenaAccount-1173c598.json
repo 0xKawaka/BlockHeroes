@@ -381,6 +381,10 @@
       {
         "name": "lastClaimedRewards",
         "type": "core::integer::u64"
+      },
+      {
+        "name": "teamSize",
+        "type": "core::integer::u32"
       }
     ]
   },

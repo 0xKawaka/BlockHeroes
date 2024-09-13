@@ -5,21 +5,23 @@ import { HeroInfos } from "../../Types/apiTypes"
 import { useEffect, useState } from "react"
 import HeroMiniature from "./HeroMiniature"
 import portraitsDict from "../../assets/portraits/portraitsDict"
-import { Sender } from "../../Blockchain/Sender"
+import { useDojo } from "../../dojo/useDojo"
 
 type PvpDefenseProps = {
+  account: Account,
   rank: number,
   heroesList: Array<HeroInfos>,
-  defensePvpHeroesIds: number[],
-  localWallet: Account,
-  reloadPvpInfos(): Promise<void>,
+  defenseArenaHeroesIds: number[],
+  loadPvpInfos(): void,
+  setDefenseArenaHeroesIds: React.Dispatch<React.SetStateAction<number[]>>
 }
 
-export default function PvpDefense({localWallet, rank, heroesList, defensePvpHeroesIds, reloadPvpInfos}: PvpDefenseProps) {
-
-  const [selectedHeroesIds, setSelectedHeroesIds] = useState<number[]>(defensePvpHeroesIds)
+export default function PvpDefense({account, rank, heroesList, defenseArenaHeroesIds, loadPvpInfos, setDefenseArenaHeroesIds}: PvpDefenseProps) {
+  const [selectedHeroesIds, setSelectedHeroesIds] = useState<number[]>(defenseArenaHeroesIds)
   const [notSelectedHeroesList, setNotSelectedHeroesList] = useState<HeroInfos[]>(heroesList.filter(hero => !selectedHeroesIds.includes(hero.id)))
   const [isSettingDefenseTeam, setIsSettingDefenseTeam] = useState<boolean>(false)
+
+  const {setup: {systemCalls: { initPvp, setPvpTeam }}} = useDojo();
 
   useEffect(() => {
     setNotSelectedHeroesList(heroesList.filter(hero => !selectedHeroesIds.includes(hero.id)))
@@ -42,11 +44,16 @@ export default function PvpDefense({localWallet, rank, heroesList, defensePvpHer
     setIsSettingDefenseTeam(true)
     let res = false;
     if(rank == 0) {
-      res = await Sender.initPvp(localWallet, selectedHeroesIds)
+      console.log("initPvp", account.address)
+      res = await initPvp(account, selectedHeroesIds)
+      await new Promise(resolve => setTimeout(resolve, 500));
+      loadPvpInfos()
     }
-    res = await Sender.setPvpTeam(localWallet, selectedHeroesIds)
-    if(res) {
-      await reloadPvpInfos()
+    else {
+      res = await setPvpTeam(account, selectedHeroesIds)
+      if(res) {
+        setDefenseArenaHeroesIds(selectedHeroesIds)
+      }
     }
     setIsSettingDefenseTeam(false)
   }

@@ -1,0 +1,15 @@
+.TeamDisplay {
+  display: flex;
+  flex-direction: row;
+  border: 0.2rem solid rgb(146, 113, 47);
+  background-color: black;
+}
+
+.HeroMiniatureAndLevelContainer {
+  border-left: 0.05rem solid rgb(0, 0, 0);
+  border-right: 0.05rem solid rgb(0, 0, 0);
+}
+
+.TeamDisplayLevel {
+  background-color: rgb(156, 121, 44);
+}

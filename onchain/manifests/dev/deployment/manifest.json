@@ -1251,8 +1251,8 @@
     {
       "kind": "DojoContract",
       "address": "0x1f355961284c21fced60460e371443a9b3a192b3e5ae755ed9428dbbb4ba68f",
-      "class_hash": "0x60bc6b11321ffc8ff8da32ed4d0bf1d0826c7b558e950558fa1ddbbc9d24eaa",
-      "original_class_hash": "0x60bc6b11321ffc8ff8da32ed4d0bf1d0826c7b558e950558fa1ddbbc9d24eaa",
+      "class_hash": "0x124ce5c19a739547da1457fb422a5880717a1063e31f7624cdc9df4c42489a4",
+      "original_class_hash": "0x124ce5c19a739547da1457fb422a5880717a1063e31f7624cdc9df4c42489a4",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2394,10 +2394,15 @@
           "name": "lastClaimedRewards",
           "type": "u64",
           "key": false
+        },
+        {
+          "name": "teamSize",
+          "type": "u32",
+          "key": false
         }
       ],
-      "class_hash": "0x31cc37133ed62dd2786a6ead1bd0242201066a1a377e6e1849a49aaa823ac58",
-      "original_class_hash": "0x31cc37133ed62dd2786a6ead1bd0242201066a1a377e6e1849a49aaa823ac58",
+      "class_hash": "0x795810946caa05cccf1ae1b91f46200e6f1016123c4e04ca9a7eac5e70bc865",
+      "original_class_hash": "0x795810946caa05cccf1ae1b91f46200e6f1016123c4e04ca9a7eac5e70bc865",
       "abi": [
         {
           "type": "impl",
@@ -2781,6 +2786,10 @@
             {
               "name": "lastClaimedRewards",
               "type": "core::integer::u64"
+            },
+            {
+              "name": "teamSize",
+              "type": "core::integer::u32"
             }
           ]
         },

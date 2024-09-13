@@ -4,13 +4,13 @@ import RuneFactory from "../../Classes/Runes/RuneFactory"
 import { BaseStatsDict, HeroInfos, RuneInfos, RuneStatsDict } from "../../Types/apiTypes"
 import { GameAccount } from "../../Types/toriiTypes"
 import EnergyHandler from "../Classes/EnergyHandler"
+import runeStatsDict from '../../GameDatas/Statistics/runeStats'
+import baseStatsDict from '../../GameDatas/Statistics/baseStats'
 
 
 export default class StateChangesHandler {
   energyHandler: EnergyHandler
   pvpEnergyHandler: EnergyHandler
-  runeStatsDict: RuneStatsDict
-  baseStatsDict: BaseStatsDict
   setHeroesList: React.Dispatch<React.SetStateAction<HeroInfos[]>>
   setRunesList: React.Dispatch<React.SetStateAction<RuneInfos[]>>
   setGameAccount: React.Dispatch<React.SetStateAction<GameAccount>>
@@ -46,7 +46,7 @@ export default class StateChangesHandler {
       const indexHero = newHeroesList.findIndex(h => h.id === experienceGain.entityId)
       newHeroesList[indexHero].experience = experienceGain.experienceAfter
       newHeroesList[indexHero].level = experienceGain.levelAfter
-      newHeroesList[indexHero].baseStats = HeroesFactory.computeBaseStats(newHeroesList[indexHero].level, newHeroesList[indexHero].rank, this.baseStatsDict[newHeroesList[indexHero].name])
+      newHeroesList[indexHero].baseStats = HeroesFactory.computeBaseStats(newHeroesList[indexHero].level, newHeroesList[indexHero].rank, baseStatsDict[newHeroesList[indexHero].name])
     })
     this.setHeroesList(newHeroesList)
   }
@@ -66,7 +66,7 @@ export default class StateChangesHandler {
   }
 
   updateRuneUpgrade(rune: RuneInfos, bonus: RuneBonusEvent | undefined, runesList: Array<RuneInfos>, heroesList: Array<HeroInfos>) {
-    let upgradedRune = RuneFactory.upgradeRune(rune, bonus, this.runeStatsDict)
+    let upgradedRune = RuneFactory.upgradeRune(rune, bonus, runeStatsDict)
     let newRunesList = [...runesList]
     const indexRune = newRunesList.findIndex(r => r.id === rune.id)
     newRunesList[indexRune] = upgradedRune
@@ -149,13 +149,13 @@ export default class StateChangesHandler {
     return this.pvpEnergyHandler.getTimeUntilNextEnergy()
   }
 
-  setRuneStatsDict(runeStatsDict: RuneStatsDict) {
-    this.runeStatsDict = runeStatsDict
-  }
+  // setRuneStatsDict(runeStatsDict: RuneStatsDict) {
+  //   this.runeStatsDict = runeStatsDict
+  // }
 
-  setBaseStatsDict(baseStatsDict: BaseStatsDict) {
-    this.baseStatsDict = baseStatsDict
-  }
+  // setBaseStatsDict(baseStatsDict: BaseStatsDict) {
+  //   this.baseStatsDict = baseStatsDict
+  // }
 
   setEnergyHandler(energyHandler: EnergyHandler) {
     this.energyHandler = energyHandler
@@ -165,7 +165,7 @@ export default class StateChangesHandler {
     this.pvpEnergyHandler = pvpEnergyHandler
   }
 
-  getRuneStatsDict() {
-    return this.runeStatsDict
-  }
+  // getRuneStatsDict() {
+  //   return this.runeStatsDict
+  // }
 }

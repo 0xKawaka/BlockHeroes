@@ -76,12 +76,14 @@ export interface ArenaAccount {
     owner: BigInt;
     rank: Number;
     lastClaimedRewards: Number;
+    teamSize: Number;
     
 }
 export const ArenaAccountDefinition = {
     owner: RecsType.BigInt,
     rank: RecsType.Number,
     lastClaimedRewards: RecsType.Number,
+    teamSize: RecsType.Number,
     
 };
 
@@ -838,12 +840,13 @@ export function defineContractComponents(world: World) {
                     owner: RecsType.BigInt,
                     rank: RecsType.Number,
                     lastClaimedRewards: RecsType.Number,
+                    teamSize: RecsType.Number,
                 },
                 {
                     metadata: {
                         namespace: "game",
                         name: "ArenaAccount",
-                        types: ["ContractAddress", "u64", "u64"],
+                        types: ["ContractAddress", "u64", "u64", "u32"],
                         customTypes: [],
                     },
                 }

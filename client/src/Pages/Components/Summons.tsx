@@ -10,35 +10,49 @@ import { Getter } from "../../Blockchain/Getter"
 import { HeroBlockchain } from "../../Types/blockchainTypes"
 import HeroMiniature from "./HeroMiniature"
 import portraitsDict from "../../assets/portraits/portraitsDict"
-import { BurnerAccount } from "@dojoengine/create-burner"
+import { useDojo } from "../../dojo/useDojo"
+import { BaseHeroInfos, HeroesFactory } from '../../Classes/Heroes/HeroesFactory'
+import { HeroInfos } from "../../Types/apiTypes"
+import { Account } from "starknet"
 
 type SummonsProps = {
-  account: BurnerAccount,
+  account: Account,
   setShowSummons: React.Dispatch<React.SetStateAction<boolean>>
-  handleNewHeroEvent: (hero: HeroBlockchain) => void
+  handleNewHeroEvent: (hero: HeroInfos) => void
 }
 
 export default function Summons({account, setShowSummons, handleNewHeroEvent }: SummonsProps) {
   const [isSummoning, setIsSummoning] = useState(false);
   const [showSummongAnimation, setShowSummonAnimation] = useState(false);
   const [showSummonResult, setShowSummonResult] = useState(false);
-  const [heroSummoned, setHeroSummoned] = useState<HeroBlockchain>();
+  const [heroSummoned, setHeroSummoned] = useState<HeroInfos>();
+
+  const {setup: {systemCalls: { mintHero }}} = useDojo();
 
   async function handleSummon() {
-    // setShowSummonResult(false);
-    // setIsSummoning(true);
-    // const {id, name} = await Sender.mintHero(account);
-    // let hero = await Getter.getHero(account, id);
-    // if(!hero)
-    //   return;
-    // setHeroSummoned(hero);
-    // setShowSummonAnimation(true);
-    // await new Promise(r => setTimeout(r, 1900));
-    // setShowSummonResult(true);
-    // setIsSummoning(false);
-    // await new Promise(r => setTimeout(r, 700));
-    // handleNewHeroEvent(hero);
-    // setShowSummonAnimation(false);
+    let animationDone = false;
+    setShowSummonResult(false);
+    setHeroSummoned(undefined);
+    setShowSummonAnimation(true);
+    new Promise(r => setTimeout(r, 1900)).then(() => {
+      setShowSummonResult(true);
+    });
+    new Promise(r => setTimeout(r, 2600)).then(() => {
+      animationDone = true;
+    });
+
+    setIsSummoning(true);
+    const {id, name} = await mintHero(account);
+    let hero = HeroesFactory.createSummonedHero(id, name.toString());
+    if(!hero)
+      return;
+    setHeroSummoned(hero);
+    while(!animationDone){
+      await new Promise(r => setTimeout(r, 100));
+    }
+    setShowSummonAnimation(false);
+    setIsSummoning(false);
+    handleNewHeroEvent(hero);
   }
 
   return(

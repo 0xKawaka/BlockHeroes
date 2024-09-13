@@ -13,11 +13,10 @@ import StateChangesHandler from "../State/StateChangesHandler"
 import arrowup from "../../assets/icons/arrowup.png"
 import arrowdown from "../../assets/icons/arrowdown.png"
 import checkmark from "../../assets/icons/checkmark.png"
-import { BurnerAccount } from "@dojoengine/create-burner"
 
 
 type RunePanelProps = {
-  account: BurnerAccount,
+  account: Account,
   runesList: Array<RuneInfos>,
   heroesList: Array<HeroInfos>,
   runeClicked: RuneInfos |  undefined,

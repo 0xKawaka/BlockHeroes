@@ -77,10 +77,9 @@ export default abstract class RuneFactory {
   }
 
   static computeRuneBonusValue(statistic: string, isPercent: boolean, runeStatsDict: RuneStatsDict) {
-    let lowerCaseStat = statistic.toLowerCase();
     if(isPercent) 
-      return runeStatsDict.bonus.common[lowerCaseStat].percent
+      return runeStatsDict.bonus.common[statistic].percent
     else 
-      return runeStatsDict.bonus.common[lowerCaseStat].flat
+      return runeStatsDict.bonus.common[statistic].flat
   }
 }

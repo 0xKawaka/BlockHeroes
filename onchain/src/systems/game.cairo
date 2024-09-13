@@ -62,7 +62,6 @@ mod Game {
             AccountsImpl::decreaseEnergy(world, caller, energyCost);
             let allyHeroes = AccountsImpl::getHeroes(world, caller, heroesIds.span());
             let allyEntities = EntityFactoryImpl::newEntities(world, caller, 0, allyHeroes, AllyOrEnemy::Ally);
-            // allyEntities[0].print();
             let enemyHeroes = LevelsImpl::getEnemies(world, map, level);
             let enemyEntities = EntityFactoryImpl::newEntities(world, caller, allyEntities.len(), enemyHeroes, AllyOrEnemy::Enemy);
             BattlesImpl::newBattle(world, caller, allyEntities, enemyEntities, map, level);
@@ -73,7 +72,7 @@ mod Game {
         fn initPvp(world: @IWorldDispatcher, heroesIds: Array<u32>) {
             assert(heroesIds.len() < 5 && heroesIds.len() > 0, '1 hero min, 4 heroes max');
             AccountsImpl::hasAccount(world, get_caller_address());
-            //add assert
+            ArenaImpl::hasNoAccount(world, get_caller_address());
             AccountsImpl::isOwnerOfHeroes(world, get_caller_address(), heroesIds.span());
             ArenaImpl::initAccount(world, get_caller_address(), heroesIds);
         }

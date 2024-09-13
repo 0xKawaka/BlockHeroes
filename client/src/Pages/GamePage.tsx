@@ -1,5 +1,4 @@
 import './GamePage.css'
-// import ApiHandler from '../Classes/IO/ApiHandler'
 import { useState, useEffect, useMemo } from 'react'
 // import {RunesList, BattlesInfosDict, HeroInfos, GameAccount, SkillsDict, SkillSets, BaseStatsDict, RuneInfos} from '../Types/apiTypes'
 import WorldSelect from './Components/WorldSelect'
@@ -8,34 +7,26 @@ import collectionIcon from '../assets/icons/Menu_CollectionIcon.png'
 import battleIcon from '../assets/icons/Menu_BattleIcon.png'
 import summonIcon from '../assets/icons/Menu_SummonIcon.png'
 import mapIcon from '../assets/icons/Menu_MapIcon.png'
-// import { computeBonusStats } from './utils/statisticsCompute'
 import Summons from './Components/Summons'
-// import { Getter } from '../Blockchain/Getter'
 import { BaseHeroInfos, HeroesFactory } from '../Classes/Heroes/HeroesFactory'
-// import Register from './Components/Register'
 import { HeroBlockchain } from '../Types/blockchainTypes'
 import MyHeroes from './Components/MyHeroes'
 import RuneFactory from '../Classes/Runes/RuneFactory'
 import runeStats from '../GameDatas/Statistics/runeStats'
-import skillsDict from '../GameDatas/Skills/skillsDict'
-import skillSets from '../GameDatas/Skills/skillSets'
-import baseStats from '../GameDatas/Statistics/baseStats'
 import StateChangesHandler from './State/StateChangesHandler'
 import AccountOverview from './Components/AccountOverview'
-// import EnergyHandler from './Classes/EnergyHandler'
+import EnergyHandler from './Classes/EnergyHandler'
 import AccountSelect from './Components/AccountSelect'
 import { worldsBattlesList } from '../GameDatas/Levels/battlesInfos'
-// import Pvp from './Components/Pvp'
-// import { GameDojo, GameAccount } from '../Blockchain/Dojo/game';
-
+import Pvp from './Components/Pvp'
 import { useDojo } from "../dojo/useDojo";
 import { useComponentValue, useQuerySync } from "@dojoengine/react";
 import { getComponentValue, Entity } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import hexToString from './utils/hexToString';
 import ToriiGetter from '../dojo/ToriiGetter'
 import { GameAccount } from '../Types/toriiTypes'
 import { HeroInfos, RuneInfos } from '../Types/apiTypes'
+import { Account } from 'starknet'
 import { set } from 'mobx'
 
 function getGamePageContainerStyle(isBattleRunning: boolean){
@@ -55,24 +46,17 @@ type GamePageProps = {
 }  
 
 function GamePage({} : GamePageProps) {
-  // ToriiGetter.getUsernamesByAccount();
+  const {setup: {clientComponents: {Account, ArenaAccount, Runes, Heroes, ArenaTeam}, toriiClient, contractComponents}, account} = useDojo();
+
   const [accountSelected, setAccountSelected] = useState<boolean>(false)
-  // const [localWallet, setAccountWallet] = useState<Account>();
-  // const [energy, setEnergy] = useState<number>(0)
-  // const [pvpEnergy, setPvpEnergy] = useState<number>(0)
-  // const [pvpRank, setPvpRank] = useState<number>(0)
-  // const [defensePvpHeroesIds, setDefensePvpHeroesIds] = useState<number[]>([])
-  // const [hasAccount, setHasAccount] = useState<boolean>(false)
+  const [blockchainAccount, setBlockchainAccount] = useState<Account>(account.account)
   const [gameAccount, setGameAccount] = useState<GameAccount>({ username: "", crystals: 0, gems: 0, energy: 0, pvpEnergy: 0, lastEnergyUpdateTimestamp: 0, lastPvpEnergyUpdateTimestamp: 0, heroesCount: 0, owner: BigInt(0), runesCount: 0 });  
+  const [arenaAccount, setArenaAccount] = useState<{rank: number, lastClaimedRewards: number}>({rank: 0, lastClaimedRewards: 0})
+  const [defenseArenaHeroesIds, setDefenseArenaHeroesIds] = useState<number[]>([])
   const [baseHeroes, setBaseHeroes] = useState<Array<BaseHeroInfos>>([])
   const [heroes, setHeroes] = useState<Array<HeroInfos>>([])
   const [runes, setRunes] = useState<Array<RuneInfos>>([])
   const [allAccountsDict, setAllAccountsDict] = useState<{[key: string]: GameAccount}>({})
-
-  // const [skillsDict, setSkillsDict] = useState<SkillsDict>({})
-  // const [skillSets, setSkillSets] = useState<SkillSets>({})
-  // const [baseStatsDict, setBaseStatsDict] = useState<BaseStatsDict>({})
-  // const [worldsBattlesList, setWorldsBattlesList] = useState<BattlesInfosDict>({})
   const [showMyHeroes, setShowMyHeroes] = useState<boolean>(false)
   const [showWorldSelect, setShowWorldSelect] = useState<boolean>(false)
   const [showPvp, setShowPvp] = useState<boolean>(false)
@@ -81,54 +65,66 @@ function GamePage({} : GamePageProps) {
   const [stateChangesHandler, setStateChangesHandler] = useState<StateChangesHandler>(new StateChangesHandler(setHeroes, setRunes, setGameAccount, setShowMyHeroes, setShowWorldSelect, setIsBattleRunning))
 
 
-  // const params = {
-  //   rpcUrl: "http://0.0.0.0:5050",
-  //   toriiUrl: "http://0.0.0.0:8080",
-  //   relayUrl: "",
-  //   account: undefined,
-  //   worldAddress: "0x43f5a4477cb4fd56a23cf3ccf5172c95bd90caf1ed0813d4989f5e7449d102f",
-  //   gameAddress: "0x349651054fdd167d9cac22e2dc68f527c1eddcd7823ec779f3ae662eada3dc9",
-  //   settingsAddress: "0x1fbf77ab7d4a5ad70e732231d18d4bbaade6f280cc7d37bfc9116b2f29f0bec",
-  // };
-
-
-  async function handleNewHeroEvent(hero: HeroBlockchain) {
-    let heroInfos = HeroesFactory.createHero(hero!, [], skillsDict, skillSets, baseStats)
+  async function handleNewHeroEvent(hero: HeroInfos) {
     let newHeroes = [...heroes]
-    newHeroes.push(heroInfos)
+    newHeroes.push(hero)
     setHeroes(newHeroes)
   }
 
-  // async function reloadPvpInfos() {
-  //   let pvpRankPromise = Getter.getPvpRank(localWallet!);
-  //   let pvpDefenseTeamPromise = Getter.getTeam(localWallet!);
-  //   let [pvpRank, pvpDefenseTeam] = await Promise.all([pvpRankPromise, pvpDefenseTeamPromise]);
-  //   setPvpRank(pvpRank);
-  //   setDefensePvpHeroesIds(pvpDefenseTeam);
-  // }
+  const setEnergy = (energy: number) => {
+    setGameAccount((prevState: GameAccount) => {
+      return {...prevState, energy: energy}
+    })
+  }
 
-  const {setup: {systemCalls: { createAccount, equipRune }, clientComponents: {Account, Runes, Heroes}, toriiClient, contractComponents}, account} = useDojo();
 
+  function loadPvpInfos() {
+    const accountEntityId = getEntityIdFromKeys([
+      BigInt(blockchainAccount.address)
+    ]) as Entity;
+    const arenaAccount = getComponentValue(ArenaAccount, accountEntityId);
+    console.log("arenaAccount", arenaAccount);
+    if(arenaAccount){
+      setArenaAccount(arenaAccount);
+      let arenaDefenseHeroes = ToriiGetter.getArenaDefenseHeroesIndexes(account.account.address, arenaAccount.teamSize, ArenaTeam);
+      setDefenseArenaHeroesIds(arenaDefenseHeroes);
+      console.log("arenaDefenseHeroes", arenaDefenseHeroes);
+    }
+
+    // let pvpRankPromise = Getter.getPvpRank(localWallet!);
+    // let pvpDefenseTeamPromise = Getter.getTeam(localWallet!);
+    // let [pvpRank, pvpDefenseTeam] = await Promise.all([pvpRankPromise, pvpDefenseTeamPromise]);
+    // setPvpRank(pvpRank);
+    // setDefenseArenaHeroesIds(pvpDefenseTeam);
+  }
+  
   useEffect(() => {
     if(!accountSelected) {
       let allAccountsDict = ToriiGetter.getAllAccounts(account.list().map((account) => account.address), Account);
       setAllAccountsDict(allAccountsDict);
     }
     else {
-      let gameAccount = ToriiGetter.getGameAccount(account.account.address, Account);
+      let gameAccount: GameAccount;
+      if(allAccountsDict[account.account.address]){
+        gameAccount = allAccountsDict[account.account.address];
+      } else {
+        gameAccount = ToriiGetter.getGameAccount(account.account.address, Account);
+      }
       setGameAccount(gameAccount);
       let runes: RuneInfos[] = [];
       let heroes: HeroInfos[] = [];
       if(gameAccount !== undefined){
         let toriiRunes = ToriiGetter.getAllRunes(account.account.address, gameAccount.runesCount, Runes);
         let toriiHeroes = ToriiGetter.getAllHeroes(account.account.address, gameAccount.heroesCount, Heroes);
-        // console.log("toriiRunes:", toriiRunes)
         runes = RuneFactory.createRunes(toriiRunes, runeStats);
-        setBaseHeroes(HeroesFactory.createBaseHeroes(skillsDict, skillSets, baseStats));
-        heroes = HeroesFactory.createHeroes(toriiHeroes, runes, skillsDict, skillSets, baseStats);
+        setBaseHeroes(HeroesFactory.createBaseHeroes());
+        heroes = HeroesFactory.createHeroes(toriiHeroes, runes);
         setHeroes(heroes);
         setRunes(runes);
-        // console.log(heroes);
+        loadPvpInfos();
+        // let energyHandler = new EnergyHandler(setEnergy);
+        // energyHandler.initEnergy(gameAccount.energy, gameAccount.lastEnergyUpdateTimestamp);
+        // stateChangesHandler.setEnergyHandler(energyHandler);
       }
     }
   }, [accountSelected]);
@@ -173,7 +169,7 @@ function GamePage({} : GamePageProps) {
       //   stateChangesHandler.setPvpEnergyHandler(pvpEnergyHandler)
       //   setGameAccount(account);
       //   setPvpRank(pvpRank);
-      //   setDefensePvpHeroesIds(pvpDefenseTeam);
+      //   setDefenseArenaHeroesIds(pvpDefenseTeam);
       //   setHasAccount(true);
       // }
       // setStateChangesHandler(stateChangesHandler)
@@ -227,23 +223,21 @@ function GamePage({} : GamePageProps) {
           </div>
         </div>
         }
-        {/* {localWallet === undefined && */}
         {!accountSelected &&
-          <AccountSelect account={account} createAccount={createAccount} allAccountsDict={allAccountsDict} setAccountSelected={setAccountSelected} />
+          <AccountSelect account={account} allAccountsDict={allAccountsDict} setAccountSelected={setAccountSelected} setBlockchainAccount={setBlockchainAccount} />
         }
-        
         {showMyHeroes &&
-          <MyHeroes account={account} heroesList={heroes} runesList={runes} baseHeroes={baseHeroes} stateChangesHandler={stateChangesHandler}/>
+          <MyHeroes account={blockchainAccount} heroesList={heroes} runesList={runes} baseHeroes={baseHeroes} stateChangesHandler={stateChangesHandler}/>
         }
         {showWorldSelect &&
-          <WorldSelect account={account} gameAccount={gameAccount} worldsBattlesList={worldsBattlesList} heroesList={heroes} runesList={runes} stateChangesHandler={stateChangesHandler} />
+          <WorldSelect account={blockchainAccount} gameAccount={gameAccount} worldsBattlesList={worldsBattlesList} heroesList={heroes} runesList={runes} stateChangesHandler={stateChangesHandler} />
         }
         {showSummons &&
-          <Summons account={account} setShowSummons={setShowSummons} handleNewHeroEvent={handleNewHeroEvent} />
+          <Summons account={blockchainAccount} setShowSummons={setShowSummons} handleNewHeroEvent={handleNewHeroEvent} />
         }
-        {/* {showPvp &&
-          <Pvp localWallet={localWallet!} rank={pvpRank} heroesList={heroesList} defensePvpHeroesIds={defensePvpHeroesIds} setShowPvp={setShowPvp} reloadPvpInfos={reloadPvpInfos} />
-        } */}
+        {showPvp &&
+          <Pvp account={blockchainAccount} rank={arenaAccount.rank} heroesList={heroes} defenseArenaHeroesIds={defenseArenaHeroesIds} setDefenseArenaHeroesIds={setDefenseArenaHeroesIds} setShowPvp={setShowPvp} loadPvpInfos={loadPvpInfos}/>
+        }
       </div>
     </div>
   )

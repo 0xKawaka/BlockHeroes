@@ -13,10 +13,9 @@ import { Account } from "starknet"
 import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import StateChangesHandler from "../State/StateChangesHandler"
 import EnergyHandler from "../Classes/EnergyHandler"
-import { BurnerAccount } from "@dojoengine/create-burner"
 
 type BattleSelectProps = {
-  account: BurnerAccount,
+  account: Account,
   energy: number
   worldId: number
   battlesList: Array<BattleInfos>

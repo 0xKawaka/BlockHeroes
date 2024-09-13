@@ -124,14 +124,16 @@ export async function setupWorld(provider: DojoProvider) {
     
         // Call the `initPvp` system with the specified Account and calldata
         const initPvp = async (props: { account: Account, heroesIds: RecsType.NumberArray }) => {
+            
             try {
                 const heroesIdsArray = Array.isArray(props.heroesIds) ? props.heroesIds : [];
+                console.log([...heroesIdsArray])
                 return await provider.execute(
                     props.account,
                     {
                         contractName: contract_name,
                         entrypoint: "initPvp",
-                        calldata: [...heroesIdsArray],
+                        calldata: [heroesIdsArray.length, ...heroesIdsArray],
                     },
                     "game"
                 );
@@ -139,8 +141,7 @@ export async function setupWorld(provider: DojoProvider) {
                 console.error("Error executing spawn:", error);
                 throw error;
             }
-        };
-            
+        };            
 
     
         // Call the `setPvpTeam` system with the specified Account and calldata
@@ -152,7 +153,7 @@ export async function setupWorld(provider: DojoProvider) {
                     {
                         contractName: contract_name,
                         entrypoint: "setPvpTeam",
-                        calldata: [...heroesIdsArray],
+                        calldata: [heroesIdsArray.length, ...heroesIdsArray],
                     },
                     "game"
                 );

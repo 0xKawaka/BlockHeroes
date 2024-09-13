@@ -1,4 +1,5 @@
-const skillSets = {
+import { SkillSets } from "../../Types/apiTypes";
+const skillSets: SkillSets = {
   "knight": ["Attack Knight", "Fire Swing", "Fire Strike"],
   "assassin": ["Attack Assassin", "Sand Strike", "Sandstorm"],
   "priest": ["Attack Priest", "Water Heal", "Water Shield"],

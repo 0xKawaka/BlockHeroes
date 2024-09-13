@@ -1,4 +1,5 @@
-const runeStats = {
+import { RuneStatsDict } from "../../Types/apiTypes"
+const runeStats: RuneStatsDict = {
   base: {
     common: {
       "Health": {

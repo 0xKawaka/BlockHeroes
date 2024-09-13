@@ -2,11 +2,14 @@ import { HeroInfos, SkillsDict, BaseStatsDict, SkillSets, HeroStats, BattlesInfo
 import { HeroBlockchain } from "../../Types/blockchainTypes";
 import Skill from "../Skill/Skill";
 import truncOrRoundDecimalPoint from "../MathInteger/MathInteger"
+import skillsDict from '../../GameDatas/Skills/skillsDict'
+import skillSets from '../../GameDatas/Skills/skillSets'
+import baseStatsDict from '../../GameDatas/Statistics/baseStats'
 
 export type BaseHeroInfos = {name: string, spells: Array<Skill>, stats:HeroStats}
 
 export abstract class HeroesFactory {
-  public static createBaseHeroes(skillsDict: SkillsDict, skillSets: SkillSets, baseStatsDict: BaseStatsDict): Array<BaseHeroInfos> {
+  public static createBaseHeroes(): Array<BaseHeroInfos> {
     let baseHeroes = new Array<BaseHeroInfos>();
     Object.keys(skillSets).forEach((heroName) => {
       let baseStats = baseStatsDict[heroName];
@@ -20,16 +23,16 @@ export abstract class HeroesFactory {
     return baseHeroes;
   }
 
-  public static createHeroes(heroes: Array<HeroBlockchain>, runes: Array<RuneInfos>, skillsDict: SkillsDict, skillSets: SkillSets, baseStatsDict: BaseStatsDict): Array<HeroInfos> {
+  public static createHeroes(heroes: Array<HeroBlockchain>, runes: Array<RuneInfos>): Array<HeroInfos> {
     let heroesWithStatsAndSkills = new Array<HeroInfos>();
     heroes.forEach((hero) => {
-      let heroWithStatsAndSkills: HeroInfos = this.createHero(hero, runes, skillsDict, skillSets, baseStatsDict)
+      let heroWithStatsAndSkills: HeroInfos = this.createHero(hero, runes)
       heroesWithStatsAndSkills.push(heroWithStatsAndSkills)
     })
     return heroesWithStatsAndSkills;
   }
 
-  public static createHero(hero: HeroBlockchain, runes: Array<RuneInfos>, skillsDict: SkillsDict, skillSets: SkillSets, baseStatsDict: BaseStatsDict): HeroInfos {
+  public static createHero(hero: HeroBlockchain, runes: Array<RuneInfos>): HeroInfos {
     let heroRunes = runes.filter(rune => hero.runeIds.includes(rune.id))
     let baseStats = HeroesFactory.computeBaseStats(hero.level, hero.rank, baseStatsDict[hero.name])
     let heroWithStatsAndSkills: HeroInfos = {
@@ -47,7 +50,24 @@ export abstract class HeroesFactory {
     return heroWithStatsAndSkills;
   }
 
-  public static createEnemyHeroes(battlesInfos: BattlesInfosApi, skillsDict: SkillsDict, skillSets: SkillSets, baseStatsDict: BaseStatsDict): BattlesInfosDict {
+  public static createSummonedHero(id: number, name: string): HeroInfos {
+    let baseStats = HeroesFactory.computeBaseStats(1, 1, baseStatsDict[name])
+    let heroWithStatsAndSkills: HeroInfos = {
+      id: id,
+      name: name,
+      level: 1,
+      rank: 1,
+      experience: 0,
+      runesIds: [],
+      spots: [],
+      spells: HeroesFactory.getSkills(skillSets[name], skillsDict),
+      baseStats: baseStats,
+      bonusStats: HeroesFactory.computeBonusStats(baseStats, [])
+    }
+    return heroWithStatsAndSkills;
+  }
+
+  public static createEnemyHeroes(battlesInfos: BattlesInfosApi): BattlesInfosDict {
     let battlesWithEnemyStatsAndSkills: BattlesInfosDict = {};
     Object.keys(battlesInfos).forEach((worldIdKey) => {
       // console.log(worldIdKey)

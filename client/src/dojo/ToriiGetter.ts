@@ -7,6 +7,21 @@ import { Parser } from "../Blockchain/Parser";
 import hexToString from "../Pages/utils/hexToString";
 
 export default class ToriiGetter {
+
+  static getArenaDefenseHeroesIndexes(accountAdrs: string, teamSize: number, ArenaTeam: any): number[] {
+    // const {setup: {clientComponents: {ArenaTeam}}} = useDojo();
+    let heroesIndexes: number[] = [];
+    for(let i = 0; i < teamSize; i++){
+      const entityId = getEntityIdFromKeys([
+        BigInt(accountAdrs), BigInt(i)
+      ]) as Entity;
+      const heroIndex = getComponentValue(ArenaTeam, entityId);
+      if(heroIndex){
+        heroesIndexes.push(heroIndex.heroIndex);
+      }
+    }
+    return heroesIndexes;
+  }
   static getAllAccounts(accountAdrsArray: string[], Account: any): {[key: string]: GameAccount} {
     let accounts: {[key: string]: GameAccount} = {};
     // const {setup: {clientComponents: {Account}}} = useDojo();

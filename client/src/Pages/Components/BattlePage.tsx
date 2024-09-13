@@ -7,10 +7,9 @@ import Entity from "../../Classes/Entity/Entity"
 import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import { Account } from "starknet"
 import StateChangesHandler from "../State/StateChangesHandler"
-import { BurnerAccount } from "@dojoengine/create-burner"
 
 type BattlePageProps = {
-  account: BurnerAccount,
+  account: Account,
   worldId: number
   battleId: number
   selectedTeam: Entity[]

@@ -7,7 +7,7 @@
     gap: 0rem;
 }
 
-.MyDefenseAndBattleHistoryButtonContainer {
+.LeaderboardAndBattleHistoryButtonContainer {
   font-size: 2.3rem;
   display: flex;
   flex-direction: row;
@@ -18,17 +18,56 @@
   background-color: rgb(102, 80, 54);
 }
 
-.MyRank {
-  font-size: 2.8rem;
+.PvpSearchBattleButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.PvpSearchBattleButton {
+  padding: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  border: 0.2rem solid rgb(146, 113, 47);
+  border-radius: 1rem;
+  background-color: rgb(184, 142, 60);
+  cursor: pointer;
+}
+
+.PvpRankAndDefenseContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-size: 3.5rem;
   border: 0.2rem solid rgb(146, 113, 47);
   background-color: rgb(102, 80, 54);
   padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-bottom: 4rem;
   width: 80%;
   text-align: center;
+  justify-content: center;
+
 }
 
-.MyDefenseButton, .BattleHistoryButton {
+.MyDefenseContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.MyDefenseButton {
+  font-size: 2.3rem;
+  font-weight: bold;
+  padding: 1rem;
+  border: 0.2rem solid rgb(146, 113, 47);
+  border-radius: 1rem;
+  background-color: rgb(184, 142, 60);
+  cursor: pointer;
+}
+
+.BattleHistoryButton, .LeaderboardButton {
   width: 50%;
   font-size: 2.3rem;
   font-weight: bold;
@@ -46,6 +85,6 @@
   cursor: pointer;
 }
 
-.MyDefenseButton:hover, .BattleHistoryButton:hover {
+.LeaderboardButton:hover, .BattleHistoryButton:hover {
   background-color: rgb(184, 142, 60);
 }

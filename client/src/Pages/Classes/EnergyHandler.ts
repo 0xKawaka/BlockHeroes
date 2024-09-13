@@ -6,12 +6,12 @@ export default class EnergyHandler {
   currentBlockchainEnergy: number
   actualEnergy: number
   lastEnergyUpdateTimestamp: number
-  setEnergy: React.Dispatch<React.SetStateAction<number>>
+  setEnergy: (energy: number) => void
   updateProcessCount: number
   maxEnergy: number
   timeTickEnergy: number
 
-  constructor(setEnergy: React.Dispatch<React.SetStateAction<number>>, maxEnergy = 5, timeTickEnergy = 1200) {
+  constructor(setEnergy: (energy: number) => void, maxEnergy = 5, timeTickEnergy = 1200) {
     this.currentBlockchainEnergy = 0
     this.actualEnergy = 0
     this.lastEnergyUpdateTimestamp = 0

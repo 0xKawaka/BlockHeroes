@@ -1,4 +1,4 @@
-import { Account, TransactionFinalityStatus } from "starknet";
+import { Account, TransactionFinalityStatus, shortString } from "starknet";
 import {
     Entity,
     Has,
@@ -12,6 +12,8 @@ import { ClientComponents } from "./createClientComponents";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import type { IWorld } from "./typescript/contracts.gen";
 import stringToFelt252 from "../Pages/utils/stringToFelt252";
+import EventHandler from "../Blockchain/event/EventHandler";
+import { Type,  } from "@dojoengine/recs";
 // import { Direction } from "./typescript/models.gen";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
@@ -22,12 +24,17 @@ export function createSystemCalls(
     { Account }: ClientComponents,
     world: World
 ) {
-    const createAccount = async (account: Account, username: string) => {
+    const createAccount = async (account: Account, username: string): Promise<boolean> =>  {
         try {
-            await client.Game.createAccount({
+            let txRes =await client.Game.createAccount({
                 account,
                 username,
             });
+            await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 200,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            return true;
             // await new Promise<void>((resolve) => {
             //     defineSystem(
             //         world,
@@ -42,6 +49,7 @@ export function createSystemCalls(
             // });
         } catch (e) {
             console.log(e);
+            return false;
         } 
         // finally {
         //     Position.removeOverride(positionId);
@@ -93,23 +101,90 @@ export function createSystemCalls(
                 account,
                 runeId,
             });
-            let res = await account.waitForTransaction(txRes.transaction_hash, {
+            let res: any = await account.waitForTransaction(txRes.transaction_hash, {
                 retryInterval: 200,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
-            console.log(res)
-            return true;
+            console.log(res);
+            let crystalCost;
+            let bonus;
 
+            if(res.events.length == 3) {
+                crystalCost = EventHandler.parseRuneUpgradeEvent(res.events[0]);
+            }
+            else if(res.events.length == 4) {
+                crystalCost = EventHandler.parseRuneUpgradeEvent(res.events[1]);
+                bonus = EventHandler.parseRuneBonusEvent(res.events[0]);
+            }
+            else {
+                throw new Error("upgradeRune : Error: unexpected number of events");
+            }
+            return { success: true, crystalCost: crystalCost, bonus: bonus };
+        }
+        catch(e){
+            console.log(e);
+            return { success: false, crystalCost: 0, bonus: undefined };
+        }
+    }
+
+    async function mintHero(account: Account): Promise<{id: number, name: String}>  {
+        try {
+            let txRes = await client.Game.mintHero({
+                account,
+            });
+            let res: any = await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 200,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            return {id: Number(res.events[2].data[1]), name: shortString.decodeShortString(res.events[2].data[2])};
+        } catch (e) {
+            console.log(e);
+            return {id: -1, name: ''};
+        }
+    }
+
+    async function initPvp(account: Account, heroesIds: number[]): Promise<boolean> {
+        try {
+            let txRes = await client.Game.initPvp({
+                account,
+                heroesIds,
+            });
+            await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 200,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            return true;
         } catch (e) {
             console.log(e);
             return false;
         }
     }
 
+    async function setPvpTeam(account: Account, heroesIds: number[]): Promise<boolean> {
+        try {
+            let txRes = await client.Game.setPvpTeam({
+                account,
+                heroesIds,
+            });
+            await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 200,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+
     return {
         createAccount,
         equipRune,
         unequipRune,
         upgradeRune,
+        mintHero,
+        initPvp,
+        setPvpTeam,
     };
 }

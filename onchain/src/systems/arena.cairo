@@ -12,6 +12,8 @@ trait IArena {
     fn getTeam(world: IWorldDispatcher, owner: ContractAddress) -> Array<u32>;
     fn getRank(world: IWorldDispatcher, owner: ContractAddress) -> u64;
     fn initArena(world: IWorldDispatcher, minRankGems: Array<u64>, gems: Array<u64>, minRankRange: Array<u64>, range: Array<u64>);
+    fn hasAccount(world: IWorldDispatcher, accountAdrs: ContractAddress);
+    fn hasNoAccount(world: IWorldDispatcher, accountAdrs: ContractAddress);
 }
 
 mod Arena {
@@ -20,12 +22,13 @@ mod Arena {
     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
     use game::models::storage::arena::{arenaAccount::ArenaAccount, arenaConfig::ArenaConfig, arenaCurrentRankIndex::ArenaCurrentRankIndex, arenaTeam::ArenaTeam, enemyRanges::EnemyRanges, gemsRewards::GemsRewards};
     use game::models::events::{Event, InitArena, ArenaDefense, RankChange};
+    use debug::PrintTrait;
 
     #[abi(embed_v0)]
     impl ArenaImpl of super::IArena {
         fn initAccount(world: IWorldDispatcher, owner: ContractAddress, heroeIds: Array<u32>) {
             let arenaCurrentRank = get!(world, 0, ArenaCurrentRankIndex).currentRankIndex;
-            set!(world, ArenaAccount { owner: owner, rank: arenaCurrentRank, lastClaimedRewards: get_block_timestamp()});
+            set!(world, ArenaAccount { owner: owner, rank: arenaCurrentRank, lastClaimedRewards: get_block_timestamp(), teamSize: heroeIds.len() });
             set!(world, ArenaCurrentRankIndex { id: 0, currentRankIndex: arenaCurrentRank + 1 });
 
             Self::setTeam(world, owner, heroeIds.span());
@@ -39,18 +42,20 @@ mod Arena {
                     break;
                 }
                 set!(world, ArenaTeam { owner: owner, index: i, heroIndex: *heroeIds[i] });
+                let arenaAccount = get!(world, owner, ArenaAccount);
+                set!(world, ArenaAccount { owner: owner, rank: arenaAccount.rank, lastClaimedRewards: arenaAccount.lastClaimedRewards, teamSize: heroeIds.len() });
                 i += 1;
             };
             emit!(world, (Event::ArenaDefense(ArenaDefense { owner: owner, heroeIds: heroeIds })));
         }
 
         fn swapRanks(world: IWorldDispatcher, winner: ContractAddress, looser: ContractAddress, lastClaimedRewards: u64) {
-            let winnerRank = get!(world, winner, ArenaAccount).rank;
-            let looserRank = get!(world, looser, ArenaAccount).rank;
-            set!(world, ArenaAccount { owner: winner, rank: looserRank, lastClaimedRewards: lastClaimedRewards });
-            set!(world, ArenaAccount { owner: looser, rank: winnerRank, lastClaimedRewards: lastClaimedRewards });
-            emit!(world, (Event::RankChange(RankChange { owner: winner, rank: looserRank })));
-            emit!(world, (Event::RankChange(RankChange { owner: looser, rank: winnerRank })));
+            let winnerAccount = get!(world, winner, ArenaAccount);
+            let looserAccount = get!(world, looser, ArenaAccount);
+            set!(world, ArenaAccount { owner: winner, rank: looserAccount.rank, lastClaimedRewards: lastClaimedRewards, teamSize: winnerAccount.teamSize });
+            set!(world, ArenaAccount { owner: looser, rank: winnerAccount.rank, lastClaimedRewards: lastClaimedRewards, teamSize: looserAccount.teamSize });
+            emit!(world, (Event::RankChange(RankChange { owner: winner, rank: looserAccount.rank })));
+            emit!(world, (Event::RankChange(RankChange { owner: looser, rank: winnerAccount.rank })));
         }
 
         fn setEnemyRangesByRank(world: IWorldDispatcher, minRank: Array<u64>, range: Array<u64>) {
@@ -131,6 +136,16 @@ mod Arena {
 
         fn getTeam(world: IWorldDispatcher, owner: ContractAddress) -> Array<u32> {
             return array![];
+        }
+
+        fn hasAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) {
+            let acc = get!(world, accountAdrs, (ArenaAccount));
+            assert(acc.rank != 0, 'Arenaccount not found');
+        }
+
+        fn hasNoAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) {
+            let acc = get!(world, accountAdrs, (ArenaAccount));
+            assert(acc.rank == 0, 'Arenaccount already exists');
         }
 
         fn initArena(world: IWorldDispatcher, minRankGems: Array<u64>, gems: Array<u64>, minRankRange: Array<u64>, range: Array<u64>) {

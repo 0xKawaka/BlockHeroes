@@ -5,10 +5,9 @@ import BattleLoader from './BattleLoader'
 import FontLoader from './FontLoader'
 import Entity from '../Classes/Entity/Entity'
 import GameEventHandler from '../Blockchain/event/GameEventHandler'
-// import { Account } from 'starknet'
-import { BurnerAccount } from '@dojoengine/create-burner'
+import { Account } from 'starknet'
 
-function getPhaserConfig(eventHandler: GameEventHandler, account: BurnerAccount, walletAdrs:string, parentContainer:string, worldId:number, battleId:number, selectedTeam: Entity[], selectedHeroesIds:number[], enemiesTeam: Entity[]): Phaser.Types.Core.GameConfig{
+function getPhaserConfig(eventHandler: GameEventHandler, account: Account, walletAdrs:string, parentContainer:string, worldId:number, battleId:number, selectedTeam: Entity[], selectedHeroesIds:number[], enemiesTeam: Entity[]): Phaser.Types.Core.GameConfig{
   const Config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     parent: parentContainer,

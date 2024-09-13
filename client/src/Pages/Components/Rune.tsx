@@ -7,11 +7,10 @@ import RuneMiniature from "./RuneMiniature"
 import { useState } from "react"
 import { Account } from "starknet"
 import crystalImg from "../../assets/icons/crystal.png"
-import { BurnerAccount } from "@dojoengine/create-burner"
 import { useDojo } from "../../dojo/useDojo"
 
 type RuneProps = {
-  account: BurnerAccount,
+  account: Account,
   runesList: Array<RuneInfos>,
   heroesList: Array<HeroInfos>,
   rune: RuneInfos,
@@ -38,7 +37,7 @@ export default function Rune({account, runesList, heroesList, rune, equipped, im
 
   async function handleEquipRune(rune: RuneInfos, heroId: number){
     setIsEquipping(true)
-    const isSuccess = await equipRune(account.account, rune.id, heroId)
+    const isSuccess = await equipRune(account, rune.id, heroId)
     if(isSuccess)
       stateChangesHandler.updateRuneEquip(rune, heroId, runesList, heroesList)
     setIsEquipping(false)
@@ -46,21 +45,21 @@ export default function Rune({account, runesList, heroesList, rune, equipped, im
   
   async function handleUnequipRune(rune: RuneInfos){
     setIsEquipping(true)
-    const isSuccess = await unequipRune(account.account, rune.id)
+    const isSuccess = await unequipRune(account, rune.id)
     if(isSuccess)
       stateChangesHandler.updateRuneUnequip(rune, runesList, heroesList)
     setIsEquipping(false)
   }
   
-  async function handleUpgradeRune(account: Account, rune: RuneInfos){
+  async function handleUpgradeRune(rune: RuneInfos){
     setIsUpgrading(true)
     const upgradeRuneDatas = await upgradeRune(account, rune.id)
-    // if(upgradeRuneDatas.success == false){
-    //   console.log("Upgrade rune failed")
-    //   return
-    // }
-    // stateChangesHandler.updateRuneUpgrade(rune, upgradeRuneDatas.bonus, runesList, heroesList)
-    // stateChangesHandler.updateCrystals(upgradeRuneDatas.crystalCost)
+    if(upgradeRuneDatas.success == false){
+      console.log("Upgrade rune failed")
+      return
+    }
+    stateChangesHandler.updateRuneUpgrade(rune, upgradeRuneDatas.bonus, runesList, heroesList)
+    stateChangesHandler.updateCrystals(upgradeRuneDatas.crystalCost)
     setIsUpgrading(false)
   }
 
@@ -81,7 +80,7 @@ export default function Rune({account, runesList, heroesList, rune, equipped, im
       </div>
       <div className="RuneButtonsContainer">
         {rune.rank < maxRankRune && 
-        <div className="RuneButtonUpgrade" onClick={() => isUpgrading ? undefined : handleUpgradeRune(account.account, rune)}>
+        <div className="RuneButtonUpgrade" onClick={() => isUpgrading ? undefined : handleUpgradeRune(rune)}>
           <div className="RuneButtonUpgradeText"> {isUpgrading ? "Upgrading" : "Upgrade"}</div>
           <div className="RuneButtonUpgradeCrystalValue">
             {200 + rune.rank * 200}

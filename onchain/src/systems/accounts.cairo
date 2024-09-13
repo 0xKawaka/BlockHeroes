@@ -24,7 +24,7 @@ trait IAccounts {
     fn getRunes(world: IWorldDispatcher, accountAdrs: ContractAddress, runesIds: Array<u32>) -> Array<Rune>;
     fn getAllRunes(world: IWorldDispatcher, accountAdrs: ContractAddress) -> Array<Rune>;
     fn getEnergyInfos(world: IWorldDispatcher, accountAdrs: ContractAddress) -> (u16, u64);
-    fn hasAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) -> bool;
+    fn hasAccount(world: IWorldDispatcher, accountAdrs: ContractAddress);
     fn isOwnerOfHeroes(world: IWorldDispatcher, accountAdrs: ContractAddress, heroesIndexes: Span<u32>) -> bool;
     fn mintStarterHeroes(world: IWorldDispatcher, accountAdrs: ContractAddress) -> u32;
     fn mintStarterRunes(world: IWorldDispatcher, accountAdrs: ContractAddress) -> u32;
@@ -234,9 +234,9 @@ mod Accounts {
             let acc = get!(world, accountAdrs, (Account));
             return acc.getEnergyInfos();
         }
-        fn hasAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) -> bool {
+        fn hasAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) {
             let acc = get!(world, accountAdrs, (Account));
-            return acc.owner == accountAdrs;
+            assert(acc.owner == accountAdrs, 'Account not found');
         }
         fn isOwnerOfHeroes(world: IWorldDispatcher, accountAdrs: ContractAddress, heroesIndexes: Span<u32>) -> bool {
             let heroesCount = get!(world, accountAdrs, (Account)).heroesCount;

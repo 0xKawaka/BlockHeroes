@@ -15,11 +15,10 @@ import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import StateChangesHandler from "../State/StateChangesHandler"
 import { Getter } from "../../Blockchain/Getter"
 import EnergyHandler from "../Classes/EnergyHandler"
-import { BurnerAccount } from "@dojoengine/create-burner"
 
 
 type BattleTeamSelectionProps = {
-  account: BurnerAccount,
+  account: Account,
   energy: number,
   worldId:number,
   battleId:number,
