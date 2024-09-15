@@ -1,6 +1,5 @@
 import Entity from "./Entity/Entity";
 import EntityFactory from "./Entity/EntityFactory";
-// import BattleScene from "../Scenes/BattleScene";
 import Turnbar from "./Entity/Turnbar";
 import IBattleEntity from "./Entity/IBattleEntity";
 import AnimationsHandler from "./Animations/AnimationsHandler";
@@ -10,11 +9,10 @@ import Scaler from "./Camera/Scaler";
 import Zoomer from "./Camera/Zoomer";
 import Positionner from "./Camera/Positionner";
 import GameEventHandler from "../Blockchain/event/GameEventHandler";
-import { SkillEvent } from "../Blockchain/event/eventTypes";
 import { Sender } from "../Blockchain/Sender";
 import { Account } from "starknet";
 import UIScene from "../Scenes/UIScene";
-// import { skillsDict } from "../GameDatas/Skills/skills";
+import GameSpeedHelper from "./Animations/GameSpeedHelper";
 
 export default class Battle {
   battleEntities: Array<IBattleEntity>
@@ -35,8 +33,9 @@ export default class Battle {
   scaler: Scaler
   zoomer: Zoomer
   positionner: Positionner
+  gameSpeedHelper: GameSpeedHelper
 
-  constructor(battleScene: BattleScene) {
+  constructor(battleScene: BattleScene, gameSpeedHelper: GameSpeedHelper) {
     this.battleScene = battleScene
     this.battleEntities = []
     this.deadEntities = []
@@ -47,6 +46,7 @@ export default class Battle {
     this.hasSelectedTarget = false
     this.isTurnPlaying = false
     this.animationsHandler = new AnimationsHandler(this)
+    this.gameSpeedHelper = gameSpeedHelper
   }
 
   setPositionner(positionner: Positionner){
@@ -55,6 +55,10 @@ export default class Battle {
 
   setScaler(scaler: Scaler){
     this.scaler = scaler
+  }
+
+  setGameSpeedHelper(gameSpeedHelper: GameSpeedHelper){
+    this.gameSpeedHelper = gameSpeedHelper
   }
 
   setZoomer(zoomer: Zoomer) {

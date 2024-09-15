@@ -86,7 +86,7 @@ export async function setupWorld(provider: DojoProvider) {
                     {
                         contractName: contract_name,
                         entrypoint: "startBattle",
-                        calldata: [...heroesIdsArray,
+                        calldata: [heroesIdsArray.length, ...heroesIdsArray,
                 props.map,
                 props.level],
                     },

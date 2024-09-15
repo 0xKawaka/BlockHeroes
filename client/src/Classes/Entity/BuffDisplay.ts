@@ -16,7 +16,7 @@ export default class BuffDisplay {
   textScale: number
   fontSize: number
 
-  constructor(imageName: string, battleScene: BattleScene, scale:number, textScale:number, visible:boolean = false, position: {image: {x: number, y: number}, text: {x: number, y: number}} = {image: {x: 0, y: 0}, text: {x: 0, y: 0}}, duration: number = 0) {
+  constructor(imageName: string, battleScene: BattleScene, scale:number, textScale:number, depth: number= 3, visible:boolean = false, position: {image: {x: number, y: number}, text: {x: number, y: number}} = {image: {x: 0, y: 0}, text: {x: 0, y: 0}}, duration: number = 0) {
     this.scale = scale
     this.textScale = textScale
     this.image = battleScene.add.image(position.image.x, position.image.y, imageName)
@@ -32,6 +32,9 @@ export default class BuffDisplay {
     // this.durationText.setScale(this.textScale)
     this.durationText.setOrigin(1, 1)
     this.durationText.setVisible(visible)
+
+    this.durationText.setDepth(depth)
+    this.image.setDepth(depth)
   }
   setScale(scale: number) {
     this.image.setScale(scale)

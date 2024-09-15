@@ -3,7 +3,6 @@ import Entity from "./Entity";
 import Turnbar from "./Turnbar";
 import IBattleEntity from "./IBattleEntity";
 import HealthBar from "./HealthBar";
-import TextAnim from "../Animations/TextAnim";
 import Battle from "../Battle";
 import BattleScene from "../../Scenes/BattleScene";
 import { buffsDebuffsStats, onTurnStackableBuffNames, onTurnStackableStatusNames } from "../../GameDatas/Skills/buffsStatus";
@@ -11,9 +10,7 @@ import BuffDisplay from "./BuffDisplay";
 import StackableBuff from "./StackableBuff";
 import SpriteWrapper from "../Animations/SpriteWrapper";
 import AnimationsHandler from "../Animations/AnimationsHandler";
-import ISkillAnimation from "../Skill/Animations/ISkillAnimation";
 import BitmapTextAnim from "../Animations/BitmapTextAnim";
-import ImgBar from "./ImgBar";
 import BarHandler from "../BarHandler";
 import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
 
@@ -32,7 +29,6 @@ export default class BattleEntity implements IBattleEntity {
   turnbar: Turnbar
   sprite: SpriteWrapper
   healthBar: HealthBar
-  // healthBar: ImgBar
   displayTurnBar: HealthBar
   outlineBarHorizontal:  BarHandler
   outlineBarVertical:  BarHandler
@@ -201,6 +197,7 @@ export default class BattleEntity implements IBattleEntity {
     console.log('Entity ' + this.getIndex() + ' died!')
     // this.sprite.visible = false
     this.resetBuffsAndStatus()
+    this.sprite.setDepth(0)
     // this.sprite.update()
     battle.deadEntities.push(battle.battleEntities.splice(index, 1)[0])
     battle.removeEntityTurnbar(this.getIndex())
@@ -235,26 +232,26 @@ export default class BattleEntity implements IBattleEntity {
   }
 
   createSprite(battleScene: BattleScene, animationIndexes: {[key: string]:{start:number, end:number}}): SpriteWrapper {
-    // let sprite = new SpriteWrapper(battleScene, this.position.x, this.position.y, this.Entity.name, this.scaleValue, this.index, width, height)
     let sprite = new SpriteWrapper(battleScene, this.position.x, this.position.y, this.Entity.name, this.scaleValue, this.upscale, this.index)
     
     // battleScene.anims.create({key: this.Entity.name + this.index, frames: battleScene.anims.generateFrameNumbers(this.Entity.name), frameRate:20, repeat:-1})
     for (let animationName in animationIndexes) {
-      if(animationName === "idle")
-        this.createAnim(battleScene, this.index , this.Entity.name, animationName, -1, animationIndexes[animationName])
+      if(animationName === "idle" || animationName === "jumpLoop")
+        this.createAnim(battleScene, this.index , this.Entity.name, animationName, -1, animationIndexes[animationName], 20)
       else 
-        this.createAnim(battleScene, this.index , this.Entity.name, animationName, 0, animationIndexes[animationName])
+        this.createAnim(battleScene, this.index , this.Entity.name, animationName, 0, animationIndexes[animationName], battleScene.battle.gameSpeedHelper.computeFrameRateEntity(this.Entity.name, animationName))
     }
     sprite.play(this.Entity.name + this.index + 'idle')
     return sprite
   }
-  createAnim(battleScene: Phaser.Scene, entityIndex: number, entityName:string, animationName: string, repeat: number, startEnd: {start: number, end: number}): void {
+  createAnim(battleScene: BattleScene, entityIndex: number, entityName:string, animationName: string, repeat: number, startEnd: {start: number, end: number}, framerate: number): void {
     battleScene.anims.create({
       key: entityName + entityIndex + animationName,
       frames: battleScene.anims.generateFrameNumbers(entityName, {start:startEnd.start, end:startEnd.end}),
-      frameRate: 20,
+      frameRate: framerate,
       repeat: repeat
-  });}
+    });
+  }
 
   playAnim(animationName: string): void {
     console.log("Playing anim " + this.Entity.name + this.index + animationName)
@@ -266,6 +263,7 @@ export default class BattleEntity implements IBattleEntity {
 
   // TODO : change speed after turn in case of buff fading
   async playTurn(battle: Battle, startTurnEvent: StartTurnEvent, animationsHandler: AnimationsHandler): Promise<void> {
+    battle.battleScene.children.bringToTop(this.sprite)
     let damageAndHealAnimQueue: Array<{isDamageOrHeal:string, isCrit: boolean, value: number, battleScene: Phaser.Scene, animationHandler: AnimationsHandler}> = []
     if(this.index != startTurnEvent.entityId)
       throw new Error('StartTurn wrong entity index, received : ' + startTurnEvent.entityId + ' expected : ' + this.index)
@@ -314,15 +312,7 @@ export default class BattleEntity implements IBattleEntity {
     else
       this.displayTurnBar.setBarPercentageValue(turnbarValue/999)
   }
-  // createTurnAndHealthBars(battleScene: BattleScene): void {
-  //   const barWidth = 32
-  //   const turnBarHeight = 2
-  //   let barScale  = this.scaleValue * 2
-  //   let x = this.sprite.getPlaceholderX()
-  //   let y  = this.sprite.getPlaceholderY() - this.sprite.getHeight()
-  //   this.displayTurnBar = new ImgBar(battleScene, x, y, "turnBar", barScale)
-  //   this.healthBar = new ImgBar(battleScene, x, y - turnBarHeight * barScale, "lifeBar", barScale)
-  // }
+
   createBars(battleScene: BattleScene): void {
     let turnBarWidth = this.sprite.getWidth() * 0.85
     let turnbarHeight = this.sprite.getHeight() * 0.035
@@ -385,6 +375,9 @@ export default class BattleEntity implements IBattleEntity {
   }
   getFrontEntityX(): number {
     throw new Error("Method getFrontEntityX not implemented.");
+  }
+  getFrontEntityXWithOffset(offset: number): number {
+    throw new Error("Method getFrontEntityXWithOffset not implemented.");
   }
   getEntity(): Entity {
     return this.Entity

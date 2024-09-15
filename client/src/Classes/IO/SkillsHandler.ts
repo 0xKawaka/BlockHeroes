@@ -1,10 +1,5 @@
 import SkillFactory from "../Skill/SkillFactory"
 import Skill from "../Skill/Skill"
-import ISkillAnimation from "../Skill/Animations/ISkillAnimation"
-import MoveAndCast from "../Skill/Animations/MoveAndCast"
-import Cast from "../Skill/Animations/Cast"
-import CastProjectile from "../Skill/Animations/CastProjectile"
-import CastProjectileAOE from "../Skill/Animations/CastProjectileAOE"
 import FlatDamage from "../Skill/FlatDamage"
 import PercentHeal from "../Skill/PercentHeal"
 import { SkillApi, HeroesListApi, SkillsDict, SkillsDictApi, RunesList, HeroInfos } from "../../Types/apiTypes"
@@ -92,5 +87,3 @@ export default class SkillsHandler {
   }
 
 }
-
-

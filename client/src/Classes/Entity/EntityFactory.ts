@@ -9,7 +9,7 @@ import BattleEntityAlly from "./BattleEntityAlly"
 import BattleEntityEnemy from "./BattleEntityEnemy"
 import IBattleEntity from "./IBattleEntity"
 import BattleScene from "../../Scenes/BattleScene"
-import {animsByEntityName} from "../Animations/spritesheetParser"
+import {animsByEntityName} from "../../GameDatas/Monsters/spritesheetParser"
 import ISkillAnimation from "../Skill/Animations/ISkillAnimation"
 
 export default class EntityFactory {

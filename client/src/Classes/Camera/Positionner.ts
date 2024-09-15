@@ -62,7 +62,7 @@ export default class Positionner {
       // const y = healthBarY + Math.floor(i / buffsPerRow) * (realHeight + this.buffStatusGapRatio * this.canvasHeight)
       const y = healthBarY - Math.trunc(i / buffsPerRow) * this.buffStatusSize
       const textX = (x - camera.worldView.x) * camera.zoom
-      const textY = (y - camera.worldView.y) * camera.zoom    
+      const textY = (y - camera.worldView.y) * camera.zoom - 2
 
       positionArray.push({image: {x, y}, text: {x: textX, y: textY}})
     }

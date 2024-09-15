@@ -28,7 +28,7 @@ export interface Account {
     lastPvpEnergyUpdateTimestamp: Number;
     runesCount: Number;
     heroesCount: Number;
-    
+    summonChests: Number;
 }
 export const AccountDefinition = {
     owner: RecsType.BigInt,
@@ -41,7 +41,7 @@ export const AccountDefinition = {
     lastPvpEnergyUpdateTimestamp: RecsType.Number,
     runesCount: RecsType.Number,
     heroesCount: RecsType.Number,
-    
+    summonChests: RecsType.Number,
 };
 
 // Type definition for `core::byte_array::ByteArray` struct
@@ -820,12 +820,13 @@ export function defineContractComponents(world: World) {
                     lastPvpEnergyUpdateTimestamp: RecsType.Number,
                     runesCount: RecsType.Number,
                     heroesCount: RecsType.Number,
+                    summonChests: RecsType.Number,
                 },
                 {
                     metadata: {
                         namespace: "game",
                         name: "Account",
-                        types: ["ContractAddress", "felt252", "u16", "u16", "u32", "u32", "u64", "u64", "u32", "u32"],
+                        types: ["ContractAddress", "felt252", "u16", "u16", "u32", "u32", "u64", "u64", "u32", "u32", "u32"],
                         customTypes: [],
                     },
                 }

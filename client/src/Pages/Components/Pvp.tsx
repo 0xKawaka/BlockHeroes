@@ -5,20 +5,26 @@ import { HeroInfos } from "../../Types/apiTypes"
 import ArrowBack from "../../assets/misc/arrowback.png"
 import { useState } from "react"
 import TeamDisplay from "./TeamDisplay"
+import { ArenaFullAccount } from "../../Types/customTypes"
+import ArenaLeaderboard from "./ArenaLeaderboard"
 
 type PvpProps = {
   account: Account,
   rank: number,
   heroesList: Array<HeroInfos>,
   defenseArenaHeroesIds: number[],
+  arenaFullAccounts: Array<ArenaFullAccount>,
   setDefenseArenaHeroesIds: React.Dispatch<React.SetStateAction<number[]>>
+  setArenaAccount: React.Dispatch<React.SetStateAction<{rank: number, lastClaimedRewards: number}>>
   setShowPvp: React.Dispatch<React.SetStateAction<boolean>>
-  loadPvpInfos(): void
+  loadPvpInfos(address: string): void
+  updateGlobalPvpInfos(): void
 }
 
-export default function Pvp({account, rank, heroesList, defenseArenaHeroesIds, setDefenseArenaHeroesIds, setShowPvp, loadPvpInfos}: PvpProps) {
+export default function Pvp({account, rank, heroesList, defenseArenaHeroesIds, arenaFullAccounts, setDefenseArenaHeroesIds, setArenaAccount, setShowPvp, loadPvpInfos, updateGlobalPvpInfos}: PvpProps) {
 
   const [showDefense, setShowDefense] = useState<boolean>(false)
+  const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false)
 
   let defenseHeroes: HeroInfos[] = []
   defenseArenaHeroesIds.map((heroId, i) => {
@@ -32,10 +38,23 @@ export default function Pvp({account, rank, heroesList, defenseArenaHeroesIds, s
     return(
       <div className="PvpAndArrowBackContainer">
         <div className="ArrowBackContainer">
-          <img className="ArrowBack" src={ArrowBack} onClick={() => setShowDefense(false)} />
+          <img className="ArrowBack" src={ArrowBack} onClick={() => rank == 0 ? setShowPvp(false) : setShowDefense(false)} />
         </div>
         <div className="PvpContainer">
-          <PvpDefense account={account} rank={rank} heroesList={heroesList} defenseArenaHeroesIds={defenseArenaHeroesIds} loadPvpInfos={loadPvpInfos} setDefenseArenaHeroesIds={setDefenseArenaHeroesIds} />
+          <PvpDefense account={account} rank={rank} heroesList={heroesList} defenseArenaHeroesIds={defenseArenaHeroesIds} loadPvpInfos={loadPvpInfos} setDefenseArenaHeroesIds={setDefenseArenaHeroesIds} setArenaAccount={setArenaAccount} updateGlobalPvpInfos={updateGlobalPvpInfos} />
+        </div>
+      </div>
+    )
+  }
+
+  if(showLeaderboard) {
+    return(
+      <div className="PvpAndArrowBackContainer">
+        <div className="ArrowBackContainer">
+          <img className="ArrowBack" src={ArrowBack} onClick={() => setShowLeaderboard(false)} />
+        </div>
+        <div className="PvpContainer">
+          <ArenaLeaderboard arenaFullAccounts={arenaFullAccounts} />
         </div>
       </div>
     )
@@ -61,7 +80,7 @@ export default function Pvp({account, rank, heroesList, defenseArenaHeroesIds, s
           
         </div>
         <div className="LeaderboardAndBattleHistoryButtonContainer">
-          <div className="LeaderboardButton" onClick={() => setShowDefense(true)}>
+          <div className="LeaderboardButton" onClick={() => setShowLeaderboard(true)}>
             Leaderboard
           </div>
           <div className="BattleHistoryButton" onClick={() => setShowDefense(true)}>

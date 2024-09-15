@@ -165,7 +165,7 @@ export default class StateChangesHandler {
     this.pvpEnergyHandler = pvpEnergyHandler
   }
 
-  // getRuneStatsDict() {
-  //   return this.runeStatsDict
-  // }
+  getRuneStatsDict() {
+    return runeStatsDict
+  }
 }

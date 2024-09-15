@@ -1,14 +1,17 @@
+import BattleScene from "../../Scenes/BattleScene";
+
 export default class SpriteWrapper extends Phaser.GameObjects.Sprite {
   target: {x: number, y: number} | null
   placeholder: Phaser.GameObjects.Rectangle
   placeholderWidth: number
   placeholderHeight: number
 
-  constructor(scene: Phaser.Scene, x: number, y: number, name: string, scaleValue: number, upscale: number, index: number) {
+  constructor(scene: BattleScene, x: number, y: number, name: string, scaleValue: number, upscale: number, index: number, depth: number= 2) {
     super(scene, x, y, name);
+    // scene.characterSpritesGroup.add(this, true);
     scene.add.existing(this);
+    this.setDepth(depth)
     this.target = null
-    // this.setScale(scaleValue)
     this.setOrigin(0.5, 1)
 
     this.placeholder = scene.add.rectangle(x, y, this.displayWidth / upscale / 5, this.displayHeight / upscale / 2.5, 0x000000, 0)
@@ -52,6 +55,11 @@ export default class SpriteWrapper extends Phaser.GameObjects.Sprite {
   setDestination(x: number, y: number){
     this.target = {x: x, y: y}
   }
+  
+  // setDepth(value: number): this {
+  //   super.setDepth(value)
+  //   return this
+  // }
 
   isMoving(){
     return this.target != null

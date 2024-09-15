@@ -42,7 +42,7 @@ export default function WorldSelect({account, gameAccount, worldsBattlesList, he
       </div>
     }
     {worldId !== -1 &&
-      <BattlesSelect account={account} energy={gameAccount.energy} worldId={worldId} battlesList={worldsBattlesList[worldId]} heroesList={heroesList} runesList={runesList} setWorldId={setWorldId} stateChangesHandler={stateChangesHandler} />
+      <BattlesSelect account={account} gameAccount={gameAccount} worldId={worldId} battlesList={worldsBattlesList[worldId]} heroesList={heroesList} runesList={runesList} setWorldId={setWorldId} stateChangesHandler={stateChangesHandler} />
     }
   </div>
   )

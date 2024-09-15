@@ -2,14 +2,10 @@ import StatsModifier from "../Statistic/StatsModifier";
 import Entity from "./Entity";
 import Turnbar from "./Turnbar";
 import IBattleEntity from "./IBattleEntity";
-import BarHandler from "../BarHandler";
 import HealthBar from "./HealthBar";
-import BattleScene from "../../Scenes/BattleScene";
 import Battle from "../Battle";
 import SpriteWrapper from "../Animations/SpriteWrapper";
 import AnimationsHandler from "../Animations/AnimationsHandler";
-import ISkillAnimation from "../Skill/Animations/ISkillAnimation";
-import ImgBar from "./ImgBar";
 import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
 
 export default class BattleEntityEnemy implements IBattleEntity {
@@ -96,7 +92,10 @@ export default class BattleEntityEnemy implements IBattleEntity {
     this.battleEntity.setOutlineBarsColor(color, alpha)
   }
   getFrontEntityX(): number {
-    return this.battleEntity.getSprite().getPlaceholderX() - this.battleEntity.getSprite().getWidth() / 1.5
+    return this.battleEntity.getSprite().getPlaceholderX() - this.battleEntity.getSprite().getWidth() / 1.4
+  }
+  getFrontEntityXWithOffset(offset: number): number {
+    return this.getFrontEntityX() - offset
   }
 
   getEntity(): Entity {

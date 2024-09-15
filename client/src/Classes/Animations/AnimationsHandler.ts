@@ -1,7 +1,7 @@
 import Battle from "../Battle"
 import IBattleEntity from "../Entity/IBattleEntity"
 import SpriteWrapper from "./SpriteWrapper"
-import { skillAnimsDict, spellAnimDict } from "../../GameDatas/Skills/skills"
+import { skillAnimsDict } from "../../GameDatas/Skills/skills"
 import { projectilesDict } from "../../GameDatas/Skills/skills"
 
 export default class AnimationsHandler {
@@ -25,16 +25,16 @@ export default class AnimationsHandler {
     this.jumpAnimationDict = {}
     this.runAnimationDict = {}
     this.spellAnimationDict = {}
-    // this.idleAnimationDict = {}
     this.annimationStateIndexer = {
       "attack": this.attackAnimationDict,
       "skill1": this.attackAnimationDict,
       "skill2": this.attackAnimationDict,
       "jump": this.jumpAnimationDict,
+      "jumpStart": this.jumpAnimationDict,
+      "jumpEnd": this.jumpAnimationDict,
       "run": this.runAnimationDict,
       "hurt": this.hurtAnimationDict,
       "die": this.deathAnimationDict,
-      // "idle": this.idleAnimationDict
     }
   }
 
@@ -48,11 +48,13 @@ export default class AnimationsHandler {
 
     if (!targetEntity || !casterEntity)
       return
+
     if(skill === "Attack"){
-      await skillAnimsDict[skill + casterEntity.getName()].animPlayer.play(this, battle, skillAnimsDict[skill + casterEntity.getName()].animType, casterEntity, targetEntity, damageDict, healDict, statusDict, buffsDict, deathArray)
+      let skillAnimWrapper = skillAnimsDict[skill + casterEntity.getName()]
+      await skillAnimsDict[skill + casterEntity.getName()].animPlayer.play(this, battle, skillAnimWrapper.animType, casterEntity, targetEntity, damageDict, healDict, statusDict, buffsDict, deathArray, skillAnimWrapper.xOffsetPercent)
     }
     else {
-      await skillAnimsDict[skill].animPlayer.play(this, battle, skillAnimsDict[skill].animType, casterEntity, targetEntity, damageDict, healDict, statusDict, buffsDict, deathArray)
+      await skillAnimsDict[skill].animPlayer.play(this, battle, skillAnimsDict[skill].animType, casterEntity, targetEntity, damageDict, healDict, statusDict, buffsDict, deathArray, skillAnimsDict[skill].xOffsetPercent)
     }
   }
 
@@ -73,12 +75,15 @@ export default class AnimationsHandler {
       else if(anim.key === entity.getName() + entity.getIndex() + "jump"){
         this.jumpAnimationDict[entity.getName() + entity.getIndex()] = false
       }
+      else if(anim.key === entity.getName() + entity.getIndex() + "jumpStart"){
+        this.jumpAnimationDict[entity.getName() + entity.getIndex()] = false
+      }
+      else if(anim.key === entity.getName() + entity.getIndex() + "jumpEnd"){
+        this.jumpAnimationDict[entity.getName() + entity.getIndex()] = false
+      }
       else if (anim.key === entity.getName() + entity.getIndex() + "run"){
         this.runAnimationDict[entity.getName() + entity.getIndex()] = false
       }
-      // else if (anim.key === entity.getName() + entity.getIndex() + "idle"){
-      //   this.idleAnimationDict[entity.getName() + entity.getIndex()] = false
-      // }
     });
   }
 
@@ -136,7 +141,6 @@ export default class AnimationsHandler {
 
   async playAnim(entity: IBattleEntity, animName: string){
     this.setAnimAndResetOtherAnimations(entity.getName(), entity.getIndex(), animName)
-    // console.log('playing anim', entity.getName(), entity.getIndex(), animName)
     entity.getSprite().anims.stop();
     entity.playAnim(animName)
   }
@@ -148,30 +152,38 @@ export default class AnimationsHandler {
     }
   }
 
-  async waitAndIdle(entity: IBattleEntity){
+  async waitAndPlayNonBlockingAnim(entity: IBattleEntity, animName: string){
     await this.waitForOtherAnimationsToFinish(entity)
     if(!entity.isDead()){
-      entity.playAnim("idle")
+      entity.playAnim(animName)
       this.resetAllAnimations(entity.getName(), entity.getIndex())
     }
   }
 
+  async waitAndIdle(entity: IBattleEntity){
+    this.waitAndPlayNonBlockingAnim(entity, "idle")
+  }
+
   async waitForHalfAnimation(entity: IBattleEntity){
     let totalFrames = entity.getSprite().anims.getTotalFrames()
-    let currentFrameIndex = entity.getSprite().anims.currentFrame?.index
+    await this.waitForSpecificFrameNumber(entity, Math.ceil(totalFrames / 2))
+  }
 
-    while(currentFrameIndex && currentFrameIndex <= totalFrames / 2){
-      // console.log("Waiting for half animation")
+  async waitForSpecificFrameNumber(entity: IBattleEntity, frameNumber: number){
+    let currentFrameIndex = entity.getSprite().anims.currentFrame?.index
+    console.log("Waiting for specific frame number" + frameNumber)
+
+    while(currentFrameIndex && currentFrameIndex <= frameNumber){
+      // console.log("Waiting for specific frame number")
       await new Promise(resolve => setTimeout(resolve, 5));
-      totalFrames = entity.getSprite().anims.getTotalFrames()
       currentFrameIndex = entity.getSprite().anims.currentFrame?.index
     }
   }
 
-  playSpellEffectOnEntity(entity: IBattleEntity, spellEffectName: string, scaleValue: number, frameRate: number){
+  playSpellEffectOnEntity(entity: IBattleEntity, spellEffectName: string, frameRate: number){
     let spellEffect = this.battle.battleScene.add.sprite(entity.getSprite().x, entity.getSprite().y, spellEffectName);
+    spellEffect.setDepth(2)
     spellEffect.setOrigin(0.5, 1);
-    // spellEffect.setScale(scaleValue)
     this.battle.battleScene.anims.create({
       key: spellEffectName + entity.getIndex(),
       frames: this.battle.battleScene.anims.generateFrameNumbers(spellEffectName),
@@ -185,6 +197,30 @@ export default class AnimationsHandler {
       this.spellAnimationDict[entity.getName() + entity.getIndex()] = false
     });
   }
+  playSpellEffectOnEntitiesCenter(entities: Array<IBattleEntity>, spellEffectName: string, frameRate: number){
+    let x = 0
+    let y = 0
+    entities.forEach(entity => {
+      x += entity.getSprite().x
+      y += entity.getSprite().y
+    });
+    x = x / entities.length
+    y = y / entities.length
+    let spellEffect = this.battle.battleScene.add.sprite(x, y, spellEffectName);
+    spellEffect.setDepth(2)
+    spellEffect.setOrigin(0.5, 1);
+    this.battle.battleScene.anims.create({
+      key: spellEffectName,
+      frames: this.battle.battleScene.anims.generateFrameNumbers(spellEffectName),
+      frameRate: frameRate,
+      repeat: 0
+    });
+    spellEffect.play(spellEffectName);
+    spellEffect.once('animationcomplete', () => {
+      spellEffect.destroy();
+    });
+  }
+  
 
   async createPlayAndWaitProjectile(targetEntity: IBattleEntity, casterEntity: IBattleEntity, animation: string){
     let {projectile, directionX} = this.createAndPlayProjectile(targetEntity, casterEntity, animation)

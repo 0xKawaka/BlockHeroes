@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x5388e791d17d2b6c196edabb8f09bf9e280f18fabe81dc9672f72b561d0729f"
-original_class_hash = "0x5388e791d17d2b6c196edabb8f09bf9e280f18fabe81dc9672f72b561d0729f"
+class_hash = "0x288c026dbb92eb9d3351ca2f8b4973c728c7a3777e9a6bc46424e29c5941805"
+original_class_hash = "0x288c026dbb92eb9d3351ca2f8b4973c728c7a3777e9a6bc46424e29c5941805"
 abi = "manifests/dev/base/abis/models/game-Account-29dd3dd7.json"
 tag = "game-Account"
 qualified_path = "game::models::account::account"
@@ -53,5 +53,10 @@ key = false
 
 [[members]]
 name = "heroesCount"
+type = "u32"
+key = false
+
+[[members]]
+name = "summonChests"
 type = "u32"
 key = false

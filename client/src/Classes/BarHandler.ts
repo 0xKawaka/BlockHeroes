@@ -5,10 +5,13 @@ export default class BarHandler {
   style: Phaser.GameObjects.Graphics
   rectangle: Phaser.GameObjects.Graphics
 
-  constructor(battleScene: Phaser.Scene, x:number, y:number, color:number, width:number, height: number) {
+  constructor(battleScene: Phaser.Scene, x:number, y:number, color:number, width:number, height: number, depth: number= 1) {
     this.width = width
     this.height = height
     this.bar = this.createBar(battleScene, x, y, color, width, height)
+    this.bar.setDepth(depth)
+    this.rectangle.setDepth(depth)
+    this.style.setDepth(depth)
   }
 
   createBar(battleScene: Phaser.Scene, x:number, y:number, color:number, width:number, height: number): Phaser.GameObjects.Graphics {

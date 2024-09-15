@@ -37,7 +37,7 @@ export default function Register({account, setAccountSelected,  setBlockchainAcc
     if(res) {
       console.log("Account created successfully")
     }
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 600));
     setIsRegistering(false);
     setAccountSelected(true);
   }

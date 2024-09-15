@@ -2,7 +2,7 @@ import RuneFactory from "../../Classes/Runes/RuneFactory";
 import { RuneInfos, RuneStatsDict } from "../../Types/apiTypes";
 import { Parser } from "../Parser";
 import RawEvent from "./RawEvent";
-import {eventHashesDict} from "./eventHash";
+import {eventHashes} from "./eventHash";
 import {NewBattleEvent, StartTurnEvent, SkillEvent, EndTurnEvent, EndBattleEvent, ExperienceGainEvent, LootEvent} from "./eventTypes";
 import { num, shortString, Contract } from "starknet";
 
@@ -29,40 +29,66 @@ export default class GameEventHandler {
 
   }
 
-  parseAndStore(events: any[]): void {
-    events.forEach((event: any) => {
-      const key = Object.keys(event)[0];
-      console.log("Eventkey", key)
-      if (key === "NewBattle") {
-        this.newBattleEvent = event["NewBattle"];
+  findNameFromeEventHashes(keys: string[]){
+    for (let i = 0; i < eventHashes.length; i++) {
+      if (eventHashes[i].keys.every((key: string) => keys.includes(key))) {
+        return eventHashes[i].name;
       }
-      else if (key === "StartTurn") {
+    }
+    return undefined;
+  }
+
+  retrieveKnownEvents(events: any[]) {
+    let knownEvents: Array<{name: string, data: any[]}> = [];
+    events.forEach((event: any) => {
+      let eventName = this.findNameFromeEventHashes(event.keys);
+      if (eventName) {
+        knownEvents.push({name: eventName, data: event.data});
+      }
+    });
+    return knownEvents;
+  }
+
+  parseAndStore(events: any[]): void {
+    let knownEvents = this.retrieveKnownEvents(events);
+    knownEvents.forEach((event: any) => {
+      // console.log("Eventkey", key)
+      if (event.name === "NewBattle") {
+        console.log("NewBattle")
+        this.parseAndStoreNewBattleEvent(event.data);
+      }
+      else if (event.name === "StartTurn") {
         this.parseAndStoreStartTurnEvent(event["StartTurn"]);
       }
-      else if (key === "Skill") {
+      else if (event.name === "Skill") {
         this.parseAndStoreSkillEvent(event["Skill"]);
       }
-      else if (key === "EndTurn") {
+      else if (event.name === "EndTurn") {
         this.parseAndStoreEndTurnEvent(event["EndTurn"]);
       }
-      else if (key === "EndBattle") {
+      else if (event.name === "EndBattle") {
         this.endBattleEvent = {owner: num.toHexString(event["EndBattle"].owner), hasPlayerWon: Boolean(Number(event["EndBattle"].playerHasWon))};
       }
-      else if (key === "ExperienceGain") {
+      else if (event.name === "ExperienceGain") {
         this.experienceGainEventArray.push({owner: num.toHexString(event["ExperienceGain"].owner), entityId: Number(event["ExperienceGain"].entityId), experienceGained: Number(event["ExperienceGain"].experienceGained), levelAfter: Number(event["ExperienceGain"].levelAfter), experienceAfter: Number(event["ExperienceGain"].experienceAfter)})
         // this.experienceGainEventArray.push({owner: num.toHexString(rawEvent.data[0]), entityId: Number(rawEvent.data[1]), experienceGained: Number(rawEvent.data[2]), levelAfter: Number(rawEvent.data[3]), experienceAfter: Number(rawEvent.data[4])})
       }
-      else if (key === "Loot") {
+      else if (event.name === "Loot") {
         this.lootEvent = {owner: num.toHexString(event["Loot"].owner), crystals: Number(event["Loot"].crystals)}
         // this.lootEvent = {owner: num.toHexString(rawEvent.data[0]), crystals: Number(rawEvent.data[1])}
       }
-      else if (key === "RuneMinted") {
+      else if (event.name === "RuneMinted") {
         this.runeMinted = RuneFactory.createRune(Parser.parseRune(event["RuneMinted"].rune), this.runesStatsDict)
       }
       else {
-        throw new Error('event ' + key + ' not found');
+        throw new Error('event ' + event.name + ' not found');
       }
     });
+  }
+
+  private parseAndStoreNewBattleEvent(data: any) {
+    // this.newBattleEvent = {owner: num.toHexString(data.owner), worldId: Number(data.worldId), battleId: Number(data.battleId)};
+    // this.newBattleEvent = {owner: num.toHexString(rawEvent.data[0]), worldId: Number(rawEvent.data[1]), battleId: Number(rawEvent.data[2])};
   }
 
   private parseAndStoreStartTurnEvent(event: any) {

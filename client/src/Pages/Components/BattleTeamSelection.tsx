@@ -3,28 +3,28 @@ import HeroMiniature from "./HeroMiniature"
 import portraitsDict from "../../assets/portraits/portraitsDict"
 import energyImg from "../../assets/icons/energy.png"
 import { useState, useEffect } from "react"
-import { GameAccount, HeroInfos } from "../../Types/apiTypes"
+import { HeroInfos } from "../../Types/apiTypes"
 import HeroesList from "./HeroesList"
 import ApiHandler from "../../Classes/IO/ApiHandler"
 import Skill from "../../Classes/Skill/Skill"
 import { create } from "domain"
 import SkillsHandler from "../../Classes/IO/SkillsHandler"
-import { Sender } from "../../Blockchain/Sender"
 import { Account } from "starknet"
 import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import StateChangesHandler from "../State/StateChangesHandler"
 import { Getter } from "../../Blockchain/Getter"
 import EnergyHandler from "../Classes/EnergyHandler"
+import { GameAccount } from "../../Types/toriiTypes"
+import { useDojo } from "../../dojo/useDojo"
 
 
 type BattleTeamSelectionProps = {
   account: Account,
-  energy: number,
+  gameAccount: GameAccount,
   worldId:number,
   battleId:number,
   enemiesNames: string[],
   enemiesLevels: number[],
-  // enemiesRanks: number[],
   energyCost: number,
   heroesList: Array<HeroInfos>
   selectedHeroesIds: number[],
@@ -34,9 +34,11 @@ type BattleTeamSelectionProps = {
   stateChangesHandler: StateChangesHandler
 }
 
-export default function BattleTeamSelection({account, energy, worldId, battleId, enemiesNames, enemiesLevels, energyCost, heroesList, selectedHeroesIds, eventHandler, setSelectedHeroesIds, setPhaserRunning, stateChangesHandler }: BattleTeamSelectionProps) {
+export default function BattleTeamSelection({account, gameAccount, worldId, battleId, enemiesNames, enemiesLevels, energyCost, heroesList, selectedHeroesIds, eventHandler, setSelectedHeroesIds, setPhaserRunning, stateChangesHandler }: BattleTeamSelectionProps) {
   const [isStartingBattle, setIsStartingBattle] =  useState<boolean>(false)
   const notSelectedHeroesList = heroesList.filter(hero => !selectedHeroesIds.includes(hero.id))
+
+  const {setup: {systemCalls: { startBattle }}} = useDojo();
 
   function handleHeroClick(heroId: number) {
     if(selectedHeroesIds.includes(heroId)){
@@ -47,27 +49,26 @@ export default function BattleTeamSelection({account, energy, worldId, battleId,
     }
   }
   async function handlePlayClick() {
-    // if(selectedHeroesIds.length == 0){
-    //   console.log("Can't start battle without heroes")
-    //   return;
-    // }
-    // if(energy < energyCost){
-    //   console.log("Not enough energy")
-    //   return;
-    // }
-    // setIsStartingBattle(true)
-    // eventHandler.reset()
-    // const isBattleStarted = await Sender.startBattle(localWallet, selectedHeroesIds, worldId, battleId, eventHandler);
-    // if(isBattleStarted) {
-    //   setIsStartingBattle(false)
-    //   setPhaserRunning(true)
-    //   const energyInfos = await Getter.getEnergyInfos(localWallet);
-    //   console.log("energyInfos: ", energyInfos)
-    //   stateChangesHandler.updateEnergyHandler(energyInfos.energy, energyInfos.lastEnergyUpdateTimestamp)
-    // }
-    // else {
-    //   setIsStartingBattle(false)
-    // }
+    if(selectedHeroesIds.length == 0){
+      console.log("Can't start battle without heroes")
+      return;
+    }
+    if(gameAccount.energy < energyCost){
+      console.log("Not enough energy")
+      return;
+    }
+    setIsStartingBattle(true)
+    eventHandler.reset()
+    const isBattleStarted = await startBattle(account, selectedHeroesIds, worldId, battleId, eventHandler);
+    if(isBattleStarted) {
+      setIsStartingBattle(false)
+      setPhaserRunning(true)
+      console.log("accout energy: ", gameAccount.energy, " ", gameAccount.lastEnergyUpdateTimestamp)
+      stateChangesHandler.updateEnergyHandler(gameAccount.energy, gameAccount.lastEnergyUpdateTimestamp)
+    }
+    else {
+      setIsStartingBattle(false)
+    }
   }
 
   return(
@@ -104,7 +105,7 @@ export default function BattleTeamSelection({account, energy, worldId, battleId,
       </div>
       {!isStartingBattle && 
       <div className="BattleTeamSelectionPlayButton" onClick={handlePlayClick}>
-        {energy < energyCost ?
+        {gameAccount.energy < energyCost ?
           <div className="BattleTeamSelectionPlayButtonNotEnoughEnergyText">Not enough energy</div>
           :
           <div className="BattleTeamSelectionPlayButtonText">Play</div>
@@ -121,7 +122,7 @@ export default function BattleTeamSelection({account, energy, worldId, battleId,
       </div>
       }
     </div>
-    {/* <HeroesList heroesList={notSelectedHeroesList} baseHeroesNotOwned={[]} handleHeroClick={handleHeroClick} heroesWidth="7.5rem"/>  */}
+    <HeroesList heroesList={notSelectedHeroesList} baseHeroesNotOwned={[]} handleHeroClick={handleHeroClick} heroesWidth="7.5rem"/> 
   </div>
   )
 }

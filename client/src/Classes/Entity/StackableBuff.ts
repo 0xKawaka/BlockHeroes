@@ -30,7 +30,7 @@ export default class StackableBuff{
   }
   createImage(position:{image: {x: number, y: number}, text: {x: number, y: number}}, duration: number, battleScene: BattleScene){
     this.visibleBuffs.push(true)
-    this.buffs.push(new BuffDisplay("buff_" + this.name, battleScene, this.scale, this.textScale, true, position, duration))
+    this.buffs.push(new BuffDisplay("buff_" + this.name, battleScene, this.scale, this.textScale, 3, true, position, duration))
 
   }
   setExistingImage(index:number, position:{image: {x: number, y: number}, text: {x: number, y: number}}, duration: number) {

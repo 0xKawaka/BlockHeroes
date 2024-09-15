@@ -1,4 +1,4 @@
-import { BattleInfos, GameAccount, HeroInfos, HeroStats, HeroesStatsDict, RunesList } from "../../Types/apiTypes"
+import { BattleInfos, HeroInfos, HeroStats, HeroesStatsDict, RunesList } from "../../Types/apiTypes"
 import BattleOverview from "./BattleOverview"
 import './BattlesSelect.css'
 import { useEffect, useState } from "react"
@@ -13,10 +13,11 @@ import { Account } from "starknet"
 import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import StateChangesHandler from "../State/StateChangesHandler"
 import EnergyHandler from "../Classes/EnergyHandler"
+import { GameAccount } from "../../Types/toriiTypes"
 
 type BattleSelectProps = {
   account: Account,
-  energy: number
+  gameAccount: GameAccount,
   worldId: number
   battlesList: Array<BattleInfos>
   heroesList: Array<HeroInfos>
@@ -36,7 +37,7 @@ function computeTotalStats(baseeStats: HeroStats, bonusStats: HeroStats): HeroSt
   }
 }
 
-function BattlesSelect ({energy, worldId, battlesList, heroesList, runesList, account, setWorldId, stateChangesHandler} : BattleSelectProps) {
+function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesList, account, setWorldId, stateChangesHandler} : BattleSelectProps) {
   const [selectedBattleIndex, setSelectedBattleIndex] = useState<number>(-1)
   const [selectedHeroesIds, setSelectedHeroesIds] = useState<number[]>([])
   const [heroesBeforeExperienceGained, setHeroesBeforeExperienceGained] = useState<HeroInfos[]>([])
@@ -100,7 +101,7 @@ function BattlesSelect ({energy, worldId, battlesList, heroesList, runesList, ac
         <div className="ArrowBackContainer">
           <img className="ArrowBack" src={ArrowBack} onClick={() => setSelectedBattleIndex(-1)}/>
         </div>
-        <BattleTeamSelection account={account} energy={energy} worldId={worldId} battleId={selectedBattleIndex} enemiesNames={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.name})} enemiesLevels={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.level})} energyCost={battlesList[selectedBattleIndex].energyCost} heroesList={heroesList} selectedHeroesIds={selectedHeroesIds} eventHandler={eventHandler!} setSelectedHeroesIds={setSelectedHeroesIds} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler}/>
+        <BattleTeamSelection account={account} gameAccount={gameAccount} worldId={worldId} battleId={selectedBattleIndex} enemiesNames={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.name})} enemiesLevels={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.level})} energyCost={battlesList[selectedBattleIndex].energyCost} heroesList={heroesList} selectedHeroesIds={selectedHeroesIds} eventHandler={eventHandler!} setSelectedHeroesIds={setSelectedHeroesIds} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler}/>
       </div>
     }
     {phaserRunning &&

@@ -7,7 +7,7 @@ export default class BitmapTextAnim extends Phaser.GameObjects.BitmapText {
   notIncreaseDistanceWhenCount: number
   increaseDistanceCount: number
 
-  constructor(scene: Phaser.Scene, distance: number, scaleValue: number, x: number, y: number, text: string, font: string, color:number) {
+  constructor(scene: Phaser.Scene, distance: number, scaleValue: number, x: number, y: number, text: string, font: string, color:number, depth: number= 4) {
     super(scene, x, y, font, text)
     this.setOrigin(0.5, 0.5)
     this.distance = distance
@@ -19,6 +19,7 @@ export default class BitmapTextAnim extends Phaser.GameObjects.BitmapText {
     this.increaseDistanceCount = 0
     this.setTint(color)
     scene.add.existing(this)
+    this.setDepth(depth)
     scene.events.on('update', this.update, this)
   }
 

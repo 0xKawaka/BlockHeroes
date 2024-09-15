@@ -3,12 +3,13 @@ import Battle from "../../Battle";
 import IBattleEntity from "../../Entity/IBattleEntity";
 import ISkillAnimation from "./ISkillAnimation";
 import SpriteWrapper from "../../Animations/SpriteWrapper";
+import { spellAnimDict } from "../../../GameDatas/Skills/skills";
 
-export default class MoveAndCast implements ISkillAnimation {
+export default class MoveAndCastEffect implements ISkillAnimation {
   moveType: string;
   returnMoveType: string;
 
-  constructor(moveType: string, returnMoveType: string){
+  constructor(moveType: string, returnMoveType: string) {
     this.moveType = moveType
     this.returnMoveType = returnMoveType
   }
@@ -30,13 +31,21 @@ export default class MoveAndCast implements ISkillAnimation {
     }
     else {
       await animationHandler.waitAndPlayAnim(casterEntity, this.moveType)
-      
       await animationHandler.moveObjectToPosition(casterSprite, destination.x, destination.y, travelTime)
     }
 
     await animationHandler.playAnim(casterEntity, animation)
+
     // await animationHandler.waitForOtherAnimationsToFinish(casterEntity)
-    await animationHandler.waitForHalfAnimation(casterEntity)
+    console.log("waitForSpecificFrameNumber")
+    await animationHandler.waitForSpecificFrameNumber(casterEntity, spellAnimDict[animation + casterEntity.getName()].frameToCast)
+    console.log("waitForSpecificFrameNumber")
+
+    animationHandler.playSpellEffectOnEntity(targetEntity,
+      spellAnimDict[animation + casterEntity.getName()].name,
+      spellAnimDict[animation + casterEntity.getName()].framerate,
+    )
+    // await animationHandler.waitForHalfAnimation(casterEntity)
     battle.applyDamages(damageDict)
     battle.applyHeals(healDict)
     battle.applyBuffsAndStatus(buffsDict, statusDict)

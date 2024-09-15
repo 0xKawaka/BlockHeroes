@@ -4,9 +4,9 @@ export default class HealthBar{
   healthBar: BarHandler
   backgroundBar: BarHandler
 
-  constructor(battleScene: Phaser.Scene, x:number, y:number, color:number, backgroundColor: number, width:number, height: number) {
-    this.backgroundBar = new BarHandler(battleScene, x, y, backgroundColor, width, height)
-    this.healthBar = new BarHandler(battleScene, x, y, color, width, height)
+  constructor(battleScene: Phaser.Scene, x:number, y:number, color:number, backgroundColor: number, width:number, height: number, depth: number= 1) {
+    this.backgroundBar = new BarHandler(battleScene, x, y, backgroundColor, width, height, depth)
+    this.healthBar = new BarHandler(battleScene, x, y, color, width, height, depth)
   }
 
   setBarPercentageValue(percentage: number) {

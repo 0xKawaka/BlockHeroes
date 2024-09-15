@@ -1,12 +1,37 @@
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 // import { useComponentValue } from "@dojoengine/react";
-import { getComponentValue, type Entity } from "@dojoengine/recs";
+import { getComponentValue, type Entity, runQuery, Has } from "@dojoengine/recs";
 import { useDojo } from "./useDojo";
-import { Hero, Rune, GameAccount } from "../Types/toriiTypes";
+import { Hero, Rune, GameAccount, ArenaAccount } from "../Types/toriiTypes";
 import { Parser } from "../Blockchain/Parser";
 import hexToString from "../Pages/utils/hexToString";
+import { ArenaFullAccount } from "../Types/customTypes";
 
 export default class ToriiGetter {
+
+  static getAllArenaUsernames(entities: Entity[], Account: any): {[key: string]: string} {  
+    // const {setup: {clientComponents: {Account}}} = useDojo();
+    let usernamesByOwner: {[key: string]: string} = {};
+    for(let i = 0; i < entities.length; i++){
+      const account = getComponentValue(Account, entities[i]);
+      if(account){
+        usernamesByOwner[account.owner.toString()] = hexToString(account.username);
+      }
+    }
+    return usernamesByOwner;
+  }
+
+  static getAllArenaAccounts(entities: Entity[], ArenaAccount: any): ArenaAccount[] {  
+    // const {setup: {clientComponents: {ArenaAccount}}} = useDojo();
+    let accounts: ArenaAccount[]= [];
+    for(let i = 0; i < entities.length; i++){
+      const account = getComponentValue(ArenaAccount, entities[i]);
+      if(account){
+        accounts.push({owner: account.owner.toString(), rank: account.rank, lastClaimedRewards: account.lastClaimedRewards, teamSize: account.teamSize});
+      }
+    }
+    return accounts;
+  }
 
   static getArenaDefenseHeroesIndexes(accountAdrs: string, teamSize: number, ArenaTeam: any): number[] {
     // const {setup: {clientComponents: {ArenaTeam}}} = useDojo();
@@ -31,7 +56,7 @@ export default class ToriiGetter {
       ]) as Entity; 
       const account = getComponentValue(Account, entityId);
       if(account){
-        accounts[accountAdrsArray[i]] = {owner: BigInt(accountAdrsArray[i]), username: hexToString(account.username), energy: account.energy, pvpEnergy: account.pvpEnergy, crystals: account.crystals, gems: account.gems, lastEnergyUpdateTimestamp: account.lastEnergyUpdateTimestamp, lastPvpEnergyUpdateTimestamp: account.lastPvpEnergyUpdateTimestamp, runesCount: account.runesCount, heroesCount: account.heroesCount};
+        accounts[accountAdrsArray[i]] = {owner: BigInt(accountAdrsArray[i]), username: hexToString(account.username), energy: account.energy, pvpEnergy: account.pvpEnergy, crystals: account.crystals, gems: account.gems, lastEnergyUpdateTimestamp: account.lastEnergyUpdateTimestamp, lastPvpEnergyUpdateTimestamp: account.lastPvpEnergyUpdateTimestamp, runesCount: account.runesCount, heroesCount: account.heroesCount, summonChests: account.summonChests};
       }
     }
     return accounts;
@@ -44,9 +69,9 @@ export default class ToriiGetter {
     ]) as Entity; 
     const account = getComponentValue(Account, entityId);
     if(account){
-      return {owner: BigInt(accountAdrs), username: hexToString(account.username), energy: account.energy, pvpEnergy: account.pvpEnergy, crystals: account.crystals, gems: account.gems, lastEnergyUpdateTimestamp: account.lastEnergyUpdateTimestamp, lastPvpEnergyUpdateTimestamp: account.lastPvpEnergyUpdateTimestamp, runesCount: account.runesCount, heroesCount: account.heroesCount};
+      return {owner: BigInt(accountAdrs), username: hexToString(account.username), energy: account.energy, pvpEnergy: account.pvpEnergy, crystals: account.crystals, gems: account.gems, lastEnergyUpdateTimestamp: account.lastEnergyUpdateTimestamp, lastPvpEnergyUpdateTimestamp: account.lastPvpEnergyUpdateTimestamp, runesCount: account.runesCount, heroesCount: account.heroesCount, summonChests: account.summonChests};
     } 
-    return {owner: BigInt(accountAdrs), username: "", energy: 0, pvpEnergy: 0, crystals: 0, gems: 0, lastEnergyUpdateTimestamp: 0, lastPvpEnergyUpdateTimestamp: 0, runesCount: 0, heroesCount: 0};
+    return {owner: BigInt(accountAdrs), username: "", energy: 0, pvpEnergy: 0, crystals: 0, gems: 0, lastEnergyUpdateTimestamp: 0, lastPvpEnergyUpdateTimestamp: 0, runesCount: 0, heroesCount: 0, summonChests: 0};
   }
 
   static getAllRunes(accountAdrs: string, runesCount: number, Runes: any): Rune[] {
@@ -81,5 +106,58 @@ export default class ToriiGetter {
       }
     }
     return heroes;
+  }
+
+  static loadGlobalPvpInfos(ArenaAccount: any, Heroes: any, ArenaTeam: any, Account: any): ArenaFullAccount[] {
+    // const {setup: {clientComponents: { ArenaAccount, Heroes, ArenaTeam, Account }}} = useDojo();
+    const entitiesSet = runQuery([Has(ArenaAccount)]);
+    const entitiesArray = Array.from(entitiesSet);
+    const allArenaAccounts = ToriiGetter.getAllArenaAccounts(entitiesArray, ArenaAccount);
+    const usernamesByOwner = ToriiGetter.getAllArenaUsernames(entitiesArray, Account);
+
+    let entitiesByOwner: {[key:string]: Entity[]} = {};
+    for(let arenaAccount of allArenaAccounts){  
+      if(entitiesByOwner[arenaAccount.owner] === undefined){
+        entitiesByOwner[arenaAccount.owner] = [];
+      }
+      else {
+        throw new Error("loadGlobalPvpInfos error: multiple accounts for same owner");
+      }
+      for(let i= 0; i < arenaAccount.teamSize; i++){
+        const accountEntityId = getEntityIdFromKeys([
+          BigInt(arenaAccount.owner), BigInt(i)
+        ]) as Entity;
+        entitiesByOwner[arenaAccount.owner.toString()].push(accountEntityId);
+      }
+    }
+    // console.log("entitiesByOwner", entitiesByOwner);
+    let arenaDefenseHeroesIndexesByOwner: {[key:string]: number[]} = {};
+    for(let arenaAccount of allArenaAccounts){
+      let arenaDefenseHeroes = ToriiGetter.getArenaDefenseHeroesIndexes(arenaAccount.owner, arenaAccount.teamSize, ArenaTeam);
+      arenaDefenseHeroesIndexesByOwner[arenaAccount.owner] = arenaDefenseHeroes;
+    }
+    // console.log("arenaDefenseHeroesIndexesByOwner", arenaDefenseHeroesIndexesByOwner);
+    let arenaDefenseHeroesByOwner: {[key:string]: Hero[]} = {};
+    for(let owner in arenaDefenseHeroesIndexesByOwner){
+      let heroes: Hero[] = [];
+      for(let heroIndex of arenaDefenseHeroesIndexesByOwner[owner]){
+        const heroEntityId = getEntityIdFromKeys([
+          BigInt(owner), BigInt(heroIndex)
+        ]) as Entity;
+        const hero = getComponentValue(Heroes, heroEntityId);
+        if(hero){
+          let runeIds =  Parser.parseRuneIds(hero.hero.runes);
+          let spots = Parser.parseSpots(hero.hero.runes);
+          heroes.push({id: hero.hero.id, name: hexToString(hero.hero.name), level: hero.hero.level, experience: hero.hero.experience, rank: hero.hero.rank, runeIds: runeIds, spots: spots});
+        }
+      }
+      arenaDefenseHeroesByOwner[owner] = heroes;
+    }
+    let arenaFullAccounts: ArenaFullAccount[] = [];
+    for(let arenaAccount of allArenaAccounts){
+      arenaFullAccounts.push({owner: arenaAccount.owner, username: usernamesByOwner[arenaAccount.owner], rank: arenaAccount.rank, team: arenaDefenseHeroesByOwner[arenaAccount.owner]});
+    }
+    arenaFullAccounts.sort((a, b) => a.rank - b.rank);
+    return arenaFullAccounts;
   }
 }

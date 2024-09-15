@@ -6,17 +6,20 @@ import { useEffect, useState } from "react"
 import HeroMiniature from "./HeroMiniature"
 import portraitsDict from "../../assets/portraits/portraitsDict"
 import { useDojo } from "../../dojo/useDojo"
+import { set } from "mobx"
 
 type PvpDefenseProps = {
   account: Account,
   rank: number,
   heroesList: Array<HeroInfos>,
   defenseArenaHeroesIds: number[],
-  loadPvpInfos(): void,
+  loadPvpInfos(address: string): void
   setDefenseArenaHeroesIds: React.Dispatch<React.SetStateAction<number[]>>
+  setArenaAccount: React.Dispatch<React.SetStateAction<{rank: number, lastClaimedRewards: number}>>
+  updateGlobalPvpInfos(): void
 }
 
-export default function PvpDefense({account, rank, heroesList, defenseArenaHeroesIds, loadPvpInfos, setDefenseArenaHeroesIds}: PvpDefenseProps) {
+export default function PvpDefense({account, rank, heroesList, defenseArenaHeroesIds, loadPvpInfos, setDefenseArenaHeroesIds, setArenaAccount, updateGlobalPvpInfos}: PvpDefenseProps) {
   const [selectedHeroesIds, setSelectedHeroesIds] = useState<number[]>(defenseArenaHeroesIds)
   const [notSelectedHeroesList, setNotSelectedHeroesList] = useState<HeroInfos[]>(heroesList.filter(hero => !selectedHeroesIds.includes(hero.id)))
   const [isSettingDefenseTeam, setIsSettingDefenseTeam] = useState<boolean>(false)
@@ -36,23 +39,33 @@ export default function PvpDefense({account, rank, heroesList, defenseArenaHeroe
     }
   }
 
+  function updatePvpInfos() {
+    new Promise(resolve => setTimeout(resolve, 600)).then(() => {
+      loadPvpInfos(account.address);
+      updateGlobalPvpInfos();
+    })
+  }
+
   async function handleSetTeamClick() {
     if(selectedHeroesIds.length == 0){
       console.log("Can't set defense team without heroes")
       return;
     }
     setIsSettingDefenseTeam(true)
-    let res = false;
     if(rank == 0) {
-      console.log("initPvp", account.address)
-      res = await initPvp(account, selectedHeroesIds)
-      await new Promise(resolve => setTimeout(resolve, 500));
-      loadPvpInfos()
+      // console.log("initPvp", account.address)
+      let res = await initPvp(account, selectedHeroesIds)
+      if(res.rank != 0){
+        setDefenseArenaHeroesIds(res.defenseHeroesIds)
+        setArenaAccount({rank: res.rank, lastClaimedRewards: 0})
+        updatePvpInfos()
+      }
     }
     else {
-      res = await setPvpTeam(account, selectedHeroesIds)
+      let res = await setPvpTeam(account, selectedHeroesIds)
       if(res) {
         setDefenseArenaHeroesIds(selectedHeroesIds)
+        updatePvpInfos()
       }
     }
     setIsSettingDefenseTeam(false)

@@ -12,6 +12,17 @@
   justify-content: center;
   gap: 2rem;
 }
+
+.SummonChestsImageAndCount {
+  position: relative;
+}
+.SummonChestsCount {
+  font-family: RetroGaming;
+  font-size: 5.5rem;
+  position: absolute;
+  right: 0;
+  top: 52%;
+}
 .summonResultContainer {
   display: flex;
   flex-direction: column;

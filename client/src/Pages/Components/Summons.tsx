@@ -14,14 +14,18 @@ import { useDojo } from "../../dojo/useDojo"
 import { BaseHeroInfos, HeroesFactory } from '../../Classes/Heroes/HeroesFactory'
 import { HeroInfos } from "../../Types/apiTypes"
 import { Account } from "starknet"
+import { GameAccount } from "../../Types/toriiTypes"
 
 type SummonsProps = {
   account: Account,
+  gameAccount: GameAccount,
+  setGameAccount: React.Dispatch<React.SetStateAction<GameAccount>>
   setShowSummons: React.Dispatch<React.SetStateAction<boolean>>
   handleNewHeroEvent: (hero: HeroInfos) => void
 }
 
-export default function Summons({account, setShowSummons, handleNewHeroEvent }: SummonsProps) {
+export default function Summons({account, gameAccount, setGameAccount, setShowSummons, handleNewHeroEvent }: SummonsProps) {
+  console.log("summonChests", gameAccount.summonChests)
   const [isSummoning, setIsSummoning] = useState(false);
   const [showSummongAnimation, setShowSummonAnimation] = useState(false);
   const [showSummonResult, setShowSummonResult] = useState(false);
@@ -30,6 +34,7 @@ export default function Summons({account, setShowSummons, handleNewHeroEvent }: 
   const {setup: {systemCalls: { mintHero }}} = useDojo();
 
   async function handleSummon() {
+    setIsSummoning(true);
     let animationDone = false;
     setShowSummonResult(false);
     setHeroSummoned(undefined);
@@ -41,7 +46,6 @@ export default function Summons({account, setShowSummons, handleNewHeroEvent }: 
       animationDone = true;
     });
 
-    setIsSummoning(true);
     const {id, name} = await mintHero(account);
     let hero = HeroesFactory.createSummonedHero(id, name.toString());
     if(!hero)
@@ -50,6 +54,7 @@ export default function Summons({account, setShowSummons, handleNewHeroEvent }: 
     while(!animationDone){
       await new Promise(r => setTimeout(r, 100));
     }
+    setGameAccount({...gameAccount, summonChests: gameAccount.summonChests - 1});
     setShowSummonAnimation(false);
     setIsSummoning(false);
     handleNewHeroEvent(hero);
@@ -65,16 +70,14 @@ export default function Summons({account, setShowSummons, handleNewHeroEvent }: 
           10 summons
         </div> */}
         <div className="SummonImageAndButton">
-          {!showSummongAnimation &&
-            <img key={"SummonChest"} className="SummonImage" src={SummonChest} />
-          }
-          {showSummongAnimation &&
-            <img key={"SummonChest"} className="SummonImage" src={SummonChestGif} />
-          }
+          <div className="SummonChestsImageAndCount">
+            <img key={"SummonChest"} className="SummonImage" src={showSummongAnimation ? SummonChestGif : SummonChest} />
+            <div className="SummonChestsCount">x{gameAccount.summonChests}</div>
+          </div>
           {isSummoning &&
             <div className="SummonButton">Summoning ...</div>
           }
-          {!isSummoning &&
+          {!isSummoning && gameAccount.summonChests > 0 &&
             <div className="SummonButton" onClick={handleSummon}>Summon</div>
           }
         </div>

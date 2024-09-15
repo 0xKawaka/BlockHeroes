@@ -27,6 +27,7 @@ pub struct Account {
     pub lastPvpEnergyUpdateTimestamp: u64,
     pub runesCount: u32,
     pub heroesCount: u32,
+    pub summonChests: u32,
 }
 
 const maxEnergy: u16 = 5;
@@ -44,6 +45,7 @@ fn new(username: felt252, owner: ContractAddress) -> Account {
         lastPvpEnergyUpdateTimestamp: get_block_timestamp(),
         runesCount: 0,
         heroesCount: 0,
+        summonChests: 2,
     }
 }
 

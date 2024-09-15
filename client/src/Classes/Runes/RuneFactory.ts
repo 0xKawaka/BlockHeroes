@@ -1,7 +1,6 @@
 import { RuneBonusEvent } from "../../Blockchain/event/eventTypes";
 import { RuneInfos, RuneStatsDict } from "../../Types/apiTypes";
 import { BlockchainRune } from "../../Types/blockchainTypes";
-import { Rune } from "../../Types/toriiTypes";
 
 export default abstract class RuneFactory {
 
@@ -16,7 +15,7 @@ export default abstract class RuneFactory {
     return rune;
   }
 
-  static createRunes(blockchainRunes: Array<Rune>, runeStatsDict: RuneStatsDict): Array<RuneInfos> {
+  static createRunes(blockchainRunes: Array<BlockchainRune>, runeStatsDict: RuneStatsDict): Array<RuneInfos> {
     let runes: Array<RuneInfos> = [];
     blockchainRunes.forEach((blockchainRune) => {
       runes.push(this.createRune(blockchainRune, runeStatsDict));
@@ -77,9 +76,10 @@ export default abstract class RuneFactory {
   }
 
   static computeRuneBonusValue(statistic: string, isPercent: boolean, runeStatsDict: RuneStatsDict) {
+    let lowerCaseStat = statistic.toLowerCase();
     if(isPercent) 
-      return runeStatsDict.bonus.common[statistic].percent
+      return runeStatsDict.bonus.common[lowerCaseStat].percent
     else 
-      return runeStatsDict.bonus.common[statistic].flat
+      return runeStatsDict.bonus.common[lowerCaseStat].flat
   }
 }

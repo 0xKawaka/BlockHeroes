@@ -2,7 +2,6 @@ import StatsModifier from "../Statistic/StatsModifier";
 import Entity from "./Entity";
 import Turnbar from "./Turnbar";
 import IBattleEntity from "./IBattleEntity";
-import BarHandler from "../BarHandler";
 import HealthBar from "./HealthBar";
 import BattleScene from "../../Scenes/BattleScene";
 import Battle from "../Battle";
@@ -11,14 +10,12 @@ import SpriteWrapper from "../Animations/SpriteWrapper";
 import AnimationsHandler from "../Animations/AnimationsHandler";
 import ISkillAnimation from "../Skill/Animations/ISkillAnimation";
 import SkillTooltip from "./SkillTooltip";
-import ImgBar from "./ImgBar";
 import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
 import UIScene from "../../Scenes/UIScene";
 
 
 export default class BattleEntityAlly implements IBattleEntity {
   battleEntity: IBattleEntity
-  // selectedBar: BarHandler
   skillImageByName: {[key: string]: Phaser.GameObjects.Image}
   skillSelectedImageByName: {[key: string]: Phaser.GameObjects.Image}
   skillScale: number
@@ -75,7 +72,7 @@ export default class BattleEntityAlly implements IBattleEntity {
     if(!this.battleEntity.isDead() && !this.battleEntity.isStunned()) {
       battle.battleScene.battle.hasSelectedTarget = false
       // this.selectedBar.showBar()
-      this.changeOutlineBarsColor(0xc9cb8d, 1)
+      this.setOutlineBarsColor(0xc9cb8d, 1)
       this.showSkills()
     }
     else if (this.battleEntity.isStunned()){
@@ -90,10 +87,6 @@ export default class BattleEntityAlly implements IBattleEntity {
     }
   }
 
-  changeOutlineBarsColor(color: number, alpha: number): void {
-    this.battleEntity.setOutlineBarsColor(color, alpha)
-  }
-
   async waitDamageAndHealAnimsDone(): Promise<void> {
     await this.battleEntity.waitDamageAndHealAnimsDone()
   }
@@ -101,7 +94,7 @@ export default class BattleEntityAlly implements IBattleEntity {
   endSkillSelection(): void {
     this.hideSkills()
     // this.selectedBar.hideBar()
-    this.changeOutlineBarsColor(0x000000, 1)
+    this.setOutlineBarsColor(0x000000, 1)
     this.resetSkillSelection()
   }
   endTurn(): void {
@@ -178,6 +171,7 @@ export default class BattleEntityAlly implements IBattleEntity {
     this.skillImageByName[name].setName("skill_" + name + "_" + this.battleEntity.getIndex().toString())
     this.skillImageByName[name].setVisible(false)
     this.skillImageByName[name].setInteractive()
+    this.skillImageByName[name].setDepth(6)
 
     this.skillSelectedImageByName[name] = battleScene.add.image(x, y, "skillSelected")
     // this.skillSelectedImageByName[name].setScale(this.skillScale)
@@ -262,7 +256,10 @@ export default class BattleEntityAlly implements IBattleEntity {
     this.battleEntity.setOutlineBarsColor(color, alpha)
   }
   getFrontEntityX(): number {
-    return this.battleEntity.getSprite().getPlaceholderX() + this.battleEntity.getSprite().getWidth() / 1.5
+    return this.battleEntity.getSprite().getPlaceholderX() + this.battleEntity.getSprite().getWidth() / 1.4
+  }
+  getFrontEntityXWithOffset(offset: number): number {
+    return this.getFrontEntityX() + offset
   }
 
   getEntity(): Entity {

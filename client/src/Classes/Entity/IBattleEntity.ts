@@ -6,7 +6,6 @@ import Battle from "../Battle";
 import SpriteWrapper from "../Animations/SpriteWrapper";
 import AnimationsHandler from "../Animations/AnimationsHandler";
 import ISkillAnimation from "../Skill/Animations/ISkillAnimation";
-import ImgBar from "./ImgBar";
 import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
 
 export default interface IBattleEntity {
@@ -28,6 +27,7 @@ export default interface IBattleEntity {
   // getSkillAnim(skillName: string): ISkillAnimation
   setOutlineBarsColor(color: number, alpha: number): void
   getFrontEntityX(): number
+  getFrontEntityXWithOffset(offset: number): number
   getEntity(): Entity
   getIndex(): number
   getBattleSpeed(): number

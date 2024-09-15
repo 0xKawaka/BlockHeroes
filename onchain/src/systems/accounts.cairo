@@ -8,7 +8,6 @@ trait IAccounts {
     fn unequipRune(world: IWorldDispatcher, accountAdrs: ContractAddress, runeId: u32);
     fn upgradeRune(world: IWorldDispatcher, accountAdrs: ContractAddress, runeId: u32);
     fn mintHero(world: IWorldDispatcher, accountAdrs: ContractAddress);
-    fn mintHeroAdmin(world: IWorldDispatcher, accountAdrs: ContractAddress, name: felt252, level: u16, rank: u16);
     fn mintRune(world: IWorldDispatcher, accountAdrs: ContractAddress);
     fn createAccount(world: IWorldDispatcher, username: felt252, accountAdrs: ContractAddress);
     fn addExperienceToHeroId(world: IWorldDispatcher, accountAdrs: ContractAddress, heroId: u32, experience: u32);
@@ -94,20 +93,15 @@ mod Accounts {
         }
         fn mintHero(world: IWorldDispatcher, accountAdrs: ContractAddress) {
             let mut acc = Self::getAccount(world, accountAdrs);
-            let heroesPossible: Array<felt252> = array!['priest', 'assassin', 'knight', 'hunter'];
+            assert(acc.summonChests > 0, 'No summon chests');
+            acc.summonChests -= 1;
+            let heroesPossible: Array<felt252> = array!['assassin', 'knight', 'priest', 'hunter', 'diana', 'elric', 'nereus', 'rex', 'celeste', 'oakheart', 'sylvara', 'bane', 'ember', 'molten'];
             let randIndex = rand32(get_block_timestamp(), heroesPossible.len());
             let heroName = *heroesPossible[randIndex];
             set!(world,(Heroes {owner: accountAdrs, index: acc.heroesCount, hero: hero::new(acc.heroesCount, heroName, 1, 1)}));
             acc.heroesCount += 1;
             set!(world, (acc));
             emit!(world, HeroMinted {owner: accountAdrs, id: acc.heroesCount - 1, name: heroName})
-        }
-        fn mintHeroAdmin(world: IWorldDispatcher, accountAdrs: ContractAddress, name: felt252, level: u16, rank: u16) {
-            let mut acc = Self::getAccount(world, accountAdrs);
-            set!(world, Heroes {owner: accountAdrs, index: acc.heroesCount, hero: hero::new(acc.heroesCount, name, level, rank)});
-            acc.heroesCount += 1;
-            set!(world, (acc));
-            emit!(world, HeroMinted {owner: accountAdrs, id: acc.heroesCount - 1, name: name})
         }
         fn mintRune(world: IWorldDispatcher, accountAdrs: ContractAddress) {
             let mut acc = Self::getAccount(world, accountAdrs);
@@ -236,7 +230,7 @@ mod Accounts {
         }
         fn hasAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) {
             let acc = get!(world, accountAdrs, (Account));
-            assert(acc.owner == accountAdrs, 'Account not found');
+            assert(acc.username != 0x0, 'Account not found');
         }
         fn isOwnerOfHeroes(world: IWorldDispatcher, accountAdrs: ContractAddress, heroesIndexes: Span<u32>) -> bool {
             let heroesCount = get!(world, accountAdrs, (Account)).heroesCount;

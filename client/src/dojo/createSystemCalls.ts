@@ -13,7 +13,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import type { IWorld } from "./typescript/contracts.gen";
 import stringToFelt252 from "../Pages/utils/stringToFelt252";
 import EventHandler from "../Blockchain/event/EventHandler";
-import { Type,  } from "@dojoengine/recs";
+import GameEventHandler from "../Blockchain/event/GameEventHandler";
 // import { Direction } from "./typescript/models.gen";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
@@ -105,7 +105,6 @@ export function createSystemCalls(
                 retryInterval: 200,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
-            console.log(res);
             let crystalCost;
             let bonus;
 
@@ -143,20 +142,25 @@ export function createSystemCalls(
         }
     }
 
-    async function initPvp(account: Account, heroesIds: number[]): Promise<boolean> {
+    async function initPvp(account: Account, heroesIds: number[]): Promise<{rank: number, defenseHeroesIds: number[]}> {
         try {
             let txRes = await client.Game.initPvp({
                 account,
                 heroesIds,
             });
-            await account.waitForTransaction(txRes.transaction_hash, {
+            let res: any = await account.waitForTransaction(txRes.transaction_hash, {
                 retryInterval: 200,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
-            return true;
+            let defenseHeroesIds = [];
+            let heroesCount = Number(res.events[res.events.length - 1].data[2]);
+            for(let i = 0; i < heroesCount; i++) {
+                defenseHeroesIds.push(Number(res.events[res.events.length - 1].data[3 + i]));
+            }
+            return {rank: Number(res.events[res.events.length - 1].data[1]), defenseHeroesIds: defenseHeroesIds};
         } catch (e) {
             console.log(e);
-            return false;
+            return {rank: 0, defenseHeroesIds: []};
         }
     }
 
@@ -177,6 +181,28 @@ export function createSystemCalls(
         }
     }
 
+    async function startBattle(account: Account, heroesIds: number[], map: number, level: number, eventHandler: GameEventHandler): Promise<boolean> {
+        try {
+            let txRes = await client.Game.startBattle({
+                account,
+                heroesIds,
+                map,
+                level,
+            });
+            let res: any = await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 200,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            console.log(res);
+            eventHandler.parseAndStore(res.events);
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+
 
     return {
         createAccount,
@@ -186,5 +212,6 @@ export function createSystemCalls(
         mintHero,
         initPvp,
         setPvpTeam,
+        startBattle,
     };
 }

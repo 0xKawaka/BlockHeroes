@@ -61,11 +61,11 @@ export default function AccountSelect({account, allAccountsDict, setAccountSelec
   }
 
   const handleAccountSelected = (accountAdrs: string) => {
-    account.select(accountAdrs);
-    console.log("selected account adrs: ", accountAdrs)
-    console.log("selected account: ", account.account.address)
-    setBlockchainAccount(account.account);
-    setAccountSelected(true);
+    const accountSelected = account.get(accountAdrs) as Account;
+    if(accountSelected){
+      setBlockchainAccount(accountSelected);
+      setAccountSelected(true);
+    }
   }
   
   const reactAccountList = account?.list().map((account, index) => {
