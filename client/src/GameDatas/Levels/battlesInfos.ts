@@ -1,14 +1,11 @@
 import { HeroesFactory } from "../../Classes/Heroes/HeroesFactory";
-import skillSets from "../Skills/skillSets";
-import skillsDict from "../Skills/skillsDict";
-import baseStats from "../Statistics/baseStats";
 
 const battlesInfos = {
   0: 
   [
     {
       background: "battle1",
-      names: ["knight", "hunter", "priest", "assassin"],
+      names: ["knight", "knight", "priest", "assassin"],
       levels: [1, 1, 1, 1],
       ranks: [1, 1, 1, 1],
       energyCost: 1,
@@ -44,7 +41,7 @@ const battlesInfos = {
   ],
 };
 
-const worldsBattlesList = HeroesFactory.createEnemyHeroes(battlesInfos, skillsDict, skillSets, baseStats);
+const worldsBattlesList = HeroesFactory.createEnemyHeroes(battlesInfos);
 
 
 

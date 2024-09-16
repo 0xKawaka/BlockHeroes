@@ -79,6 +79,8 @@ impl AccountImpl of AccountTrait {
 
         PrintTrait::print('self.lastEnergyUpdateTimestamp');
         PrintTrait::print(self.lastEnergyUpdateTimestamp);
+        PrintTrait::print('now');
+        PrintTrait::print(now);
 
         let timeDiff = now - self.lastEnergyUpdateTimestamp;
         let energyToAdd = timeDiff / timeTickEnergy;

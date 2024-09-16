@@ -1,17 +1,12 @@
 import "./Summons.css"
-// import {Image} from 'react-native';
 import ArrowBack from "../../assets/misc/arrowback.png"
-import Soul from "../../assets/misc/soul.png"
 import SummonChest from "../../assets/misc/summonChest.png"
 import SummonChestGif from "../../assets/gif/summonChest.gif"
-import { Sender } from "../../Blockchain/Sender"
 import { useState } from "react"
-import { Getter } from "../../Blockchain/Getter"
-import { HeroBlockchain } from "../../Types/blockchainTypes"
 import HeroMiniature from "./HeroMiniature"
 import portraitsDict from "../../assets/portraits/portraitsDict"
 import { useDojo } from "../../dojo/useDojo"
-import { BaseHeroInfos, HeroesFactory } from '../../Classes/Heroes/HeroesFactory'
+import { HeroesFactory } from '../../Classes/Heroes/HeroesFactory'
 import { HeroInfos } from "../../Types/apiTypes"
 import { Account } from "starknet"
 import { GameAccount } from "../../Types/toriiTypes"

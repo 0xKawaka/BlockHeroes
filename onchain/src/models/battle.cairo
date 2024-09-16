@@ -135,6 +135,7 @@ impl BattleImpl of BattleTrait {
     }
     fn playTurn(ref self: Battle, world: IWorldDispatcher, skillIndex: u8, targetIndex: u32) {
         // PrintTrait::print('Play turn');
+        self.sortTurnTimeline();
         assert(!self.isBattleOver, 'Battle is over');
         assert(self.isWaitingForPlayerAction, 'Not waiting for player action');
         let mut entity = self.getEntityHighestTurn();

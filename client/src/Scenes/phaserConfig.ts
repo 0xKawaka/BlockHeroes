@@ -7,7 +7,7 @@ import Entity from '../Classes/Entity/Entity'
 import GameEventHandler from '../Blockchain/event/GameEventHandler'
 import { Account } from 'starknet'
 
-function getPhaserConfig(eventHandler: GameEventHandler, account: Account, walletAdrs:string, parentContainer:string, worldId:number, battleId:number, selectedTeam: Entity[], selectedHeroesIds:number[], enemiesTeam: Entity[]): Phaser.Types.Core.GameConfig{
+function getPhaserConfig(eventHandler: GameEventHandler, account: Account, playTurn: any, walletAdrs:string, parentContainer:string, worldId:number, battleId:number, selectedTeam: Entity[], selectedHeroesIds:number[], enemiesTeam: Entity[]): Phaser.Types.Core.GameConfig{
   const Config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     parent: parentContainer,
@@ -29,7 +29,7 @@ function getPhaserConfig(eventHandler: GameEventHandler, account: Account, walle
   
     callbacks: {
       preBoot: function (game) {
-        game.registry.merge({"eventHandler": eventHandler, "account": account, "walletAdrs": walletAdrs, "worldId": worldId, "battleId": battleId, "selectedTeam": selectedTeam, "selectedHeroesIds": selectedHeroesIds, "enemiesTeam": enemiesTeam});
+        game.registry.merge({"eventHandler": eventHandler, "account": account, "playTurn": playTurn, "walletAdrs": walletAdrs, "worldId": worldId, "battleId": battleId, "selectedTeam": selectedTeam, "selectedHeroesIds": selectedHeroesIds, "enemiesTeam": enemiesTeam});
       }
     }
   }

@@ -10,6 +10,7 @@ import GameEventHandler from '../Blockchain/event/GameEventHandler'
 import Tooltips from './UIScene'
 import UIScene from './UIScene'
 import BackgroundPick from '../Classes/Camera/BackgroundPick'
+import GameSpeedHelper from '../Classes/Animations/GameSpeedHelper'
 
 
 export default class BattleScene extends Phaser.Scene {
@@ -17,16 +18,21 @@ export default class BattleScene extends Phaser.Scene {
   clickHandler: ClickHandler
   battleLoaded: boolean
   eventHandler: GameEventHandler
+  characterSpritesGroup: Phaser.GameObjects.Group
+  // UISpritesGroup: Phaser.GameObjects.Group
 
   constructor() {
     super('Battle')
-    // this.battleLoaded = false
-    this.battle = new Battle(this)
+    this.battle = new Battle(this, new GameSpeedHelper(1))
     this.clickHandler = new ClickHandler(this.battle)
     this.battle.setBattleScene(this)
   }
 
   preload() {
+    this.battle.setPlayTurn(this.registry.get('playTurn'))
+    this.battle.setWorldId(this.registry.get('worldId'))
+    this.battle.setGameEventHandler(this.registry.get('eventHandler'))
+    this.battle.setAccountWallet(this.registry.get('account'))
   }
 
   async create() {
@@ -47,12 +53,10 @@ export default class BattleScene extends Phaser.Scene {
 
     let selectedTeam = this.registry.get('selectedTeam')
     let enemiesTeam = this.registry.get('enemiesTeam')
-    this.battle.setGameEventHandler(this.registry.get('eventHandler'))
-    this.battle.setAccountWallet(this.registry.get('localWallet'))
     
     this.playMusic()
 
-    let backgroundImg = this.add.image(0, 0, 'background').setOrigin(0, 0)
+    this.add.image(0, 0, 'background').setOrigin(0, 0)
     
     this.createEntities(selectedTeam, enemiesTeam);
 

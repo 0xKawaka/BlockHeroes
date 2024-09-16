@@ -201,6 +201,25 @@ export function createSystemCalls(
             return false;
         }
     }
+    async function playTurn(account: Account, map: number, spellIndex: number, targetIndex: number, eventHandler: GameEventHandler) {
+        try {
+            let txRes = await client.Game.playTurn({
+                account,
+                map,
+                spellIndex,
+                targetIndex,
+            });
+            let res: any = await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 200,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            eventHandler.parseAndStore(res.events);
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
 
 
 
@@ -213,5 +232,6 @@ export function createSystemCalls(
         initPvp,
         setPvpTeam,
         startBattle,
+        playTurn,
     };
 }

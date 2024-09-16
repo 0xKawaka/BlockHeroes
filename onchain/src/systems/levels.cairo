@@ -21,12 +21,13 @@ mod Levels {
         fn getEnemies(world: IWorldDispatcher, map: u16, level: u16) -> Array<Hero> {
             let mut enemiesCount = get!(world, (map, level), (LevelInfos)).enemiesCount;
             let mut enemies: Array<Hero> = array![];
+            let mut i = 0;
             loop {
-                if(enemiesCount == 0) {
+                if(i == enemiesCount) {
                     break;
                 }
-                let enemy = get!(world, (map, level, enemiesCount - 1), (LevelEnemy));
-                enemiesCount -= 1;
+                let enemy = get!(world, (map, level, i), (LevelEnemy));
+                i += 1;
                 enemies.append(enemy.hero);
             };
             return enemies;
@@ -34,12 +35,13 @@ mod Levels {
         fn getEnemiesLevels(world: IWorldDispatcher, map: u16, level: u16) -> Array<u16> {
             let mut enemiesCount = get!(world, (map, level), (LevelInfos)).enemiesCount;
             let mut enemiesLevels: Array<u16> = array![];
+            let mut i = 0;
             loop {
-                if(enemiesCount == 0) {
+                if(i == enemiesCount) {
                     break;
                 }
-                let enemy = get!(world, (map, level, enemiesCount - 1), (LevelEnemy));
-                enemiesCount -= 1;
+                let enemy = get!(world, (map, level, i), (LevelEnemy));
+                i += 1;
                 enemiesLevels.append(enemy.hero.level);
             };
             return enemiesLevels;

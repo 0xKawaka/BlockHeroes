@@ -7,6 +7,7 @@ import Entity from "../../Classes/Entity/Entity"
 import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import { Account } from "starknet"
 import StateChangesHandler from "../State/StateChangesHandler"
+import { useDojo } from "../../dojo/useDojo"
 
 type BattlePageProps = {
   account: Account,
@@ -26,6 +27,7 @@ type BattlePageProps = {
 }
 
 export default function BattlePage({account, worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam, heroesList, runesList, eventHandler, setPhaserRunning, stateChangesHandler, setIsLootPanelVisible, setWinOrLose, setHeroesBeforeExperienceGained}: BattlePageProps) {
+  const {setup: {systemCalls: { playTurn }}} = useDojo();
 
   function handleStartFight() {
     const heroesBeforeExperienceGained = structuredClone(heroesList.filter(hero => selectedHeroesIds.some(id => id === hero.id)))
@@ -33,7 +35,7 @@ export default function BattlePage({account, worldId, battleId, selectedTeam, se
     stateChangesHandler.setIsBattleRunning(true)
     setPhaserRunning(true)
     setIsLootPanelVisible(false)
-    const phaserGame = new Phaser.Game(getPhaserConfig(eventHandler, account, "0xtest", "GamePhaserContainer", worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam))
+    const phaserGame = new Phaser.Game(getPhaserConfig(eventHandler, account, playTurn, "0xtest", "GamePhaserContainer", worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam))
     phaserGame.events.on('destroy', () => {
       onDestroyProcs()
     })

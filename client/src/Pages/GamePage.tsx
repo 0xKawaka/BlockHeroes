@@ -33,6 +33,7 @@ import { ToriiClient } from '@dojoengine/torii-client'
 import { AllyOrEnemy } from '../dojo/typescript/models.gen';
 import { ClientComponents } from '../dojo/createClientComponents';
 
+
 function getGamePageContainerStyle(isBattleRunning: boolean){
   if (isBattleRunning){
     return {
@@ -53,7 +54,8 @@ type GamePageProps = {
 
 function GamePage({toriiClient, account} : GamePageProps) {
   const {setup: {clientComponents: {Account, ArenaAccount, Runes, Heroes, ArenaTeam}, contractComponents}} = useDojo();
-  useQuerySync(toriiClient, contractComponents as any, []);
+  // useQuerySync(toriiClient, contractComponents as any, []);
+
 
   const [accountSelected, setAccountSelected] = useState<boolean>(false)
   const [blockchainAccount, setBlockchainAccount] = useState<Account>(account.account)

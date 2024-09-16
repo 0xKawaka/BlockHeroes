@@ -1,12 +1,9 @@
-const monstersNames = ["knight", "assassin", "priest", "hunter"]
+const monstersNames = ["knight", "assassin", "priest", "hunter", "diana", "elric", "nereus", "rex", "celeste", "oakheart", "sylvara", "bane", "ember", "molten"]
 
-let imagesByName: {[key: string]: {[key: string]: {[key: string]: any}} } = {}
+const imagesByName: {[key: string]: string} = {}
 
-for (let monsterName of monstersNames) {
-  imagesByName[monsterName] = {}
-  let img = require('../../assets/monsters/' + monsterName + '/' + 'spritesheet.png')
-  imagesByName[monsterName] = img
-}
-
+monstersNames.forEach(monsterName => {
+  imagesByName[monsterName] = new URL(`../../assets/monsters/${monsterName}.png`, import.meta.url).href
+})
 
 export default imagesByName

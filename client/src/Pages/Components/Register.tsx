@@ -1,13 +1,7 @@
 // import { StarknetWindowObject } from "get-starknet"
 import "./Register.css"
-import { GameAccount } from "../../Types/apiTypes"
-import { Sender } from "../../Blockchain/Sender"
-import { Getter } from "../../Blockchain/Getter"
 import { useState } from "react"
 import { Account } from "starknet";
-import Burner from '../../Blockchain/Burner'
-import Storage from '../../Cookies/storage'
-import { RpcProvider } from "starknet";
 import { BurnerAccount } from "@dojoengine/create-burner"
 import { useDojo } from "../../dojo/useDojo"
 

@@ -9,10 +9,10 @@ import Scaler from "./Camera/Scaler";
 import Zoomer from "./Camera/Zoomer";
 import Positionner from "./Camera/Positionner";
 import GameEventHandler from "../Blockchain/event/GameEventHandler";
-import { Sender } from "../Blockchain/Sender";
 import { Account } from "starknet";
 import UIScene from "../Scenes/UIScene";
 import GameSpeedHelper from "./Animations/GameSpeedHelper";
+import { useDojo } from "../dojo/useDojo";
 
 export default class Battle {
   battleEntities: Array<IBattleEntity>
@@ -28,12 +28,14 @@ export default class Battle {
   hasSelectedTarget: boolean
   isTurnPlaying: boolean
   eventHandler: GameEventHandler
-  localWallet: Account
+  account: Account
   animationsHandler: AnimationsHandler
   scaler: Scaler
   zoomer: Zoomer
   positionner: Positionner
   gameSpeedHelper: GameSpeedHelper
+  playTurn: any
+  worldId: number
 
   constructor(battleScene: BattleScene, gameSpeedHelper: GameSpeedHelper) {
     this.battleScene = battleScene
@@ -47,6 +49,14 @@ export default class Battle {
     this.isTurnPlaying = false
     this.animationsHandler = new AnimationsHandler(this)
     this.gameSpeedHelper = gameSpeedHelper
+  }
+
+  setPlayTurn(playTurn: any){
+    this.playTurn = playTurn
+  }
+
+  setWorldId(worldId: number){
+    this.worldId = worldId
   }
 
   setPositionner(positionner: Positionner){
@@ -69,8 +79,8 @@ export default class Battle {
     this.eventHandler = eventHandler
   }
 
-  setAccountWallet(localWallet: Account){
-    this.localWallet = localWallet
+  setAccountWallet(account: Account){
+    this.account = account
   }
 
   setUIScene(UIScene: UIScene){
@@ -249,7 +259,7 @@ export default class Battle {
         
         this.getEntityHighestTurn().endSkillSelection()
         console.log('cast ' + this.getEntityHighestTurn().getSkillIndexByName(this.selectedSkill) + ' on ' + entityClickedId)
-        await Sender.playTurn(this.localWallet, this.getEntityHighestTurn().getSkillIndexByName(this.selectedSkill), entityClickedId, this.eventHandler)
+        await this.playTurn(this.account, this.worldId, this.getEntityHighestTurn().getSkillIndexByName(this.selectedSkill), entityClickedId, this.eventHandler)
         await this.processNextSkill(this.getEntityHighestTurn().getIndex())
       }
     }
