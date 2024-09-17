@@ -32,6 +32,8 @@ import { BurnerAccount } from '@dojoengine/create-burner'
 import { ToriiClient } from '@dojoengine/torii-client'
 import { AllyOrEnemy } from '../dojo/typescript/models.gen';
 import { ClientComponents } from '../dojo/createClientComponents';
+import Maps from '../GameDatas/maps'
+import { set } from 'mobx'
 
 
 function getGamePageContainerStyle(isBattleRunning: boolean){
@@ -53,9 +55,8 @@ type GamePageProps = {
 }
 
 function GamePage({toriiClient, account} : GamePageProps) {
-  const {setup: {clientComponents: {Account, ArenaAccount, Runes, Heroes, ArenaTeam}, contractComponents}} = useDojo();
+  const {setup: {clientComponents: {Account, ArenaAccount, Runes, Heroes, ArenaTeam, MapProgress}, contractComponents}} = useDojo();
   // useQuerySync(toriiClient, contractComponents as any, []);
-
 
   const [accountSelected, setAccountSelected] = useState<boolean>(false)
   const [blockchainAccount, setBlockchainAccount] = useState<Account>(account.account)
@@ -72,8 +73,8 @@ function GamePage({toriiClient, account} : GamePageProps) {
   const [showPvp, setShowPvp] = useState<boolean>(false)
   const [showSummons, setShowSummons] = useState<boolean>(false)
   const [isBattleRunning, setIsBattleRunning] = useState<boolean>(false)
-  const [stateChangesHandler, setStateChangesHandler] = useState<StateChangesHandler>(new StateChangesHandler(setHeroes, setRunes, setGameAccount, setShowMyHeroes, setShowWorldSelect, setIsBattleRunning))
-
+  const [mapProgress, setMapProgress] = useState<{[key: number]: number}>({})
+  const [stateChangesHandler, setStateChangesHandler] = useState<StateChangesHandler>(new StateChangesHandler(setHeroes, setRunes, setGameAccount, setShowMyHeroes, setShowWorldSelect, setIsBattleRunning, setMapProgress))
 
   async function handleNewHeroEvent(hero: HeroInfos) {
     let newHeroes = [...heroes]
@@ -95,9 +96,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
 
 
   function loadPvpInfos(address: string) {
-    const accountEntityId = getEntityIdFromKeys([
-      BigInt(address)
-    ]) as Entity;
+    const accountEntityId = getEntityIdFromKeys([BigInt(address)]) as Entity;
     const arenaAccount = getComponentValue(ArenaAccount, accountEntityId);
     // console.log("arenaAccount", arenaAccount);
     if(arenaAccount){
@@ -149,6 +148,10 @@ function GamePage({toriiClient, account} : GamePageProps) {
         let pvpEnergyHandler = new EnergyHandler(setPvpEnergy);
         pvpEnergyHandler.initEnergy(gameAccount.pvpEnergy, gameAccount.lastPvpEnergyUpdateTimestamp);
         stateChangesHandler.setPvpEnergyHandler(pvpEnergyHandler);
+        const campaignProgressEntity = getEntityIdFromKeys([BigInt(blockchainAccount.address), BigInt(Maps.Campaign)]) as Entity;
+        const campaignProgress = getComponentValue(MapProgress, campaignProgressEntity);
+        mapProgress[Maps.Campaign] = campaignProgress ? campaignProgress.level : 0;
+        setMapProgress(mapProgress);
       }
     }
   }, [accountSelected]);
@@ -195,7 +198,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
           <MyHeroes account={blockchainAccount} heroesList={heroes} runesList={runes} baseHeroes={baseHeroes} stateChangesHandler={stateChangesHandler}/>
         }
         {showWorldSelect &&
-          <WorldSelect account={blockchainAccount} gameAccount={gameAccount} worldsBattlesList={worldsBattlesList} heroesList={heroes} runesList={runes} stateChangesHandler={stateChangesHandler} />
+          <WorldSelect account={blockchainAccount} gameAccount={gameAccount} worldsBattlesList={worldsBattlesList} heroesList={heroes} runesList={runes} mapProgress={mapProgress} stateChangesHandler={stateChangesHandler} />
         }
         {showSummons &&
           <Summons account={blockchainAccount} gameAccount={gameAccount} setGameAccount={setGameAccount} setShowSummons={setShowSummons} handleNewHeroEvent={handleNewHeroEvent} />

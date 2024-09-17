@@ -27,8 +27,9 @@ use game::models::events::{Event, Skill, EndTurn, EntityBuffEvent};
 use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 
 use core::box::BoxTrait;
-use debug::PrintTrait;
 use starknet::get_block_timestamp;
+use debug::PrintTrait;
+
 
 
 #[derive(Copy, Drop, Serde, Introspect, PartialEq)]
@@ -107,12 +108,11 @@ impl EntityImpl of EntityTrait {
             return;
         }
         self.setMaxHealthIfHealthIsGreater();
-        PrintTrait::print('health:');
-        self.getHealth().print();
+        println!("Health {} {}", self.getHealth().sign, self.getHealth().mag);
 
         self.cooldowns.reduceCooldowns();
         if(self.isStunned()){
-            PrintTrait::print('stunned');
+            println!("Stunned");
             self.endTurn(world, ref battle);
             return;
         }
@@ -174,9 +174,9 @@ impl EntityImpl of EntityTrait {
         })));
     }
     fn die(ref self: Entity, ref battle: Battle) {
-        PrintTrait::print('death');
-        PrintTrait::print(self.index);        
+        println!("Death {}", self.index);
         battle.deadEntities.append(self.getIndex());
+        battle.entities.set(self.getIndex(), self);
 
         let mut i: u32 = 0;
         loop {
@@ -300,6 +300,7 @@ impl EntityImpl of EntityTrait {
         self.stunOnTurnProc.isStunned()
     }
     fn isDead(self: @Entity) -> bool {
+        // println!("isDead health: {} {}", self.statistics.getHealth().sign, self.statistics.getHealth().mag);
         if (self.statistics.getHealth().min(i64Impl::new(0, false)) == self.statistics.getHealth()) {
             return true;
         }

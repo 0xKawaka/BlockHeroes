@@ -17,15 +17,21 @@ export default class StateChangesHandler {
   setShowMyHeroes: React.Dispatch<React.SetStateAction<boolean>>
   setShowWorldSelect: React.Dispatch<React.SetStateAction<boolean>>
   setIsBattleRunning: React.Dispatch<React.SetStateAction<boolean>>
+  setMapProgress: React.Dispatch<React.SetStateAction<{[key: number]: number;}>>
 
 
-  constructor(setHeroesList: React.Dispatch<React.SetStateAction<HeroInfos[]>>, setRunesList: React.Dispatch<React.SetStateAction<RuneInfos[]>>, setGameAccount: React.Dispatch<React.SetStateAction<GameAccount>>, setShowMyHeroes: React.Dispatch<React.SetStateAction<boolean>>, setShowWorldSelect: React.Dispatch<React.SetStateAction<boolean>>, setIsBattleRunning: React.Dispatch<React.SetStateAction<boolean>>) {
+  constructor(setHeroesList: React.Dispatch<React.SetStateAction<HeroInfos[]>>, setRunesList: React.Dispatch<React.SetStateAction<RuneInfos[]>>, setGameAccount: React.Dispatch<React.SetStateAction<GameAccount>>, setShowMyHeroes: React.Dispatch<React.SetStateAction<boolean>>, setShowWorldSelect: React.Dispatch<React.SetStateAction<boolean>>, setIsBattleRunning: React.Dispatch<React.SetStateAction<boolean>>, setMapProgress: React.Dispatch<React.SetStateAction<{[key: number]: number;}>>) {
     this.setHeroesList = setHeroesList
     this.setRunesList = setRunesList
     this.setGameAccount = setGameAccount
     this.setShowMyHeroes = setShowMyHeroes
     this.setShowWorldSelect = setShowWorldSelect
     this.setIsBattleRunning = setIsBattleRunning
+    this.setMapProgress = setMapProgress
+  }
+
+  updateMapProgress(mapProgress: {[key: number]: number}) {
+    this.setMapProgress(mapProgress)
   }
 
   updateLoot(loot: LootEvent) {

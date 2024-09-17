@@ -5,6 +5,13 @@ const battlesInfos = {
   [
     {
       background: "battle1",
+      names: ["assassin"],
+      levels: [1],
+      ranks: [1],
+      energyCost: 0,
+    },
+    {
+      background: "battle1",
       names: ["knight", "knight", "priest", "assassin"],
       levels: [1, 1, 1, 1],
       ranks: [1, 1, 1, 1],
@@ -17,13 +24,7 @@ const battlesInfos = {
       ranks: [1, 1, 1, 1],
       energyCost: 1,
     },
-    {
-      background: "battle1",
-      names: ["assassin"],
-      levels: [1],
-      ranks: [1],
-      energyCost: 0,
-    },
+
     {
       background: "battle1",
       names: ["priest", "priest", "hunter", "assassin"],

@@ -44,10 +44,10 @@ export default function AccountOverview({gameAccount, maxEnergy, maxPvpEnergy}: 
         <div className="CrystalsValue">{gameAccount.crystals}</div>
         <img className="CrystalsIcon" src={crystalImg} />
       </div>
-      <div className="GemsContainer">
+      {/* <div className="GemsContainer">
         <div className="GemsValue">{gameAccount.gems}</div>
         <img className="GemsIcon" src={gemImg} />
-      </div>
+      </div> */}
     </div>
   </div>
   )

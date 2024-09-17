@@ -23,7 +23,7 @@ export default class BattleScene extends Phaser.Scene {
 
   constructor() {
     super('Battle')
-    this.battle = new Battle(this, new GameSpeedHelper(1))
+    this.battle = new Battle(this, new GameSpeedHelper(3))
     this.clickHandler = new ClickHandler(this.battle)
     this.battle.setBattleScene(this)
   }

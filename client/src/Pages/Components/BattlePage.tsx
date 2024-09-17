@@ -8,6 +8,7 @@ import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import { Account } from "starknet"
 import StateChangesHandler from "../State/StateChangesHandler"
 import { useDojo } from "../../dojo/useDojo"
+import Maps from "../../GameDatas/maps"
 
 type BattlePageProps = {
   account: Account,
@@ -19,6 +20,8 @@ type BattlePageProps = {
   heroesList: Array<HeroInfos>
   runesList: RunesList
   eventHandler: GameEventHandler
+  mapProgress?: {[key: number]: number}
+  map: Maps,
   setPhaserRunning: React.Dispatch<React.SetStateAction<boolean>>
   stateChangesHandler: StateChangesHandler
   setIsLootPanelVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -26,7 +29,8 @@ type BattlePageProps = {
   setHeroesBeforeExperienceGained: React.Dispatch<React.SetStateAction<HeroInfos[]>>
 }
 
-export default function BattlePage({account, worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam, heroesList, runesList, eventHandler, setPhaserRunning, stateChangesHandler, setIsLootPanelVisible, setWinOrLose, setHeroesBeforeExperienceGained}: BattlePageProps) {
+
+export default function BattlePage({account, worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam, heroesList, runesList, eventHandler, mapProgress, map, setPhaserRunning, stateChangesHandler, setIsLootPanelVisible, setWinOrLose, setHeroesBeforeExperienceGained}: BattlePageProps) {
   const {setup: {systemCalls: { playTurn }}} = useDojo();
 
   function handleStartFight() {
@@ -54,6 +58,10 @@ export default function BattlePage({account, worldId, battleId, selectedTeam, se
     }
     console.log('endBattleEvent.hasPlayerWon : ' + endBattleEvent.hasPlayerWon)
     setWinOrLose(endBattleEvent.hasPlayerWon ? "Victory" : "Defeat")
+    if(endBattleEvent.hasPlayerWon && mapProgress !== undefined && battleId !== undefined && mapProgress[map] <= battleId){
+      mapProgress[map] = battleId + 1
+      stateChangesHandler.updateMapProgress(mapProgress)
+    }
     stateChangesHandler.updateAfterExperience(heroesList, eventHandler.getExperienceGainEventArray())
     let loot = eventHandler.getLootEvent()
     if(loot !== undefined) {

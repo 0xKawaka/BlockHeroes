@@ -15,10 +15,11 @@ type WorldSelectProps = {
   worldsBattlesList: BattlesInfosDict
   heroesList: Array<HeroInfos>
   runesList: RunesList
+  mapProgress: {[key: number]: number}
   stateChangesHandler: StateChangesHandler
 }
 
-export default function WorldSelect({account, gameAccount, worldsBattlesList, heroesList, runesList, stateChangesHandler }: WorldSelectProps) {
+export default function WorldSelect({account, gameAccount, worldsBattlesList, heroesList, runesList, mapProgress, stateChangesHandler }: WorldSelectProps) {
 
   const [worldId, setWorldId] = useState<number>(-1)
 
@@ -42,7 +43,7 @@ export default function WorldSelect({account, gameAccount, worldsBattlesList, he
       </div>
     }
     {worldId !== -1 &&
-      <BattlesSelect account={account} gameAccount={gameAccount} worldId={worldId} battlesList={worldsBattlesList[worldId]} heroesList={heroesList} runesList={runesList} setWorldId={setWorldId} stateChangesHandler={stateChangesHandler} />
+      <BattlesSelect account={account} gameAccount={gameAccount} worldId={worldId} battlesList={worldsBattlesList[worldId]} heroesList={heroesList} runesList={runesList} setWorldId={setWorldId} mapProgress={mapProgress} stateChangesHandler={stateChangesHandler} />
     }
   </div>
   )

@@ -31,7 +31,7 @@ export function createSystemCalls(
                 username,
             });
             await account.waitForTransaction(txRes.transaction_hash, {
-                retryInterval: 200,
+                retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
             return true;
@@ -65,7 +65,7 @@ export function createSystemCalls(
                 heroId,
             });
             await account.waitForTransaction(txRes.transaction_hash, {
-                retryInterval: 200,
+                retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
             return true;
@@ -84,7 +84,7 @@ export function createSystemCalls(
                 runeId,
             });
             await account.waitForTransaction(txRes.transaction_hash, {
-                retryInterval: 200,
+                retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
             return true;
@@ -102,7 +102,7 @@ export function createSystemCalls(
                 runeId,
             });
             let res: any = await account.waitForTransaction(txRes.transaction_hash, {
-                retryInterval: 200,
+                retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
             let crystalCost;
@@ -132,7 +132,7 @@ export function createSystemCalls(
                 account,
             });
             let res: any = await account.waitForTransaction(txRes.transaction_hash, {
-                retryInterval: 200,
+                retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
             return {id: Number(res.events[2].data[1]), name: shortString.decodeShortString(res.events[2].data[2])};
@@ -149,7 +149,7 @@ export function createSystemCalls(
                 heroesIds,
             });
             let res: any = await account.waitForTransaction(txRes.transaction_hash, {
-                retryInterval: 200,
+                retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
             let defenseHeroesIds = [];
@@ -171,7 +171,7 @@ export function createSystemCalls(
                 heroesIds,
             });
             await account.waitForTransaction(txRes.transaction_hash, {
-                retryInterval: 200,
+                retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
             return true;
@@ -190,7 +190,7 @@ export function createSystemCalls(
                 level,
             });
             let res: any = await account.waitForTransaction(txRes.transaction_hash, {
-                retryInterval: 200,
+                retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
             console.log(res);
@@ -210,7 +210,7 @@ export function createSystemCalls(
                 targetIndex,
             });
             let res: any = await account.waitForTransaction(txRes.transaction_hash, {
-                retryInterval: 200,
+                retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
             eventHandler.parseAndStore(res.events);

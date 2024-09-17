@@ -81,7 +81,9 @@ mod Battles {
                     break;
                 }
                 let entityStorage = get!(world, (owner, map, i), EntityStorage);
-                heroesIds.append(entityStorage.entityVal.heroId);
+                if(entityStorage.entityVal.isAlly()) {
+                    heroesIds.append(entityStorage.entityVal.heroId);
+                }
                 i += 1;
             };
             return heroesIds;
@@ -95,7 +97,7 @@ mod Battles {
             let levels = LevelsImpl::getEnemiesLevels(world, map, battleStorage.level);
             experienceHandler::computeAndDistributeExperience(world, owner, heroesIds, @levels);
             lootHandler::computeAndDistributeLoot(world, owner, @levels);
-            let levelProgress = get!(world, owner, MapProgress).level;
+            let levelProgress = get!(world, (owner, map), MapProgress).level;
             if(levelProgress == battleStorage.level){
                 set!(world, MapProgress { owner: owner, map: map, level: battleStorage.level + 1 });
             }
@@ -195,6 +197,7 @@ mod Battles {
                 if( i == battle.entities.len() ) {
                     break;
                 }
+                println!("stor entity {} isDead {}", battle.entities.get(i).unwrap().getIndex(), battle.entities.get(i).unwrap().isDead());
                 let healthOnTurnProcsEntity: Array<HealthOnTurnProc> = battle.getHealthOnTurnProcsEntity(i);
                 set!(world,
                     (

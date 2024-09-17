@@ -13,6 +13,7 @@ fn computeAndDistributeExperience(world: IWorldDispatcher, owner: ContractAddres
         if i == heroesIndexes.len() {
             break;
         }
+        println!("Adding {} experience to hero {}", experiencePerHero, *heroesIndexes[i]);
         AccountsImpl::addExperienceToHeroId(world, owner, *heroesIndexes[i], experiencePerHero);
         i += 1;
     };

@@ -14,6 +14,7 @@ import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import StateChangesHandler from "../State/StateChangesHandler"
 import EnergyHandler from "../Classes/EnergyHandler"
 import { GameAccount } from "../../Types/toriiTypes"
+import Maps from "../../GameDatas/maps"
 
 type BattleSelectProps = {
   account: Account,
@@ -23,6 +24,7 @@ type BattleSelectProps = {
   heroesList: Array<HeroInfos>
   runesList: RunesList
   setWorldId: React.Dispatch<React.SetStateAction<number>>
+  mapProgress: {[key: number]: number}
   stateChangesHandler: StateChangesHandler
 }
 
@@ -37,7 +39,7 @@ function computeTotalStats(baseeStats: HeroStats, bonusStats: HeroStats): HeroSt
   }
 }
 
-function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesList, account, setWorldId, stateChangesHandler} : BattleSelectProps) {
+function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesList, account, setWorldId, mapProgress, stateChangesHandler} : BattleSelectProps) {
   const [selectedBattleIndex, setSelectedBattleIndex] = useState<number>(-1)
   const [selectedHeroesIds, setSelectedHeroesIds] = useState<number[]>([])
   const [heroesBeforeExperienceGained, setHeroesBeforeExperienceGained] = useState<HeroInfos[]>([])
@@ -86,7 +88,7 @@ function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesLis
           <img className="ArrowBack" src={ArrowBack} onClick={() => setWorldId(-1)}/>
         </div>
         <div className="BattlesSelectList">
-          {battlesList !== undefined && battlesList.map((battle, i) => {
+          {battlesList !== undefined && battlesList.slice(0, mapProgress[Maps.Campaign] + 1).map((battle, i) => {
             return (  
               <div className="BattleOverviewContainer" key={i} onClick={() => setSelectedBattleIndex(i)}>
                 <BattleOverview enemiesNames={battle.enemies.map((enemy) => {return enemy.name})} enemiesLevels={battle.enemies.map((enemy) => {return enemy.level})} energyCost={battle.energyCost} />
@@ -105,7 +107,7 @@ function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesLis
       </div>
     }
     {phaserRunning &&
-      <BattlePage account={account} worldId={worldId} battleId={selectedBattleIndex} selectedTeam={getSelectedTeam(selectedHeroesIds)} selectedHeroesIds={selectedHeroesIds} enemiesTeam={getEnemiesTeam(selectedBattleIndex)} heroesList={heroesList} runesList={runesList} eventHandler={eventHandler!} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler} setIsLootPanelVisible={setIsLootPanelVisible} setWinOrLose={setWinOrLose} setHeroesBeforeExperienceGained={setHeroesBeforeExperienceGained} />
+      <BattlePage account={account} worldId={worldId} battleId={selectedBattleIndex} selectedTeam={getSelectedTeam(selectedHeroesIds)} selectedHeroesIds={selectedHeroesIds} enemiesTeam={getEnemiesTeam(selectedBattleIndex)} heroesList={heroesList} runesList={runesList} eventHandler={eventHandler!} mapProgress={mapProgress} map={Maps.Campaign} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler} setIsLootPanelVisible={setIsLootPanelVisible} setWinOrLose={setWinOrLose} setHeroesBeforeExperienceGained={setHeroesBeforeExperienceGained} />
     }
     {!phaserRunning && isLootPanelVisible &&
       <div className="OutOfBattleContainer">
@@ -114,7 +116,6 @@ function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesLis
         }
         {winOrLose === "Victory" &&
           <EndBattlePanel title={winOrLose} heroesList={heroesList} heroesBeforeExperienceGained={heroesBeforeExperienceGained} eventHandler={eventHandler!} setWinOrLose={setWinOrLose} setIsLootPanelVisible={setIsLootPanelVisible} stateChangesHandler={stateChangesHandler} />
-          // {name:"Contributor's emblem", amount:1, image:"Emblem"}    
         }
       </div>
     }

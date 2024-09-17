@@ -65,18 +65,23 @@ export default class GameEventHandler {
         this.parseAndStoreEndTurnEvent(event.data);
       }
       else if (event.name === "EndBattle") {
-        this.endBattleEvent = {owner: num.toHexString(event["EndBattle"].owner), hasPlayerWon: Boolean(Number(event["EndBattle"].playerHasWon))};
+        console.log("endbattle event", event)
+        // this.endBattleEvent = {owner: num.toHexString(event["EndBattle"].owner), hasPlayerWon: Boolean(Number(event["EndBattle"].playerHasWon))};
+        this.endBattleEvent = {owner: num.toHexString(event.data[0]), hasPlayerWon: Boolean(Number(event.data[1]))};
       }
       else if (event.name === "ExperienceGain") {
+        console.log("experience gain event", event)
         // this.experienceGainEventArray.push({owner: num.toHexString(event["ExperienceGain"].owner), entityId: Number(event["ExperienceGain"].entityId), experienceGained: Number(event["ExperienceGain"].experienceGained), levelAfter: Number(event["ExperienceGain"].levelAfter), experienceAfter: Number(event["ExperienceGain"].experienceAfter)})
         this.experienceGainEventArray.push({owner: num.toHexString(event.data[0]), entityId: Number(event.data[1]), experienceGained: Number(event.data[2]), levelAfter: Number(event.data[3]), experienceAfter: Number(event.data[4])})
+        console.log('processed experience gain: ', this.experienceGainEventArray[this.experienceGainEventArray.length - 1])
       }
       else if (event.name === "Loot") {
         // this.lootEvent = {owner: num.toHexString(event["Loot"].owner), crystals: Number(event["Loot"].crystals)}
         this.lootEvent = {owner: num.toHexString(event.data[0]), crystals: Number(event.data[1])}
       }
       else if (event.name === "RuneMinted") {
-        this.runeMinted = RuneFactory.createRune(Parser.parseRune(event["RuneMinted"].rune), this.runesStatsDict)
+        console.log("rune minted event", event)
+        // this.runeMinted = RuneFactory.createRune(Parser.parseRune(event["RuneMinted"].rune), this.runesStatsDict)
       }
       else {
         throw new Error('event ' + event.name + ' not found');

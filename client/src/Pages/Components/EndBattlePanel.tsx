@@ -13,6 +13,7 @@ type EndBattlePanelProps = {
   heroesList: Array<HeroInfos>,
   heroesBeforeExperienceGained: Array<HeroInfos>,
   eventHandler: GameEventHandler,
+
   setWinOrLose: React.Dispatch<React.SetStateAction<string>>,
   setIsLootPanelVisible: React.Dispatch<React.SetStateAction<boolean>>,
   stateChangesHandler: StateChangesHandler

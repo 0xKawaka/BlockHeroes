@@ -52,34 +52,37 @@ mod Levels {
             set!(
                 world,
                 (
-                LevelEnemy { map: Map::Campaign.toU16(), level: 0, index: 0, hero: hero::new(0, 'knight', 1, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 0, index: 1, hero: hero::new(0, 'knight', 1, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 0, index: 2, hero: hero::new(0, 'priest', 1, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 0, index: 3, hero: hero::new(0, 'assassin', 1, 1) },
-                LevelInfos { map: Map::Campaign.toU16(), level: 0, energyCost: 1, enemiesCount: 4},
+                LevelEnemy { map: Map::Campaign.toU16(), level: 0, index: 0, hero: hero::new(0, 'assassin', 1, 1) },
+                LevelInfos { map: Map::Campaign.toU16(), level: 0, energyCost: 0, enemiesCount: 1},
                 )
             );
+
 
             // Level 1
             set!(
                 world,
                 (
-                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 0, hero: hero::new(0, 'knight', 5, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 1, hero: hero::new(0, 'knight', 5, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 2, hero: hero::new(0, 'hunter', 5, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 3, hero: hero::new(0, 'assassin', 5, 1) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 0, hero: hero::new(0, 'knight', 1, 1) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 1, hero: hero::new(0, 'knight', 1, 1) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 2, hero: hero::new(0, 'priest', 1, 1) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 3, hero: hero::new(0, 'assassin', 1, 1) },
                 LevelInfos { map: Map::Campaign.toU16(), level: 1, energyCost: 1, enemiesCount: 4},
                 )
             );
+
 
             // Level 2
             set!(
                 world,
                 (
-                LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 0, hero: hero::new(0, 'assassin', 1, 1) },
-                LevelInfos { map: Map::Campaign.toU16(), level: 2, energyCost: 0, enemiesCount: 1},
+                LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 0, hero: hero::new(0, 'knight', 5, 1) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 1, hero: hero::new(0, 'knight', 5, 1) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 2, hero: hero::new(0, 'hunter', 5, 1) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 3, hero: hero::new(0, 'assassin', 5, 1) },
+                LevelInfos { map: Map::Campaign.toU16(), level: 2, energyCost: 1, enemiesCount: 4},
                 )
             );
+
 
             // Level 3
             set!(

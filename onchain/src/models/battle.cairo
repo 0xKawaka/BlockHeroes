@@ -1,7 +1,6 @@
 mod entity;
 
 use starknet::ContractAddress;
-use debug::PrintTrait;
 
 use entity::Entity;
 use entity::healthOnTurnProc::{HealthOnTurnProc, HealthOnTurnProcImpl, DamageOrHealEnum};
@@ -16,6 +15,8 @@ use game::utils::signedIntegers::{i64::i64Impl};
 
 use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 use game::models::events::{Event, StartTurn, IdAndValue, TurnBarEvent, EntityBuffEvent, BuffEvent, EndBattle};
+
+use debug::PrintTrait;
 
 #[derive(Destruct)]
 struct Battle {
@@ -59,14 +60,14 @@ fn new(entities: Array<Entity>, aliveEntities: Array<u32>, deadEntities: Array<u
     return battle;
 }
 
-fn initAliveAlliesOrEnemiesIndexes(alliesIndexes: Span<u32>, aliveEntities: Span<u32>) -> Vector<u32> {
+fn initAliveAlliesOrEnemiesIndexes(alliesOrEnemiesIndexes: Span<u32>, aliveEntities: Span<u32>) -> Vector<u32> {
     let mut aliveAlliesOrEnemiesIndexes: Array<u32> = Default::default();
     let mut i: u32 = 0;
     loop {
-        if (i == alliesIndexes.len()) {
+        if (i == alliesOrEnemiesIndexes.len()) {
             break;
         }
-        let entityIndex = alliesIndexes.get(i).unwrap().unbox();
+        let entityIndex = alliesOrEnemiesIndexes.get(i).unwrap().unbox();
         if (spanHelper::includes(aliveEntities, entityIndex)) {
             aliveAlliesOrEnemiesIndexes.append(*entityIndex);
         }
@@ -190,15 +191,15 @@ impl BattleImpl of BattleTrait {
         // PrintTrait::print('finished onturnprocs');
     }
     fn loopUntilNextTurn(ref self: Battle) {
-        PrintTrait::print('Loop until next turn');
+        println!("Loop until next turn");
         self.updateTurnBarsSpeed();
         loop {
             if (self.checkTurnBarsForFullBars()) {
                 self.sortTurnTimeline();
-                PrintTrait::print('Turn timeline : ');
-                PrintTrait::print(self.getEntityHighestTurn().getIndex());
-                PrintTrait::print(*self.getEntityHighestTurn().getTurnBar().turnbar);
-                PrintTrait::print(self.getEntityHighestTurn().getSpeed());
+                println!("Turn timeline : ");
+                println!("{}", self.getEntityHighestTurn().getIndex());
+                println!("{}", *self.getEntityHighestTurn().getTurnBar().turnbar);
+                println!("{}", self.getEntityHighestTurn().getSpeed());
                 // PrintTrait::print(self.getEntityByIndex(self.turnTimeline.getValue(1)).getIndex());
                 // PrintTrait::print(*self.getEntityByIndex(self.turnTimeline.getValue(1)).getTurnBar().turnbar);
                 // PrintTrait::print(self.getEntityByIndex(self.turnTimeline.getValue(1)).getSpeed());
@@ -304,7 +305,7 @@ impl BattleImpl of BattleTrait {
         return self.entities.getValue(self.turnTimeline.getValue(0));
     }
     fn waitForPlayerAction(ref self: Battle) {
-        PrintTrait::print('Waiting for player action');
+        println!("Waiting for player action");
         self.isWaitingForPlayerAction = true;
     }
     fn checkAndProcessDeadEntities(ref self: Battle) -> Array<u32> {
@@ -345,7 +346,7 @@ impl BattleImpl of BattleTrait {
             i = i + 1;
         };
         if (alliesDeadCount == self.alliesIndexes.len()) {
-            PrintTrait::print('All allies dead');
+            println!("All allies dead");
             emit!(world, (Event::EndBattle(EndBattle {
                 owner: self.owner,
                 playerHasWon: false,
@@ -355,7 +356,7 @@ impl BattleImpl of BattleTrait {
             return true;
         }
         if (enemiesDeadCount == self.enemiesIndexes.len()) {
-            PrintTrait::print('All enemies dead');
+            println!("All enemies dead");
             emit!(world, (Event::EndBattle(EndBattle {
                 owner: self.owner,
                 playerHasWon: true,
@@ -746,7 +747,7 @@ impl BattleImpl of BattleTrait {
                 break;
             }
             let entityIndex = self.turnTimeline.getValue(i);
-            entityIndex.print();
+            println!("Entity index : {}", entityIndex);
             let entity = self.entities.getValue(entityIndex);
             (*entity.getTurnBar().turnbar).print();
             entity.getSpeed().print();

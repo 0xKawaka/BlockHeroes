@@ -1,9 +1,10 @@
 mod runes;
 mod heroes;
 
+use debug::PrintTrait;
+
 use core::traits::TryInto;
 use core::traits::Into;
-use debug::PrintTrait;
 use option::OptionTrait;
 
 use game::models::hero::{Hero, HeroTrait, HeroImpl};
@@ -77,10 +78,8 @@ impl AccountImpl of AccountTrait {
             return;
         }
 
-        PrintTrait::print('self.lastEnergyUpdateTimestamp');
-        PrintTrait::print(self.lastEnergyUpdateTimestamp);
-        PrintTrait::print('now');
-        PrintTrait::print(now);
+        println!("lastEnergyUpdateTimestamp {}", self.lastEnergyUpdateTimestamp);
+        println!("now {}", now);
 
         let timeDiff = now - self.lastEnergyUpdateTimestamp;
         let energyToAdd = timeDiff / timeTickEnergy;
@@ -159,7 +158,6 @@ impl AccountImpl of AccountTrait {
         return (self.pvpEnergy, self.lastPvpEnergyUpdateTimestamp);
     }
     fn print(self: Account) {
-        self.energy.print();
         self.crystals.print();
     }
 }

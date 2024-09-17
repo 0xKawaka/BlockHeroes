@@ -74,9 +74,11 @@ mod BattleFactory {
                 }
                 if(entities[i].isDead()) {
                     deadEntities.append(entities[i].getIndex());
+                    println!("Dead entity {}", entities[i].getIndex());
                 }
                 else {
                     aliveEntities.append(entities[i].getIndex());
+                    println!("Alive entity {}", entities[i].getIndex());
                 }
                 i += 1;
             };
@@ -108,7 +110,7 @@ mod BattleFactory {
                     if( j == healthOnTurnProcsCount ) {
                         break;
                     }
-                    healthOnTurnProcs.append(get!(world, (owner, i, j), HealthOnTurnProcStorage).healthOnTurnProc);
+                    healthOnTurnProcs.append(get!(world, (owner, map, i, j), HealthOnTurnProcStorage).healthOnTurnProc);
                     j += 1;
                 };
                 i += 1;
