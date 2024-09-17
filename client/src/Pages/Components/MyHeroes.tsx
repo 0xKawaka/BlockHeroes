@@ -9,9 +9,11 @@ import { Account } from 'starknet'
 import StateChangesHandler from '../State/StateChangesHandler'
 import { BaseHeroInfos } from '../../Classes/Heroes/HeroesFactory'
 import NotOwnedHeroPanel from './NotOwnedHeroPanel'
+import { GameAccount } from '../../Types/toriiTypes'
 
 type MyHeroesProps = {
   account: Account,
+  gameAccount: GameAccount
   heroesList: Array<HeroInfos>
   runesList: Array<RuneInfos>
   baseHeroes: BaseHeroInfos[]
@@ -28,7 +30,7 @@ function getHeroById(heroId:number, heroesList:Array<HeroInfos>){
 }
 
 
-function MyHeroes ( {account, heroesList, runesList, baseHeroes, stateChangesHandler } : MyHeroesProps) {
+function MyHeroes ( {account, gameAccount, heroesList, runesList, baseHeroes, stateChangesHandler } : MyHeroesProps) {
   const [showingHero, setShowingHero] = useState<boolean>(false)
   const [heroId, setHeroId] = useState<number>(-1)
   const [heroNotOwned, setHeroNotOwned] = useState<BaseHeroInfos>()
@@ -80,13 +82,13 @@ function MyHeroes ( {account, heroesList, runesList, baseHeroes, stateChangesHan
       </div>
     }
     {showingHero && !showingRunes && heroInfos &&
-      <HeroPanel heroIndex={heroId} heroInfos={heroInfos} runesList={runesList} setShowingHero={setShowingHero} handleRuneClick={handleRuneClick}></HeroPanel>
+      <HeroPanel gameAccount={gameAccount} heroIndex={heroId} heroInfos={heroInfos} runesList={runesList} setShowingHero={setShowingHero} handleRuneClick={handleRuneClick}></HeroPanel>
     }
     {showingHero && !showingRunes && heroId === -1 && heroNotOwned &&
       <NotOwnedHeroPanel heroInfos={heroNotOwned} setShowingHero={setShowingHero}></NotOwnedHeroPanel>
     }
     {showingRunes &&
-      <RunePanel account={account} runesList={runesList} heroesList={heroesList} runeClicked={getRuneEquipped(heroInfos!, runeSpotClicked)} runeSpotClicked={runeSpotClicked} runeListUnequiped={runeListUnequiped} heroId={heroId} setShowingRunes={setShowingRunes} stateChangesHandler={stateChangesHandler}></RunePanel>
+      <RunePanel account={account} gameAccount={gameAccount} runesList={runesList} heroesList={heroesList} runeClicked={getRuneEquipped(heroInfos!, runeSpotClicked)} runeSpotClicked={runeSpotClicked} runeListUnequiped={runeListUnequiped} heroId={heroId} setShowingRunes={setShowingRunes} stateChangesHandler={stateChangesHandler}></RunePanel>
     }
 
   </div>)

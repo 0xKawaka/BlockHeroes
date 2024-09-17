@@ -13,10 +13,12 @@ import StateChangesHandler from "../State/StateChangesHandler"
 import arrowup from "../../assets/icons/arrowup.png"
 import arrowdown from "../../assets/icons/arrowdown.png"
 import checkmark from "../../assets/icons/checkmark.png"
+import { GameAccount } from "../../Types/toriiTypes"
 
 
 type RunePanelProps = {
   account: Account,
+  gameAccount: GameAccount,
   runesList: Array<RuneInfos>,
   heroesList: Array<HeroInfos>,
   runeClicked: RuneInfos |  undefined,
@@ -28,7 +30,7 @@ type RunePanelProps = {
 }
 
 
-export default function RunePanel({runesList, heroesList, runeClicked, runeSpotClicked, runeListUnequiped, heroId, account, setShowingRunes, stateChangesHandler}: RunePanelProps) {
+export default function RunePanel({account, gameAccount, runesList, heroesList, runeClicked, runeSpotClicked, runeListUnequiped, heroId, setShowingRunes, stateChangesHandler}: RunePanelProps) {
   const [runeSelectedId, setRuneSelectedId] = useState<number>(-1)
   const [sortedRank, setSortedRank] = useState<string>("rank_desc")
   const [onlyEquippable, setOnlyEquippable] = useState<boolean>(true)
@@ -86,6 +88,7 @@ export default function RunePanel({runesList, heroesList, runeClicked, runeSpotC
         <div className="RuneEquippedWrapper">
         {runeClicked && 
           <Rune 
+          gameAccount={gameAccount}
           runesList={runesList}
           heroesList={heroesList}
           rune={runeClicked}
@@ -107,6 +110,7 @@ export default function RunePanel({runesList, heroesList, runeClicked, runeSpotC
         <div className="RuneSelectedWrapper">
           {runeSelectedId > -1 && runeSelected &&
           <Rune 
+            gameAccount={gameAccount}
             runesList={runesList}
             heroesList={heroesList}
             rune={runeSelected!}

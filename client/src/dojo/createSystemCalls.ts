@@ -221,6 +221,25 @@ export function createSystemCalls(
         }
     }
 
+    async function startPvpBattle(account: Account, opponentAdrs: bigint, heroesIds: number[], eventHandler: GameEventHandler): Promise<boolean> {
+        try {
+            let txRes = await client.Game.startPvpBattle({
+                account,
+                opponentAdrs,
+                heroesIds,
+            });
+            let res: any = await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 100,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            eventHandler.parseAndStore(res.events);
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
 
 
     return {
@@ -233,5 +252,6 @@ export function createSystemCalls(
         setPvpTeam,
         startBattle,
         playTurn,
+        startPvpBattle,
     };
 }

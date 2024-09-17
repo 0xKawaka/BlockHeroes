@@ -52,7 +52,6 @@ function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesLis
     setGameEventHandler(new GameEventHandler(stateChangesHandler.getRuneStatsDict()))
   }, [])
 
-
   function getSelectedTeam(selectedHeroesIds:number[]): Entity[] {
     let selectedTeamNames = []
     let selectedTeamStats = []
@@ -103,7 +102,7 @@ function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesLis
         <div className="ArrowBackContainer">
           <img className="ArrowBack" src={ArrowBack} onClick={() => setSelectedBattleIndex(-1)}/>
         </div>
-        <BattleTeamSelection account={account} gameAccount={gameAccount} worldId={worldId} battleId={selectedBattleIndex} enemiesNames={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.name})} enemiesLevels={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.level})} energyCost={battlesList[selectedBattleIndex].energyCost} heroesList={heroesList} selectedHeroesIds={selectedHeroesIds} eventHandler={eventHandler!} setSelectedHeroesIds={setSelectedHeroesIds} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler}/>
+        <BattleTeamSelection account={account} gameAccount={gameAccount} map={Maps.Campaign} battleId={selectedBattleIndex} enemiesNames={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.name})} enemiesLevels={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.level})} energyCost={battlesList[selectedBattleIndex].energyCost} heroesList={heroesList} selectedHeroesIds={selectedHeroesIds} eventHandler={eventHandler!} setSelectedHeroesIds={setSelectedHeroesIds} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler}/>
       </div>
     }
     {phaserRunning &&

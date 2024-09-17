@@ -44,7 +44,7 @@ export async function setupWorld(provider: DojoProvider) {
                     {
                         contractName: contract_name,
                         entrypoint: "startPvpBattle",
-                        calldata: [props.enemyOwner, ...heroesIdsArray],
+                        calldata: [props.enemyOwner, heroesIdsArray.length, ...heroesIdsArray],
                     },
                     "game"
                 );

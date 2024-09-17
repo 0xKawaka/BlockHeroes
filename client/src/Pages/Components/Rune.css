@@ -49,6 +49,15 @@
   user-select: none;
 }
 
+.RuneButtonUpgrade.insufficient-crystals {
+  background-color: red;
+}
+
+.RuneButtonUpgrade.insufficient-crystals:hover {
+  background-color: red;
+  color: white;
+}
+
 .RuneButtonUpgradeCrystalValue {
   display: flex;
   align-items: center;

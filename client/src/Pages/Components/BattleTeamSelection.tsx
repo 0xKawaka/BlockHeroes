@@ -14,17 +14,21 @@ import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import StateChangesHandler from "../State/StateChangesHandler"
 import { Getter } from "../../Blockchain/Getter"
 import EnergyHandler from "../Classes/EnergyHandler"
-import { GameAccount } from "../../Types/toriiTypes"
+import { GameAccount, Hero } from "../../Types/toriiTypes"
 import { useDojo } from "../../dojo/useDojo"
+import { map } from "rxjs"
+import Maps from "../../GameDatas/maps"
 
 
 type BattleTeamSelectionProps = {
   account: Account,
   gameAccount: GameAccount,
-  worldId:number,
+  map:Maps,
   battleId:number,
-  enemiesNames: string[],
-  enemiesLevels: number[],
+  enemies?: Hero[],
+  enemiesNames?: string[],
+  enemiesLevels?: number[],
+  enemyAdrs?: string,
   energyCost: number,
   heroesList: Array<HeroInfos>
   selectedHeroesIds: number[],
@@ -34,11 +38,11 @@ type BattleTeamSelectionProps = {
   stateChangesHandler: StateChangesHandler
 }
 
-export default function BattleTeamSelection({account, gameAccount, worldId, battleId, enemiesNames, enemiesLevels, energyCost, heroesList, selectedHeroesIds, eventHandler, setSelectedHeroesIds, setPhaserRunning, stateChangesHandler }: BattleTeamSelectionProps) {
+export default function BattleTeamSelection({account, gameAccount, map, battleId, enemies, enemiesNames, enemiesLevels, enemyAdrs, energyCost, heroesList, selectedHeroesIds, eventHandler, setSelectedHeroesIds, setPhaserRunning, stateChangesHandler }: BattleTeamSelectionProps) {
   const [isStartingBattle, setIsStartingBattle] =  useState<boolean>(false)
   const notSelectedHeroesList = heroesList.filter(hero => !selectedHeroesIds.includes(hero.id))
 
-  const {setup: {systemCalls: { startBattle }}} = useDojo();
+  const {setup: {systemCalls: { startBattle, startPvpBattle }}} = useDojo();
 
   function handleHeroClick(heroId: number) {
     if(selectedHeroesIds.includes(heroId)){
@@ -59,12 +63,20 @@ export default function BattleTeamSelection({account, gameAccount, worldId, batt
     }
     setIsStartingBattle(true)
     eventHandler.reset()
-    const isBattleStarted = await startBattle(account, selectedHeroesIds, worldId, battleId, eventHandler);
+    let isBattleStarted = false;
+    if(map === Maps.Arena && enemyAdrs) {
+      startPvpBattle(account, BigInt(enemyAdrs), selectedHeroesIds, eventHandler)
+    }
+    else if (map === Maps.Campaign) {
+      isBattleStarted = await startBattle(account, selectedHeroesIds, map, battleId, eventHandler);
+    }
     if(isBattleStarted) {
       setIsStartingBattle(false)
       setPhaserRunning(true)
-      console.log("accout energy: ", gameAccount.energy, " ", gameAccount.lastEnergyUpdateTimestamp)
-      stateChangesHandler.updateEnergyHandler(gameAccount.energy, gameAccount.lastEnergyUpdateTimestamp)
+      if(map === Maps.Campaign) {
+        console.log("accout energy: ", gameAccount.energy, " ", gameAccount.lastEnergyUpdateTimestamp)
+        stateChangesHandler.updateEnergyHandler(gameAccount.energy, gameAccount.lastEnergyUpdateTimestamp)
+      }
     }
     else {
       setIsStartingBattle(false)
@@ -92,14 +104,20 @@ export default function BattleTeamSelection({account, gameAccount, worldId, batt
         <div className="BattleTeamSelectionVersusText">VS</div>
         <div className="BattleTeamSelectionMiniaturesAndTitleContainer">
           <div className="BattleTeamSelectionEnemiesMiniatures">
-            {enemiesNames.map((enemyName, i) => {
+            {enemiesNames && enemiesLevels && enemiesNames.map((enemyName, i) => {
               return (
                 <div className="HeroMiniatureWrapper" key={i}>
                   <HeroMiniature image={portraitsDict[enemyName]} rank={1} level={enemiesLevels[i]} imageWidth="9rem"></HeroMiniature>
                 </div>
               )
-            }
-          )}
+            })}
+            {enemies && enemies.map((enemy, i) => {
+              return (
+                <div className="HeroMiniatureWrapper" key={i}>
+                  <HeroMiniature image={portraitsDict[enemy.name]} rank={1} level={enemy.level} imageWidth="9rem"></HeroMiniature>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

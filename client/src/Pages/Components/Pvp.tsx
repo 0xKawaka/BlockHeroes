@@ -3,28 +3,44 @@ import "./Pvp.css"
 import PvpDefense from "./PvpDefense"
 import { HeroInfos } from "../../Types/apiTypes"
 import ArrowBack from "../../assets/misc/arrowback.png"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import TeamDisplay from "./TeamDisplay"
 import { ArenaFullAccount } from "../../Types/customTypes"
 import ArenaLeaderboard from "./ArenaLeaderboard"
+import ArenaBattleSelect from "./ArenaBattleSelect"
+import BattleTeamSelection from "./BattleTeamSelection"
+import GameEventHandler from "../../Blockchain/event/GameEventHandler"
+import StateChangesHandler from "../State/StateChangesHandler"
+import { GameAccount } from "../../Types/toriiTypes"
+import Maps from "../../GameDatas/maps"
 
 type PvpProps = {
   account: Account,
+  gameAccount: GameAccount,
   rank: number,
   heroesList: Array<HeroInfos>,
   defenseArenaHeroesIds: number[],
   arenaFullAccounts: Array<ArenaFullAccount>,
+  stateChangesHandler: StateChangesHandler
   setDefenseArenaHeroesIds: React.Dispatch<React.SetStateAction<number[]>>
   setArenaAccount: React.Dispatch<React.SetStateAction<{rank: number, lastClaimedRewards: number}>>
   setShowPvp: React.Dispatch<React.SetStateAction<boolean>>
   loadPvpInfos(address: string): void
   updateGlobalPvpInfos(): void
+  
 }
 
-export default function Pvp({account, rank, heroesList, defenseArenaHeroesIds, arenaFullAccounts, setDefenseArenaHeroesIds, setArenaAccount, setShowPvp, loadPvpInfos, updateGlobalPvpInfos}: PvpProps) {
+export default function Pvp({account, gameAccount, rank, heroesList, defenseArenaHeroesIds, arenaFullAccounts, stateChangesHandler, setDefenseArenaHeroesIds, setArenaAccount, setShowPvp, loadPvpInfos, updateGlobalPvpInfos}: PvpProps) {
 
   const [showDefense, setShowDefense] = useState<boolean>(false)
   const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false)
+  const [showArenaBattleSelect, setShowArenaBattleSelect] = useState<boolean>(false)
+  const [enemyAccountSelected,  setEnemyAccountSelected] = useState<ArenaFullAccount>()
+  const [eventHandler, setGameEventHandler] = useState<GameEventHandler>()
+
+  useEffect(() => {
+    setGameEventHandler(new GameEventHandler(stateChangesHandler.getRuneStatsDict()))
+  }, [])
 
   let defenseHeroes: HeroInfos[] = []
   defenseArenaHeroesIds.map((heroId, i) => {
@@ -47,6 +63,17 @@ export default function Pvp({account, rank, heroesList, defenseArenaHeroesIds, a
     )
   }
 
+  if(enemyAccountSelected) {
+    return(
+      <div className="PvpAndArrowBackContainer">
+        <div className="ArrowBackContainer">
+          <img className="ArrowBack" src={ArrowBack} onClick={() => setEnemyAccountSelected(undefined)} />
+        </div>
+        <BattleTeamSelection account={account} gameAccount={gameAccount} worldId={Maps.Arena} battleId={0} enemies={enemyAccountSelected.team} enemiesNames={enemyAccountSelected.team.map(hero => hero.name)} enemiesLevels={enemyAccountSelected.team.map(hero => hero.level)} enemyAdrs={enemyAccountSelected.owner} energyCost={0} heroesList={heroesList} selectedHeroesIds={[]} eventHandler={eventHandler!} setSelectedHeroesIds={() => {}} setPhaserRunning={() => {}} stateChangesHandler={stateChangesHandler} />
+      </div>
+    )
+  }
+
   if(showLeaderboard) {
     return(
       <div className="PvpAndArrowBackContainer">
@@ -60,12 +87,26 @@ export default function Pvp({account, rank, heroesList, defenseArenaHeroesIds, a
     )
   }
 
+  if(showArenaBattleSelect) {
+    return(
+      <div className="PvpAndArrowBackContainer">
+        <div className="ArrowBackContainer">
+          <img className="ArrowBack" src={ArrowBack} onClick={() => setShowArenaBattleSelect(false)} />
+        </div>
+        <div className="PvpContainer">
+          <ArenaBattleSelect arenaFullAccounts={arenaFullAccounts} setEnemyAccountSelected={setEnemyAccountSelected} />
+        </div>
+      </div>
+    )
+  }
+
   return(
     <div className="PvpAndArrowBackContainer">
       <div className="ArrowBackContainer">
         <img className="ArrowBack" src={ArrowBack} onClick={() => setShowPvp(false)} />
       </div>
       <div className="PvpContainer">
+        {showLeaderboard && <ArenaLeaderboard arenaFullAccounts={arenaFullAccounts} />}
         <div className="PvpRankAndDefenseContainer">
           <div className="MyRank">RANK {rank}</div>
           <div className="MyDefenseContainer">
@@ -75,7 +116,7 @@ export default function Pvp({account, rank, heroesList, defenseArenaHeroesIds, a
             </div>
           </div>
           <div className="PvpSearchBattleButtonContainer">
-            <div className="PvpSearchBattleButton" onClick={() => setShowDefense(true)}>Battle</div>
+            <div className="PvpSearchBattleButton" onClick={() => setShowArenaBattleSelect(true)}>Battle</div>
           </div>
           
         </div>

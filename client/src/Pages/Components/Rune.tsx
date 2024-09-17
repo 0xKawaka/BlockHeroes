@@ -4,13 +4,15 @@ import { HeroInfos, RuneInfos, RunesList } from "../../Types/apiTypes"
 import StateChangesHandler from "../State/StateChangesHandler"
 import "./Rune.css"
 import RuneMiniature from "./RuneMiniature"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Account } from "starknet"
 import crystalImg from "../../assets/icons/crystal.png"
 import { useDojo } from "../../dojo/useDojo"
+import { GameAccount } from "../../Types/toriiTypes"
 
 type RuneProps = {
   account: Account,
+  gameAccount: GameAccount,
   runesList: Array<RuneInfos>,
   heroesList: Array<HeroInfos>,
   rune: RuneInfos,
@@ -25,15 +27,25 @@ type RuneProps = {
 const maxRankRune = 16
 
 
-export default function Rune({account, runesList, heroesList, rune, equipped, image, heroId, runeSpotClicked, alreadyEquippedRune, stateChangesHandler}: RuneProps) {
+export default function Rune({account, gameAccount, runesList, heroesList, rune, equipped, image, heroId, runeSpotClicked, alreadyEquippedRune, stateChangesHandler}: RuneProps) {
   const equippedString = equipped ? "Remove" : "Equip"
   const processEquippedString = equipped ? "Removing" : "Equiping"
 
+  const [insufficientCrystals, setInsufficientCrystals] = useState<boolean>(false)
   const [showEquipTooltip, setShowEquipTooltip] = useState<boolean>(false)
   const [showWrongShapeTooltip, setShowWrongShapeTooltip] = useState<boolean>(false)
   const [isUpgrading, setIsUpgrading] = useState<boolean>(false)
   const [isEquipping, setIsEquipping] = useState<boolean>(false)
   const {setup: {systemCalls: { equipRune, unequipRune, upgradeRune }}} = useDojo();
+
+  useEffect(() => {
+    if (insufficientCrystals) {
+      const timer = setTimeout(() => {
+        setInsufficientCrystals(false)
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [insufficientCrystals])
 
   async function handleEquipRune(rune: RuneInfos, heroId: number){
     setIsEquipping(true)
@@ -50,8 +62,12 @@ export default function Rune({account, runesList, heroesList, rune, equipped, im
       stateChangesHandler.updateRuneUnequip(rune, runesList, heroesList)
     setIsEquipping(false)
   }
-  
+
   async function handleUpgradeRune(rune: RuneInfos){
+    if(gameAccount.crystals < 200 + rune.rank * 200){
+      setInsufficientCrystals(true)
+      return;
+    }
     setIsUpgrading(true)
     const upgradeRuneDatas = await upgradeRune(account, rune.id)
     if(upgradeRuneDatas.success == false){
@@ -80,7 +96,7 @@ export default function Rune({account, runesList, heroesList, rune, equipped, im
       </div>
       <div className="RuneButtonsContainer">
         {rune.rank < maxRankRune && 
-        <div className="RuneButtonUpgrade" onClick={() => isUpgrading ? undefined : handleUpgradeRune(rune)}>
+        <div className={`RuneButtonUpgrade ${insufficientCrystals ? 'insufficient-crystals' : ''}`} onClick={() => isUpgrading ? undefined : handleUpgradeRune(rune)}>
           <div className="RuneButtonUpgradeText"> {isUpgrading ? "Upgrading" : "Upgrade"}</div>
           <div className="RuneButtonUpgradeCrystalValue">
             {200 + rune.rank * 200}

@@ -18,6 +18,7 @@ export default function Register({account, setAccountSelected,  setBlockchainAcc
   const {setup: {systemCalls: { createAccount }}} = useDojo();
 
   function handleInputChange(event: any) {
+    if(event.target.value.length > 27) return;
     setUsername(event.target.value.replace(regex, ''))
   }
 

@@ -5,8 +5,10 @@ import {HeroInfos, RunesList, HeroStats} from '../../Types/apiTypes'
 import RunesDisplay from "./RunesDisplay"
 import StatsDisplay from "./StatsDisplay"
 import SpellsPanel from "./SpellsPanel"
+import { GameAccount } from "../../Types/toriiTypes"
 
 type HeroPanelProps = {
+  gameAccount: GameAccount,
   heroIndex: number,
   heroInfos: HeroInfos,
   runesList: RunesList,
@@ -14,7 +16,7 @@ type HeroPanelProps = {
   handleRuneClick(runeIndex: number, runeSpotClicked: number): void
 }
 
-export default function HeroPanel({heroIndex, heroInfos, runesList, setShowingHero, handleRuneClick}: HeroPanelProps) {
+export default function HeroPanel({gameAccount, heroIndex, heroInfos, runesList, setShowingHero, handleRuneClick}: HeroPanelProps) {
   const [spellsPanelSelected, setSpellsPanelSelected] = useState<boolean>(false)
   const [statsPanelSelected, setStatsPanelSelected] = useState<boolean>(true)
 

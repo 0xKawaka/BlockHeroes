@@ -37,9 +37,10 @@ mod Game {
     impl GameImpl of super::IGame<ContractState> {
         fn startPvpBattle(world: @IWorldDispatcher, enemyOwner: ContractAddress, heroesIds: Array<u32>) {
             assert(heroesIds.len() < 5 && heroesIds.len() > 0, '1 hero min, 4 heroes max');
-            AccountsImpl::hasAccount(world, get_caller_address());
-            //check haspvpaccount
             let caller = get_caller_address();
+            AccountsImpl::hasAccount(world, caller);
+            ArenaImpl::hasAccount(world, caller);
+            ArenaImpl::hasAccount(world, enemyOwner);
             ArenaImpl::isEnemyInRange(world, caller, enemyOwner);
             AccountsImpl::decreasePvpEnergy(world, caller, 1);
             let allyHeroes = AccountsImpl::getHeroes(world, caller, heroesIds.span());
@@ -47,7 +48,7 @@ mod Game {
             let enemyHeroesIndex = ArenaImpl::getTeam(world, enemyOwner);
             let enemyHeroes = AccountsImpl::getHeroes(world, enemyOwner, enemyHeroesIndex.span());
             let enemyEntities = EntityFactoryImpl::newEntities(world, enemyOwner, allyEntities.len(), enemyHeroes, AllyOrEnemy::Enemy);
-            BattlesImpl::newArenaBattle(world, caller, enemyOwner, allyEntities, enemyEntities, heroesIds);
+            BattlesImpl::newArenaBattle(world, caller, enemyOwner, allyEntities, enemyEntities);
         }
         fn playArenaTurn(world: @IWorldDispatcher, spellIndex: u8, targetIndex: u32) {
             BattlesImpl::playArenaTurn(world, get_caller_address(), spellIndex, targetIndex);

@@ -7,7 +7,7 @@ use game::models::battle::entity::Entity;
 use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 
 trait IBattles {
-    fn newArenaBattle(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, heroesIds: Array<u32>);
+    fn newArenaBattle(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>);
     fn newBattle(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16);
     fn playArenaTurn(world: IWorldDispatcher, owner: ContractAddress, spellIndex: u8, targetIndex: u32);
     fn playTurn(world: IWorldDispatcher, owner: ContractAddress, map: u16, spellIndex: u8, targetIndex: u32);
@@ -38,14 +38,14 @@ mod Battles {
     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 
     impl BattlesImpl of super::IBattles {
-        fn newArenaBattle(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, heroesIds: Array<u32>) {
+        fn newArenaBattle(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>) {
             InternalBattlesImpl::initArenaBattleStorage(world, owner, enemyOwner, allyEntities, enemyEntities);
-            let mut battle = BattleFactoryImpl::getBattle(world, owner, 0);
+            let mut battle = BattleFactoryImpl::getBattle(world, owner, Map::Arena.toU16());
             let healthsArray = battle.getHealthsArray();
             emit!(world, (Event::NewBattle(NewBattle { owner: owner, healthsArray: healthsArray })));
             battle.battleLoop(world);
             InternalBattlesImpl::ifArenaBattleIsOverHandle(world, owner, battle.isBattleOver, battle.isVictory);
-            // InternalBattlesImpl::storeArenaBattleState(world, ref battle, owner);
+            InternalBattlesImpl::storeBattleState(world, ref battle, owner, Map::Arena.toU16());
         }
         fn newBattle(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16) {
             InternalBattlesImpl::initBattleStorage(world, owner, allyEntities, enemyEntities, map, level);
@@ -57,10 +57,10 @@ mod Battles {
             InternalBattlesImpl::storeBattleState(world, ref battle, owner, map);
         }
         fn playArenaTurn(world: IWorldDispatcher, owner: ContractAddress, spellIndex: u8, targetIndex: u32) {
-            let mut battle = BattleFactoryImpl::getBattle(world, owner, 0);
+            let mut battle = BattleFactoryImpl::getBattle(world, owner, Map::Arena.toU16());
             battle.playTurn(world, spellIndex, targetIndex);
             InternalBattlesImpl::ifArenaBattleIsOverHandle(world, owner, battle.isBattleOver, battle.isVictory);
-            // InternalBattlesImpl::storeArenaBattleState(world, ref battle, owner);
+            InternalBattlesImpl::storeBattleState(world, ref battle, owner, Map::Arena.toU16());
         }
         fn playTurn(world: IWorldDispatcher, owner: ContractAddress, map: u16, spellIndex: u8, targetIndex: u32) {
             let mut battle = BattleFactoryImpl::getBattle(world, owner, map);
@@ -122,7 +122,6 @@ mod Battles {
                 )
             );
             Self::initBattleStorage(world, owner, allyEntities, enemyEntities, Map::Arena.toU16(), 0);
-
         }
         fn initBattleStorage(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16) {
             set!(world,
@@ -197,7 +196,6 @@ mod Battles {
                 if( i == battle.entities.len() ) {
                     break;
                 }
-                println!("stor entity {} isDead {}", battle.entities.get(i).unwrap().getIndex(), battle.entities.get(i).unwrap().isDead());
                 let healthOnTurnProcsEntity: Array<HealthOnTurnProc> = battle.getHealthOnTurnProcsEntity(i);
                 set!(world,
                     (

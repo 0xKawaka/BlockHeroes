@@ -56,7 +56,7 @@
 }
 
 .BattleTeamSelectionPlayButton {
-  font-size: 2.3rem;
+  /* font-size: 2.3rem;
   font-weight: bold;
   display: flex;
   flex-direction: row;  
@@ -67,7 +67,17 @@
   background-color: rgb(180, 133, 38);
   cursor: pointer;
   -webkit-user-select: none;
-  user-select: none;
+  user-select: none; */
+  font-size: 2.3rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 0.2rem solid rgb(180, 133, 38);
+  background-color: rgb(180, 133, 38);
+  padding: 1.3rem;
+  cursor: pointer;
+  gap: 2rem;
 }
 
 .BattleTeamSelectionPlayButton:hover{

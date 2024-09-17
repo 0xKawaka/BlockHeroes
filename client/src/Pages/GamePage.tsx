@@ -103,14 +103,14 @@ function GamePage({toriiClient, account} : GamePageProps) {
       setArenaAccount(arenaAccount);
       let arenaDefenseHeroes = ToriiGetter.getArenaDefenseHeroesIndexes(address, arenaAccount.teamSize, ArenaTeam);
       setDefenseArenaHeroesIds(arenaDefenseHeroes);
-      console.log("arenaDefenseHeroes", arenaDefenseHeroes);
+      // console.log("arenaDefenseHeroes", arenaDefenseHeroes);
     }
   }
 
   function updateGlobalPvpInfos() {
-    console.log("updateGlobalPvpInfos");
+    // console.log("updateGlobalPvpInfos");
     let arenaFullAccounts = ToriiGetter.loadGlobalPvpInfos(ArenaAccount, Heroes, ArenaTeam, Account);
-    console.log("arenaFullAccounts", arenaFullAccounts);
+    // console.log("arenaFullAccounts", arenaFullAccounts);
     setArenaFullAccounts(arenaFullAccounts);
   }
 
@@ -195,7 +195,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
           <AccountSelect account={account} allAccountsDict={allAccountsDict} setAccountSelected={setAccountSelected} setBlockchainAccount={setBlockchainAccount} />
         }
         {showMyHeroes &&
-          <MyHeroes account={blockchainAccount} heroesList={heroes} runesList={runes} baseHeroes={baseHeroes} stateChangesHandler={stateChangesHandler}/>
+          <MyHeroes account={blockchainAccount} gameAccount={gameAccount} heroesList={heroes} runesList={runes} baseHeroes={baseHeroes} stateChangesHandler={stateChangesHandler}/>
         }
         {showWorldSelect &&
           <WorldSelect account={blockchainAccount} gameAccount={gameAccount} worldsBattlesList={worldsBattlesList} heroesList={heroes} runesList={runes} mapProgress={mapProgress} stateChangesHandler={stateChangesHandler} />
@@ -204,7 +204,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
           <Summons account={blockchainAccount} gameAccount={gameAccount} setGameAccount={setGameAccount} setShowSummons={setShowSummons} handleNewHeroEvent={handleNewHeroEvent} />
         }
         {showPvp &&
-          <Pvp account={blockchainAccount} rank={arenaAccount.rank} heroesList={heroes} defenseArenaHeroesIds={defenseArenaHeroesIds} arenaFullAccounts={arenaFullAccounts} setDefenseArenaHeroesIds={setDefenseArenaHeroesIds} setArenaAccount={setArenaAccount} setShowPvp={setShowPvp} loadPvpInfos={loadPvpInfos} updateGlobalPvpInfos={updateGlobalPvpInfos}/>
+          <Pvp account={blockchainAccount} gameAccount={gameAccount} rank={arenaAccount.rank} heroesList={heroes} defenseArenaHeroesIds={defenseArenaHeroesIds} arenaFullAccounts={arenaFullAccounts} stateChangesHandler={stateChangesHandler} setDefenseArenaHeroesIds={setDefenseArenaHeroesIds} setArenaAccount={setArenaAccount} setShowPvp={setShowPvp} loadPvpInfos={loadPvpInfos} updateGlobalPvpInfos={updateGlobalPvpInfos}/>
         }
       </div>
     </div>
