@@ -24,8 +24,8 @@ mod Settings {
         EntityFactoryImpl::initBonusRunesTable(world);
         let minRankGems = array![1, 2, 4, 10];
         let gems = array![1, 2, 4, 10];
-        let minRankRange = array![3, 5, 10];
-        let range = array![2, 2, 5];
+        let minRankRange = array![5, 8, 10, 20, 30];
+        let range = array![2, 3, 4, 5, 7];
         ArenaImpl::initArena(world, minRankGems, gems, minRankRange, range)
     }
 

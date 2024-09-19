@@ -8,7 +8,7 @@ trait IArena {
     fn setEnemyRangesByRank(world: IWorldDispatcher, minRank: Array<u64>, range: Array<u64>);
     fn setGemsRewards(world: IWorldDispatcher, minRank: Array<u64>, gems: Array<u64>);
     fn getGemsReward(world: IWorldDispatcher, owner: ContractAddress) -> u64;
-    fn isEnemyInRange(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress) -> bool;
+    fn assertEnemyInRange(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress);
     fn getTeam(world: IWorldDispatcher, owner: ContractAddress) -> Array<u32>;
     fn getRank(world: IWorldDispatcher, owner: ContractAddress) -> u64;
     fn initArena(world: IWorldDispatcher, minRankGems: Array<u64>, gems: Array<u64>, minRankRange: Array<u64>, range: Array<u64>);
@@ -52,6 +52,9 @@ mod Arena {
         fn swapRanks(world: IWorldDispatcher, winner: ContractAddress, looser: ContractAddress, lastClaimedRewards: u64) {
             let winnerAccount = get!(world, winner, ArenaAccount);
             let looserAccount = get!(world, looser, ArenaAccount);
+            if(winnerAccount.rank < looserAccount.rank) {
+                return;
+            }
             set!(world, ArenaAccount { owner: winner, rank: looserAccount.rank, lastClaimedRewards: lastClaimedRewards, teamSize: winnerAccount.teamSize });
             set!(world, ArenaAccount { owner: looser, rank: winnerAccount.rank, lastClaimedRewards: lastClaimedRewards, teamSize: looserAccount.teamSize });
             emit!(world, (Event::RankChange(RankChange { owner: winner, rank: looserAccount.rank })));
@@ -107,9 +110,10 @@ mod Arena {
             return res;
         }
 
-        fn isEnemyInRange(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress) -> bool {
+        fn assertEnemyInRange(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress) {
             let ownerRank = get!(world, owner, ArenaAccount).rank;
             let enemyRank = get!(world, enemyOwner, ArenaAccount).rank;
+            assert(ownerRank > enemyRank, 'Can only fight higher ranks');
             let enemyRangesByRankLength = get!(world, 0, ArenaConfig).enemyRangesByRankLength;
 
             let mut i: u32 = 0;
@@ -127,7 +131,7 @@ mod Arena {
                 }
                 i += 1;
             };
-            return res;
+            assert(res, 'Enemy rank not in range');
         }
 
         fn getRank(world: IWorldDispatcher, owner: ContractAddress) -> u64 {
@@ -135,7 +139,17 @@ mod Arena {
         }
 
         fn getTeam(world: IWorldDispatcher, owner: ContractAddress) -> Array<u32> {
-            return array![];
+            let account = get!(world, owner, ArenaAccount);
+            let mut heroIndexes: Array<u32> = Default::default();
+            let mut i: u32 = 0;
+            loop {
+                if i == account.teamSize {
+                    break;
+                }
+                heroIndexes.append(get!(world, (owner, i), ArenaTeam).heroIndex);
+                i += 1;
+            };
+            return heroIndexes;
         }
 
         fn hasAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) {

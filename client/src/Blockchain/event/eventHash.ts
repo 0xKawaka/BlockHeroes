@@ -13,7 +13,9 @@ export const eventHashes: {[key: string]: string} = {
   "0x169143d013e7076216610ff35d9f8aaed3705a203efcaad1474f9a854f900bd": "EndBattle",
   "0xe652e0407ea68d77a436a2e8d511b75b7885524d7a62e8c28312b419dcde4c": "ExperienceGain",
   "0x1aa4251c55065346137f3c4c733fd2305e0640fbe22c9143a8c9cfe59e1bc54": "Loot",
-  "0x12072cf4cf73034a0d2054394ece7cb1dc5df49068f7705f0f1356920890f6c": "RuneMinted",
+  // "0x12072cf4cf73034a0d2054394ece7cb1dc5df49068f7705f0f1356920890f6c": "RuneMinted",
+  "0x1f355961284c21fced60460e371443a9b3a192b3e5ae755ed9428dbbb4ba68f": "RuneMinted",
+  "0x3f5625bd0dba2b2aaa6094d9b9a6bb65078fb5954bab66850ed3b8e4ac66955": "RankChange",
 }
 
 export default eventHashes;

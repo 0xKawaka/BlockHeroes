@@ -20,10 +20,10 @@ const castEffectTarget = new CastAndEffect("Target")
 const castTrueAOE = new CastAndEffect("trueAOE")
 
 const skillAnimsDict: {[key: string]: SkillAnimationWrapper} = {
-  "Attack Hunter": new SkillAnimationWrapper("attack", jumpInJumpOutAndCast),
-  "Attack Priest": new SkillAnimationWrapper("attack", castProjectile),
-  "Attack Knight": new SkillAnimationWrapper("attack", jumpInJumpOutAndCast),
-  "Attack Assassin": new SkillAnimationWrapper("attack", jumpInJumpOutAndCast),
+  "Attack Elandor": new SkillAnimationWrapper("attack", jumpInJumpOutAndCast),
+  "Attack Marella": new SkillAnimationWrapper("attack", castProjectile),
+  "Attack Wellan": new SkillAnimationWrapper("attack", jumpInJumpOutAndCast),
+  "Attack Sirocco": new SkillAnimationWrapper("attack", jumpInJumpOutAndCast),
   "Attack Diana": new SkillAnimationWrapper("attack", jumpInJumpOutAndCast),
   "Heal": new SkillAnimationWrapper("skill1", cast),
   "Fire Strike": new SkillAnimationWrapper("skill2", runInRunOutAndCast),
@@ -66,11 +66,11 @@ const skillAnimsDict: {[key: string]: SkillAnimationWrapper} = {
 }
 
 const projectilesDict: {[key: string]: {name:string, width:number, height:number, widthRatio: number, heightRatio: number}} = {
-  "attackpriest": {name:"frostbolt", width:200, height:50, widthRatio: 0.2, heightRatio: 0.08}
+  "attackmarella": {name:"frostbolt", width:200, height:50, widthRatio: 0.2, heightRatio: 0.08}
 }
 
 const spellAnimDict: {[key: string]: {name:string, framerate:number, width:number, height:number, frameToCast:number}} = {
-  "skill2hunter": {name:"arrowShower", framerate:11, width:256, height:128, frameToCast:-1},
+  "skill2elandor": {name:"arrowShower", framerate:11, width:256, height:128, frameToCast:-1},
   "skill1diana": {name:"dianaBuff", framerate:8, width:288, height:128, frameToCast:-1},
   "skill1elric": {name:"elricBuff", framerate:8, width:288, height:128, frameToCast:-1},
   "skill2nereus": {name:"nereusWave", framerate:10, width:288, height:128, frameToCast:9},

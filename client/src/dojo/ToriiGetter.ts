@@ -6,6 +6,10 @@ import { Hero, Rune, GameAccount, ArenaAccount } from "../Types/toriiTypes";
 import { Parser } from "../Blockchain/Parser";
 import hexToString from "../Pages/utils/hexToString";
 import { ArenaFullAccount } from "../Types/customTypes";
+import { HeroesFactory } from "../Classes/Heroes/HeroesFactory";
+import { HeroBlockchain } from "../Types/blockchainTypes";
+import RuneFactory from "../Classes/Runes/RuneFactory";
+import { HeroInfos } from "../Types/apiTypes";
 
 export default class ToriiGetter {
 
@@ -108,12 +112,17 @@ export default class ToriiGetter {
     return heroes;
   }
 
-  static loadGlobalPvpInfos(ArenaAccount: any, Heroes: any, ArenaTeam: any, Account: any): ArenaFullAccount[] {
+  static loadGlobalPvpInfos(ArenaAccount: any, Heroes: any, ArenaTeam: any, Account: any, Runes: any): ArenaFullAccount[] {
     // const {setup: {clientComponents: { ArenaAccount, Heroes, ArenaTeam, Account }}} = useDojo();
     const entitiesSet = runQuery([Has(ArenaAccount)]);
     const entitiesArray = Array.from(entitiesSet);
     const allArenaAccounts = ToriiGetter.getAllArenaAccounts(entitiesArray, ArenaAccount);
-    const usernamesByOwner = ToriiGetter.getAllArenaUsernames(entitiesArray, Account);
+    const ownersArray = allArenaAccounts.map(allArenaAccounts => allArenaAccounts.owner);
+    const accountsByOwner = ToriiGetter.getAllAccounts(ownersArray, Account);
+    let runesByOwner: {[key:string]: Rune[]} = {};
+    for(let owner in accountsByOwner){
+      runesByOwner[owner] = ToriiGetter.getAllRunes(owner, accountsByOwner[owner].runesCount, Runes);
+    }
 
     let entitiesByOwner: {[key:string]: Entity[]} = {};
     for(let arenaAccount of allArenaAccounts){  
@@ -137,25 +146,28 @@ export default class ToriiGetter {
       arenaDefenseHeroesIndexesByOwner[arenaAccount.owner] = arenaDefenseHeroes;
     }
     // console.log("arenaDefenseHeroesIndexesByOwner", arenaDefenseHeroesIndexesByOwner);
-    let arenaDefenseHeroesByOwner: {[key:string]: Hero[]} = {};
+    let arenaDefenseHeroesByOwner: {[key:string]: HeroInfos[]} = {};
     for(let owner in arenaDefenseHeroesIndexesByOwner){
-      let heroes: Hero[] = [];
+      let heroes: HeroInfos[] = [];
       for(let heroIndex of arenaDefenseHeroesIndexesByOwner[owner]){
         const heroEntityId = getEntityIdFromKeys([
           BigInt(owner), BigInt(heroIndex)
         ]) as Entity;
-        const hero = getComponentValue(Heroes, heroEntityId);
-        if(hero){
-          let runeIds =  Parser.parseRuneIds(hero.hero.runes);
-          let spots = Parser.parseSpots(hero.hero.runes);
-          heroes.push({id: hero.hero.id, name: hexToString(hero.hero.name), level: hero.hero.level, experience: hero.hero.experience, rank: hero.hero.rank, runeIds: runeIds, spots: spots});
+        let heroTorii = getComponentValue(Heroes, heroEntityId);
+        if(heroTorii){
+          let runeIds =  Parser.parseRuneIds(heroTorii.hero.runes);
+          let spots = Parser.parseSpots(heroTorii.hero.runes);
+          let hero: HeroBlockchain = {id: heroTorii.hero.id, name: hexToString(heroTorii.hero.name), level: heroTorii.hero.level, experience: heroTorii.hero.experience, rank: heroTorii.hero.rank, runeIds: runeIds, spots: spots};
+          let runes = RuneFactory.createRunes(runesByOwner[owner]);
+          let heroInfos = HeroesFactory.createHero(hero, runes);
+          heroes.push(heroInfos);
         }
       }
       arenaDefenseHeroesByOwner[owner] = heroes;
     }
     let arenaFullAccounts: ArenaFullAccount[] = [];
     for(let arenaAccount of allArenaAccounts){
-      arenaFullAccounts.push({owner: arenaAccount.owner, username: usernamesByOwner[arenaAccount.owner], rank: arenaAccount.rank, team: arenaDefenseHeroesByOwner[arenaAccount.owner]});
+      arenaFullAccounts.push({owner: arenaAccount.owner, username: accountsByOwner[arenaAccount.owner].username, rank: arenaAccount.rank, team: arenaDefenseHeroesByOwner[arenaAccount.owner]});
     }
     arenaFullAccounts.sort((a, b) => a.rank - b.rank);
     return arenaFullAccounts;

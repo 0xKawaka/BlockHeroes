@@ -13,6 +13,7 @@ import { Account } from "starknet";
 import UIScene from "../Scenes/UIScene";
 import GameSpeedHelper from "./Animations/GameSpeedHelper";
 import { useDojo } from "../dojo/useDojo";
+import Maps from "../GameDatas/maps";
 
 export default class Battle {
   battleEntities: Array<IBattleEntity>
@@ -35,7 +36,7 @@ export default class Battle {
   positionner: Positionner
   gameSpeedHelper: GameSpeedHelper
   playTurn: any
-  worldId: number
+  map: Maps
 
   constructor(battleScene: BattleScene, gameSpeedHelper: GameSpeedHelper) {
     this.battleScene = battleScene
@@ -55,8 +56,8 @@ export default class Battle {
     this.playTurn = playTurn
   }
 
-  setWorldId(worldId: number){
-    this.worldId = worldId
+  setMap(map: number){
+    this.map = map
   }
 
   setPositionner(positionner: Positionner){
@@ -259,7 +260,11 @@ export default class Battle {
         
         this.getEntityHighestTurn().endSkillSelection()
         console.log('cast ' + this.getEntityHighestTurn().getSkillIndexByName(this.selectedSkill) + ' on ' + entityClickedId)
-        await this.playTurn(this.account, this.worldId, this.getEntityHighestTurn().getSkillIndexByName(this.selectedSkill), entityClickedId, this.eventHandler)
+        if(this.map == Maps.Campaign){
+          await this.playTurn(this.account, this.map, this.getEntityHighestTurn().getSkillIndexByName(this.selectedSkill), entityClickedId, this.eventHandler)
+        } else {
+          await this.playTurn(this.account, this.getEntityHighestTurn().getSkillIndexByName(this.selectedSkill), entityClickedId, this.eventHandler)
+        }
         await this.processNextSkill(this.getEntityHighestTurn().getIndex())
       }
     }

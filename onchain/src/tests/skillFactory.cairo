@@ -28,10 +28,10 @@
 //         let skill = SkillFactoryImpl::getSkill(world, 'Water Shield');
 //         assert(skill.cooldown == 4, 'skill cooldown should be 4');
 
-//         // let skillSet: Array<Skill> = SkillFactoryImpl::getSkillSet(world, 'hunter');
+//         // let skillSet: Array<Skill> = SkillFactoryImpl::getSkillSet(world, 'elandor');
 //         // assert(skillSet.len() == 3, 'skillSet len');
 
-//         // let skillSets: Array<Array<Skill>> = SkillFactoryImpl::getSkillSets(world, array!['hunter', 'priest']);
+//         // let skillSets: Array<Array<Skill>> = SkillFactoryImpl::getSkillSets(world, array!['elandor', 'marella']);
 //         // assert(skillSets[1].len() == 3, 'skillSets[1] len');
 //     }
 // }

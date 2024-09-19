@@ -213,6 +213,7 @@ export function createSystemCalls(
                 retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
+            console.log("playTurnEvents", res.events);
             eventHandler.parseAndStore(res.events);
             return true;
         } catch (e) {
@@ -221,12 +222,31 @@ export function createSystemCalls(
         }
     }
 
-    async function startPvpBattle(account: Account, opponentAdrs: bigint, heroesIds: number[], eventHandler: GameEventHandler): Promise<boolean> {
+    async function startPvpBattle(account: Account, enemyOwner: bigint, heroesIds: number[], eventHandler: GameEventHandler): Promise<boolean> {
         try {
             let txRes = await client.Game.startPvpBattle({
                 account,
-                opponentAdrs,
+                enemyOwner,
                 heroesIds,
+            });
+            let res: any = await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 100,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            eventHandler.parseAndStore(res.events);
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    async function playArenaTurn(account: Account, spellIndex: number, targetIndex: number, eventHandler: GameEventHandler): Promise<boolean> {
+        try {
+            let txRes = await client.Game.playArenaTurn({
+                account,
+                spellIndex,
+                targetIndex,
             });
             let res: any = await account.waitForTransaction(txRes.transaction_hash, {
                 retryInterval: 100,
@@ -253,5 +273,6 @@ export function createSystemCalls(
         startBattle,
         playTurn,
         startPvpBattle,
+        playArenaTurn
     };
 }

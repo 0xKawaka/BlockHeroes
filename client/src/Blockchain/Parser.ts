@@ -72,6 +72,26 @@ export abstract class Parser {
     }
   }
 
+
+  static parseRawRune(event: any): BlockchainRune {
+    const rank = Number(event[4]);
+    return {
+      id: Number(event[1]),
+      statistic: this.parseRuneStatistic(Number(event[2])),
+      isPercent: Boolean(Number(event[3])),
+      rank: rank,
+      rarity: this.parseRuneRarity(Number(event[5])),
+      shape: Number(event[6]) + 1,
+      isEquipped: Boolean(Number(event[7])),
+      heroEquipped: Number(event[8]),
+      rank4Bonus: undefined,
+      rank8Bonus: undefined,
+      rank12Bonus: undefined,
+      rank16Bonus: undefined,
+    }
+  }
+
+
   static parseBonusRune(bonus: any) {
     return {
       statistic: this.getNotUndefinedKeys(bonus.statistic.variant)[0],
@@ -95,6 +115,36 @@ export abstract class Parser {
         return 6;
     }
     return -1;
+  }
+
+  static parseRuneStatistic(statistic: number): string {
+    switch(statistic) {
+      case 0:
+        return "Health";
+      case 1:
+        return "Attack";
+      case 2:
+        return "Defense";
+      case 3:
+        return "Speed";
+    }
+    return "Unkown Rune Statistic"
+  }
+
+  static parseRuneRarity(rarity: number): string {
+    switch(rarity) {
+      case 0:
+        return "Common";
+      case 1:
+        return "Uncommon";
+      case 2:
+        return "Rare";
+      case 3:
+        return "Epic";
+      case 4:
+        return "Legendary";
+    }
+    return "Unkown Rune Rarity"
   }
 
   static getNotUndefinedKeys(obj: any) {

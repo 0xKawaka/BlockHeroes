@@ -1,7 +1,7 @@
 const animsByEntityName: {
   [key: string]: {[key: string]:{start:number, end:number}},
 } = {  
-  "hunter": {
+  "elandor": {
     idle:{start:0, end:11},
     hurt:{start:12, end:17},
     die:{start:18, end:36},
@@ -12,7 +12,7 @@ const animsByEntityName: {
     attack: {start:84, end:98},
     run: {start:99, end:108},
   },
-  "priest": {
+  "marella": {
     idle:{start:0, end:7},
     hurt:{start:8, end:14},
     die:{start:15, end:30},
@@ -20,7 +20,7 @@ const animsByEntityName: {
     skill1: {start:49, end:60},
     attack: {start:61, end:68},
   },
-  "assassin": {
+  "sirocco": {
     idle:{start:0, end:7},
     hurt:{start:8, end:13},
     die:{start:14, end:32},
@@ -31,7 +31,7 @@ const animsByEntityName: {
     run: {start:88, end:95},
     roll: {start:96, end:101},
   },
-  "knight": {
+  "wellan": {
     idle:{start:0, end:7},
     hurt:{start:8, end:13},
     die:{start:14, end:26},

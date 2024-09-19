@@ -9,11 +9,25 @@
   border-bottom: 0.2rem solid rgb(146, 113, 47);
 }
 
+.ArenaBattleRank1 {
+  background-color: rgb(224, 175, 13);
+  color: black;
+  padding: 1rem;
+  font-size: 3.5rem;
+  width: 60%;
+}
+
 .ArenaBattleSelectAccountContainer {
-width: 100%;
-border: 0.2rem solid rgb(146, 113, 47);
-border-bottom: none;
-/* background-color: rgb(102, 80, 54); */
+  width: 100%;
+  border: 0.2rem solid rgb(146, 113, 47);
+  border-bottom: none;
+}
+
+.ArenaBattleSelectAccountContainerGray {
+  width: 100%;
+  border: 0.2rem solid rgb(146, 113, 47);
+  border-bottom: none;
+  filter: grayscale(80%);
 }
 
 .ArenaBattleSelectAccount {
@@ -41,6 +55,14 @@ border-bottom: none;
   padding: 1.3rem;
   cursor: pointer;
   gap: 2rem;
+  width: 10rem;
+}
+
+.ArenaBattleSelectPlaceholder {
+  visibility: hidden;
+  border: 0.2rem solid rgb(180, 133, 38);
+  padding: 1.3rem;
+  width: 10rem;
 }
 
 .ArenaBattleSelectButton:hover {

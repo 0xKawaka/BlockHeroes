@@ -30,7 +30,7 @@ export default class BattleScene extends Phaser.Scene {
 
   preload() {
     this.battle.setPlayTurn(this.registry.get('playTurn'))
-    this.battle.setWorldId(this.registry.get('worldId'))
+    this.battle.setMap(this.registry.get('map'))
     this.battle.setGameEventHandler(this.registry.get('eventHandler'))
     this.battle.setAccountWallet(this.registry.get('account'))
   }

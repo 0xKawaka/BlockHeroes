@@ -1,4 +1,4 @@
-import { ExperienceGainEvent, LootEvent, RuneBonusEvent } from "../../Blockchain/event/eventTypes"
+import { ExperienceGainEvent, LootEvent, RankChangeEvent, RuneBonusEvent } from "../../Blockchain/event/eventTypes"
 import { HeroesFactory } from "../../Classes/Heroes/HeroesFactory"
 import RuneFactory from "../../Classes/Runes/RuneFactory"
 import { BaseStatsDict, HeroInfos, RuneInfos, RuneStatsDict } from "../../Types/apiTypes"
@@ -6,6 +6,7 @@ import { GameAccount } from "../../Types/toriiTypes"
 import EnergyHandler from "../Classes/EnergyHandler"
 import runeStatsDict from '../../GameDatas/Statistics/runeStats'
 import baseStatsDict from '../../GameDatas/Statistics/baseStats'
+import { ArenaAccount, ArenaFullAccount } from "../../Types/customTypes"
 
 
 export default class StateChangesHandler {
@@ -18,9 +19,11 @@ export default class StateChangesHandler {
   setShowWorldSelect: React.Dispatch<React.SetStateAction<boolean>>
   setIsBattleRunning: React.Dispatch<React.SetStateAction<boolean>>
   setMapProgress: React.Dispatch<React.SetStateAction<{[key: number]: number;}>>
+  setArenaAccount: React.Dispatch<React.SetStateAction<ArenaAccount>>
+  setArenaFullAccounts: React.Dispatch<React.SetStateAction<ArenaFullAccount[]>>
 
 
-  constructor(setHeroesList: React.Dispatch<React.SetStateAction<HeroInfos[]>>, setRunesList: React.Dispatch<React.SetStateAction<RuneInfos[]>>, setGameAccount: React.Dispatch<React.SetStateAction<GameAccount>>, setShowMyHeroes: React.Dispatch<React.SetStateAction<boolean>>, setShowWorldSelect: React.Dispatch<React.SetStateAction<boolean>>, setIsBattleRunning: React.Dispatch<React.SetStateAction<boolean>>, setMapProgress: React.Dispatch<React.SetStateAction<{[key: number]: number;}>>) {
+  constructor(setHeroesList: React.Dispatch<React.SetStateAction<HeroInfos[]>>, setRunesList: React.Dispatch<React.SetStateAction<RuneInfos[]>>, setGameAccount: React.Dispatch<React.SetStateAction<GameAccount>>, setShowMyHeroes: React.Dispatch<React.SetStateAction<boolean>>, setShowWorldSelect: React.Dispatch<React.SetStateAction<boolean>>, setIsBattleRunning: React.Dispatch<React.SetStateAction<boolean>>, setMapProgress: React.Dispatch<React.SetStateAction<{[key: number]: number;}>>, setArenaAccount: React.Dispatch<React.SetStateAction<ArenaAccount>>, setArenaFullAccounts: React.Dispatch<React.SetStateAction<ArenaFullAccount[]>> ) {
     this.setHeroesList = setHeroesList
     this.setRunesList = setRunesList
     this.setGameAccount = setGameAccount
@@ -28,6 +31,17 @@ export default class StateChangesHandler {
     this.setShowWorldSelect = setShowWorldSelect
     this.setIsBattleRunning = setIsBattleRunning
     this.setMapProgress = setMapProgress
+    this.setArenaAccount = setArenaAccount
+    this.setArenaFullAccounts = setArenaFullAccounts
+  }
+
+  updateArenaFullAccounts(arenaFullAccounts: ArenaFullAccount[], rankChanges: RankChangeEvent[]) {
+    let newArenaFullAccounts = [...arenaFullAccounts]
+    rankChanges.forEach((rankChange: RankChangeEvent) => {
+      const indexAccount = newArenaFullAccounts.findIndex(a => a.owner === BigInt(rankChange.owner).toString())
+      newArenaFullAccounts[indexAccount].rank = rankChange.rank
+    })
+    this.setArenaFullAccounts(newArenaFullAccounts)
   }
 
   updateMapProgress(mapProgress: {[key: number]: number}) {

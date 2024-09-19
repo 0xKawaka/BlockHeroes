@@ -28,14 +28,14 @@ type BattleSelectProps = {
   stateChangesHandler: StateChangesHandler
 }
 
-function computeTotalStats(baseeStats: HeroStats, bonusStats: HeroStats): HeroStats {
+function computeTotalStats(baseStats: HeroStats, bonusStats: HeroStats): HeroStats {
   return {
-    health: baseeStats.health + bonusStats.health,
-    speed: baseeStats.speed + bonusStats.speed,
-    attack: baseeStats.attack + bonusStats.attack,
-    defense: baseeStats.defense + bonusStats.defense,
-    criticalChance: baseeStats.criticalChance + bonusStats.criticalChance,
-    criticalDamage: baseeStats.criticalDamage + bonusStats.criticalDamage,
+    health: baseStats.health + bonusStats.health,
+    speed: baseStats.speed + bonusStats.speed,
+    attack: baseStats.attack + bonusStats.attack,
+    defense: baseStats.defense + bonusStats.defense,
+    criticalChance: baseStats.criticalChance + bonusStats.criticalChance,
+    criticalDamage: baseStats.criticalDamage + bonusStats.criticalDamage,
   }
 }
 
@@ -106,16 +106,11 @@ function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesLis
       </div>
     }
     {phaserRunning &&
-      <BattlePage account={account} worldId={worldId} battleId={selectedBattleIndex} selectedTeam={getSelectedTeam(selectedHeroesIds)} selectedHeroesIds={selectedHeroesIds} enemiesTeam={getEnemiesTeam(selectedBattleIndex)} heroesList={heroesList} runesList={runesList} eventHandler={eventHandler!} mapProgress={mapProgress} map={Maps.Campaign} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler} setIsLootPanelVisible={setIsLootPanelVisible} setWinOrLose={setWinOrLose} setHeroesBeforeExperienceGained={setHeroesBeforeExperienceGained} />
+      <BattlePage account={account} map={Maps.Campaign} battleId={selectedBattleIndex} selectedTeam={getSelectedTeam(selectedHeroesIds)} selectedHeroesIds={selectedHeroesIds} enemiesTeam={getEnemiesTeam(selectedBattleIndex)} heroesList={heroesList} runesList={runesList} eventHandler={eventHandler!} mapProgress={mapProgress} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler} setIsLootPanelVisible={setIsLootPanelVisible} setWinOrLose={setWinOrLose} setHeroesBeforeExperienceGained={setHeroesBeforeExperienceGained} />
     }
     {!phaserRunning && isLootPanelVisible &&
       <div className="OutOfBattleContainer">
-        {winOrLose === "Defeat" &&
-          <EndBattlePanel title={winOrLose} heroesList={heroesList} heroesBeforeExperienceGained={heroesBeforeExperienceGained} eventHandler={eventHandler!} setWinOrLose={setWinOrLose} setIsLootPanelVisible={setIsLootPanelVisible} stateChangesHandler={stateChangesHandler} />          
-        }
-        {winOrLose === "Victory" &&
-          <EndBattlePanel title={winOrLose} heroesList={heroesList} heroesBeforeExperienceGained={heroesBeforeExperienceGained} eventHandler={eventHandler!} setWinOrLose={setWinOrLose} setIsLootPanelVisible={setIsLootPanelVisible} stateChangesHandler={stateChangesHandler} />
-        }
+        <EndBattlePanel title={winOrLose} map={Maps.Campaign} heroesList={heroesList} heroesBeforeExperienceGained={heroesBeforeExperienceGained} eventHandler={eventHandler!} setWinOrLose={setWinOrLose} setIsLootPanelVisible={setIsLootPanelVisible} stateChangesHandler={stateChangesHandler} />
       </div>
     }
   </div>

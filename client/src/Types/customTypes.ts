@@ -1,10 +1,12 @@
-import { Hero } from "./toriiTypes";
+import { HeroInfos } from "./apiTypes";
 
 type ArenaFullAccount = {
     owner: string,
     username: string,
     rank: number,
-    team: Array<Hero>,
+    team: Array<HeroInfos>,
 }
 
-export type {ArenaFullAccount}
+type ArenaAccount = {rank: number, lastClaimedRewards: number}
+
+export type {ArenaFullAccount, ArenaAccount}

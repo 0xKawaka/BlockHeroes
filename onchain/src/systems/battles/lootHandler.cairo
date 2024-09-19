@@ -22,6 +22,7 @@ fn computeAndDistributeLoot(world: IWorldDispatcher, owner: ContractAddress, ene
     let crystals: u32 = baseCrystalsGivenPerEnemy * enemiesLen + ((baseCrystalsGivenPerEnemy * (totalLevel - enemiesLen) * crystalsBonusPercentPerLevel) / 100);
     AccountsImpl::increaseCrystals(world, owner, crystals);
     if(hasLootedRune()) {
+        println!("Looted rune");
         AccountsImpl::mintRune(world, owner);
     }
     emit!(world, (Event::Loot(Loot {
@@ -31,5 +32,5 @@ fn computeAndDistributeLoot(world: IWorldDispatcher, owner: ContractAddress, ene
 }
 
 fn hasLootedRune() -> bool {
-    return rand32(get_block_timestamp(), 10) < runeLootChance;
+    return rand32(get_block_timestamp() + 111, 10) < runeLootChance;
 }

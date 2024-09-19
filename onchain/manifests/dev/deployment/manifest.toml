@@ -24,8 +24,8 @@ manifest_name = "dojo-base"
 [[contracts]]
 kind = "DojoContract"
 address = "0x1f355961284c21fced60460e371443a9b3a192b3e5ae755ed9428dbbb4ba68f"
-class_hash = "0x50f0cd2ce0e6a661ea0327d650bf3dbb5c57815757e8c8471e3a084318bc384"
-original_class_hash = "0x50f0cd2ce0e6a661ea0327d650bf3dbb5c57815757e8c8471e3a084318bc384"
+class_hash = "0x3b982b2c063396c15862aab255358302cd42eee79f919e4c3693b0e3a593047"
+original_class_hash = "0x3b982b2c063396c15862aab255358302cd42eee79f919e4c3693b0e3a593047"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/game-Game-1a8648a1.json"
 reads = []
@@ -51,8 +51,8 @@ manifest_name = "game-Game-1a8648a1"
 [[contracts]]
 kind = "DojoContract"
 address = "0x7db0ee87b66abc2184e93e5f322d9753aa2dd71890cd1ffddfacebde2cbc49e"
-class_hash = "0x2d57a960c0615f3a789b325eb0b101265df994dee665daf287a53449279b87f"
-original_class_hash = "0x2d57a960c0615f3a789b325eb0b101265df994dee665daf287a53449279b87f"
+class_hash = "0xb3eba8fe5b44da0800d45b7d9053ae906bb1d7814651a41d8c776452d30709"
+original_class_hash = "0xb3eba8fe5b44da0800d45b7d9053ae906bb1d7814651a41d8c776452d30709"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/game-Settings-4d1bc91c.json"
 reads = []

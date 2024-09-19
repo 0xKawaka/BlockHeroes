@@ -9,4 +9,5 @@ type RuneBonusEvent = {owner: string, id: number, rank: number, procStat: string
 type ExperienceGainEvent = {owner: string,  entityId: number, experienceGained: number, levelAfter: number, experienceAfter: number }
 type LootEvent = {owner: string, crystals: number}
 type RuneMintedEvent = {owner: string, blockchainRune: BlockchainRune}
-export type {NewBattleEvent, StartTurnEvent, SkillEvent, EndTurnEvent, EndBattleEvent, RuneBonusEvent, ExperienceGainEvent, LootEvent, RuneMintedEvent}
+type RankChangeEvent = {owner: string, rank: number}
+export type {NewBattleEvent, StartTurnEvent, SkillEvent, EndTurnEvent, EndBattleEvent, RuneBonusEvent, ExperienceGainEvent, LootEvent, RuneMintedEvent, RankChangeEvent }

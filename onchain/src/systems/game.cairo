@@ -41,7 +41,7 @@ mod Game {
             AccountsImpl::hasAccount(world, caller);
             ArenaImpl::hasAccount(world, caller);
             ArenaImpl::hasAccount(world, enemyOwner);
-            ArenaImpl::isEnemyInRange(world, caller, enemyOwner);
+            ArenaImpl::assertEnemyInRange(world, caller, enemyOwner);
             AccountsImpl::decreasePvpEnergy(world, caller, 1);
             let allyHeroes = AccountsImpl::getHeroes(world, caller, heroesIds.span());
             let allyEntities = EntityFactoryImpl::newEntities(world, caller, 0, allyHeroes, AllyOrEnemy::Ally);

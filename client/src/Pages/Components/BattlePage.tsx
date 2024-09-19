@@ -9,44 +9,57 @@ import { Account } from "starknet"
 import StateChangesHandler from "../State/StateChangesHandler"
 import { useDojo } from "../../dojo/useDojo"
 import Maps from "../../GameDatas/maps"
+import { ArenaAccount, ArenaFullAccount } from "../../Types/customTypes"
+import { num } from "starknet";
 
 type BattlePageProps = {
   account: Account,
-  worldId: number
+  arenaAccount?: ArenaAccount
+  map: Maps
   battleId: number
   selectedTeam: Entity[]
   selectedHeroesIds: number[]
   enemiesTeam: Entity[]
   heroesList: Array<HeroInfos>
-  runesList: RunesList
+  enemyAccountSelected?: ArenaFullAccount
+  arenaFullAccounts?: Array<ArenaFullAccount>,
+  runesList?: RunesList
   eventHandler: GameEventHandler
   mapProgress?: {[key: number]: number}
-  map: Maps,
+  updateGlobalPvpInfos?: () => void
+  loadPvpInfos?: (address: string) => void
   setPhaserRunning: React.Dispatch<React.SetStateAction<boolean>>
   stateChangesHandler: StateChangesHandler
+  setPreviousArenaRank?: React.Dispatch<React.SetStateAction<number>>
+  setEnemyAccountSelected?: React.Dispatch<React.SetStateAction<ArenaFullAccount | undefined>>
   setIsLootPanelVisible: React.Dispatch<React.SetStateAction<boolean>>
   setWinOrLose: React.Dispatch<React.SetStateAction<string>>
-  setHeroesBeforeExperienceGained: React.Dispatch<React.SetStateAction<HeroInfos[]>>
+  setHeroesBeforeExperienceGained?: React.Dispatch<React.SetStateAction<HeroInfos[]>>
 }
 
 
-export default function BattlePage({account, worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam, heroesList, runesList, eventHandler, mapProgress, map, setPhaserRunning, stateChangesHandler, setIsLootPanelVisible, setWinOrLose, setHeroesBeforeExperienceGained}: BattlePageProps) {
-  const {setup: {systemCalls: { playTurn }}} = useDojo();
+export default function BattlePage({account, arenaAccount, map, battleId, selectedTeam, selectedHeroesIds, enemiesTeam, heroesList, enemyAccountSelected, arenaFullAccounts, runesList, eventHandler, mapProgress, updateGlobalPvpInfos, loadPvpInfos, setPhaserRunning, stateChangesHandler, setPreviousArenaRank, setEnemyAccountSelected, setIsLootPanelVisible, setWinOrLose, setHeroesBeforeExperienceGained}: BattlePageProps) {
+  const {setup: {systemCalls: { playTurn, playArenaTurn }}} = useDojo();
 
   function handleStartFight() {
-    const heroesBeforeExperienceGained = structuredClone(heroesList.filter(hero => selectedHeroesIds.some(id => id === hero.id)))
-    setHeroesBeforeExperienceGained(heroesBeforeExperienceGained)
+    if(map === Maps.Campaign){
+      if(setHeroesBeforeExperienceGained == undefined) {
+        throw new Error("BattlePage setHeroesBeforeExperienceGained is undefined")
+      }
+      const heroesBeforeExperienceGained = structuredClone(heroesList.filter(hero => selectedHeroesIds.some(id => id === hero.id)))
+      setHeroesBeforeExperienceGained(heroesBeforeExperienceGained)
+    }
     stateChangesHandler.setIsBattleRunning(true)
     setPhaserRunning(true)
     setIsLootPanelVisible(false)
-    const phaserGame = new Phaser.Game(getPhaserConfig(eventHandler, account, playTurn, "0xtest", "GamePhaserContainer", worldId, battleId, selectedTeam, selectedHeroesIds, enemiesTeam))
+    const phaserGame = new Phaser.Game(getPhaserConfig(eventHandler, account, map == Maps.Campaign ? playTurn : playArenaTurn, "GamePhaserContainer", map, battleId, selectedTeam, enemiesTeam))
     phaserGame.events.on('destroy', () => {
       onDestroyProcs()
     })
   }
 
   useEffect(() => {
-    handleStartFight()
+      handleStartFight()
   }, [])
   
   async function onDestroyProcs() {
@@ -58,18 +71,37 @@ export default function BattlePage({account, worldId, battleId, selectedTeam, se
     }
     console.log('endBattleEvent.hasPlayerWon : ' + endBattleEvent.hasPlayerWon)
     setWinOrLose(endBattleEvent.hasPlayerWon ? "Victory" : "Defeat")
-    if(endBattleEvent.hasPlayerWon && mapProgress !== undefined && battleId !== undefined && mapProgress[map] <= battleId){
-      mapProgress[map] = battleId + 1
-      stateChangesHandler.updateMapProgress(mapProgress)
+    if(map === Maps.Campaign){
+      if(endBattleEvent.hasPlayerWon && mapProgress !== undefined && battleId !== undefined && mapProgress[map] <= battleId){
+        mapProgress[map] = battleId + 1
+        stateChangesHandler.updateMapProgress(mapProgress)
+      }
+      stateChangesHandler.updateAfterExperience(heroesList, eventHandler.getExperienceGainEventArray())
+      let loot = eventHandler.getLootEvent()
+      if(loot !== undefined) {
+        stateChangesHandler.updateLoot(loot)
+      }
+      let rune = eventHandler.getRuneMinted()
+      if(rune !== undefined && runesList !== undefined) {
+        stateChangesHandler.updateNewRune(rune, runesList)
+      }
     }
-    stateChangesHandler.updateAfterExperience(heroesList, eventHandler.getExperienceGainEventArray())
-    let loot = eventHandler.getLootEvent()
-    if(loot !== undefined) {
-      stateChangesHandler.updateLoot(loot)
-    }
-    let rune = eventHandler.getRuneMinted()
-    if(rune !== undefined) {
-      stateChangesHandler.updateNewRune(rune, runesList)
+    else if(map === Maps.Arena) {
+      let rankChanges = eventHandler.getRankChange()
+      if(rankChanges !== undefined) {
+        let enemyAdrsHex = num.toHexString(enemyAccountSelected!.owner)
+        let ownerRankChange = rankChanges.find(rankChange => rankChange.owner === account.address)
+        let enemyRankChange = rankChanges.find(rankChange => rankChange.owner === enemyAdrsHex)
+        // console.log("ownerRankChange", ownerRankChange)
+        // console.log("enemyRankChange", enemyRankChange)
+        stateChangesHandler.updateArenaFullAccounts(arenaFullAccounts!, rankChanges)
+        setPreviousArenaRank && setPreviousArenaRank(arenaAccount!.rank)
+        ownerRankChange && stateChangesHandler.setArenaAccount({...arenaAccount!, rank: ownerRankChange.rank})
+        enemyRankChange && setEnemyAccountSelected!({...enemyAccountSelected!, rank: enemyRankChange!.rank})
+      }
+      await new Promise(r => setTimeout(r, 1000));
+      loadPvpInfos!(account.address)
+      updateGlobalPvpInfos!()
     }
     setPhaserRunning(false)
     stateChangesHandler.setIsBattleRunning(false)

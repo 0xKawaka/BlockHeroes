@@ -3,7 +3,7 @@ import { RuneInfos, RuneStatsDict } from "../../Types/apiTypes";
 import { Parser } from "../Parser";
 import RawEvent from "./RawEvent";
 import eventHashes from "./eventHash";
-import {NewBattleEvent, StartTurnEvent, SkillEvent, EndTurnEvent, EndBattleEvent, ExperienceGainEvent, LootEvent} from "./eventTypes";
+import {NewBattleEvent, StartTurnEvent, SkillEvent, EndTurnEvent, EndBattleEvent, ExperienceGainEvent, LootEvent, RankChangeEvent} from "./eventTypes";
 import { num, shortString, Contract } from "starknet";
 
 export default class GameEventHandler {
@@ -16,6 +16,7 @@ export default class GameEventHandler {
   private lootEvent: LootEvent | undefined;
   private runeMinted: RuneInfos | undefined;
   private runesStatsDict: RuneStatsDict;
+  private rankChange: RankChangeEvent[];
 
   constructor(runesStatsDict: RuneStatsDict) {
     this.runesStatsDict = runesStatsDict;
@@ -26,6 +27,7 @@ export default class GameEventHandler {
     this.skillEventArray = [];
     this.endTurnEventArray = [];
     this.experienceGainEventArray = [];
+    this.rankChange = [];
 
   }
 
@@ -70,7 +72,7 @@ export default class GameEventHandler {
         this.endBattleEvent = {owner: num.toHexString(event.data[0]), hasPlayerWon: Boolean(Number(event.data[1]))};
       }
       else if (event.name === "ExperienceGain") {
-        console.log("experience gain event", event)
+        // console.log("experience gain event", event)
         // this.experienceGainEventArray.push({owner: num.toHexString(event["ExperienceGain"].owner), entityId: Number(event["ExperienceGain"].entityId), experienceGained: Number(event["ExperienceGain"].experienceGained), levelAfter: Number(event["ExperienceGain"].levelAfter), experienceAfter: Number(event["ExperienceGain"].experienceAfter)})
         this.experienceGainEventArray.push({owner: num.toHexString(event.data[0]), entityId: Number(event.data[1]), experienceGained: Number(event.data[2]), levelAfter: Number(event.data[3]), experienceAfter: Number(event.data[4])})
         console.log('processed experience gain: ', this.experienceGainEventArray[this.experienceGainEventArray.length - 1])
@@ -80,8 +82,11 @@ export default class GameEventHandler {
         this.lootEvent = {owner: num.toHexString(event.data[0]), crystals: Number(event.data[1])}
       }
       else if (event.name === "RuneMinted") {
-        console.log("rune minted event", event)
-        // this.runeMinted = RuneFactory.createRune(Parser.parseRune(event["RuneMinted"].rune), this.runesStatsDict)
+        console.log("RUNEE MINTED rune minted event", event)
+        this.runeMinted = RuneFactory.createRune(Parser.parseRawRune(event.data))
+      }
+      else if (event.name === "RankChange") {
+        this.rankChange.push({owner: event.data[0], rank: Number(event.data[1])})
       }
       else {
         throw new Error('event ' + event.name + ' not found');
@@ -240,6 +245,10 @@ export default class GameEventHandler {
     this.experienceGainEventArray = [];
     this.lootEvent = undefined;
     this.runeMinted = undefined;
+  }
+
+  getRankChange(): RankChangeEvent[] {
+    return this.rankChange;
   }
 
   getRuneMinted(): RuneInfos | undefined {

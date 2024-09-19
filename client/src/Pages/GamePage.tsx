@@ -12,7 +12,6 @@ import { BaseHeroInfos, HeroesFactory } from '../Classes/Heroes/HeroesFactory'
 import { HeroBlockchain } from '../Types/blockchainTypes'
 import MyHeroes from './Components/MyHeroes'
 import RuneFactory from '../Classes/Runes/RuneFactory'
-import runeStats from '../GameDatas/Statistics/runeStats'
 import StateChangesHandler from './State/StateChangesHandler'
 import AccountOverview from './Components/AccountOverview'
 import EnergyHandler from './Classes/EnergyHandler'
@@ -27,7 +26,7 @@ import ToriiGetter from '../dojo/ToriiGetter'
 import { GameAccount, Hero } from '../Types/toriiTypes'
 import { HeroInfos, RuneInfos } from '../Types/apiTypes'
 import { Account } from 'starknet'
-import { ArenaFullAccount } from '../Types/customTypes'
+import { ArenaAccount, ArenaFullAccount } from '../Types/customTypes'
 import { BurnerAccount } from '@dojoengine/create-burner'
 import { ToriiClient } from '@dojoengine/torii-client'
 import { AllyOrEnemy } from '../dojo/typescript/models.gen';
@@ -61,7 +60,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
   const [accountSelected, setAccountSelected] = useState<boolean>(false)
   const [blockchainAccount, setBlockchainAccount] = useState<Account>(account.account)
   const [gameAccount, setGameAccount] = useState<GameAccount>({ username: "", crystals: 0, gems: 0, energy: 0, pvpEnergy: 0, lastEnergyUpdateTimestamp: 0, lastPvpEnergyUpdateTimestamp: 0, heroesCount: 0, owner: BigInt(0), runesCount: 0, summonChests: 0 });  
-  const [arenaAccount, setArenaAccount] = useState<{rank: number, lastClaimedRewards: number}>({rank: 0, lastClaimedRewards: 0})
+  const [arenaAccount, setArenaAccount] = useState<ArenaAccount>({rank: 0, lastClaimedRewards: 0})
   const [defenseArenaHeroesIds, setDefenseArenaHeroesIds] = useState<number[]>([])
   const [arenaFullAccounts, setArenaFullAccounts] = useState<ArenaFullAccount[]>([])
   const [baseHeroes, setBaseHeroes] = useState<Array<BaseHeroInfos>>([])
@@ -74,7 +73,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
   const [showSummons, setShowSummons] = useState<boolean>(false)
   const [isBattleRunning, setIsBattleRunning] = useState<boolean>(false)
   const [mapProgress, setMapProgress] = useState<{[key: number]: number}>({})
-  const [stateChangesHandler, setStateChangesHandler] = useState<StateChangesHandler>(new StateChangesHandler(setHeroes, setRunes, setGameAccount, setShowMyHeroes, setShowWorldSelect, setIsBattleRunning, setMapProgress))
+  const [stateChangesHandler, setStateChangesHandler] = useState<StateChangesHandler>(new StateChangesHandler(setHeroes, setRunes, setGameAccount, setShowMyHeroes, setShowWorldSelect, setIsBattleRunning, setMapProgress, setArenaAccount, setArenaFullAccounts))
 
   async function handleNewHeroEvent(hero: HeroInfos) {
     let newHeroes = [...heroes]
@@ -109,8 +108,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
 
   function updateGlobalPvpInfos() {
     // console.log("updateGlobalPvpInfos");
-    let arenaFullAccounts = ToriiGetter.loadGlobalPvpInfos(ArenaAccount, Heroes, ArenaTeam, Account);
-    // console.log("arenaFullAccounts", arenaFullAccounts);
+    let arenaFullAccounts = ToriiGetter.loadGlobalPvpInfos(ArenaAccount, Heroes, ArenaTeam, Account, Runes);
     setArenaFullAccounts(arenaFullAccounts);
   }
 
@@ -136,7 +134,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
       if(gameAccount !== undefined){
         let toriiRunes = ToriiGetter.getAllRunes(blockchainAccount.address, gameAccount.runesCount, Runes);
         let toriiHeroes = ToriiGetter.getAllHeroes(blockchainAccount.address, gameAccount.heroesCount, Heroes);
-        runes = RuneFactory.createRunes(toriiRunes, runeStats);
+        runes = RuneFactory.createRunes(toriiRunes);
         setBaseHeroes(HeroesFactory.createBaseHeroes());
         heroes = HeroesFactory.createHeroes(toriiHeroes, runes);
         setHeroes(heroes);
@@ -204,7 +202,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
           <Summons account={blockchainAccount} gameAccount={gameAccount} setGameAccount={setGameAccount} setShowSummons={setShowSummons} handleNewHeroEvent={handleNewHeroEvent} />
         }
         {showPvp &&
-          <Pvp account={blockchainAccount} gameAccount={gameAccount} rank={arenaAccount.rank} heroesList={heroes} defenseArenaHeroesIds={defenseArenaHeroesIds} arenaFullAccounts={arenaFullAccounts} stateChangesHandler={stateChangesHandler} setDefenseArenaHeroesIds={setDefenseArenaHeroesIds} setArenaAccount={setArenaAccount} setShowPvp={setShowPvp} loadPvpInfos={loadPvpInfos} updateGlobalPvpInfos={updateGlobalPvpInfos}/>
+          <Pvp account={blockchainAccount} gameAccount={gameAccount} arenaAccount={arenaAccount} heroesList={heroes} defenseArenaHeroesIds={defenseArenaHeroesIds} arenaFullAccounts={arenaFullAccounts} stateChangesHandler={stateChangesHandler} setDefenseArenaHeroesIds={setDefenseArenaHeroesIds} setArenaAccount={setArenaAccount} setShowPvp={setShowPvp} loadPvpInfos={loadPvpInfos} updateGlobalPvpInfos={updateGlobalPvpInfos}/>
         }
       </div>
     </div>

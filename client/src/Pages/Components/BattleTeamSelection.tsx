@@ -2,6 +2,7 @@ import "./BattleTeamSelection.css"
 import HeroMiniature from "./HeroMiniature"
 import portraitsDict from "../../assets/portraits/portraitsDict"
 import energyImg from "../../assets/icons/energy.png"
+import pvpEnergyImg from "../../assets/icons/pvpEnergy.png"
 import { useState, useEffect } from "react"
 import { HeroInfos } from "../../Types/apiTypes"
 import HeroesList from "./HeroesList"
@@ -25,7 +26,7 @@ type BattleTeamSelectionProps = {
   gameAccount: GameAccount,
   map:Maps,
   battleId:number,
-  enemies?: Hero[],
+  enemies?: HeroInfos[],
   enemiesNames?: string[],
   enemiesLevels?: number[],
   enemyAdrs?: string,
@@ -57,7 +58,7 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
       console.log("Can't start battle without heroes")
       return;
     }
-    if(gameAccount.energy < energyCost){
+    if((map == Maps.Campaign && gameAccount.energy < energyCost) || (map == Maps.Arena && gameAccount.pvpEnergy < energyCost) ){
       console.log("Not enough energy")
       return;
     }
@@ -65,7 +66,7 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
     eventHandler.reset()
     let isBattleStarted = false;
     if(map === Maps.Arena && enemyAdrs) {
-      startPvpBattle(account, BigInt(enemyAdrs), selectedHeroesIds, eventHandler)
+      isBattleStarted = await startPvpBattle(account, BigInt(enemyAdrs), selectedHeroesIds, eventHandler)
     }
     else if (map === Maps.Campaign) {
       isBattleStarted = await startBattle(account, selectedHeroesIds, map, battleId, eventHandler);
@@ -77,9 +78,14 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
         console.log("accout energy: ", gameAccount.energy, " ", gameAccount.lastEnergyUpdateTimestamp)
         stateChangesHandler.updateEnergyHandler(gameAccount.energy, gameAccount.lastEnergyUpdateTimestamp)
       }
+      else if(map === Maps.Arena) {
+        console.log("accout pvp energy: ", gameAccount.pvpEnergy, " ", gameAccount.lastPvpEnergyUpdateTimestamp)
+        stateChangesHandler.updatePvpEnergyHandler(gameAccount.pvpEnergy, gameAccount.lastPvpEnergyUpdateTimestamp)
+      }
     }
     else {
       setIsStartingBattle(false)
+      throw new Error("Battle not started")
     }
   }
 
@@ -104,7 +110,7 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
         <div className="BattleTeamSelectionVersusText">VS</div>
         <div className="BattleTeamSelectionMiniaturesAndTitleContainer">
           <div className="BattleTeamSelectionEnemiesMiniatures">
-            {enemiesNames && enemiesLevels && enemiesNames.map((enemyName, i) => {
+            {enemies == undefined && enemiesNames && enemiesLevels && enemiesNames.map((enemyName, i) => {
               return (
                 <div className="HeroMiniatureWrapper" key={i}>
                   <HeroMiniature image={portraitsDict[enemyName]} rank={1} level={enemiesLevels[i]} imageWidth="9rem"></HeroMiniature>
@@ -130,7 +136,7 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
         }
         <div className="BattleTeamSelectionEnergyCostValueIconContainer">
           <div className="BattleTeamSelectionEnergyCostValue">{energyCost}</div>
-          <img className="BattleTeamSelectionEnergyCostIcon" src={energyImg} />
+          <img className="BattleTeamSelectionEnergyCostIcon" src={map == Maps.Campaign ? energyImg : pvpEnergyImg} />
         </div>
       </div>
       }

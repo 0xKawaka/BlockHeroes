@@ -102,10 +102,10 @@ mod EntityFactory {
             set!(
                 world,
                 (
-                    BaseHero { heroName: 'assassin', statistics: statistics::new(1500, 200, 100, 185, 10, 100), skillsCount: 3 },
-                    BaseHero { heroName: 'knight', statistics: statistics::new(2000, 120, 180, 150, 10, 100), skillsCount: 3 },
-                    BaseHero { heroName: 'priest', statistics: statistics::new(1700, 150, 150, 160, 10, 100), skillsCount: 3 },
-                    BaseHero { heroName: 'hunter', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'sirocco', statistics: statistics::new(1500, 200, 100, 185, 10, 100), skillsCount: 3 },
+                    BaseHero { heroName: 'wellan', statistics: statistics::new(2000, 120, 180, 150, 10, 100), skillsCount: 3 },
+                    BaseHero { heroName: 'marella', statistics: statistics::new(1700, 150, 150, 160, 10, 100), skillsCount: 3 },
+                    BaseHero { heroName: 'elandor', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
                     BaseHero { heroName: 'diana', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
                     BaseHero { heroName: 'elric', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
                     BaseHero { heroName: 'nereus', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
@@ -116,6 +116,13 @@ mod EntityFactory {
                     BaseHero { heroName: 'bane', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
                     BaseHero { heroName: 'ember', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
                     BaseHero { heroName: 'molten', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'solas', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'solveig', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'janus', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'horus', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'jabari', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'khamsin', statistics: statistics::new(1500, 170, 130, 170, 10, 200), skillsCount: 3 },
+
                 )
             )
         }

@@ -19,10 +19,9 @@ export default class BattleLoader extends Phaser.Scene {
 
   preload() {
     this.createLoadingScreen()
-    let worldId = this.registry.get('worldId')
+    let map = this.registry.get('map')
     let battleId = this.registry.get('battleId')
-    // let img = require('../assets/backgrounds/' +  getLevelBackground(worldId, battleId, this.sys.canvas.width) + '.png')
-    let img = new URL('../assets/backgrounds/' +  getLevelBackground(worldId, battleId, this.sys.canvas.width) + '.png', import.meta.url).href
+    let img = new URL('../assets/backgrounds/' +  getLevelBackground(map, battleId, this.sys.canvas.width) + '.png', import.meta.url).href
     this.load.image('background', img)
     this.loadMusicLoop()
     this.loadSpellAnimations()
@@ -52,7 +51,6 @@ export default class BattleLoader extends Phaser.Scene {
     let loadedNames: Array<string> = []
     for (let i = 0; i < enemiesNameArray.length; i++) {
       if (!loadedNames.includes(enemiesNameArray[i])) {
-        // const spritesheet  = require('../assets/monsters/' + enemiesNameArray[i] + '.png')
         const spritesheet  = new URL('../assets/monsters/' + enemiesNameArray[i] + '.png', import.meta.url).href
         this.load.spritesheet(enemiesNameArray[i], spritesheet, getSpriteSize(enemiesNameArray[i]))
         loadedNames.push(enemiesNameArray[i])
@@ -60,7 +58,6 @@ export default class BattleLoader extends Phaser.Scene {
     }
     for(let i = 0; i < selectedTeam.length; i++){
       if(!loadedNames.includes(selectedTeam[i].name)){
-        // const spritesheet  = require('../assets/monsters/' + selectedTeam[i].name + '.png')
         const spritesheet  = new URL('../assets/monsters/' + selectedTeam[i].name + '.png', import.meta.url).href
         this.load.spritesheet(selectedTeam[i].name, spritesheet, getSpriteSize(selectedTeam[i].name))
         loadedNames.push(selectedTeam[i].name)
@@ -90,7 +87,6 @@ export default class BattleLoader extends Phaser.Scene {
 
   loadSpellAnimations(){
     spellAnimInfos.forEach((spellAnimInfo) => {
-      // let img = require('../assets/spellAnim/' + spellAnimInfo.name + '.png')
       let img = new URL('../assets/spellAnim/' + spellAnimInfo.name + '.png', import.meta.url).href
       this.load.spritesheet(spellAnimInfo.name, img, { frameWidth: spellAnimInfo.width, frameHeight: spellAnimInfo.height })
     })
@@ -98,7 +94,6 @@ export default class BattleLoader extends Phaser.Scene {
 
   loadProjectiles(){
     projectileInfos.forEach((projectileInfo) => {
-      // let img = require('../assets/projectiles/' + projectileInfo.name + '.png')
       let img = new URL('../assets/projectiles/' + projectileInfo.name + '.png', import.meta.url).href
       this.load.image("projectile_" + projectileInfo.name, img)
     })
@@ -106,32 +101,26 @@ export default class BattleLoader extends Phaser.Scene {
 
   loadBuffsStatus(){
     buffsDebuffsStats.forEach((stat: string) => {
-      // let imgBuff = require('../assets/buffs/' + stat + '.png')
       let imgBuff = new URL('../assets/buffs/' + stat + '.png', import.meta.url).href
 
-      // let imgDebuff = require('../assets/status/' + stat + '.png')
       let imgDebuff = new URL('../assets/status/' + stat + '.png', import.meta.url).href
       this.load.image("buff_" + stat, imgBuff)
       this.load.image("status_" + stat, imgDebuff)
     })
 
     onTurnStackableBuffNames.forEach((stackableBuffName) => {
-      // let img = require('../assets/buffs/' + stackableBuffName + '.png')
       let img = new URL('../assets/buffs/' + stackableBuffName + '.png', import.meta.url).href
       this.load.image("buff_" + stackableBuffName, img)
     })
     onTurnStackableStatusNames.forEach((stackableStatusName) => {
-      // let img = require('../assets/status/' + stackableStatusName + '.png')
       let img = new URL('../assets/status/' + stackableStatusName + '.png', import.meta.url).href
       this.load.image("buff_" + stackableStatusName, img)
     })
-    // let img = require('../assets/status/stun.png')
     let img = new URL('../assets/status/stun.png', import.meta.url).href
     this.load.image("status_stun", img)
   }
 
   loadMusicLoop(musicName: string = 'battle'){
-    // let sound = require('../assets/sound/music/' + musicName + '.mp3')
     let sound = new URL('../assets/sound/music/' + musicName + '.mp3', import.meta.url).href
     this.load.audio('battleLoop', sound);
   }

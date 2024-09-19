@@ -1,4 +1,25 @@
-const monstersNames = ["knight", "assassin", "priest", "hunter", "diana", "elric", "nereus", "rex", "celeste", "oakheart", "sylvara", "bane", "ember", "molten"]
+const monstersNames = [
+  "wellan",
+  "sirocco",
+  "marella",
+  "elandor",
+  "diana",
+  "elric",
+  "nereus",
+  "rex",
+  "celeste",
+  "oakheart",
+  "sylvara",
+  "bane",
+  "ember",
+  "molten",
+  "solas",
+  "solveig",
+  "janus",
+  "horus",
+  "jabari",
+  "khamsin",
+ ]
 
 const imagesByName: {[key: string]: string} = {}
 

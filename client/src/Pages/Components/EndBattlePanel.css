@@ -36,6 +36,11 @@
 .EndBattlePanelTitleVictory {
   color: rgb(240, 200, 22);
 }
+.EndBattlePanelNewRank {
+  font-size: 4rem;
+  font-weight: bold;
+  text-align: center;
+}
 
 .buttonContinue{
   padding: 1.3rem;

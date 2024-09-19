@@ -6,26 +6,33 @@ import ExperiencePanel from "./ExperiencePanel"
 import LootItem from "./LootItem"
 import { useEffect } from "react"
 import LootPanel from "./LootPanel"
-import emblemPng from "../../assets/lootItems/emblem.png"
+import Maps from "../../GameDatas/maps"
+import { ArenaAccount, ArenaFullAccount } from "../../Types/customTypes"
 
 type EndBattlePanelProps = {
   title:string,
+  map: Maps,
+  arenaAccount?: ArenaAccount,
+  previousArenaRank?: number,
   heroesList: Array<HeroInfos>,
-  heroesBeforeExperienceGained: Array<HeroInfos>,
+  heroesBeforeExperienceGained?: Array<HeroInfos>,
   eventHandler: GameEventHandler,
-
   setWinOrLose: React.Dispatch<React.SetStateAction<string>>,
   setIsLootPanelVisible: React.Dispatch<React.SetStateAction<boolean>>,
+  setEnemyAccountSelected?: React.Dispatch<React.SetStateAction<ArenaFullAccount | undefined>>,
+  setShowArenaBattleSelect?: React.Dispatch<React.SetStateAction<boolean>>,
   stateChangesHandler: StateChangesHandler
 }
 
-const imagesByItemName: {[key: string]: string} = {
-  "Emblem": emblemPng,
-}
+// const imagesByItemName: {[key: string]: string} = {
+//   "Emblem": emblemPng,
+// }
 
-export default function EndBattlePanel({title, eventHandler, heroesList, heroesBeforeExperienceGained, setWinOrLose, setIsLootPanelVisible, stateChangesHandler}: EndBattlePanelProps) {
+export default function EndBattlePanel({title, map, arenaAccount, previousArenaRank, eventHandler, heroesList, heroesBeforeExperienceGained, setWinOrLose, setIsLootPanelVisible, setEnemyAccountSelected, setShowArenaBattleSelect, stateChangesHandler}: EndBattlePanelProps) {
 
   function handleContinue() {
+    setShowArenaBattleSelect && setShowArenaBattleSelect(false)
+    setEnemyAccountSelected && setEnemyAccountSelected(undefined)
     setWinOrLose("")
     setIsLootPanelVisible(false)
     stateChangesHandler.setIsBattleRunning(false)
@@ -39,7 +46,12 @@ export default function EndBattlePanel({title, eventHandler, heroesList, heroesB
     {title === "Victory" && 
     <div className="EndBattlePanelVictoryContainer">
       <div className="EndBattlePanelTitleVictory">{title.toUpperCase()}</div>
-      <ExperiencePanel heroesList={heroesList} eventHandler={eventHandler} heroesBeforeExperienceGained={heroesBeforeExperienceGained} />
+      {previousArenaRank !== undefined && arenaAccount !== undefined &&
+        <div className="EndBattlePanelNewRank">rank : {previousArenaRank} {`=>`} {arenaAccount.rank}</div>
+      }
+      {heroesBeforeExperienceGained !== undefined && 
+        <ExperiencePanel heroesList={heroesList} eventHandler={eventHandler} heroesBeforeExperienceGained={heroesBeforeExperienceGained} />
+      }
       <LootPanel eventHandler={eventHandler} />
     </div>
   

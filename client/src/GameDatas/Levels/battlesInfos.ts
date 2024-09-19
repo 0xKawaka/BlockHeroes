@@ -5,21 +5,21 @@ const battlesInfos = {
   [
     {
       background: "battle1",
-      names: ["assassin"],
+      names: ["sirocco"],
       levels: [1],
       ranks: [1],
       energyCost: 0,
     },
     {
       background: "battle1",
-      names: ["knight", "knight", "priest", "assassin"],
+      names: ["wellan", "wellan", "marella", "sirocco"],
       levels: [1, 1, 1, 1],
       ranks: [1, 1, 1, 1],
       energyCost: 1,
     },
     {
       background: "battle1",
-      names: ["knight", "knight", "hunter", "assassin"],
+      names: ["wellan", "wellan", "elandor", "sirocco"],
       levels: [5, 5, 5, 5],
       ranks: [1, 1, 1, 1],
       energyCost: 1,
@@ -27,14 +27,14 @@ const battlesInfos = {
 
     {
       background: "battle1",
-      names: ["priest", "priest", "hunter", "assassin"],
+      names: ["marella", "marella", "elandor", "sirocco"],
       levels: [10, 10, 10, 10],
       ranks: [1, 1, 1, 1],
       energyCost: 1,
     },
     {
       background: "battle1",
-      names: ["priest", "hunter", "assassin", "assassin"],
+      names: ["marella", "elandor", "sirocco", "sirocco"],
       levels: [20, 20, 20, 20],
       ranks: [1, 1, 1, 1],
       energyCost: 1,
