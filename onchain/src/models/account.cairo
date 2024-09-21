@@ -52,6 +52,7 @@ fn new(username: felt252, owner: ContractAddress) -> Account {
 
 trait AccountTrait {
     fn updateEnergy(ref self: Account);
+    fn increaseSummonChests(ref self: Account, summonChestsToAdd: u32);
     fn decreaseEnergy(ref self: Account, energyCost: u16);
     fn increaseEnergy(ref self: Account, energyToAdd: u16);
 
@@ -97,6 +98,9 @@ impl AccountImpl of AccountTrait {
 
         let timeLeft = timeDiff % timeTickEnergy;
         self.lastEnergyUpdateTimestamp = now - timeLeft;
+    }
+    fn increaseSummonChests(ref self: Account, summonChestsToAdd: u32) {
+        self.summonChests = self.summonChests + summonChestsToAdd;
     }
     fn decreaseEnergy(ref self: Account, energyCost: u16) {
         assert(self.energy >= energyCost, 'Not enough energy');

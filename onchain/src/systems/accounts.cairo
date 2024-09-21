@@ -11,6 +11,7 @@ trait IAccounts {
     fn mintRune(world: IWorldDispatcher, accountAdrs: ContractAddress);
     fn createAccount(world: IWorldDispatcher, username: felt252, accountAdrs: ContractAddress);
     fn addExperienceToHeroId(world: IWorldDispatcher, accountAdrs: ContractAddress, heroId: u32, experience: u32);
+    fn increaseSummonChests(world: IWorldDispatcher, accountAdrs: ContractAddress, summonChestsToAdd: u32);
     fn decreaseEnergy(world: IWorldDispatcher, accountAdrs: ContractAddress, energyCost: u16);
     fn decreasePvpEnergy(world: IWorldDispatcher, accountAdrs: ContractAddress, energyCost: u16);
     fn increaseCrystals(world: IWorldDispatcher, accountAdrs: ContractAddress, crystalsToAdd: u32);
@@ -128,6 +129,11 @@ mod Accounts {
             let mut hero = get!(world, (accountAdrs, heroId), (Heroes)).hero;
             hero.gainExperience(world, experience, accountAdrs);
             set!(world, Heroes {owner: accountAdrs, index: heroId, hero: hero});
+        }
+        fn increaseSummonChests(world: IWorldDispatcher, accountAdrs: ContractAddress, summonChestsToAdd: u32) {
+            let mut acc = Self::getAccount(world, accountAdrs);
+            acc.increaseSummonChests(summonChestsToAdd);
+            set!(world, (acc));
         }
         fn decreaseEnergy(world: IWorldDispatcher, accountAdrs: ContractAddress, energyCost: u16) {
             let mut acc = Self::getAccount(world, accountAdrs);

@@ -24,7 +24,6 @@ mod Arena {
     use game::models::events::{Event, InitArena, ArenaDefense, RankChange};
     use debug::PrintTrait;
 
-    #[abi(embed_v0)]
     impl ArenaImpl of super::IArena {
         fn initAccount(world: IWorldDispatcher, owner: ContractAddress, heroeIds: Array<u32>) {
             let arenaCurrentRank = get!(world, 0, ArenaCurrentRankIndex).currentRankIndex;

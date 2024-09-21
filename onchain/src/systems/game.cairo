@@ -27,7 +27,6 @@ mod Game {
     use game::systems::levels::Levels::LevelsImpl;
     use game::systems::battles::Battles::BattlesImpl;
     use game::systems::arena::Arena::ArenaImpl;
-    use game::models::account::{Account, AccountImpl};
     use game::models::hero::{Hero, HeroImpl, HeroTrait};
     use game::models::battle::entity::{Entity, EntityImpl, EntityTrait, AllyOrEnemy};
     use game::models::storage::mapProgress::MapProgress;

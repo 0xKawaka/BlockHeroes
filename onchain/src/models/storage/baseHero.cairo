@@ -1,5 +1,4 @@
 const decimals: u64 = 100;
-const LEVEL_MULTIPLIER_BY_RANK: u64 = 10;
 
 use game::models::storage::{statistics, statistics::Statistics};
 

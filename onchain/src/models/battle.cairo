@@ -30,14 +30,16 @@ struct Battle {
     aliveEnemiesIndexes: Vector<u32>,
     healthOnTurnProcs: NullableVector<HealthOnTurnProc>,
     skillSets : Array<Array<Skill>>,
+    // alliesTauntingIndexes: Vector<u32>,
+    // enemiesTauntingIndexes: Vector<u32>,
     isBattleOver: bool,
     isVictory: bool,
     isWaitingForPlayerAction: bool,
-    #[key]
     owner: ContractAddress,
 }
 
 fn new(entities: Array<Entity>, aliveEntities: Array<u32>, deadEntities: Array<u32>, turnTimeline: Array<u32>, allies: Array<u32>, enemies: Array<u32>, healthOnTurnProcs: Array<HealthOnTurnProc>, skillSets : Array<Array<Skill>>, isBattleOver: bool, isWaitingForPlayerAction: bool, owner: ContractAddress) -> Battle {
+// fn new(entities: Array<Entity>, aliveEntities: Array<u32>, deadEntities: Array<u32>, turnTimeline: Array<u32>, allies: Array<u32>, enemies: Array<u32>, healthOnTurnProcs: Array<HealthOnTurnProc>, skillSets : Array<Array<Skill>>, alliesTauntingIndexes: Array<u32>, enemiesTauntingIndexes: Array<u32>, isBattleOver: bool, isWaitingForPlayerAction: bool, owner: ContractAddress) -> Battle {
     let alliesSpan = allies.span();
     let enemiesSpan = enemies.span();
     let aliveEntitiesSpan = aliveEntities.span();
@@ -52,6 +54,8 @@ fn new(entities: Array<Entity>, aliveEntities: Array<u32>, deadEntities: Array<u
         aliveEnemiesIndexes: initAliveAlliesOrEnemiesIndexes(enemiesSpan, aliveEntitiesSpan),
         healthOnTurnProcs: NullableVectorImpl::newFromArray(healthOnTurnProcs),
         skillSets : skillSets,
+        // alliesTauntingIndexes: VectorImpl::newFromArray(alliesTauntingIndexes),
+        // enemiesTauntingIndexes: VectorImpl::newFromArray(enemiesTauntingIndexes),
         isBattleOver: isBattleOver,
         isVictory: false,
         isWaitingForPlayerAction: isWaitingForPlayerAction,
@@ -89,6 +93,7 @@ trait BattleTrait {
     fn checkTurnBarsForFullBars(ref self: Battle) -> bool;
     fn checkAndProcessDeadEntities(ref self: Battle) -> Array<u32>;
     fn checkAndProcessBattleOver(ref self: Battle, world: IWorldDispatcher) -> bool;
+    // fn isEntityAttackable(ref self: Battle, entityIndex: u32) -> bool;
     fn isAlly(ref self: Battle, entityIndex: u32) -> bool;
     fn isAllyOf(ref self: Battle, entityIndex: u32, isAllyIndex: u32) -> bool;
     fn getAliveAlliesOf(ref self: Battle, entityIndex: u32) -> Array<Entity>;
@@ -367,6 +372,11 @@ impl BattleImpl of BattleTrait {
         }
         return false;
     }
+    // fn isEntityAttackable(ref self: Battle, entityIndex: u32) -> bool {
+    //     if(self.isAlly(entityIndex)) {
+    //         return self.isAllyOf(entityIndex, self.getEntityHighestTurn().index);
+    //     }
+    // }
     fn isAlly(ref self: Battle, entityIndex: u32) -> bool {
         return arrayHelper::includes(@self.alliesIndexes, @entityIndex);
     }

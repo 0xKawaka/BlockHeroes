@@ -9,6 +9,7 @@ mod Settings {
     use game::systems::levels::Levels::LevelsImpl;
     use game::systems::entityFactory::EntityFactory::EntityFactoryImpl;
     use game::systems::arena::Arena::ArenaImpl;
+    use game::systems::quests::Quests::QuestsImpl;
 
     // #[abi(embed_v0)]
     // impl SettingsImpl of super::ISettings<ContractState> {

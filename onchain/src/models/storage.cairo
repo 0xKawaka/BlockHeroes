@@ -5,3 +5,5 @@ mod arena;
 mod battles;
 mod baseHero;
 mod mapProgress;
+mod quest;
+// mod accountConfig;

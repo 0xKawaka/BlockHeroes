@@ -6,3 +6,4 @@ mod battles;
 mod accounts;
 mod skillFactory;
 mod levels;
+mod quests;
