@@ -14,7 +14,7 @@ import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import StateChangesHandler from "../State/StateChangesHandler"
 import EnergyHandler from "../Classes/EnergyHandler"
 import { GameAccount } from "../../Types/toriiTypes"
-import Maps from "../../GameDatas/maps"
+import {Maps} from "../../GameDatas/maps"
 
 type BattleSelectProps = {
   account: Account,

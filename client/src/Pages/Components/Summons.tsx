@@ -49,7 +49,7 @@ export default function Summons({account, gameAccount, setGameAccount, setShowSu
     while(!animationDone){
       await new Promise(r => setTimeout(r, 100));
     }
-    setGameAccount({...gameAccount, summonChests: gameAccount.summonChests - 1});
+    setGameAccount({...gameAccount, summonChests: gameAccount.summonChests - 1, heroesCount: gameAccount.heroesCount + 1});
     setShowSummonAnimation(false);
     setIsSummoning(false);
     handleNewHeroEvent(hero);
@@ -57,9 +57,11 @@ export default function Summons({account, gameAccount, setGameAccount, setShowSu
 
   return(
     <div className="WorldSelectArrowBackAndSummonsContainer">
-      <div className="ArrowBackContainer">
-        <img className="ArrowBack" src={ArrowBack} onClick={() => setShowSummons(false)} />
-      </div>
+      {gameAccount.heroesCount >= 2 &&
+        <div className="ArrowBackContainer">
+          <img className="ArrowBack" src={ArrowBack} onClick={() => setShowSummons(false)} />
+        </div>
+      }
       <div className="SummonsContainer">
         {/* <div className="SummonsCount">
           10 summons
@@ -67,6 +69,9 @@ export default function Summons({account, gameAccount, setGameAccount, setShowSu
         <div className="SummonImageAndButton">
           <div className="SummonChestsImageAndCount">
             <img key={"SummonChest"} className="SummonImage" src={showSummongAnimation ? SummonChestGif : SummonChest} />
+            {gameAccount.heroesCount < 2 &&
+              <div className="SummonFirstHeroesText">Summon your first heroes</div>
+            }
             <div className="SummonChestsCount">x{gameAccount.summonChests}</div>
           </div>
           {isSummoning &&

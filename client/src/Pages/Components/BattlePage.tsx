@@ -8,7 +8,7 @@ import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import { Account } from "starknet"
 import StateChangesHandler from "../State/StateChangesHandler"
 import { useDojo } from "../../dojo/useDojo"
-import Maps from "../../GameDatas/maps"
+import {Maps} from "../../GameDatas/maps"
 import { ArenaAccount, ArenaFullAccount } from "../../Types/customTypes"
 import { num } from "starknet";
 

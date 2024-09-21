@@ -24,8 +24,8 @@ manifest_name = "dojo-base"
 [[contracts]]
 kind = "DojoContract"
 address = "0x1f355961284c21fced60460e371443a9b3a192b3e5ae755ed9428dbbb4ba68f"
-class_hash = "0x3b982b2c063396c15862aab255358302cd42eee79f919e4c3693b0e3a593047"
-original_class_hash = "0x3b982b2c063396c15862aab255358302cd42eee79f919e4c3693b0e3a593047"
+class_hash = "0x3d42494b13b6f3fc221bfdb2113df925049d469c915960104b3ad3c3f9b0b01"
+original_class_hash = "0x3d42494b13b6f3fc221bfdb2113df925049d469c915960104b3ad3c3f9b0b01"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/game-Game-1a8648a1.json"
 reads = []
@@ -37,6 +37,7 @@ systems = [
     "playArenaTurn",
     "startBattle",
     "playTurn",
+    "claimGlobalRewards",
     "initPvp",
     "setPvpTeam",
     "equipRune",
@@ -51,8 +52,8 @@ manifest_name = "game-Game-1a8648a1"
 [[contracts]]
 kind = "DojoContract"
 address = "0x7db0ee87b66abc2184e93e5f322d9753aa2dd71890cd1ffddfacebde2cbc49e"
-class_hash = "0xb3eba8fe5b44da0800d45b7d9053ae906bb1d7814651a41d8c776452d30709"
-original_class_hash = "0xb3eba8fe5b44da0800d45b7d9053ae906bb1d7814651a41d8c776452d30709"
+class_hash = "0x77f65fd8c22e6db379d823f26eea07eec6413c7bec2884f5b4b7410b75cab91"
+original_class_hash = "0x77f65fd8c22e6db379d823f26eea07eec6413c7bec2884f5b4b7410b75cab91"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/game-Settings-4d1bc91c.json"
 reads = []
@@ -124,6 +125,35 @@ key = false
 [[models.members]]
 name = "summonChests"
 type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x41ed76294d945c236a5e9563a66fc865153dde18cd43c1686aac0c88c2f06bf"
+original_class_hash = "0x41ed76294d945c236a5e9563a66fc865153dde18cd43c1686aac0c88c2f06bf"
+abi = "manifests/dev/deployment/abis/models/game-AccountQuests-28c6c5cc.json"
+tag = "game-AccountQuests"
+qualified_path = "game::models::storage::quest::accountQuests::account_quests"
+manifest_name = "game-AccountQuests-28c6c5cc"
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[models.members]]
+name = "map"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "mapProgressRequired"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "hasClaimedRewards"
+type = "bool"
 key = false
 
 [[models]]
@@ -418,6 +448,35 @@ key = false
 [[models.members]]
 name = "gems"
 type = "u64"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x494f8e15440ec90fbf52f80800e0d750ec57dc6c0197adbec739767d821aa3"
+original_class_hash = "0x494f8e15440ec90fbf52f80800e0d750ec57dc6c0197adbec739767d821aa3"
+abi = "manifests/dev/deployment/abis/models/game-GlobalQuests-26e30eac.json"
+tag = "game-GlobalQuests"
+qualified_path = "game::models::storage::quest::globalQuests::global_quests"
+manifest_name = "game-GlobalQuests-26e30eac"
+
+[[models.members]]
+name = "map"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "mapProgressRequired"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "rewardType"
+type = "RewardType"
+key = false
+
+[[models.members]]
+name = "rewardQuantity"
+type = "u32"
 key = false
 
 [[models]]

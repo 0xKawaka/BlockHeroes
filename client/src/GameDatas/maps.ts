@@ -3,4 +3,12 @@ enum Maps {
   Arena= 1,
 }
 
-export default Maps;
+function mapFromString(map: string): Maps {
+  switch(map) {
+    case "Campaign": return Maps.Campaign;
+    case "Arena": return Maps.Arena;
+    default: return Maps.Campaign;
+  }
+}
+
+export {Maps, mapFromString};

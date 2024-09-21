@@ -1,4 +1,4 @@
-import Maps from "../maps";
+import {Maps} from "../maps";
 
 const campaignMaps: { [key: string]: any} = {
   0: {

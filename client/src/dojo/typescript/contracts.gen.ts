@@ -119,8 +119,27 @@ export async function setupWorld(provider: DojoProvider) {
                 throw error;
             }
         };
-            
 
+
+        // Call the `claimGlobalRewards` system with the specified Account and calldata
+        const claimGlobalRewards = async (props: { account: Account, map: number, mapProgressRequired: number }) => {
+            try {
+                return await provider.execute(
+                    props.account,
+                    {
+                        contractName: contract_name,
+                        entrypoint: "claimGlobalRewards",
+                        calldata: [props.map,
+                props.mapProgressRequired],
+                    },
+                    "game"
+                );
+            } catch (error) {
+                console.error("Error executing spawn:", error);
+                throw error;
+            }
+        };
+            
     
         // Call the `initPvp` system with the specified Account and calldata
         const initPvp = async (props: { account: Account, heroesIds: RecsType.NumberArray }) => {
@@ -286,7 +305,7 @@ export async function setupWorld(provider: DojoProvider) {
             
 
         return {
-            world, startPvpBattle, playArenaTurn, startBattle, playTurn, initPvp, setPvpTeam, equipRune, unequipRune, upgradeRune, mintHero, mintRune, createAccount
+            world, startPvpBattle, playArenaTurn, startBattle, playTurn, claimGlobalRewards, initPvp, setPvpTeam, equipRune, unequipRune, upgradeRune, mintHero, mintRune, createAccount
         };
     }
 

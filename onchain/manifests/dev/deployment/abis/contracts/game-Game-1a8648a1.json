@@ -209,6 +209,22 @@
       },
       {
         "type": "function",
+        "name": "claimGlobalRewards",
+        "inputs": [
+          {
+            "name": "map",
+            "type": "core::integer::u16"
+          },
+          {
+            "name": "mapProgressRequired",
+            "type": "core::integer::u16"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
         "name": "initPvp",
         "inputs": [
           {

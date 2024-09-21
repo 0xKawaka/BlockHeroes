@@ -4,6 +4,13 @@ enum Map {
     Arena,
 }
 
+// fn fromU16(value: u16) -> Map {
+//     match value {
+//         0 => Map::Campaign,
+//         1 => Map::Arena,
+//     }
+// }
+
 trait MapTrait {
     fn toU16(self: Map) -> u16;
 }

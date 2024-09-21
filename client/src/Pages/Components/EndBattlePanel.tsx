@@ -6,7 +6,7 @@ import ExperiencePanel from "./ExperiencePanel"
 import LootItem from "./LootItem"
 import { useEffect } from "react"
 import LootPanel from "./LootPanel"
-import Maps from "../../GameDatas/maps"
+import {Maps} from "../../GameDatas/maps"
 import { ArenaAccount, ArenaFullAccount } from "../../Types/customTypes"
 
 type EndBattlePanelProps = {

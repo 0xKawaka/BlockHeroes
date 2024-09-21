@@ -52,7 +52,7 @@ img {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 14rem;
+  gap: 11rem;
 }
 
 .GamePageMenuButton {

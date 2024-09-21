@@ -260,6 +260,24 @@ export function createSystemCalls(
         }
     }
 
+    async function claimGlobalRewards(account: Account, map: number, mapProgressRequired: number) {
+        try {
+            let txRes = await client.Game.claimGlobalRewards({
+                account,
+                map,
+                mapProgressRequired,
+            });
+            await account.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 100,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
 
 
     return {
@@ -273,6 +291,7 @@ export function createSystemCalls(
         startBattle,
         playTurn,
         startPvpBattle,
-        playArenaTurn
+        playArenaTurn,
+        claimGlobalRewards
     };
 }

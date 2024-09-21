@@ -16,6 +16,7 @@ trait IAccounts {
     fn decreasePvpEnergy(world: IWorldDispatcher, accountAdrs: ContractAddress, energyCost: u16);
     fn increaseCrystals(world: IWorldDispatcher, accountAdrs: ContractAddress, crystalsToAdd: u32);
     fn decreaseCrystals(world: IWorldDispatcher, accountAdrs: ContractAddress, crystalsToSub: u32);
+    fn getOwnedHeroesNames(world: IWorldDispatcher, accountAdrs: ContractAddress) -> Array<felt252>;
     fn getAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) -> Account;
     fn getHero(world: IWorldDispatcher, accountAdrs: ContractAddress, heroId: u32) -> Hero;
     fn getHeroes(world: IWorldDispatcher, accountAdrs: ContractAddress, heroesIds: Span<u32>) -> Array<Hero>;
@@ -96,9 +97,34 @@ mod Accounts {
             let mut acc = Self::getAccount(world, accountAdrs);
             assert(acc.summonChests > 0, 'No summon chests');
             acc.summonChests -= 1;
-            let heroesPossible: Array<felt252> = array!['sirocco', 'wellan', 'marella', 'elandor', 'diana', 'elric', 'nereus', 'rex', 'celeste', 'oakheart', 'sylvara', 'bane', 'ember', 'molten'];
-            let randIndex = rand32(get_block_timestamp(), heroesPossible.len());
-            let heroName = *heroesPossible[randIndex];
+            let ownedHeroesNames = Self::getOwnedHeroesNames(world, accountAdrs);
+            let heroesPossible: Array<felt252> = array!['sirocco', 'wellan', 'marella', 'elandor', 'diana', 'elric', 'nereus', 'rex', 'celeste', 'oakheart', 'sylvara', 'bane', 'ember', 'molten', 'solas', 'solveig', 'janus', 'horus', 'jabari', 'khamsin'];
+            assert(heroesPossible.len() > ownedHeroesNames.len(), 'All heroes owned');
+            let mut notOwnedHeroesIndexes: Array<u32> = Default::default();
+            let mut i: u32 = 0;
+            loop {
+                if i == heroesPossible.len() {
+                    break;
+                }
+                let mut j: u32 = 0;
+                let mut isOwned = false;
+                loop {
+                    if j == ownedHeroesNames.len() {
+                        break;
+                    }
+                    if heroesPossible[i] == ownedHeroesNames[j] {
+                        isOwned = true;
+                        break;
+                    }
+                    j += 1;
+                };
+                if !isOwned {
+                    notOwnedHeroesIndexes.append(i);
+                }
+                i += 1;
+            };
+            let randIndex = rand32(get_block_timestamp(), notOwnedHeroesIndexes.len());
+            let heroName = *heroesPossible[*notOwnedHeroesIndexes[randIndex]];
             set!(world,(Heroes {owner: accountAdrs, index: acc.heroesCount, hero: hero::new(acc.heroesCount, heroName, 1, 1)}));
             acc.heroesCount += 1;
             set!(world, (acc));
@@ -117,10 +143,10 @@ mod Accounts {
             assert(acc.username == 0x0, 'Account already created');
             let mut acc = account::new(username, accountAdrs);
             emit!(world, NewAccount {owner: accountAdrs, username: username});
-            let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
-            let runesCount = Self::mintStarterRunes(world, accountAdrs);
-            acc.heroesCount = heroesCount;
-            acc.runesCount = runesCount;
+            // let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
+            // let runesCount = Self::mintStarterRunes(world, accountAdrs);
+            // acc.heroesCount = heroesCount;
+            // acc.runesCount = runesCount;
             set!(world, (acc));
         }
         fn addExperienceToHeroId(world: IWorldDispatcher, accountAdrs: ContractAddress, heroId: u32, experience: u32) {
@@ -157,6 +183,22 @@ mod Accounts {
             acc.decreaseCrystals(crystalsToSub);
             set!(world, (acc));
         }
+        fn getOwnedHeroesNames(world: IWorldDispatcher, accountAdrs: ContractAddress) -> Array<felt252> {
+            let acc = get!(world, accountAdrs, (Account));
+            let mut heroes: Array<felt252> = Default::default();
+            let mut i: u32 = 0;
+            loop {
+                if i == acc.heroesCount {
+                    break;
+                }
+                let heroName = get!(world, (accountAdrs, i), (Heroes)).hero.name;
+                heroes.append(heroName);
+                i += 1;
+            };
+            return heroes;
+        }
+
+
         fn getAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) -> Account {
             let acc = get!(world, accountAdrs, (Account));
             assert(acc.owner == accountAdrs, 'Account not created');
@@ -259,48 +301,28 @@ mod Accounts {
                 world,
                 (
                 Heroes {owner: accountAdrs, index: 0, hero: hero::new(0, 'marella', 1, 1)},
-                Heroes {owner: accountAdrs, index: 1, hero: hero::new(1, 'marella', 1, 1)},
-                Heroes {owner: accountAdrs, index: 2, hero: hero::new(2, 'sirocco', 1, 1)},
-                Heroes {owner: accountAdrs, index: 3, hero: hero::new(3, 'sirocco', 1, 1)},
-                Heroes {owner: accountAdrs, index: 4, hero: hero::new(4, 'wellan', 1, 1)},
-                Heroes {owner: accountAdrs, index: 5, hero: hero::new(5, 'wellan', 1, 1)},
-                Heroes {owner: accountAdrs, index: 6, hero: hero::new(6, 'elandor', 1, 1)},
-                Heroes {owner: accountAdrs, index: 7, hero: hero::new(7, 'elandor', 1, 1)},
-                Heroes {owner: accountAdrs, index: 8, hero: hero::new(8, 'diana', 1, 1)},
-                Heroes {owner: accountAdrs, index: 9, hero: hero::new(9, 'diana', 1, 1)},
-                Heroes {owner: accountAdrs, index: 10, hero: hero::new(10, 'elric', 1, 1)},
-                Heroes {owner: accountAdrs, index: 11, hero: hero::new(11, 'elric', 1, 1)},
-                Heroes {owner: accountAdrs, index: 12, hero: hero::new(12, 'nereus', 1, 1)},
-                Heroes {owner: accountAdrs, index: 13, hero: hero::new(13, 'nereus', 1, 1)},
-                Heroes {owner: accountAdrs, index: 14, hero: hero::new(14, 'rex', 1, 1)},
-                Heroes {owner: accountAdrs, index: 15, hero: hero::new(15, 'rex', 1, 1)},
-                Heroes {owner: accountAdrs, index: 16, hero: hero::new(16, 'celeste', 1, 1)},
-                Heroes {owner: accountAdrs, index: 17, hero: hero::new(17, 'celeste', 1, 1)},
-                Heroes {owner: accountAdrs, index: 18, hero: hero::new(18, 'oakheart', 1, 1)},
-                Heroes {owner: accountAdrs, index: 19, hero: hero::new(19, 'oakheart', 1, 1)},
-                Heroes {owner: accountAdrs, index: 20, hero: hero::new(20, 'sylvara', 1, 1)},
-                Heroes {owner: accountAdrs, index: 21, hero: hero::new(21, 'sylvara', 1, 1)},
-                Heroes {owner: accountAdrs, index: 22, hero: hero::new(22, 'bane', 1, 1)},
-                Heroes {owner: accountAdrs, index: 23, hero: hero::new(23, 'bane', 1, 1)},
-                Heroes {owner: accountAdrs, index: 24, hero: hero::new(24, 'ember', 1, 1)},
-                Heroes {owner: accountAdrs, index: 25, hero: hero::new(25, 'ember', 1, 1)},
-                Heroes {owner: accountAdrs, index: 26, hero: hero::new(26, 'molten', 1, 1)},
-                Heroes {owner: accountAdrs, index: 27, hero: hero::new(27, 'molten', 1, 1)},
-                Heroes {owner: accountAdrs, index: 28, hero: hero::new(28, 'solas', 1, 1)},
-                Heroes {owner: accountAdrs, index: 29, hero: hero::new(29, 'solas', 1, 1)},
-                Heroes {owner: accountAdrs, index: 30, hero: hero::new(30, 'solveig', 1, 1)},
-                Heroes {owner: accountAdrs, index: 31, hero: hero::new(31, 'solveig', 1, 1)},   
-                Heroes {owner: accountAdrs, index: 32, hero: hero::new(32, 'janus', 1, 1)},
-                Heroes {owner: accountAdrs, index: 33, hero: hero::new(33, 'janus', 1, 1)},
-                Heroes {owner: accountAdrs, index: 34, hero: hero::new(34, 'horus', 1, 1)},
-                Heroes {owner: accountAdrs, index: 35, hero: hero::new(35, 'horus', 1, 1)},
-                Heroes {owner: accountAdrs, index: 36, hero: hero::new(36, 'jabari', 1, 1)},
-                Heroes {owner: accountAdrs, index: 37, hero: hero::new(37, 'jabari', 1, 1)},
-                Heroes {owner: accountAdrs, index: 38, hero: hero::new(38, 'khamsin', 1, 1)},
-                Heroes {owner: accountAdrs, index: 39, hero: hero::new(39, 'khamsin', 1, 1)},
+                Heroes {owner: accountAdrs, index: 1, hero: hero::new(1, 'sirocco', 1, 1)},
+                Heroes {owner: accountAdrs, index: 2, hero: hero::new(2, 'wellan', 1, 1)},
+                Heroes {owner: accountAdrs, index: 3, hero: hero::new(3, 'elandor', 1, 1)},
+                Heroes {owner: accountAdrs, index: 4, hero: hero::new(4, 'diana', 1, 1)},
+                Heroes {owner: accountAdrs, index: 5, hero: hero::new(5, 'elric', 1, 1)},
+                Heroes {owner: accountAdrs, index: 6, hero: hero::new(6, 'nereus', 1, 1)},
+                Heroes {owner: accountAdrs, index: 7, hero: hero::new(7, 'rex', 1, 1)},
+                Heroes {owner: accountAdrs, index: 8, hero: hero::new(8, 'celeste', 1, 1)},
+                Heroes {owner: accountAdrs, index: 9, hero: hero::new(9, 'oakheart', 1, 1)},
+                Heroes {owner: accountAdrs, index: 10, hero: hero::new(10, 'sylvara', 1, 1)},
+                Heroes {owner: accountAdrs, index: 11, hero: hero::new(11, 'bane', 1, 1)},
+                Heroes {owner: accountAdrs, index: 12, hero: hero::new(12, 'ember', 1, 1)},
+                Heroes {owner: accountAdrs, index: 13, hero: hero::new(13, 'molten', 1, 1)},
+                Heroes {owner: accountAdrs, index: 14, hero: hero::new(14, 'solas', 1, 1)},
+                Heroes {owner: accountAdrs, index: 15, hero: hero::new(15, 'solveig', 1, 1)},
+                // Heroes {owner: accountAdrs, index: 16, hero: hero::new(16, 'janus', 1, 1)},
+                // Heroes {owner: accountAdrs, index: 17, hero: hero::new(17, 'horus', 1, 1)},
+                // Heroes {owner: accountAdrs, index: 18, hero: hero::new(18, 'jabari', 1, 1)},
+                // Heroes {owner: accountAdrs, index: 19, hero: hero::new(19, 'khamsin', 1, 1)},
                 )
             );
-            return 40;
+            return 16;
         }
         fn mintStarterRunes(world: IWorldDispatcher, accountAdrs: ContractAddress) -> u32 {
             set!(

@@ -6,7 +6,7 @@ import { GameAccount } from "../../Types/toriiTypes"
 import EnergyHandler from "../Classes/EnergyHandler"
 import runeStatsDict from '../../GameDatas/Statistics/runeStats'
 import baseStatsDict from '../../GameDatas/Statistics/baseStats'
-import { ArenaAccount, ArenaFullAccount } from "../../Types/customTypes"
+import { ArenaAccount, ArenaFullAccount, GlobalQuest } from "../../Types/customTypes"
 
 
 export default class StateChangesHandler {
@@ -21,9 +21,10 @@ export default class StateChangesHandler {
   setMapProgress: React.Dispatch<React.SetStateAction<{[key: number]: number;}>>
   setArenaAccount: React.Dispatch<React.SetStateAction<ArenaAccount>>
   setArenaFullAccounts: React.Dispatch<React.SetStateAction<ArenaFullAccount[]>>
+  setGlobalQuests: React.Dispatch<React.SetStateAction<GlobalQuest[]>>
 
 
-  constructor(setHeroesList: React.Dispatch<React.SetStateAction<HeroInfos[]>>, setRunesList: React.Dispatch<React.SetStateAction<RuneInfos[]>>, setGameAccount: React.Dispatch<React.SetStateAction<GameAccount>>, setShowMyHeroes: React.Dispatch<React.SetStateAction<boolean>>, setShowWorldSelect: React.Dispatch<React.SetStateAction<boolean>>, setIsBattleRunning: React.Dispatch<React.SetStateAction<boolean>>, setMapProgress: React.Dispatch<React.SetStateAction<{[key: number]: number;}>>, setArenaAccount: React.Dispatch<React.SetStateAction<ArenaAccount>>, setArenaFullAccounts: React.Dispatch<React.SetStateAction<ArenaFullAccount[]>> ) {
+  constructor(setHeroesList: React.Dispatch<React.SetStateAction<HeroInfos[]>>, setRunesList: React.Dispatch<React.SetStateAction<RuneInfos[]>>, setGameAccount: React.Dispatch<React.SetStateAction<GameAccount>>, setShowMyHeroes: React.Dispatch<React.SetStateAction<boolean>>, setShowWorldSelect: React.Dispatch<React.SetStateAction<boolean>>, setIsBattleRunning: React.Dispatch<React.SetStateAction<boolean>>, setMapProgress: React.Dispatch<React.SetStateAction<{[key: number]: number;}>>, setArenaAccount: React.Dispatch<React.SetStateAction<ArenaAccount>>, setArenaFullAccounts: React.Dispatch<React.SetStateAction<ArenaFullAccount[]>>, setGlobalQuests: React.Dispatch<React.SetStateAction<GlobalQuest[]>> ) {
     this.setHeroesList = setHeroesList
     this.setRunesList = setRunesList
     this.setGameAccount = setGameAccount
@@ -33,6 +34,7 @@ export default class StateChangesHandler {
     this.setMapProgress = setMapProgress
     this.setArenaAccount = setArenaAccount
     this.setArenaFullAccounts = setArenaFullAccounts
+    this.setGlobalQuests = setGlobalQuests
   }
 
   updateArenaFullAccounts(arenaFullAccounts: ArenaFullAccount[], rankChanges: RankChangeEvent[]) {

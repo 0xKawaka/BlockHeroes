@@ -1,14 +1,13 @@
 use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
-use game::models::map::Map;
 use starknet::ContractAddress;
 
 trait IQuest {
     fn initQuests(world: IWorldDispatcher);
-    fn claimRewards(world: IWorldDispatcher, owner: ContractAddress, map: Map, mapProgressRequired: u16);
+    fn claimGlobalRewards(world: IWorldDispatcher, owner: ContractAddress, map: u16, mapProgressRequired: u16);
 }
 
 mod Quests {
-    use game::models::storage::quest::{globalQuests::GlobalQuests, rewardType::{RewardType, RewardTypeImpl}};
+    use game::models::storage::quest::{accountQuests::AccountQuests, globalQuests::GlobalQuests, rewardType::{RewardType, RewardTypeImpl}};
     use game::models::map::{MapTrait, Map};
     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
     use starknet::ContractAddress;
@@ -17,21 +16,24 @@ mod Quests {
 
     impl QuestsImpl of super::IQuest {
         fn initQuests(world: IWorldDispatcher) {
-            let map: Map = Map::Campaign;
+            let map: u16 = Map::Campaign.toU16();
             set!(
                 world,
                 (
                 GlobalQuests { map: map, mapProgressRequired: 1, rewardType: RewardType::Summon, rewardQuantity: 1 },
-                GlobalQuests { map: map, mapProgressRequired: 5, rewardType: RewardType::Summon, rewardQuantity: 1 },
-                GlobalQuests { map: map, mapProgressRequired: 10, rewardType: RewardType::Summon, rewardQuantity: 1 },
+                GlobalQuests { map: map, mapProgressRequired: 3, rewardType: RewardType::Summon, rewardQuantity: 1 },
+                GlobalQuests { map: map, mapProgressRequired: 4, rewardType: RewardType::Summon, rewardQuantity: 1 },
                 GlobalQuests { map: map, mapProgressRequired: 20, rewardType: RewardType::Summon, rewardQuantity: 1 },
                 )
             );
         }
 
-        fn claimRewards(world: IWorldDispatcher, owner: ContractAddress, map: Map, mapProgressRequired: u16) {
+        fn claimGlobalRewards(world: IWorldDispatcher, owner: ContractAddress, map: u16, mapProgressRequired: u16) {
             let ownerProgress = get!(world, (owner, map), MapProgress).level;
             assert(ownerProgress >= mapProgressRequired, 'progress not enough');
+            let accountGlobalQuest = get!(world, (owner, map, mapProgressRequired), AccountQuests);
+            assert(!accountGlobalQuest.hasClaimedRewards, 'quest already claimed');
+            set!(world, AccountQuests { owner, map, mapProgressRequired, hasClaimedRewards: true });
             let quest = get!(world, (map, mapProgressRequired), GlobalQuests);
 
             match quest.rewardType {

@@ -5,13 +5,34 @@ import { useDojo } from "./useDojo";
 import { Hero, Rune, GameAccount, ArenaAccount } from "../Types/toriiTypes";
 import { Parser } from "../Blockchain/Parser";
 import hexToString from "../Pages/utils/hexToString";
-import { ArenaFullAccount } from "../Types/customTypes";
+import { ArenaFullAccount, GlobalQuest } from "../Types/customTypes";
 import { HeroesFactory } from "../Classes/Heroes/HeroesFactory";
 import { HeroBlockchain } from "../Types/blockchainTypes";
 import RuneFactory from "../Classes/Runes/RuneFactory";
 import { HeroInfos } from "../Types/apiTypes";
+import { mapFromString } from "../GameDatas/maps";
 
 export default class ToriiGetter {
+
+  static getGlobalQuests(accountAdrs: string, GlobalQuests: any, AccountQuests: any): GlobalQuest[] {
+    // const {setup: {clientComponents: {GlobalQuests, AccountQuests}}} = useDojo();
+    const entitiesSet = runQuery([Has(GlobalQuests)]);
+    const entitiesArray = Array.from(entitiesSet);
+    let quests: Array<GlobalQuest> = [];
+    for(let i = 0; i < entitiesArray.length; i++){
+      const quest = getComponentValue(GlobalQuests, entitiesArray[i]);
+
+      if(quest){
+        const entityId = getEntityIdFromKeys([
+          BigInt(accountAdrs), BigInt(quest.map), BigInt(quest.mapProgressRequired)
+        ]) as Entity;
+        const accountQuest = getComponentValue(AccountQuests, entityId);
+        quests.push({map: mapFromString(quest.map), mapProgressRequired: quest.mapProgressRequired, rewardType: quest.rewardType, rewardQuantity: quest.rewardQuantity, hasClaimed: accountQuest ? accountQuest.hasClaimedRewards : false});
+      }
+    }
+    quests.sort((a, b) => a.mapProgressRequired - b.mapProgressRequired);
+    return quests;
+  }
 
   static getAllArenaUsernames(entities: Entity[], Account: any): {[key: string]: string} {  
     // const {setup: {clientComponents: {Account}}} = useDojo();

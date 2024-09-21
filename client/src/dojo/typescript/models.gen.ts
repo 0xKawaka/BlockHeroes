@@ -70,6 +70,30 @@ export const FieldLayoutDefinition = {
     
 };
 
+// Type definition for `game::models::map::Map` enum
+export type Map = { type: 'Campaign'; } | { type: 'Arena'; };
+
+export const MapDefinition = {
+    type: RecsType.String,
+    value: RecsType.String
+};
+
+// Type definition for `game::models::storage::quest::accountQuests::AccountQuests` struct
+export interface AccountQuests {
+    owner: BigInt;
+    map: Number;
+    mapProgressRequired: Number;
+    hasClaimedRewards: Boolean;
+    
+}
+export const AccountQuestsDefinition = {
+    owner: RecsType.BigInt,
+    map: RecsType.Number,
+    mapProgressRequired: RecsType.Number,
+    hasClaimedRewards: RecsType.Boolean,
+    
+};
+
 
 // Type definition for `game::models::storage::arena::arenaAccount::ArenaAccount` struct
 export interface ArenaAccount {
@@ -396,6 +420,30 @@ export const GemsRewardsDefinition = {
     index: RecsType.Number,
     minRank: RecsType.Number,
     gems: RecsType.Number,
+    
+};
+        
+// Type definition for `game::models::storage::quest::rewardType::RewardType` enum
+export type RewardType = { type: 'Summon'; } | { type: 'Rune'; } | { type: 'Crystals'; };
+
+export const RewardTypeDefinition = {
+    type: RecsType.String,
+    value: RecsType.String
+};
+        
+// Type definition for `game::models::storage::quest::globalQuests::GlobalQuests` struct
+export interface GlobalQuests {
+    map: Number;
+    mapProgressRequired: Number;
+    rewardType: RewardType;
+    rewardQuantity: Number;
+    
+}
+export const GlobalQuestsDefinition = {
+    map: RecsType.Number,
+    mapProgressRequired: RecsType.Number,
+    rewardType: RewardTypeDefinition,
+    rewardQuantity: RecsType.Number,
     
 };
 
@@ -833,6 +881,27 @@ export function defineContractComponents(world: World) {
             );
         })(),
 
+        // Model definition for `game::models::storage::quest::accountQuests::AccountQuests` model
+        AccountQuests: (() => {
+            return defineComponent(
+                world,
+                {
+                    owner: RecsType.BigInt,
+                    map: RecsType.Number,
+                    mapProgressRequired: RecsType.Number,
+                    hasClaimedRewards: RecsType.Boolean,
+                },
+                {
+                    metadata: {
+                        namespace: "game",
+                        name: "AccountQuests",
+                        types: ["ContractAddress", "u16", "u16", "bool"],
+                        customTypes: [],
+                    },
+                }
+            );
+        })(),
+
         // Model definition for `game::models::storage::arena::arenaAccount::ArenaAccount` model
         ArenaAccount: (() => {
             return defineComponent(
@@ -1053,6 +1122,27 @@ export function defineContractComponents(world: World) {
                         namespace: "game",
                         name: "GemsRewards",
                         types: ["u32", "u64", "u64"],
+                        customTypes: [],
+                    },
+                }
+            );
+        })(),
+
+        // Model definition for `game::models::storage::quest::globalQuests::GlobalQuests` model
+        GlobalQuests: (() => {
+            return defineComponent(
+                world,
+                {
+                    map: RecsType.Number,
+                    mapProgressRequired: RecsType.Number,
+                    rewardType: RecsType.String,
+                    rewardQuantity: RecsType.Number,
+                },
+                {
+                    metadata: {
+                        namespace: "game",
+                        name: "GlobalQuests",
+                        types: ["u16", "u16", "RewardType", "u32"],
                         customTypes: [],
                     },
                 }

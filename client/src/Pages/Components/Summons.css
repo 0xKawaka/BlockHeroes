@@ -5,6 +5,10 @@
   justify-content: center;
   gap: 2.5rem;
 }
+
+.SummonFirstHeroesText {
+  font-size: 3.5rem;
+}
 .SummonImageAndButton {
   display: flex;
   flex-direction: column;

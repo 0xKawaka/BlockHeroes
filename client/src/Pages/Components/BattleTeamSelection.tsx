@@ -18,7 +18,7 @@ import EnergyHandler from "../Classes/EnergyHandler"
 import { GameAccount, Hero } from "../../Types/toriiTypes"
 import { useDojo } from "../../dojo/useDojo"
 import { map } from "rxjs"
-import Maps from "../../GameDatas/maps"
+import {Maps} from "../../GameDatas/maps"
 
 
 type BattleTeamSelectionProps = {

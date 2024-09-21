@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x76f75ac2e7c0010fe59a56431805a6a12dc1c5bd97a016b022063ca8de4db6a"
-original_class_hash = "0x76f75ac2e7c0010fe59a56431805a6a12dc1c5bd97a016b022063ca8de4db6a"
+class_hash = "0x494f8e15440ec90fbf52f80800e0d750ec57dc6c0197adbec739767d821aa3"
+original_class_hash = "0x494f8e15440ec90fbf52f80800e0d750ec57dc6c0197adbec739767d821aa3"
 abi = "manifests/dev/base/abis/models/game-GlobalQuests-26e30eac.json"
 tag = "game-GlobalQuests"
 qualified_path = "game::models::storage::quest::globalQuests::global_quests"
@@ -8,7 +8,7 @@ manifest_name = "game-GlobalQuests-26e30eac"
 
 [[members]]
 name = "map"
-type = "Map"
+type = "u16"
 key = true
 
 [[members]]

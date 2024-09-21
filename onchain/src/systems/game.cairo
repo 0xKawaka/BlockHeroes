@@ -6,6 +6,7 @@ trait IGame {
     fn playArenaTurn(spellIndex: u8, targetIndex: u32);
     fn startBattle(heroesIds: Array<u32>, map: u16, level: u16);
     fn playTurn(map: u16, spellIndex: u8, targetIndex: u32);
+    fn claimGlobalRewards(map: u16, mapProgressRequired: u16);
     fn initPvp(heroesIds: Array<u32>);
     fn setPvpTeam(heroesIds: Array<u32>);
     fn equipRune(runeId: u32, heroId: u32);
@@ -27,9 +28,11 @@ mod Game {
     use game::systems::levels::Levels::LevelsImpl;
     use game::systems::battles::Battles::BattlesImpl;
     use game::systems::arena::Arena::ArenaImpl;
+    use game::systems::quests::Quests::QuestsImpl;
     use game::models::hero::{Hero, HeroImpl, HeroTrait};
     use game::models::battle::entity::{Entity, EntityImpl, EntityTrait, AllyOrEnemy};
     use game::models::storage::mapProgress::MapProgress;
+    use game::models::map::Map;
     use game::utils::nullableVector::{NullableVector, NullableVectorImpl, VecTrait};
 
     #[abi(embed_v0)]
@@ -68,6 +71,9 @@ mod Game {
         }
         fn playTurn(world: @IWorldDispatcher, map: u16, spellIndex: u8, targetIndex: u32) {
             BattlesImpl::playTurn(world, get_caller_address(), map, spellIndex, targetIndex);
+        }
+        fn claimGlobalRewards(world: @IWorldDispatcher, map: u16, mapProgressRequired: u16) {
+            QuestsImpl::claimGlobalRewards(world, get_caller_address(), map, mapProgressRequired);
         }
         fn initPvp(world: @IWorldDispatcher, heroesIds: Array<u32>) {
             assert(heroesIds.len() < 5 && heroesIds.len() > 0, '1 hero min, 4 heroes max');

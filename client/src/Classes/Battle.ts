@@ -13,7 +13,7 @@ import { Account } from "starknet";
 import UIScene from "../Scenes/UIScene";
 import GameSpeedHelper from "./Animations/GameSpeedHelper";
 import { useDojo } from "../dojo/useDojo";
-import Maps from "../GameDatas/maps";
+import {Maps} from "../GameDatas/maps";
 
 export default class Battle {
   battleEntities: Array<IBattleEntity>

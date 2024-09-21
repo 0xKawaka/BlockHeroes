@@ -1,3 +1,4 @@
+import {Maps} from "../GameDatas/maps";
 import { HeroInfos } from "./apiTypes";
 
 type ArenaFullAccount = {
@@ -9,4 +10,6 @@ type ArenaFullAccount = {
 
 type ArenaAccount = {rank: number, lastClaimedRewards: number}
 
-export type {ArenaFullAccount, ArenaAccount}
+type GlobalQuest = { map: Maps, mapProgressRequired: number, rewardType: string, rewardQuantity: number, hasClaimed: boolean}
+
+export type {ArenaFullAccount, ArenaAccount, GlobalQuest};

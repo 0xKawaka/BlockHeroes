@@ -6,7 +6,7 @@ import FontLoader from './FontLoader'
 import Entity from '../Classes/Entity/Entity'
 import GameEventHandler from '../Blockchain/event/GameEventHandler'
 import { Account } from 'starknet'
-import Maps from '../GameDatas/maps'
+import {Maps} from '../GameDatas/maps'
 
 function getPhaserConfig(eventHandler: GameEventHandler, account: Account, playTurn: any, parentContainer:string, map: Maps, battleId:number, selectedTeam: Entity[], enemiesTeam: Entity[]): Phaser.Types.Core.GameConfig{
   const Config: Phaser.Types.Core.GameConfig = {

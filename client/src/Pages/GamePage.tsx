@@ -7,6 +7,7 @@ import collectionIcon from '../assets/icons/Menu_CollectionIcon.png'
 import battleIcon from '../assets/icons/Menu_BattleIcon.png'
 import summonIcon from '../assets/icons/Menu_SummonIcon.png'
 import mapIcon from '../assets/icons/Menu_MapIcon2.png'
+import questsIcon from '../assets/icons/Menu_QuestsIcon.png'
 import Summons from './Components/Summons'
 import { BaseHeroInfos, HeroesFactory } from '../Classes/Heroes/HeroesFactory'
 import { HeroBlockchain } from '../Types/blockchainTypes'
@@ -26,13 +27,13 @@ import ToriiGetter from '../dojo/ToriiGetter'
 import { GameAccount, Hero } from '../Types/toriiTypes'
 import { HeroInfos, RuneInfos } from '../Types/apiTypes'
 import { Account } from 'starknet'
-import { ArenaAccount, ArenaFullAccount } from '../Types/customTypes'
+import { ArenaAccount, ArenaFullAccount, GlobalQuest } from '../Types/customTypes'
 import { BurnerAccount } from '@dojoengine/create-burner'
 import { ToriiClient } from '@dojoengine/torii-client'
 import { AllyOrEnemy } from '../dojo/typescript/models.gen';
 import { ClientComponents } from '../dojo/createClientComponents';
-import Maps from '../GameDatas/maps'
-import { set } from 'mobx'
+import {Maps} from '../GameDatas/maps'
+import Quests from './Components/Quests'
 
 
 function getGamePageContainerStyle(isBattleRunning: boolean){
@@ -54,7 +55,7 @@ type GamePageProps = {
 }
 
 function GamePage({toriiClient, account} : GamePageProps) {
-  const {setup: {clientComponents: {Account, ArenaAccount, Runes, Heroes, ArenaTeam, MapProgress}, contractComponents}} = useDojo();
+  const {setup: {clientComponents: {Account, ArenaAccount, Runes, Heroes, ArenaTeam, MapProgress, GlobalQuests, AccountQuests}}} = useDojo();
   // useQuerySync(toriiClient, contractComponents as any, []);
 
   const [accountSelected, setAccountSelected] = useState<boolean>(false)
@@ -67,13 +68,15 @@ function GamePage({toriiClient, account} : GamePageProps) {
   const [heroes, setHeroes] = useState<Array<HeroInfos>>([])
   const [runes, setRunes] = useState<Array<RuneInfos>>([])
   const [allAccountsDict, setAllAccountsDict] = useState<{[key: string]: GameAccount}>({})
+  const [showQuests, setShowQuests] = useState<boolean>(false)
   const [showMyHeroes, setShowMyHeroes] = useState<boolean>(false)
   const [showWorldSelect, setShowWorldSelect] = useState<boolean>(false)
   const [showPvp, setShowPvp] = useState<boolean>(false)
   const [showSummons, setShowSummons] = useState<boolean>(false)
   const [isBattleRunning, setIsBattleRunning] = useState<boolean>(false)
   const [mapProgress, setMapProgress] = useState<{[key: number]: number}>({})
-  const [stateChangesHandler, setStateChangesHandler] = useState<StateChangesHandler>(new StateChangesHandler(setHeroes, setRunes, setGameAccount, setShowMyHeroes, setShowWorldSelect, setIsBattleRunning, setMapProgress, setArenaAccount, setArenaFullAccounts))
+  const [globalQuests, setGlobalQuests] = useState<Array<GlobalQuest>>([])
+  const [stateChangesHandler, setStateChangesHandler] = useState<StateChangesHandler>(new StateChangesHandler(setHeroes, setRunes, setGameAccount, setShowMyHeroes, setShowWorldSelect, setIsBattleRunning, setMapProgress, setArenaAccount, setArenaFullAccounts, setGlobalQuests))
 
   async function handleNewHeroEvent(hero: HeroInfos) {
     let newHeroes = [...heroes]
@@ -132,6 +135,11 @@ function GamePage({toriiClient, account} : GamePageProps) {
       let runes: RuneInfos[] = [];
       let heroes: HeroInfos[] = [];
       if(gameAccount !== undefined){
+        if(gameAccount.heroesCount < 2){
+          setShowSummons(true);
+        }
+        let globalQuests = ToriiGetter.getGlobalQuests(blockchainAccount.address, GlobalQuests, AccountQuests)
+        setGlobalQuests(globalQuests);
         let toriiRunes = ToriiGetter.getAllRunes(blockchainAccount.address, gameAccount.runesCount, Runes);
         let toriiHeroes = ToriiGetter.getAllHeroes(blockchainAccount.address, gameAccount.heroesCount, Heroes);
         runes = RuneFactory.createRunes(toriiRunes);
@@ -158,20 +166,26 @@ function GamePage({toriiClient, account} : GamePageProps) {
     <div className='GamePhaserContainer' id='GamePhaserContainer'>
       <div className='GamePageContainer' style={getGamePageContainerStyle(isBattleRunning)}>
         {accountSelected && !isBattleRunning && gameAccount && <AccountOverview gameAccount={gameAccount} maxEnergy={5} maxPvpEnergy={5} />}
-        {accountSelected && !showMyHeroes && !showWorldSelect && !showSummons && !showPvp &&
+        {accountSelected && !showMyHeroes && !showWorldSelect && !showSummons && !showPvp && !showQuests &&
         <div className='GamePageTitleAndMenu'>
           <img className='GamePageTitle' src={title} />
           <div className='GamePageMenu'>
+            <div className='GamePageMenuButton' onClick={() => setShowQuests(true)}>
+              <img className='GamePageMenuButtonIcon' src={questsIcon} />
+              <div className="GamePageMenuButtonText">
+                Quests
+              </div>
+            </div>
             <div className='GamePageMenuButton' onClick={() => setShowSummons(true)}>
               <img className='GamePageMenuButtonIcon' src={summonIcon} />
               <div className="GamePageMenuButtonText">
-                Summon Heroes
+                Summon
               </div>
             </div>
             <div className='GamePageMenuButton' onClick={() => setShowMyHeroes(true)}>
               <img className='GamePageMenuButtonIcon' src={collectionIcon} />
               <div className="GamePageMenuButtonText">
-                My Collection
+                Heroes
               </div>
             </div>
             <div className='GamePageMenuButton' onClick={() => setShowWorldSelect(true)}>
@@ -191,6 +205,9 @@ function GamePage({toriiClient, account} : GamePageProps) {
         }
         {!accountSelected &&
           <AccountSelect account={account} allAccountsDict={allAccountsDict} setAccountSelected={setAccountSelected} setBlockchainAccount={setBlockchainAccount} />
+        }
+        {showQuests &&
+          <Quests account={blockchainAccount} gameAccount={gameAccount} stateChangesHandler={stateChangesHandler} globalQuests={globalQuests} mapProgress={mapProgress} setShowQuests={setShowQuests} />
         }
         {showMyHeroes &&
           <MyHeroes account={blockchainAccount} gameAccount={gameAccount} heroesList={heroes} runesList={runes} baseHeroes={baseHeroes} stateChangesHandler={stateChangesHandler}/>

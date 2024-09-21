@@ -363,31 +363,31 @@
   },
   {
     "type": "impl",
-    "name": "global_questsImpl",
-    "interface_name": "game::models::storage::quest::globalQuests::Iglobal_quests"
+    "name": "account_questsImpl",
+    "interface_name": "game::models::storage::quest::accountQuests::Iaccount_quests"
   },
   {
     "type": "enum",
-    "name": "game::models::storage::quest::rewardType::RewardType",
+    "name": "core::bool",
     "variants": [
       {
-        "name": "Summon",
+        "name": "False",
         "type": "()"
       },
       {
-        "name": "Rune",
-        "type": "()"
-      },
-      {
-        "name": "Crystals",
+        "name": "True",
         "type": "()"
       }
     ]
   },
   {
     "type": "struct",
-    "name": "game::models::storage::quest::globalQuests::GlobalQuests",
+    "name": "game::models::storage::quest::accountQuests::AccountQuests",
     "members": [
+      {
+        "name": "owner",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
       {
         "name": "map",
         "type": "core::integer::u16"
@@ -397,18 +397,14 @@
         "type": "core::integer::u16"
       },
       {
-        "name": "rewardType",
-        "type": "game::models::storage::quest::rewardType::RewardType"
-      },
-      {
-        "name": "rewardQuantity",
-        "type": "core::integer::u32"
+        "name": "hasClaimedRewards",
+        "type": "core::bool"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "game::models::storage::quest::globalQuests::Iglobal_quests",
+    "name": "game::models::storage::quest::accountQuests::Iaccount_quests",
     "items": [
       {
         "type": "function",
@@ -416,7 +412,7 @@
         "inputs": [
           {
             "name": "model",
-            "type": "game::models::storage::quest::globalQuests::GlobalQuests"
+            "type": "game::models::storage::quest::accountQuests::AccountQuests"
           }
         ],
         "outputs": [],
@@ -426,7 +422,7 @@
   },
   {
     "type": "event",
-    "name": "game::models::storage::quest::globalQuests::global_quests::Event",
+    "name": "game::models::storage::quest::accountQuests::account_quests::Event",
     "kind": "enum",
     "variants": []
   }
