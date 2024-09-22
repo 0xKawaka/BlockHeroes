@@ -6,4 +6,5 @@ mod battles;
 mod baseHero;
 mod mapProgress;
 mod quest;
+mod usernames;
 // mod accountConfig;

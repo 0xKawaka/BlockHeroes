@@ -43,6 +43,7 @@ mod Accounts {
     use game::models::hero::rune::RuneTrait;
     use game::models::hero::HeroTrait;
     use game::models::{account, account::{AccountImpl, AccountTrait, Account, heroes::Heroes, runes::Runes}};
+    use game::models::storage::usernames::Usernames;
     use game::models::{hero, hero::Hero, hero::HeroImpl, hero::rune, hero::EquippedRunesImpl, hero::rune::RuneImpl, hero::rune::Rune};
     use game::models::hero::rune::{RuneStatistic, RuneRarity, RuneType};
     use game::models::events::{Event, EventKey, HeroMinted, RuneMinted, NewAccount, TimestampEnergy, TimestampPvpEnergy};
@@ -140,7 +141,9 @@ mod Accounts {
         }
         fn createAccount(world: IWorldDispatcher, username: felt252, accountAdrs: ContractAddress) {
             let acc = get!(world, accountAdrs, (Account));
-            assert(acc.username == 0x0, 'Account already created');
+            assert(acc.username == 0x0, 'wallet already has account');
+            let usernameStorage = get!(world, username, (Usernames));
+            assert(usernameStorage.owner == 0.try_into().unwrap(), 'username already taken');
             let mut acc = account::new(username, accountAdrs);
             emit!(world, NewAccount {owner: accountAdrs, username: username});
             let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
@@ -148,6 +151,7 @@ mod Accounts {
             acc.heroesCount = heroesCount;
             acc.runesCount = runesCount;
             set!(world, (acc));
+            set!(world, (Usernames {username: username, owner: accountAdrs}));
         }
         fn addExperienceToHeroId(world: IWorldDispatcher, accountAdrs: ContractAddress, heroId: u32, experience: u32) {
             let acc = Self::getAccount(world, accountAdrs);

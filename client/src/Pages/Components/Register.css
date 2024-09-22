@@ -31,3 +31,8 @@
   cursor: pointer;
   align-items: center;
 }
+
+.ErrorMessage {
+  color: red;
+  font-size: 2.4rem;
+}

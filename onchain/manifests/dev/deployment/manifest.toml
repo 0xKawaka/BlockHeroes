@@ -24,8 +24,8 @@ manifest_name = "dojo-base"
 [[contracts]]
 kind = "DojoContract"
 address = "0x1f355961284c21fced60460e371443a9b3a192b3e5ae755ed9428dbbb4ba68f"
-class_hash = "0x1d5d00f3434e893194ed94487ea78b45c9e732f667adc1a83fe4a110b1be215"
-original_class_hash = "0x1d5d00f3434e893194ed94487ea78b45c9e732f667adc1a83fe4a110b1be215"
+class_hash = "0x49a5fedcfebef254185d2c9d5042885572e4eacfb4df66cb1e459ab7e7384ee"
+original_class_hash = "0x49a5fedcfebef254185d2c9d5042885572e4eacfb4df66cb1e459ab7e7384ee"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/game-Game-1a8648a1.json"
 reads = []
@@ -791,4 +791,23 @@ key = true
 [[models.members]]
 name = "entityIndex"
 type = "u16"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0xfe77c6cf0de023a542df66ce7ff4c0a72e8c00f4ec7c666538543135c4a5e"
+original_class_hash = "0xfe77c6cf0de023a542df66ce7ff4c0a72e8c00f4ec7c666538543135c4a5e"
+abi = "manifests/dev/deployment/abis/models/game-Usernames-6fb02379.json"
+tag = "game-Usernames"
+qualified_path = "game::models::storage::usernames::usernames"
+manifest_name = "game-Usernames-6fb02379"
+
+[[models.members]]
+name = "username"
+type = "felt252"
+key = true
+
+[[models.members]]
+name = "owner"
+type = "ContractAddress"
 key = false

@@ -24,17 +24,17 @@ export function createSystemCalls(
     { Account }: ClientComponents,
     world: World
 ) {
-    const createAccount = async (account: Account, username: string): Promise<boolean> =>  {
+    const createAccount = async (account: Account, username: string): Promise<{success: boolean, error: string}> =>  {
         try {
             let txRes =await client.Game.createAccount({
                 account,
                 username,
             });
-            await account.waitForTransaction(txRes.transaction_hash, {
+            let res = await account.waitForTransaction(txRes.transaction_hash, {
                 retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
-            return true;
+            return {success: true, error: ''};
             // await new Promise<void>((resolve) => {
             //     defineSystem(
             //         world,
@@ -47,9 +47,12 @@ export function createSystemCalls(
             //         }
             //     );
             // });
-        } catch (e) {
+        } catch (e: any) {
             console.log(e);
-            return false;
+            if(e.message.includes("username already taken")){
+                return {success: false, error: 'Username already taken'};
+            }
+            return {success: false, error: 'Unkown error'};
         } 
         // finally {
         //     Position.removeOverride(positionId);
