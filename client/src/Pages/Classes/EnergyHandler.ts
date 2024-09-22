@@ -1,6 +1,4 @@
 import truncOrRoundDecimalPoint from '../../Classes/MathInteger/MathInteger'
-import { EnergyInfos } from '../../Types/blockchainTypes'
-
 
 export default class EnergyHandler {
   currentBlockchainEnergy: number
@@ -11,7 +9,7 @@ export default class EnergyHandler {
   maxEnergy: number
   timeTickEnergy: number
 
-  constructor(setEnergy: (energy: number) => void, maxEnergy = 5, timeTickEnergy = 1200) {
+  constructor(setEnergy: (energy: number) => void, maxEnergy: number, timeTickEnergy: number) {
     this.currentBlockchainEnergy = 0
     this.actualEnergy = 0
     this.lastEnergyUpdateTimestamp = 0

@@ -2774,10 +2774,10 @@ const skillsDictWithoutImages: SkillsDictApi = {
         1
       ],
       [
-        true
+        false
       ],
       [
-        false
+        true
       ],
       [
         false

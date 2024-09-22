@@ -222,17 +222,31 @@ export default class AnimationsHandler {
   }
   
 
-  async createPlayAndWaitProjectile(targetEntity: IBattleEntity, casterEntity: IBattleEntity, animation: string){
-    let {projectile, directionX} = this.createAndPlayProjectile(targetEntity, casterEntity, animation)
+  async createPlayAndWaitProjectile(targetEntity: IBattleEntity, casterEntity: IBattleEntity, startPosition: {x: number, y: number}, animation: string){
+    let {projectile, directionX} = this.createAndPlayProjectile(targetEntity, casterEntity, startPosition, animation)
     await this.waitForCollision(projectile, targetEntity.getSprite(), directionX)
     projectile.destroy()
   }
 
-  createAndPlayProjectile(targetEntity: IBattleEntity, casterEntity: IBattleEntity, animation: string): {projectile:Phaser.GameObjects.Image, directionX:number} {
-    let direction = new Phaser.Math.Vector2( targetEntity.getSprite().getPlaceholderX() - casterEntity.getSprite().getPlaceholderX(), targetEntity.getSprite().getPlaceholderY() - casterEntity.getSprite().getPlaceholderY());
-    let angle = Phaser.Math.Angle.Between(casterEntity.getSprite().getPlaceholderX(), casterEntity.getSprite().getPlaceholderY(), targetEntity.getSprite().getPlaceholderX(), targetEntity.getSprite().getPlaceholderY())
-
-    let projectile = this.battle.battleScene.add.image(casterEntity.getSprite().getPlaceholderX(), casterEntity.getSprite().getCenterY(), "projectile_" + projectilesDict[animation + casterEntity.getName()].name)
+  createAndPlayProjectile(targetEntity: IBattleEntity, casterEntity: IBattleEntity, startPosition: {x: number, y: number}, animation: string): {projectile:Phaser.GameObjects.Image, directionX:number} {
+    let direction = new Phaser.Math.Vector2( targetEntity.getSprite().getCenterX() - startPosition.x, targetEntity.getSprite().getCenterY() - startPosition.y);
+    let angle = 0;
+    if(projectilesDict[animation + casterEntity.getName()].changeAngle)
+      angle = Phaser.Math.Angle.Between(startPosition.x, startPosition.y, targetEntity.getSprite().getCenterX(), targetEntity.getSprite().getCenterY())
+    let projectile;
+    if(projectilesDict[animation + casterEntity.getName()].framerate == 0){
+      projectile = this.battle.battleScene.add.image(startPosition.x, startPosition.y, projectilesDict[animation + casterEntity.getName()].name)
+    }
+    else {
+      projectile = this.battle.battleScene.add.sprite(startPosition.x, startPosition.y, projectilesDict[animation + casterEntity.getName()].name)
+      this.battle.battleScene.anims.create({
+        key: animation + casterEntity.getName(),
+        frames: this.battle.battleScene.anims.generateFrameNumbers(projectilesDict[animation + casterEntity.getName()].name),
+        frameRate: projectilesDict[animation + casterEntity.getName()].framerate,
+        repeat: -1
+      });
+      projectile.play(animation + casterEntity.getName());
+    }
     projectile.rotation = angle;
     
     this.battle.battleScene.physics.add.existing(projectile);

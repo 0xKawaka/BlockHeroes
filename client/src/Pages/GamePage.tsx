@@ -34,6 +34,7 @@ import { AllyOrEnemy } from '../dojo/typescript/models.gen';
 import { ClientComponents } from '../dojo/createClientComponents';
 import {Maps} from '../GameDatas/maps'
 import Quests from './Components/Quests'
+import { maxEnergy, maxPvpEnergy, timeTickEnergy, timeTickPvpEnergy } from '../GameDatas/constants'
 
 
 function getGamePageContainerStyle(isBattleRunning: boolean){
@@ -148,10 +149,10 @@ function GamePage({toriiClient, account} : GamePageProps) {
         setHeroes(heroes);
         setRunes(runes);
         loadPvpInfos(blockchainAccount.address);
-        let energyHandler = new EnergyHandler(setEnergy);
+        let energyHandler = new EnergyHandler(setEnergy, maxEnergy, timeTickEnergy);
         energyHandler.initEnergy(gameAccount.energy, gameAccount.lastEnergyUpdateTimestamp);
         stateChangesHandler.setEnergyHandler(energyHandler);
-        let pvpEnergyHandler = new EnergyHandler(setPvpEnergy);
+        let pvpEnergyHandler = new EnergyHandler(setPvpEnergy, maxPvpEnergy, timeTickPvpEnergy);
         pvpEnergyHandler.initEnergy(gameAccount.pvpEnergy, gameAccount.lastPvpEnergyUpdateTimestamp);
         stateChangesHandler.setPvpEnergyHandler(pvpEnergyHandler);
         const campaignProgressEntity = getEntityIdFromKeys([BigInt(blockchainAccount.address), BigInt(Maps.Campaign)]) as Entity;
@@ -165,7 +166,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
   return (
     <div className='GamePhaserContainer' id='GamePhaserContainer'>
       <div className='GamePageContainer' style={getGamePageContainerStyle(isBattleRunning)}>
-        {accountSelected && !isBattleRunning && gameAccount && <AccountOverview gameAccount={gameAccount} maxEnergy={5} maxPvpEnergy={5} stateChangesHandler={stateChangesHandler} />}
+        {accountSelected && !isBattleRunning && gameAccount && <AccountOverview gameAccount={gameAccount} maxEnergy={maxEnergy} maxPvpEnergy={maxPvpEnergy} stateChangesHandler={stateChangesHandler} />}
         {accountSelected && !showMyHeroes && !showWorldSelect && !showSummons && !showPvp && !showQuests &&
         <div className='GamePageTitleAndMenu'>
           <img className='GamePageTitle' src={title} />

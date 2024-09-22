@@ -94,8 +94,13 @@ export default class BattleLoader extends Phaser.Scene {
 
   loadProjectiles(){
     projectileInfos.forEach((projectileInfo) => {
-      let img = new URL('../assets/projectiles/' + projectileInfo.name + '.png', import.meta.url).href
-      this.load.image("projectile_" + projectileInfo.name, img)
+      let img = new URL('../assets/spellAnim/' + projectileInfo.name + '.png', import.meta.url).href
+      if(projectileInfo.framerate === 0) {
+        this.load.image(projectileInfo.name, img)
+      }
+      else {
+        this.load.spritesheet(projectileInfo.name, img, { frameWidth: projectileInfo.width, frameHeight: projectileInfo.height })
+      }
     })
   }
 

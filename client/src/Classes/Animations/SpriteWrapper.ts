@@ -92,4 +92,11 @@ export default class SpriteWrapper extends Phaser.GameObjects.Sprite {
     return 0
   }
 
+  getCenterX(): number{
+    let x = this.placeholder.getCenter().x
+    if (x)
+      return x
+    return 0
+  }
+
 }

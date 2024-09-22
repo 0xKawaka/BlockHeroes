@@ -174,7 +174,7 @@ mod SkillFactory {
                     SkillBuff { skillName: 'Scorpion Surge', index: 0, buff: buff::new(BuffType::Stun, 0, 2, true, false, false) },
                     SkillBuff { skillName: 'Venom Slash', index: 0, buff: buff::new(BuffType::Poison, 12, 2, true, false, false) },
                     SkillBuff { skillName: 'Sand Flurry', index: 0, buff: buff::new(BuffType::DefenseDown, 50, 2, true, false, false) },
-                    SkillBuff { skillName: 'Quicksand Ambush', index: 0, buff: buff::new(BuffType::SpeedDown, 20, 2, true, false, false) },
+                    SkillBuff { skillName: 'Quicksand Ambush', index: 0, buff: buff::new(BuffType::SpeedDown, 20, 2, false, true, false) },
                 )
             );
         }
