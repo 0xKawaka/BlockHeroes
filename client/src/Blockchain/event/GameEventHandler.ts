@@ -5,6 +5,7 @@ import RawEvent from "./RawEvent";
 import eventHashes from "./eventHash";
 import {NewBattleEvent, StartTurnEvent, SkillEvent, EndTurnEvent, EndBattleEvent, ExperienceGainEvent, LootEvent, RankChangeEvent} from "./eventTypes";
 import { num, shortString, Contract } from "starknet";
+import { getEntityIdFromKeys } from '@dojoengine/utils';
 
 export default class GameEventHandler {
   private newBattleEvent: NewBattleEvent | undefined;
@@ -17,6 +18,8 @@ export default class GameEventHandler {
   private runeMinted: RuneInfos | undefined;
   private runesStatsDict: RuneStatsDict;
   private rankChange: RankChangeEvent[];
+  private pvpEnergyTimestamp: number;
+  private energyTimestamp: number;
 
   constructor(runesStatsDict: RuneStatsDict) {
     this.runesStatsDict = runesStatsDict;
@@ -28,7 +31,6 @@ export default class GameEventHandler {
     this.endTurnEventArray = [];
     this.experienceGainEventArray = [];
     this.rankChange = [];
-
   }
 
   findNameFromeEventHashes(keys: string[]){
@@ -41,11 +43,11 @@ export default class GameEventHandler {
   }
 
   retrieveKnownEvents(events: any[]) {
-    let knownEvents: Array<{name: string, data: any[]}> = [];
+    let knownEvents: Array<{name: string, data: any[], keys: any[]}> = [];
     events.forEach((event: any) => {
       let eventName = this.findNameFromeEventHashes(event.keys);
       if (eventName) {
-        knownEvents.push({name: eventName, data: event.data});
+        knownEvents.push({name: eventName, data: event.data, keys: event.keys});
       }
     });
     return knownEvents;
@@ -82,11 +84,17 @@ export default class GameEventHandler {
         this.lootEvent = {owner: num.toHexString(event.data[0]), crystals: Number(event.data[1])}
       }
       else if (event.name === "RuneMinted") {
-        console.log("RUNEE MINTED rune minted event", event)
+        // console.log("RUNEE MINTED rune minted event", event)
         this.runeMinted = RuneFactory.createRune(Parser.parseRawRune(event.data))
       }
       else if (event.name === "RankChange") {
         this.rankChange.push({owner: event.data[0], rank: Number(event.data[1])})
+      }
+      else if(event.name === "EnergyTimestampUpdate") {
+        this.energyTimestamp = Number(event.data[1]);
+      }
+      else if(event.name === "PvpEnergyTimestampUpdate") {
+        this.pvpEnergyTimestamp = Number(event.data[1]);
       }
       else {
         throw new Error('event ' + event.name + ' not found');
@@ -245,6 +253,14 @@ export default class GameEventHandler {
     this.experienceGainEventArray = [];
     this.lootEvent = undefined;
     this.runeMinted = undefined;
+  }
+
+  getEnergyTimestamp(): number | undefined {
+    return this.energyTimestamp;
+  }
+
+  getPvpEnergyTimestamp(): number | undefined {
+    return this.pvpEnergyTimestamp;
   }
 
   getRankChange(): RankChangeEvent[] {

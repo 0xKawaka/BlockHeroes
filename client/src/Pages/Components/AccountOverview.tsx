@@ -12,10 +12,10 @@ type AccountOverviewProps = {
   gameAccount: GameAccount
   maxEnergy: number
   maxPvpEnergy: number
-  // stateChangesHandler: StateChangesHandler
+  stateChangesHandler: StateChangesHandler
 }
 
-export default function AccountOverview({gameAccount, maxEnergy, maxPvpEnergy}: AccountOverviewProps) {
+export default function AccountOverview({gameAccount, maxEnergy, maxPvpEnergy, stateChangesHandler}: AccountOverviewProps) {
 
   const [isHoveringEnergy, setIsHoveringEnergy] = useState<boolean>(false)
   const [isHoveringPvpEnergy, setIsHoveringPvpEnergy] = useState<boolean>(false)
@@ -31,14 +31,14 @@ export default function AccountOverview({gameAccount, maxEnergy, maxPvpEnergy}: 
           <div className="EnergyValue">{gameAccount.energy} / {maxEnergy}</div>
           <img className="EnergyIcon" src={energyImg} />
         </div>
-        {/* {isHoveringEnergy && energy < maxEnergy && <div className="EnergyTooltip">Next energy in {stateChangesHandler.getTimeUntilNextEnergy()} seconds</div>} */}
+        {isHoveringEnergy && gameAccount.energy < maxEnergy && <div className="EnergyTooltip">Next energy in {stateChangesHandler.getTimeUntilNextEnergy()} seconds</div>}
       </div>
       <div className="EnergyContainer">
         <div className="EnergyValueIconContainer" onMouseOver={() => {setIsHoveringPvpEnergy(true)}} onMouseOut={() => {setIsHoveringPvpEnergy(false)}}>
           <div className="EnergyValue">{gameAccount.pvpEnergy} / {maxEnergy}</div>
           <img className="EnergyIcon" src={pvpEnergyImg} />
         </div>
-        {/* {isHoveringPvpEnergy && pvpEnergy < maxPvpEnergy && <div className="EnergyTooltip">Next energy in {stateChangesHandler.getTimeUntilNextPvpEnergy()} seconds</div>} */}
+        {isHoveringPvpEnergy && gameAccount.pvpEnergy < maxPvpEnergy && <div className="EnergyTooltip">Next energy in {stateChangesHandler.getTimeUntilNextPvpEnergy()} seconds</div>}
       </div>
       <div className="CrystalsContainer">
         <div className="CrystalsValue">{gameAccount.crystals}</div>

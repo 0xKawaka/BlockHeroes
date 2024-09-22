@@ -8,7 +8,7 @@ const battlesInfos = {
       names: ["sirocco"],
       levels: [1],
       ranks: [1],
-      energyCost: 0,
+      energyCost: 1,
     },
     {
       background: "battle1",

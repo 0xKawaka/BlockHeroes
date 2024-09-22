@@ -51,12 +51,12 @@ fn new(username: felt252, owner: ContractAddress) -> Account {
 }
 
 trait AccountTrait {
-    fn updateEnergy(ref self: Account);
+    fn updateEnergy(ref self: Account) -> u64;
     fn increaseSummonChests(ref self: Account, summonChestsToAdd: u32);
     fn decreaseEnergy(ref self: Account, energyCost: u16);
     fn increaseEnergy(ref self: Account, energyToAdd: u16);
 
-    fn updatePvpEnergy(ref self: Account);
+    fn updatePvpEnergy(ref self: Account) -> u64;
     fn decreasePvpEnergy(ref self: Account, energyCost: u16);
     fn increasePvpEnergy(ref self: Account, energyToAdd: u16);
 
@@ -71,12 +71,12 @@ trait AccountTrait {
 }
 
 impl AccountImpl of AccountTrait {
-    fn updateEnergy(ref self: Account) {
+    fn updateEnergy(ref self: Account) -> u64 {
         let now = get_block_timestamp();
         
         if(self.energy >= maxEnergy) {
             self.lastEnergyUpdateTimestamp = now;
-            return;
+            return self.lastEnergyUpdateTimestamp;
         }
 
         println!("lastEnergyUpdateTimestamp {}", self.lastEnergyUpdateTimestamp);
@@ -86,18 +86,19 @@ impl AccountImpl of AccountTrait {
         let energyToAdd = timeDiff / timeTickEnergy;
 
         if(energyToAdd == 0) {
-            return;
+            return self.lastEnergyUpdateTimestamp;
         }
         self.energy = self.energy + energyToAdd.try_into().unwrap();
 
         if(self.energy >= maxEnergy) {
             self.energy = maxEnergy;
             self.lastEnergyUpdateTimestamp = now;
-            return;
+            return self.lastEnergyUpdateTimestamp;
         }
 
         let timeLeft = timeDiff % timeTickEnergy;
         self.lastEnergyUpdateTimestamp = now - timeLeft;
+        return self.lastEnergyUpdateTimestamp;
     }
     fn increaseSummonChests(ref self: Account, summonChestsToAdd: u32) {
         self.summonChests = self.summonChests + summonChestsToAdd;
@@ -109,30 +110,31 @@ impl AccountImpl of AccountTrait {
     fn increaseEnergy(ref self: Account, energyToAdd: u16) {
         self.energy = self.energy + energyToAdd;
     }
-    fn updatePvpEnergy(ref self: Account) {
+    fn updatePvpEnergy(ref self: Account) -> u64 {
         let now = get_block_timestamp();
         
         if(self.pvpEnergy >= maxPvpEnergy) {
             self.lastPvpEnergyUpdateTimestamp = now;
-            return;
+            return self.lastPvpEnergyUpdateTimestamp;
         }
 
         let timeDiff = now - self.lastPvpEnergyUpdateTimestamp;
         let energyToAdd = timeDiff / timeTickPvpEnergy;
 
         if(energyToAdd == 0) {
-            return;
+            return self.lastPvpEnergyUpdateTimestamp;
         }
         self.pvpEnergy = self.pvpEnergy + energyToAdd.try_into().unwrap();
 
         if(self.pvpEnergy >= maxPvpEnergy) {
             self.pvpEnergy = maxPvpEnergy;
             self.lastPvpEnergyUpdateTimestamp = now;
-            return;
+            return self.lastPvpEnergyUpdateTimestamp;
         }
 
         let timeLeft = timeDiff % timeTickPvpEnergy;
         self.lastPvpEnergyUpdateTimestamp = now - timeLeft;
+        return self.lastPvpEnergyUpdateTimestamp;
     }
     fn decreasePvpEnergy(ref self: Account, energyCost: u16) {
         assert(self.pvpEnergy >= energyCost, 'Not enough pvp energy');

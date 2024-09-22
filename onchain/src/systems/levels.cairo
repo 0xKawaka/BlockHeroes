@@ -53,7 +53,7 @@ mod Levels {
                 world,
                 (
                 LevelEnemy { map: Map::Campaign.toU16(), level: 0, index: 0, hero: hero::new(0, 'sirocco', 1, 1) },
-                LevelInfos { map: Map::Campaign.toU16(), level: 0, energyCost: 0, enemiesCount: 1},
+                LevelInfos { map: Map::Campaign.toU16(), level: 0, energyCost: 1, enemiesCount: 1},
                 )
             );
 

@@ -23,6 +23,16 @@ enum Event {
     ArenaDefense: ArenaDefense,
     RankChange: RankChange,
     InitArena: InitArena,
+
+    TimestampPvpEnergy: TimestampPvpEnergy,
+    TimestampEnergy: TimestampEnergy,
+}
+
+#[derive(Drop, Serde)]
+enum EventKey {
+    RuneMinted,
+    TimestampEnergy,
+    TimestampPvpEnergy,
 }
 
 #[derive(Destruct, Serde)]
@@ -127,6 +137,8 @@ struct HeroMinted {
 }
 #[derive(Drop, Serde, starknet::Event)]
 struct RuneMinted {
+    #[key]
+    eventKey: EventKey,
     owner: ContractAddress,
     rune: Rune,
 }
@@ -160,4 +172,18 @@ struct InitArena {
     owner: ContractAddress,
     rank: u64,
     heroeIds: Array<u32>,
+}
+#[derive(Drop, Serde, starknet::Event)]
+struct TimestampEnergy {
+    #[key]
+    eventKey: EventKey,
+    owner: ContractAddress,
+    timestamp: u64,
+}
+#[derive(Drop, Serde, starknet::Event)]
+struct TimestampPvpEnergy {
+    #[key]
+    eventKey: EventKey,
+    owner: ContractAddress,
+    timestamp: u64,
 }

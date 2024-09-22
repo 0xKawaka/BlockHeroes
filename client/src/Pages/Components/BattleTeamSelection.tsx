@@ -19,6 +19,8 @@ import { GameAccount, Hero } from "../../Types/toriiTypes"
 import { useDojo } from "../../dojo/useDojo"
 import { map } from "rxjs"
 import {Maps} from "../../GameDatas/maps"
+import { pvpBattleEnergyCost } from "../../GameDatas/constants"
+import { stat } from "fs"
 
 
 type BattleTeamSelectionProps = {
@@ -75,12 +77,20 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
       setIsStartingBattle(false)
       setPhaserRunning(true)
       if(map === Maps.Campaign) {
-        console.log("accout energy: ", gameAccount.energy, " ", gameAccount.lastEnergyUpdateTimestamp)
-        stateChangesHandler.updateEnergyHandler(gameAccount.energy, gameAccount.lastEnergyUpdateTimestamp)
+        let updateTimestamp = eventHandler.getEnergyTimestamp()
+        if(updateTimestamp != undefined){
+          stateChangesHandler.updateEnergyHandler(gameAccount.energy - energyCost, updateTimestamp)
+          stateChangesHandler.setGameAccount({...gameAccount, energy: gameAccount.energy - energyCost, lastEnergyUpdateTimestamp: updateTimestamp})
+          console.log("account energy: ", gameAccount.energy - energyCost, " ", updateTimestamp)
+        } 
       }
       else if(map === Maps.Arena) {
-        console.log("accout pvp energy: ", gameAccount.pvpEnergy, " ", gameAccount.lastPvpEnergyUpdateTimestamp)
-        stateChangesHandler.updatePvpEnergyHandler(gameAccount.pvpEnergy, gameAccount.lastPvpEnergyUpdateTimestamp)
+        let updateTimestamp = eventHandler.getPvpEnergyTimestamp()
+        if(updateTimestamp != undefined){
+          stateChangesHandler.updatePvpEnergyHandler(gameAccount.pvpEnergy - pvpBattleEnergyCost, updateTimestamp)
+          stateChangesHandler.setGameAccount({...gameAccount, pvpEnergy: gameAccount.pvpEnergy - pvpBattleEnergyCost, lastPvpEnergyUpdateTimestamp: updateTimestamp})
+          console.log("account pvp energy: ", gameAccount.pvpEnergy - pvpBattleEnergyCost, " ", updateTimestamp)
+        }
       }
     }
     else {

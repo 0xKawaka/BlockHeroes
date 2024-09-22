@@ -193,7 +193,6 @@ export function createSystemCalls(
                 retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
-            console.log(res);
             eventHandler.parseAndStore(res.events);
             return true;
         } catch (e) {

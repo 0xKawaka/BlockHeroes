@@ -165,7 +165,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
   return (
     <div className='GamePhaserContainer' id='GamePhaserContainer'>
       <div className='GamePageContainer' style={getGamePageContainerStyle(isBattleRunning)}>
-        {accountSelected && !isBattleRunning && gameAccount && <AccountOverview gameAccount={gameAccount} maxEnergy={5} maxPvpEnergy={5} />}
+        {accountSelected && !isBattleRunning && gameAccount && <AccountOverview gameAccount={gameAccount} maxEnergy={5} maxPvpEnergy={5} stateChangesHandler={stateChangesHandler} />}
         {accountSelected && !showMyHeroes && !showWorldSelect && !showSummons && !showPvp && !showQuests &&
         <div className='GamePageTitleAndMenu'>
           <img className='GamePageTitle' src={title} />

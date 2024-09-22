@@ -45,7 +45,7 @@ mod Accounts {
     use game::models::{account, account::{AccountImpl, AccountTrait, Account, heroes::Heroes, runes::Runes}};
     use game::models::{hero, hero::Hero, hero::HeroImpl, hero::rune, hero::EquippedRunesImpl, hero::rune::RuneImpl, hero::rune::Rune};
     use game::models::hero::rune::{RuneStatistic, RuneRarity, RuneType};
-    use game::models::events::{Event, HeroMinted, RuneMinted, NewAccount};
+    use game::models::events::{Event, EventKey, HeroMinted, RuneMinted, NewAccount, TimestampEnergy, TimestampPvpEnergy};
 
     use super::IAccounts;
 
@@ -136,17 +136,17 @@ mod Accounts {
             set!(world, Runes {owner: accountAdrs, index: acc.runesCount, rune: mintedRune});
             acc.runesCount += 1;
             set!(world, (acc));
-            emit!(world, RuneMinted {owner: accountAdrs, rune: mintedRune});
+            emit!(world, RuneMinted {eventKey: EventKey::RuneMinted, owner: accountAdrs, rune: mintedRune});
         }
         fn createAccount(world: IWorldDispatcher, username: felt252, accountAdrs: ContractAddress) {
             let acc = get!(world, accountAdrs, (Account));
             assert(acc.username == 0x0, 'Account already created');
             let mut acc = account::new(username, accountAdrs);
             emit!(world, NewAccount {owner: accountAdrs, username: username});
-            // let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
-            // let runesCount = Self::mintStarterRunes(world, accountAdrs);
-            // acc.heroesCount = heroesCount;
-            // acc.runesCount = runesCount;
+            let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
+            let runesCount = Self::mintStarterRunes(world, accountAdrs);
+            acc.heroesCount = heroesCount;
+            acc.runesCount = runesCount;
             set!(world, (acc));
         }
         fn addExperienceToHeroId(world: IWorldDispatcher, accountAdrs: ContractAddress, heroId: u32, experience: u32) {
@@ -163,13 +163,15 @@ mod Accounts {
         }
         fn decreaseEnergy(world: IWorldDispatcher, accountAdrs: ContractAddress, energyCost: u16) {
             let mut acc = Self::getAccount(world, accountAdrs);
-            acc.updateEnergy();
+            let timestamp:u64 = acc.updateEnergy();
+            emit!(world, TimestampEnergy {eventKey: EventKey::TimestampEnergy, owner: accountAdrs, timestamp: timestamp});
             acc.decreaseEnergy(energyCost);
             set!(world, (acc));
         }
         fn decreasePvpEnergy(world: IWorldDispatcher, accountAdrs: ContractAddress, energyCost: u16) {
             let mut acc = Self::getAccount(world, accountAdrs);
-            acc.updatePvpEnergy();
+            let timestamp:u64 = acc.updatePvpEnergy();
+            emit!(world, TimestampPvpEnergy {eventKey: EventKey::TimestampPvpEnergy, owner: accountAdrs, timestamp: timestamp});
             acc.decreasePvpEnergy(energyCost);
             set!(world, (acc));
         }
@@ -316,13 +318,13 @@ mod Accounts {
                 Heroes {owner: accountAdrs, index: 13, hero: hero::new(13, 'molten', 1, 1)},
                 Heroes {owner: accountAdrs, index: 14, hero: hero::new(14, 'solas', 1, 1)},
                 Heroes {owner: accountAdrs, index: 15, hero: hero::new(15, 'solveig', 1, 1)},
-                // Heroes {owner: accountAdrs, index: 16, hero: hero::new(16, 'janus', 1, 1)},
-                // Heroes {owner: accountAdrs, index: 17, hero: hero::new(17, 'horus', 1, 1)},
-                // Heroes {owner: accountAdrs, index: 18, hero: hero::new(18, 'jabari', 1, 1)},
-                // Heroes {owner: accountAdrs, index: 19, hero: hero::new(19, 'khamsin', 1, 1)},
+                Heroes {owner: accountAdrs, index: 16, hero: hero::new(16, 'janus', 1, 1)},
+                Heroes {owner: accountAdrs, index: 17, hero: hero::new(17, 'horus', 1, 1)},
+                Heroes {owner: accountAdrs, index: 18, hero: hero::new(18, 'jabari', 1, 1)},
+                Heroes {owner: accountAdrs, index: 19, hero: hero::new(19, 'khamsin', 1, 1)},
                 )
             );
-            return 16;
+            return 20;
         }
         fn mintStarterRunes(world: IWorldDispatcher, accountAdrs: ContractAddress) -> u32 {
             set!(
