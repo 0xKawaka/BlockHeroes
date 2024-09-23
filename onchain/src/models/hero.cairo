@@ -10,7 +10,7 @@ use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 use game::models::events::{Event, ExperienceGain};
 
 const levelZeroExperienceNeeded: u32 = 100;
-const bonusExperiencePercentRequirePerLevel: u32 = 10;
+const bonusExperiencePercentRequirePerLevel: u32 = 50;
 
 #[derive(Introspect, Copy, Drop, Serde)]
 pub struct Hero {

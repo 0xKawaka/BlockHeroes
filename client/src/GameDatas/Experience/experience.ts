@@ -1,5 +1,5 @@
 const levelZeroExperienceNeeded = 100;
-const bonusExperiencePercentRequirePerLevel = 0.1;
+const bonusExperiencePercentRequirePerLevel = 0.5;
 
 function computeExperienceNeeded(level: number): number {
   if (level === 0) {

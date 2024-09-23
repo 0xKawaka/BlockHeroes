@@ -1,8 +1,4 @@
-import SkillsHandler from "../../Classes/IO/SkillsHandler";
-import Skill from "../../Classes/Skill/Skill";
-import { SkillsDictApi } from "../../Types/apiTypes";
-
-const skillsDictWithoutImages: SkillsDictApi = {
+const skillsDictWithoutImages = {
   "Attack Wellan": {
     "imgName": "AttackWellan",
     "name": "Attack Wellan",
@@ -201,7 +197,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
     ],
     "heal": [
       "percent",
-      0.1,
+      0.08,
       false,
       true,
       false
@@ -214,7 +210,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "Regen"
       ],
       [
-        0.08
+        0.06
       ],
       [
         2
@@ -336,10 +332,10 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "imgName": "ArrowsRain",
     "name": "Arrows Rain",
     "description": "Arrows Rain.",
-    "cooldown": 3,
+    "cooldown": 4,
     "damage": [
       "flat",
-      0,
+      100,
       false,
       true,
       false
@@ -356,10 +352,10 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "aoe": false,
     "buffsAndStatusArrays": [
       [
-        "Poison"
+        "DefenseDown"
       ],
       [
-        0.1
+        0.3
       ],
       [
         2
@@ -389,7 +385,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "imgName": "ForestSenses",
     "name": "Forest Senses",
     "description": "Forest Senses.",
-    "cooldown": 3,
+    "cooldown": 4,
     "damage": [
       "flat",
       0,
@@ -413,12 +409,12 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "SpeedUp"
       ],
       [
-        0.8,
-        0.8
+        0.6,
+        0.6
       ],
       [
-        2,
-        2
+        3,
+        3
       ],
       [
         1,
@@ -564,10 +560,10 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "SpeedDown"
       ],
       [
-        0.2
+        0.15
       ],
       [
-        2
+        3
       ],
       [
         1
@@ -633,7 +629,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "imgName": "NatureCall",
     "name": "Nature Call",
     "description": "Nature Call.",
-    "cooldown": 3,
+    "cooldown": 4,
     "damage": [
       "flat",
       0,
@@ -656,7 +652,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "SpeedUp"
       ],
       [
-        0.4
+        0.35
       ],
       [
         2
@@ -787,7 +783,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "DefenseUp"
       ],
       [
-        0.5
+        0.45
       ],
       [
         3
@@ -841,8 +837,8 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "AttackDown"
       ],
       [
-        0.5,
-        0.5
+        0.4,
+        0.4
       ],
       [
         2,
@@ -1047,7 +1043,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "imgName": "ChumChallenge",
     "name": "Chum Challenge",
     "description": "Chum Challenge.",
-    "cooldown": 3,
+    "cooldown": 4,
     "damage": [
       "flat",
       0,
@@ -1067,24 +1063,31 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "aoe": false,
     "buffsAndStatusArrays": [
       [
-        "DefenseUp"
+        "DefenseUp",
+        "AttackUp"
       ],
       [
+        0.6,
         0.6
       ],
       [
-        2
+        3,
+        3
       ],
       [
+        1,
         1
       ],
       [
+        false,
         false
       ],
       [
+        false,
         false
       ],
       [
+        true,
         true
       ],
       [],
@@ -1237,10 +1240,10 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "aoe": false,
     "buffsAndStatusArrays": [
       [
-        "SpeedDown"
+        "AttackDown"
       ],
       [
-        0.5
+        0.3
       ],
       [
         2
@@ -1309,10 +1312,10 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "imgName": "LignumHammer",
     "name": "Lignum Hammer",
     "description": "Lignum Hammer.",
-    "cooldown": 3,
+    "cooldown": 2,
     "damage": [
       "flat",
-      200,
+      180,
       true,
       false,
       false
@@ -1385,7 +1388,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "DefenseUp"
       ],
       [
-        0.5
+        0.45
       ],
       [
         2
@@ -1464,7 +1467,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
     ],
     "heal": [
       "percent",
-      0.1,
+      0.12,
       false,
       true,
       false
@@ -1477,7 +1480,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "Regen"
       ],
       [
-        0.03
+        0.04
       ],
       [
         2
@@ -1619,10 +1622,10 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "aoe": false,
     "buffsAndStatusArrays": [
       [
-        "SpeedDown"
+        "DefenseDown"
       ],
       [
-        0.5
+        0.4
       ],
       [
         2
@@ -1701,7 +1704,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
     ],
     "heal": [
       "percent",
-      0.05,
+      0.1,
       true,
       false,
       false
@@ -1754,8 +1757,8 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "AttackUp"
       ],
       [
-        0.2,
-        0.2
+        0.3,
+        0.3
       ],
       [
         2,
@@ -1868,7 +1871,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "imgName": "BlazingRage",
     "name": "Blazing Rage",
     "description": "Blazing Rage.",
-    "cooldown": 3,
+    "cooldown": 4,
     "damage": [
       "flat",
       0,
@@ -1896,8 +1899,8 @@ const skillsDictWithoutImages: SkillsDictApi = {
         0.6
       ],
       [
-        2,
-        2
+        3,
+        3
       ],
       [
         1,
@@ -2029,7 +2032,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "SpeedUp"
       ],
       [
-        0.3
+        0.4
       ],
       [
         2
@@ -2137,7 +2140,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "imgName": "SwordsDance",
     "name": "Swords Dance",
     "description": "Swords Dance.",
-    "cooldown": 3,
+    "cooldown": 4,
     "damage": [
       "flat",
       0,
@@ -2160,7 +2163,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "AttackUp"
       ],
       [
-        0.3
+        0.6
       ],
       [
         2
@@ -2213,7 +2216,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "DefenseDown"
       ],
       [
-        0.5
+        0.4
       ],
       [
         2
@@ -2399,7 +2402,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "imgName": "AnkhBlessing",
     "name": "Ankh Blessing",
     "description": "Ankh Blessing.",
-    "cooldown": 3,
+    "cooldown": 4,
     "damage": [
       "flat",
       0,
@@ -2422,10 +2425,10 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "DefenseUp"
       ],
       [
-        0.5
+        0.35
       ],
       [
-        2
+        3
       ],
       [
         1
@@ -2463,8 +2466,8 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "heal": [
       "percent",
       0.1,
-      false,
       true,
+      false,
       false
     ],
     "targetType": "ally",
@@ -2472,10 +2475,10 @@ const skillsDictWithoutImages: SkillsDictApi = {
     "aoe": false,
     "buffsAndStatusArrays": [
       [
-        "AttackUp"
+        "Regen"
       ],
       [
-        0.3
+        0.1
       ],
       [
         2
@@ -2484,10 +2487,10 @@ const skillsDictWithoutImages: SkillsDictApi = {
         1
       ],
       [
-        false
+        true
       ],
       [
-        true
+        false
       ],
       [
         false
@@ -2712,7 +2715,7 @@ const skillsDictWithoutImages: SkillsDictApi = {
         "DefenseDown"
       ],
       [
-        0.5
+        0.4
       ],
       [
         2
@@ -2792,6 +2795,5 @@ const skillsDictWithoutImages: SkillsDictApi = {
     ]
   }
 };
-const skillsDict = SkillsHandler.formatSkills(skillsDictWithoutImages);
 
-export default skillsDict;
+export default skillsDictWithoutImages;

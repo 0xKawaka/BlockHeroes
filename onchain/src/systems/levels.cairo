@@ -52,8 +52,8 @@ mod Levels {
             set!(
                 world,
                 (
-                LevelEnemy { map: Map::Campaign.toU16(), level: 0, index: 0, hero: hero::new(0, 'sirocco', 1, 1) },
-                LevelInfos { map: Map::Campaign.toU16(), level: 0, energyCost: 1, enemiesCount: 1},
+                LevelEnemy { map: Map::Campaign.toU16(), level: 0, index: 0, hero: hero::new(0, 'nereus', 1, 1) },
+                LevelInfos { map: Map::Campaign.toU16(), level: 0, energyCost: 0, enemiesCount: 1},
                 )
             );
 
@@ -62,11 +62,9 @@ mod Levels {
             set!(
                 world,
                 (
-                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 0, hero: hero::new(0, 'wellan', 1, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 1, hero: hero::new(0, 'wellan', 1, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 2, hero: hero::new(0, 'marella', 1, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 3, hero: hero::new(0, 'sirocco', 1, 1) },
-                LevelInfos { map: Map::Campaign.toU16(), level: 1, energyCost: 1, enemiesCount: 4},
+                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 0, hero: hero::new(0, 'molten', 1, 1) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 1, hero: hero::new(0, 'ember', 1, 1) },
+                LevelInfos { map: Map::Campaign.toU16(), level: 1, energyCost: 0, enemiesCount: 2},
                 )
             );
 
@@ -76,10 +74,9 @@ mod Levels {
                 world,
                 (
                 LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 0, hero: hero::new(0, 'wellan', 5, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 1, hero: hero::new(0, 'wellan', 5, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 2, hero: hero::new(0, 'elandor', 5, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 3, hero: hero::new(0, 'sirocco', 5, 1) },
-                LevelInfos { map: Map::Campaign.toU16(), level: 2, energyCost: 1, enemiesCount: 4},
+                LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 1, hero: hero::new(0, 'ember', 5, 1) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 2, hero: hero::new(0, 'bane', 5, 1) },
+                LevelInfos { map: Map::Campaign.toU16(), level: 2, energyCost: 0, enemiesCount: 3},
                 )
             );
 
@@ -88,11 +85,8 @@ mod Levels {
             set!(
                 world,
                 (
-                LevelEnemy { map: Map::Campaign.toU16(), level: 3, index: 0, hero: hero::new(0, 'marella', 10, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 3, index: 1, hero: hero::new(0, 'marella', 10, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 3, index: 2, hero: hero::new(0, 'elandor', 10, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 3, index: 3, hero: hero::new(0, 'sirocco', 10, 1) },
-                LevelInfos { map: Map::Campaign.toU16(), level: 3, energyCost: 1, enemiesCount: 4},
+                LevelEnemy { map: Map::Campaign.toU16(), level: 3, index: 0, hero: hero::new(0, 'molten', 10, 6) },
+                LevelInfos { map: Map::Campaign.toU16(), level: 3, energyCost: 0, enemiesCount: 1},
                 )
             );
 
@@ -100,13 +94,97 @@ mod Levels {
             set!(
                 world,
                 (
-                LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 0, hero: hero::new(0, 'marella', 20, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 1, hero: hero::new(0, 'elandor', 20, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 2, hero: hero::new(0, 'sirocco', 20, 1) },
-                LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 3, hero: hero::new(0, 'sirocco', 20, 1) },
-                LevelInfos { map: Map::Campaign.toU16(), level: 4, energyCost: 1, enemiesCount: 4},
+                LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 0, hero: hero::new(0, 'molten', 20, 3) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 1, hero: hero::new(0, 'bane', 20, 3) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 2, hero: hero::new(0, 'ember', 20, 3) },
+                LevelInfos { map: Map::Campaign.toU16(), level: 4, energyCost: 0, enemiesCount: 3},
                 )
             );
+
+            // Level 5
+            set!(
+                world,
+                (
+                LevelEnemy { map: Map::Campaign.toU16(), level: 5, index: 0, hero: hero::new(0, 'wellan', 20, 2) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 5, index: 1, hero: hero::new(0, 'bane', 20, 2) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 5, index: 2, hero: hero::new(0, 'molten', 20, 2) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 5, index: 2, hero: hero::new(0, 'ember', 20, 2) },
+                LevelInfos { map: Map::Campaign.toU16(), level: 5, energyCost: 0, enemiesCount: 4},
+                )
+            );
+
+            // Level 6
+            set!(
+                world,
+                (
+                LevelEnemy { map: Map::Campaign.toU16(), level: 6, index: 0, hero: hero::new(0, 'nereus', 20, 3) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 6, index: 1, hero: hero::new(0, 'rex', 20, 3) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 6, index: 2, hero: hero::new(0, 'marella', 20, 3) },
+                LevelEnemy { map: Map::Campaign.toU16(), level: 6, index: 2, hero: hero::new(0, 'celeste', 20, 3) },
+                LevelInfos { map: Map::Campaign.toU16(), level: 6, energyCost: 0, enemiesCount: 4},
+                )
+            );
+
+
+            // // Level 0
+            // set!(
+            //     world,
+            //     (
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 0, index: 0, hero: hero::new(0, 'sirocco', 1, 1) },
+            //     LevelInfos { map: Map::Campaign.toU16(), level: 0, energyCost: 1, enemiesCount: 1},
+            //     )
+            // );
+
+
+            // // Level 1
+            // set!(
+            //     world,
+            //     (
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 0, hero: hero::new(0, 'wellan', 1, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 1, hero: hero::new(0, 'wellan', 1, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 2, hero: hero::new(0, 'marella', 1, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 1, index: 3, hero: hero::new(0, 'sirocco', 1, 1) },
+            //     LevelInfos { map: Map::Campaign.toU16(), level: 1, energyCost: 1, enemiesCount: 4},
+            //     )
+            // );
+
+
+            // // Level 2
+            // set!(
+            //     world,
+            //     (
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 0, hero: hero::new(0, 'wellan', 5, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 1, hero: hero::new(0, 'wellan', 5, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 2, hero: hero::new(0, 'elandor', 5, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 2, index: 3, hero: hero::new(0, 'sirocco', 5, 1) },
+            //     LevelInfos { map: Map::Campaign.toU16(), level: 2, energyCost: 1, enemiesCount: 4},
+            //     )
+            // );
+
+
+            // // Level 3
+            // set!(
+            //     world,
+            //     (
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 3, index: 0, hero: hero::new(0, 'marella', 10, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 3, index: 1, hero: hero::new(0, 'marella', 10, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 3, index: 2, hero: hero::new(0, 'elandor', 10, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 3, index: 3, hero: hero::new(0, 'sirocco', 10, 1) },
+            //     LevelInfos { map: Map::Campaign.toU16(), level: 3, energyCost: 1, enemiesCount: 4},
+            //     )
+            // );
+
+            // // Level 4
+            // set!(
+            //     world,
+            //     (
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 0, hero: hero::new(0, 'marella', 20, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 1, hero: hero::new(0, 'elandor', 20, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 2, hero: hero::new(0, 'sirocco', 20, 1) },
+            //     LevelEnemy { map: Map::Campaign.toU16(), level: 4, index: 3, hero: hero::new(0, 'sirocco', 20, 1) },
+            //     LevelInfos { map: Map::Campaign.toU16(), level: 4, energyCost: 1, enemiesCount: 4},
+            //     )
+            // );
         }
     }
 }

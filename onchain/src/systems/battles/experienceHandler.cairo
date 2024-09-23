@@ -3,7 +3,7 @@ use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 use starknet::ContractAddress;
 
 const levelZeroExperienceGiven: u32 = 100;
-const bonusExperiencePercentEnemyGivesPerLevel: u32 = 5;
+const bonusExperiencePercentEnemyGivesPerLevel: u32 = 20;
 
 fn computeAndDistributeExperience(world: IWorldDispatcher, owner: ContractAddress, heroesIndexes: Array<u32>, enemyLevels: @Array<u16>) {
     let totalExperience = computeExperienceAmount(enemyLevels);
