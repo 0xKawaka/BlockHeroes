@@ -22,7 +22,8 @@ const arenaMap = "Background_Forest";
 function getLevelBackground(map: Maps, battleId: number, canvasWidth: number): string {
   let suffix = "";
   if(map === Maps.Campaign){
-    suffix = campaignMaps[battleId].background
+    suffix = "Background_Forest"
+    // suffix = campaignMaps[battleId].background
   }
   else if(map === Maps.Arena){
     suffix = arenaMap

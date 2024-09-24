@@ -4,9 +4,9 @@ use game::models::events::{Event, Loot};
 use starknet::{ContractAddress, get_block_timestamp};
 use game::utils::random::rand32;
 
-const baseCrystalsGivenPerEnemy: u32 = 100;
-const crystalsBonusPercentPerLevel: u32 = 5;
-const runeLootChance: u32 = 6;
+const baseCrystalsGivenPerEnemy: u32 = 200;
+const crystalsBonusPercentPerLevel: u32 = 20;
+const runeLootChance: u32 = 10;
 
 fn computeAndDistributeLoot(world: IWorldDispatcher, owner: ContractAddress, enemyLevels: @Array<u16>) {
     let mut totalLevel: u32 = 0;

@@ -263,7 +263,7 @@ export default class BattleEntity implements IBattleEntity {
 
   // TODO : change speed after turn in case of buff fading
   async playTurn(battle: Battle, startTurnEvent: StartTurnEvent, animationsHandler: AnimationsHandler): Promise<void> {
-    battle.battleScene.children.bringToTop(this.sprite)
+    this.sprite.setDepth(3)
     let damageAndHealAnimQueue: Array<{isDamageOrHeal:string, isCrit: boolean, value: number, battleScene: Phaser.Scene, animationHandler: AnimationsHandler}> = []
     if(this.index != startTurnEvent.entityId)
       throw new Error('StartTurn wrong entity index, received : ' + startTurnEvent.entityId + ' expected : ' + this.index)
@@ -286,6 +286,7 @@ export default class BattleEntity implements IBattleEntity {
     else {
       this.applyBuffsAndStatus(startTurnEvent.buffs, startTurnEvent.status, battle.battleScene)
     }
+    this.sprite.setDepth(2)
   }
   async waitDamageAndHealAnimsDone(): Promise<void> {
     console.log("waitDamageAndHealAnimsDone")

@@ -1,4 +1,7 @@
-const skillsDictWithoutImages = {
+import SkillsHandler from "../../Classes/IO/SkillsHandler";
+import { SkillsDictApi } from "../../Types/apiTypes";
+
+const skillsDictWithoutImages: SkillsDictApi = {
   "Attack Wellan": {
     "imgName": "AttackWellan",
     "name": "Attack Wellan",
@@ -1907,16 +1910,16 @@ const skillsDictWithoutImages = {
         1
       ],
       [
+        false,
+        false
+      ],
+      [
+        false,
+        false
+      ],
+      [
         true,
         true
-      ],
-      [
-        false,
-        false
-      ],
-      [
-        false,
-        false
       ],
       [],
       [],
@@ -2796,4 +2799,6 @@ const skillsDictWithoutImages = {
   }
 };
 
-export default skillsDictWithoutImages;
+const skillsDict = SkillsHandler.formatSkills(skillsDictWithoutImages);
+
+export default skillsDict;

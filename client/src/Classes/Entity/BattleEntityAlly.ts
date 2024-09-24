@@ -145,6 +145,7 @@ export default class BattleEntityAlly implements IBattleEntity {
   createCooldownRectangles(skillArray: Skill[], skillwidthScaled:number, battleScene: BattleScene): void {
     skillArray.forEach((skill, index) => {
       this.skillCooldownRectangleByName[skill.name] = battleScene.add.graphics();
+      this.skillCooldownRectangleByName[skill.name].setDepth(9)
       this.skillCooldownRectangleByName[skill.name].fillStyle(0x000000, 1);
       this.skillCooldownRectangleByName[skill.name].setAlpha(1)
       this.skillCooldownRectangleByName[skill.name].setVisible(false)
@@ -171,9 +172,10 @@ export default class BattleEntityAlly implements IBattleEntity {
     this.skillImageByName[name].setName("skill_" + name + "_" + this.battleEntity.getIndex().toString())
     this.skillImageByName[name].setVisible(false)
     this.skillImageByName[name].setInteractive()
-    this.skillImageByName[name].setDepth(6)
+    this.skillImageByName[name].setDepth(7)
 
     this.skillSelectedImageByName[name] = battleScene.add.image(x, y, "skillSelected")
+    this.skillSelectedImageByName[name].setDepth(8)
     // this.skillSelectedImageByName[name].setScale(this.skillScale)
     this.skillSelectedImageByName[name].setVisible(false)
   }

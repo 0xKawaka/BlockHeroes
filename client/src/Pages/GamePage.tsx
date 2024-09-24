@@ -45,7 +45,7 @@ function getGamePageContainerStyle(isBattleRunning: boolean){
   }
   else {
     return {
-      paddingTop: "1rem",
+      paddingTop: "1vh",
     }
   }
 }

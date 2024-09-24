@@ -105,6 +105,12 @@ export default class AnimationsHandler {
     bolt.destroy();
   }
 
+  isHurtBlockingAnimPlaying(entity: IBattleEntity){
+    return (this.attackAnimationDict[entity.getName() + entity.getIndex()] || this.deathAnimationDict[entity.getName() + entity.getIndex()] ||
+    this.hurtAnimationDict[entity.getName() + entity.getIndex()] || this.jumpAnimationDict[entity.getName() + entity.getIndex()] ||
+    this.runAnimationDict[entity.getName() + entity.getIndex()])
+  }
+
   isAnimPlaying(entity: IBattleEntity){
     return (this.attackAnimationDict[entity.getName() + entity.getIndex()] || this.deathAnimationDict[entity.getName() + entity.getIndex()] ||
     this.hurtAnimationDict[entity.getName() + entity.getIndex()] || this.jumpAnimationDict[entity.getName() + entity.getIndex()] ||
@@ -146,9 +152,18 @@ export default class AnimationsHandler {
   }
 
   async playAnimIfNoneRuning(entity: IBattleEntity, animName: string){
-    if(!this.isAnimPlaying(entity)){
-      this.setAnimAndResetOtherAnimations(entity.getName(), entity.getIndex(), animName)
-      entity.playAnim(animName)
+    if(animName == "hurt"){
+      if(!this.isHurtBlockingAnimPlaying(entity)){
+        this.setAnimAndResetOtherAnimations(entity.getName(), entity.getIndex(), animName)
+        entity.playAnim(animName)
+      }
+
+    }
+    else {
+      if(!this.isAnimPlaying(entity)){
+        this.setAnimAndResetOtherAnimations(entity.getName(), entity.getIndex(), animName)
+        entity.playAnim(animName)
+      }
     }
   }
 
@@ -182,7 +197,7 @@ export default class AnimationsHandler {
 
   playSpellEffectOnEntity(entity: IBattleEntity, spellEffectName: string, frameRate: number){
     let spellEffect = this.battle.battleScene.add.sprite(entity.getSprite().x, entity.getSprite().y, spellEffectName);
-    spellEffect.setDepth(2)
+    spellEffect.setDepth(4)
     spellEffect.setOrigin(0.5, 1);
     this.battle.battleScene.anims.create({
       key: spellEffectName + entity.getIndex(),
@@ -207,7 +222,7 @@ export default class AnimationsHandler {
     x = x / entities.length
     y = y / entities.length
     let spellEffect = this.battle.battleScene.add.sprite(x, y, spellEffectName);
-    spellEffect.setDepth(2)
+    spellEffect.setDepth(4)
     spellEffect.setOrigin(0.5, 1);
     this.battle.battleScene.anims.create({
       key: spellEffectName,

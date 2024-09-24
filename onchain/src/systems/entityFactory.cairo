@@ -146,7 +146,7 @@ mod EntityFactory {
             set!(
                 world,
                 (
-                    BonusRuneStatistics { statistic: RuneStatistic::Health, rarity: RuneRarity::Common, isPercent: false, value: 50 },
+                    BonusRuneStatistics { statistic: RuneStatistic::Health, rarity: RuneRarity::Common, isPercent: false, value: 5 },
                     BonusRuneStatistics { statistic: RuneStatistic::Attack, rarity: RuneRarity::Common, isPercent: false, value: 5 },
                     BonusRuneStatistics { statistic: RuneStatistic::Defense, rarity: RuneRarity::Common, isPercent: false, value: 5 },
                     BonusRuneStatistics { statistic: RuneStatistic::Speed, rarity: RuneRarity::Common, isPercent: false, value: 3 },

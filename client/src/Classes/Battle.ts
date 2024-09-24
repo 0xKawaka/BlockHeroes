@@ -109,6 +109,7 @@ export default class Battle {
       let currentStartTurnEvent = this.eventHandler.shiftStartTurnEvent()
       if(!currentStartTurnEvent){
         console.log("No start turn event received")
+        await new Promise(resolve => setTimeout(resolve, 50));
       }
       else {
         console.log("StartTurnEvent : " + JSON.stringify(currentStartTurnEvent))

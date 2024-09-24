@@ -16,7 +16,7 @@ export default class BuffDisplay {
   textScale: number
   fontSize: number
 
-  constructor(imageName: string, battleScene: BattleScene, scale:number, textScale:number, depth: number= 3, visible:boolean = false, position: {image: {x: number, y: number}, text: {x: number, y: number}} = {image: {x: 0, y: 0}, text: {x: 0, y: 0}}, duration: number = 0) {
+  constructor(imageName: string, battleScene: BattleScene, scale:number, textScale:number, visible:boolean = false, position: {image: {x: number, y: number}, text: {x: number, y: number}} = {image: {x: 0, y: 0}, text: {x: 0, y: 0}}, duration: number = 0, depth: number= 5) {
     this.scale = scale
     this.textScale = textScale
     this.image = battleScene.add.image(position.image.x, position.image.y, imageName)

@@ -185,6 +185,7 @@ export function createSystemCalls(
     }
 
     async function startBattle(account: Account, heroesIds: number[], map: number, level: number, eventHandler: GameEventHandler): Promise<boolean> {
+        console.log("startBattle", heroesIds, map, level);
         try {
             let txRes = await client.Game.startBattle({
                 account,

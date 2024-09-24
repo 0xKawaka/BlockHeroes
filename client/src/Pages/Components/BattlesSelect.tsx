@@ -86,14 +86,16 @@ function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesLis
         <div className="ArrowBackContainer" >
           <img className="ArrowBack" src={ArrowBack} onClick={() => setWorldId(-1)}/>
         </div>
-        <div className="BattlesSelectList">
-          {battlesList !== undefined && battlesList.slice(0, mapProgress[Maps.Campaign] + 1).map((battle, i) => {
-            return (  
-              <div className="BattleOverviewContainer" key={i} onClick={() => setSelectedBattleIndex(i)}>
-                <BattleOverview enemiesNames={battle.enemies.map((enemy) => {return enemy.name})} enemiesLevels={battle.enemies.map((enemy) => {return enemy.level})} energyCost={battle.energyCost} />
-              </div>
-            )
-          })}
+        <div className="BattlesSelectListContainer">
+          <div className="BattlesSelectList">
+            {battlesList !== undefined && battlesList.slice(0, mapProgress[Maps.Campaign] + 1).map((battle, i) => {
+              return (  
+                <div className="BattleOverviewContainer" key={i} onClick={() => setSelectedBattleIndex(i)}>
+                  <BattleOverview enemiesNames={battle.enemies.map((enemy) => {return enemy.name})} enemiesLevels={battle.enemies.map((enemy) => {return enemy.level})} energyCost={battle.energyCost} />
+                </div>
+              )
+            })}
+          </div>
         </div>
       </div>
     }

@@ -33,7 +33,7 @@ type RunePanelProps = {
 export default function RunePanel({account, gameAccount, runesList, heroesList, runeClicked, runeSpotClicked, runeListUnequiped, heroId, setShowingRunes, stateChangesHandler}: RunePanelProps) {
   const [runeSelectedId, setRuneSelectedId] = useState<number>(-1)
   const [sortedRank, setSortedRank] = useState<string>("rank_desc")
-  const [onlyEquippable, setOnlyEquippable] = useState<boolean>(true)
+  const [onlyEquippable, setOnlyEquippable] = useState<boolean>(false)
   const [filters, setFilters] = useState<Array<string>>([])
 
   const [runesUnequiped, setRuneListUnequiped] = useState<RunesList>(filterAndSortRunes(runeListUnequiped, filters, sortedRank))

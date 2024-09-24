@@ -21,9 +21,9 @@ mod Quests {
                 world,
                 (
                 GlobalQuests { map: map, mapProgressRequired: 1, rewardType: RewardType::Summon, rewardQuantity: 1 },
-                GlobalQuests { map: map, mapProgressRequired: 3, rewardType: RewardType::Summon, rewardQuantity: 1 },
                 GlobalQuests { map: map, mapProgressRequired: 4, rewardType: RewardType::Summon, rewardQuantity: 1 },
-                GlobalQuests { map: map, mapProgressRequired: 20, rewardType: RewardType::Summon, rewardQuantity: 1 },
+                GlobalQuests { map: map, mapProgressRequired: 6, rewardType: RewardType::Summon, rewardQuantity: 1 },
+                GlobalQuests { map: map, mapProgressRequired: 8, rewardType: RewardType::Summon, rewardQuantity: 1 },
                 )
             );
         }

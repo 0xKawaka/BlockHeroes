@@ -1,10 +1,19 @@
-.BattlesSelectList{
+.BattlesSelectContainer {
+  /* height: 99vh; */
+}
+
+.BattlesSelectListContainer {
+  padding-top: 10vh;
+  /* padding-bottom: 5rem; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  padding-top: 8rem;
+}
+.BattlesSelectList{
+  display: block;
+  max-height: 81vh;
+  overflow-y: scroll;
 }
 
 .BattleOverviewContainer {

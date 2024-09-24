@@ -152,11 +152,12 @@ fn getRandomType(seed: u64) ->  RuneType {
 }
 
 fn getRandomIsPercent(seed: u64) -> bool {
-    let rand = rand32(seed, 2);
-    if rand == 0 {
-        return true;
-    }
-    return false;
+    return true;
+    // let rand = rand32(seed, 2);
+    // if rand == 0 {
+    //     return true;
+    // }
+    // return false;
 }
 
 trait RuneTrait {

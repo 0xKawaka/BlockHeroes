@@ -146,10 +146,10 @@ mod Accounts {
             assert(usernameStorage.owner == 0.try_into().unwrap(), 'username already taken');
             let mut acc = account::new(username, accountAdrs);
             emit!(world, NewAccount {owner: accountAdrs, username: username});
-            let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
-            let runesCount = Self::mintStarterRunes(world, accountAdrs);
-            acc.heroesCount = heroesCount;
-            acc.runesCount = runesCount;
+            // let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
+            // let runesCount = Self::mintStarterRunes(world, accountAdrs);
+            acc.heroesCount = 0;
+            acc.runesCount = 0;
             set!(world, (acc));
             set!(world, (Usernames {username: username, owner: accountAdrs}));
         }

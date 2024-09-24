@@ -5,6 +5,7 @@ import truncOrRoundDecimalPoint from "../MathInteger/MathInteger"
 import skillsDict from '../../GameDatas/Skills/skillsDict'
 import skillSets from '../../GameDatas/Skills/skillSets'
 import baseStatsDict from '../../GameDatas/Statistics/baseStats'
+import { attackBonusPerLevel, statsBonusPerLevel } from "../../GameDatas/constants";
 
 export type BaseHeroInfos = {name: string, spells: Array<Skill>, stats:HeroStats}
 
@@ -110,7 +111,11 @@ export abstract class HeroesFactory {
   }
 
   static computeBaseStatFromLevelRank(level: number, rank: number, stat: number): number {
-    return truncOrRoundDecimalPoint(stat + (stat * (level - 1)) / 100);
+    return truncOrRoundDecimalPoint(stat + stat * (level - 1) * statsBonusPerLevel / 100);
+  }
+
+  static computeBaseAttackFromLevelRank(level: number, rank: number, attack: number): number {
+    return truncOrRoundDecimalPoint(attack + attack * (level - 1) * attackBonusPerLevel / 100);
   }
 
   static computeBonusStats(baseStats: HeroStats, runes: Array<RuneInfos>): HeroStats {

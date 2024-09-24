@@ -1,4 +1,6 @@
 const decimals: u64 = 100;
+const statsBonusPerLevel: u64 = 10;
+const attackBonusPerLevel: u64 = 20;
 
 use game::models::storage::{statistics, statistics::Statistics};
 
@@ -35,16 +37,16 @@ trait BaseHeroTrait {
 
 impl BaseHeroImpl of BaseHeroTrait {
     fn computeHealth(self: BaseHero, level: u16, rank: u16) -> u64 {
-        return self.statistics.health + (self.statistics.health * (level.into() - 1) / decimals);
+        return self.statistics.health + (self.statistics.health * (level.into() - 1) * statsBonusPerLevel / decimals);
     }
     fn computeAttack(self: BaseHero, level: u16, rank: u16) -> u64 {
-        return self.statistics.attack + (self.statistics.attack * (level.into() - 1) / decimals);
+        return self.statistics.attack + (self.statistics.attack * (level.into() - 1) * attackBonusPerLevel / decimals);
     }
     fn computeDefense(self: BaseHero, level: u16, rank: u16) -> u64 {
-        return self.statistics.defense + (self.statistics.defense * (level.into() - 1) / decimals);
+        return self.statistics.defense + (self.statistics.defense * (level.into() - 1) * statsBonusPerLevel / decimals);
     }
     fn computeSpeed(self: BaseHero, level: u16, rank: u16) -> u64 {
-        return self.statistics.speed + (self.statistics.speed * (level.into() - 1) / decimals);
+        return self.statistics.speed + (self.statistics.speed * (level.into() - 1) * statsBonusPerLevel / decimals);
     }
     fn computeCriticalRate(self: BaseHero, level: u16, rank: u16) -> u64 {
         return self.statistics.criticalRate;

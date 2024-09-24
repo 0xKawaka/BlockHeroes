@@ -42,7 +42,7 @@ function Quests ( {account, gameAccount, globalQuests, mapProgress, stateChanges
         stateChangesHandler.setGameAccount({...gameAccount, summonChests: gameAccount.summonChests + quest.rewardQuantity})
       }
     }
-    newClaimingArray = newClaimingArray.filter((value) => value)
+    newClaimingArray = newClaimingArray.filter((value) => value !== index)
     setIsClaimingArray(newClaimingArray)
   }
 
@@ -61,7 +61,7 @@ function Quests ( {account, gameAccount, globalQuests, mapProgress, stateChanges
         {globalQuests.map((quest, index) => {
           return (
             <div className={quest.hasClaimed || mapProgress[quest.map] < quest.mapProgressRequired ? "QuestContainerGrayed" : "QuestContainer"}  key={index + 1}>
-              <div className="QuestMap">Reach campaign level {quest.mapProgressRequired}</div>
+              <div className="QuestMap">Reach campaign level {quest.mapProgressRequired + 1}</div>
                 {quest.rewardType == "Summon" && 
                   <div className="QuestReward">
                     <div className="QuestRewardType">{quest.rewardQuantity} Summon Chest</div>
