@@ -12,7 +12,6 @@ import { getSyncEvents, getSyncEntities } from "@dojoengine/state";
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
 export async function setup({ ...config }: DojoConfig) {
-    // torii client
     const toriiClient = await torii.createClient({
         rpcUrl: config.rpcUrl,
         toriiUrl: config.toriiUrl,
@@ -64,7 +63,8 @@ export async function setup({ ...config }: DojoConfig) {
     try {
         await burnerManager.init();
         if (burnerManager.list().length === 0) {
-            await burnerManager.create();
+            console.log("Creating new account");
+            await burnerManager.create({prefundedAmount: "1000000000000"});
         }
     } catch (e) {
         console.error(e);

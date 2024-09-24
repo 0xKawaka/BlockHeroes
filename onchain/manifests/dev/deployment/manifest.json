@@ -1230,12 +1230,12 @@
       }
     ],
     "address": "0x4ccbc6da0b26ca909183ad69df4cf35b3c8c8492a5a791fd5eda13ce3c55c50",
-    "transaction_hash": "0x1af25f2ef012b3219b757bd5556c7a9158ed307608d8506f743c7541320717",
+    "transaction_hash": "0x5967fd69042d620f1b7c9048a2b7c38d35fd6e991e810a29ccd7eb2fb194a65",
     "block_number": 3,
     "seed": "game",
     "metadata": {
       "profile_name": "dev",
-      "rpc_url": "https://api.cartridge.gg/x/blockheroes/katana"
+      "rpc_url": "https://api.cartridge.gg/x/blockheroesdev/katana"
     },
     "manifest_name": "dojo-world"
   },

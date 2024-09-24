@@ -88,7 +88,7 @@ export default class StateChangesHandler {
   }
 
   updateRuneUpgrade(rune: RuneInfos, bonus: RuneBonusEvent | undefined, runesList: Array<RuneInfos>, heroesList: Array<HeroInfos>) {
-    let upgradedRune = RuneFactory.upgradeRune(rune, bonus, runeStatsDict)
+    let upgradedRune = RuneFactory.upgradeRune(rune, bonus)
     let newRunesList = [...runesList]
     const indexRune = newRunesList.findIndex(r => r.id === rune.id)
     newRunesList[indexRune] = upgradedRune

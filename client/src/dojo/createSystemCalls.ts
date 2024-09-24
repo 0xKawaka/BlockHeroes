@@ -146,10 +146,11 @@ export function createSystemCalls(
     }
 
     async function initPvp(account: Account, heroesIds: number[]): Promise<{rank: number, defenseHeroesIds: number[]}> {
+        let anyHeroesIds = heroesIds as any;
         try {
             let txRes = await client.Game.initPvp({
                 account,
-                heroesIds,
+                heroesIds:anyHeroesIds,
             });
             let res: any = await account.waitForTransaction(txRes.transaction_hash, {
                 retryInterval: 100,
@@ -168,10 +169,11 @@ export function createSystemCalls(
     }
 
     async function setPvpTeam(account: Account, heroesIds: number[]): Promise<boolean> {
+        let anyHeroesIds = heroesIds as any;
         try {
             let txRes = await client.Game.setPvpTeam({
                 account,
-                heroesIds,
+                heroesIds:anyHeroesIds,
             });
             await account.waitForTransaction(txRes.transaction_hash, {
                 retryInterval: 100,
@@ -185,11 +187,12 @@ export function createSystemCalls(
     }
 
     async function startBattle(account: Account, heroesIds: number[], map: number, level: number, eventHandler: GameEventHandler): Promise<boolean> {
-        console.log("startBattle", heroesIds, map, level);
+        let anyHeroesIds = heroesIds as any;
+        // console.log("startBattle", heroesIds, map, level);
         try {
             let txRes = await client.Game.startBattle({
                 account,
-                heroesIds,
+                heroesIds:anyHeroesIds,
                 map,
                 level,
             });
@@ -226,11 +229,12 @@ export function createSystemCalls(
     }
 
     async function startPvpBattle(account: Account, enemyOwner: bigint, heroesIds: number[], eventHandler: GameEventHandler): Promise<boolean> {
+        let anyHeroesIds = heroesIds as any;
         try {
             let txRes = await client.Game.startPvpBattle({
                 account,
                 enemyOwner,
-                heroesIds,
+                heroesIds: anyHeroesIds,
             });
             let res: any = await account.waitForTransaction(txRes.transaction_hash, {
                 retryInterval: 100,

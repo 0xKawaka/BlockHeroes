@@ -1,6 +1,4 @@
-import IStatistic from "../../Interfaces/IStatistics";
-
-export default class Statistics implements IStatistic {
+export default class Statistics {
   level: number;
   health: number;
   // attack: number;

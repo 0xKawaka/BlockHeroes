@@ -2,11 +2,7 @@ import { Account } from "starknet"
 import "./AccountSelect.css"
 import { useState, useEffect } from "react"
 import Register from "./Register"
-import Storage from '../../Cookies/storage'
-import Burner from "../../Blockchain/Burner"
-import { Getter } from "../../Blockchain/Getter"
 import { BurnerAccount } from "@dojoengine/create-burner"
-import { set } from "mobx"
 import { GameAccount } from "../../Types/toriiTypes"
 
 type AccountSelectProps = {
@@ -21,17 +17,6 @@ export default function AccountSelect({account, allAccountsDict, setAccountSelec
   const [removePopup, setRemovePopup] = useState<boolean>(false);
   const [adrsToRemove, setAdrsToRemove] = useState<string>("");
   const [showClipboardMsg, setShowClipboardMsg] = useState<boolean>(false);
-
-  // async function handleAccountWalletSelect(accountAdrs: string) {
-  //   let acc = Burner.getAccountByAddress(accountAdrs)
-  //   console.log(acc)
-  //   if(acc){
-  //     // let account = await Getter.getAccount(acc);
-  //     setAccountWallet(acc);
-  //   }
-  // }
-
-  // const accounts = Burner.getAllAccounts();
 
 
   const showRemovePopup = (address: string) => {

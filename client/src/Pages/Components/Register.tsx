@@ -27,7 +27,7 @@ export default function Register({account, setAccountSelected, setBlockchainAcco
     setErrorMessage('');
     setIsRegistering(true);
     console.log("account :", account.account.address)
-    account.create()
+    account.create({prefundedAmount: "1000000000000"})
     console.log("account_aftercreate :", account.account.address)
     setBlockchainAccount(account.account)
     let res = await createAccount(account.account, username)
