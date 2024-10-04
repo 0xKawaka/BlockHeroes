@@ -12,6 +12,7 @@ trait IEntityFactory {
     fn initBaseHeroesDict(world: IWorldDispatcher);
     fn initRunesTable(world: IWorldDispatcher);
     fn initBonusRunesTable(world: IWorldDispatcher);
+    fn initHeroesByRankDict(world: IWorldDispatcher);
 }
 
 mod EntityFactory {
@@ -24,7 +25,7 @@ mod EntityFactory {
     use game::models::battle::entity::{skill, skill::SkillImpl, skill::TargetType, skill::damage, skill::heal};
     use game::models::battle::entity::healthOnTurnProc::{HealthOnTurnProc, HealthOnTurnProcImpl};
     use game::models::storage::{statistics, statistics::{runeStatistics, runeStatistics::RuneStatistics, bonusRuneStatistics, bonusRuneStatistics::BonusRuneStatistics}};
-    use game::models::storage::{baseHero, baseHero::{BaseHero, BaseHeroImpl, Statistics}};
+    use game::models::storage::{baseHero, baseHero::{BaseHero, BaseHeroImpl, Statistics}, heroesByRank::HeroesByRank };
     use game::systems::accounts::Accounts::AccountsImpl;
 
     impl EntityFactoryImpl of super::IEntityFactory {
@@ -72,26 +73,26 @@ mod EntityFactory {
                 let rune: Rune = *runes[i];
                 let runeStatWithoutRank = get!(world, (rune.statistic, rune.rarity, rune.isPercent), (RuneStatistics)).value;
                 let runeStat = runeStatWithoutRank + ((runeStatWithoutRank * rune.rank) / 10);
-                InternalEntityFactoryImpl::matchAndAddStat(ref runesTotalBonusStats, rune.statistic, runeStat.into(), rune.isPercent, baseStats);
+                matchAndAddStat(ref runesTotalBonusStats, rune.statistic, runeStat.into(), rune.isPercent, baseStats);
                 if (rune.rank > 3) {
                     let bonusRank4 = rune.rank4Bonus;
                     let runeBonusStat = get!(world, (bonusRank4.statistic, rune.rarity, bonusRank4.isPercent), (BonusRuneStatistics)).value;
-                    InternalEntityFactoryImpl::matchAndAddStat(ref runesTotalBonusStats, bonusRank4.statistic, runeBonusStat.into(), bonusRank4.isPercent, baseStats);
+                    matchAndAddStat(ref runesTotalBonusStats, bonusRank4.statistic, runeBonusStat.into(), bonusRank4.isPercent, baseStats);
                 }
                 if (rune.rank > 7) {
                     let bonusRank8 = rune.rank8Bonus;
                     let runeBonusStat = get!(world, (bonusRank8.statistic, rune.rarity, bonusRank8.isPercent), (BonusRuneStatistics)).value;
-                    InternalEntityFactoryImpl::matchAndAddStat(ref runesTotalBonusStats, bonusRank8.statistic, runeBonusStat.into(), bonusRank8.isPercent, baseStats);
+                    matchAndAddStat(ref runesTotalBonusStats, bonusRank8.statistic, runeBonusStat.into(), bonusRank8.isPercent, baseStats);
                 }
                 if (rune.rank > 11) {
                     let bonusRank12 = rune.rank12Bonus;
                     let runeBonusStat = get!(world, (bonusRank12.statistic, rune.rarity, bonusRank12.isPercent), (BonusRuneStatistics)).value;
-                    InternalEntityFactoryImpl::matchAndAddStat(ref runesTotalBonusStats, bonusRank12.statistic, runeBonusStat.into(), bonusRank12.isPercent, baseStats);
+                    matchAndAddStat(ref runesTotalBonusStats, bonusRank12.statistic, runeBonusStat.into(), bonusRank12.isPercent, baseStats);
                 }
                 if (rune.rank > 15) {
                     let bonusRank16 = rune.rank16Bonus;
                     let runeBonusStat = get!(world, (bonusRank16.statistic, rune.rarity, bonusRank16.isPercent), (BonusRuneStatistics)).value;
-                    InternalEntityFactoryImpl::matchAndAddStat(ref runesTotalBonusStats, bonusRank16.statistic, runeBonusStat.into(), bonusRank16.isPercent, baseStats);
+                    matchAndAddStat(ref runesTotalBonusStats, bonusRank16.statistic, runeBonusStat.into(), bonusRank16.isPercent, baseStats);
                 }
                 i += 1;
             };
@@ -102,27 +103,37 @@ mod EntityFactory {
             set!(
                 world,
                 (
-                    BaseHero { heroName: 'sirocco', statistics: statistics::new(1500, 190, 120, 190, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'wellan', statistics: statistics::new(1500, 165, 160, 175, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'marella', statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'elandor', statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'diana', statistics: statistics::new(1500, 185, 124, 191, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'elric', statistics: statistics::new(1500, 170, 160, 170, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'nereus', statistics: statistics::new(1500, 185, 135, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'rex', statistics: statistics::new(1500, 180, 160, 160, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'celeste', statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'oakheart', statistics: statistics::new(1500, 170, 160, 170, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'sylvara', statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'bane', statistics: statistics::new(1500, 190, 125, 185, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'ember', statistics: statistics::new(1500, 165, 155, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'molten', statistics: statistics::new(1500, 180, 160, 160, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'solas', statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'solveig', statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'janus', statistics: statistics::new(1500, 200, 110, 190, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'horus', statistics: statistics::new(1500, 165, 155, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'jabari', statistics: statistics::new(1500, 185, 135, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'khamsin', statistics: statistics::new(1500, 180, 140, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'sirocco', rank: 1, statistics: statistics::new(1500, 190, 120, 190, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'wellan', rank: 1, statistics: statistics::new(1500, 165, 160, 175, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'marella', rank: 1, statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'elandor', rank: 1, statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'diana', rank: 1, statistics: statistics::new(1500, 185, 124, 191, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'elric', rank: 1, statistics: statistics::new(1500, 170, 160, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'nereus', rank: 1, statistics: statistics::new(1500, 185, 135, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'rex', rank: 1, statistics: statistics::new(1500, 180, 160, 160, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'celeste', rank: 1, statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'oakheart', rank: 1, statistics: statistics::new(1500, 170, 160, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'sylvara', rank: 1, statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'bane', rank: 1, statistics: statistics::new(1500, 190, 125, 185, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'ember', rank: 1, statistics: statistics::new(1500, 165, 155, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'molten', rank: 3, statistics: statistics::new(1500, 180, 160, 160, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'solas', rank: 3, statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'solveig', rank: 3, statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'janus', rank: 2, statistics: statistics::new(1500, 200, 110, 190, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'horus', rank: 2, statistics: statistics::new(1500, 165, 155, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'jabari', rank: 2, statistics: statistics::new(1500, 185, 135, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'khamsin', rank: 2, statistics: statistics::new(1500, 180, 140, 180, 10, 200), skillsCount: 3 },
 
+                )
+            )
+        }
+        fn initHeroesByRankDict(world: IWorldDispatcher) {
+            set!(
+                world,
+                (
+                    HeroesByRank { rank: 1, heroes: array!['sirocco', 'wellan', 'marella', 'elandor', 'diana', 'elric', 'nereus', 'rex', 'celeste', 'oakheart', 'sylvara', 'bane', 'ember'] },
+                    HeroesByRank { rank: 2, heroes: array!['janus', 'horus', 'jabari', 'khamsin'] },
+                    HeroesByRank { rank: 3, heroes: array!['molten', 'solas', 'solveig'] }
                 )
             )
         }
@@ -160,24 +171,21 @@ mod EntityFactory {
         }
     }
 
-    #[generate_trait]
-    impl InternalEntityFactoryImpl of InternalEntityFactoryTrait {
-        fn matchAndAddStat(ref runesTotalBonusStats: Statistics, statType: RuneStatistic, bonusStat: u64, isPercent: bool, baseStats: Statistics) {
-            if(isPercent) {
-                match statType {
-                    RuneStatistic::Health => runesTotalBonusStats.health += (baseStats.health * bonusStat) / 100,
-                    RuneStatistic::Attack => runesTotalBonusStats.attack += (baseStats.attack * bonusStat) / 100,
-                    RuneStatistic::Defense => runesTotalBonusStats.defense += (baseStats.defense * bonusStat) / 100,
-                    RuneStatistic::Speed => runesTotalBonusStats.speed += (baseStats.speed * bonusStat) / 100,
-                }
+    fn matchAndAddStat(ref runesTotalBonusStats: Statistics, statType: RuneStatistic, bonusStat: u64, isPercent: bool, baseStats: Statistics) {
+        if(isPercent) {
+            match statType {
+                RuneStatistic::Health => runesTotalBonusStats.health += (baseStats.health * bonusStat) / 100,
+                RuneStatistic::Attack => runesTotalBonusStats.attack += (baseStats.attack * bonusStat) / 100,
+                RuneStatistic::Defense => runesTotalBonusStats.defense += (baseStats.defense * bonusStat) / 100,
+                RuneStatistic::Speed => runesTotalBonusStats.speed += (baseStats.speed * bonusStat) / 100,
             }
-            else {
-                match statType {
-                    RuneStatistic::Health => runesTotalBonusStats.health += bonusStat,
-                    RuneStatistic::Attack => runesTotalBonusStats.attack += bonusStat,
-                    RuneStatistic::Defense => runesTotalBonusStats.defense += bonusStat,
-                    RuneStatistic::Speed => runesTotalBonusStats.speed += bonusStat,
-                }
+        }
+        else {
+            match statType {
+                RuneStatistic::Health => runesTotalBonusStats.health += bonusStat,
+                RuneStatistic::Attack => runesTotalBonusStats.attack += bonusStat,
+                RuneStatistic::Defense => runesTotalBonusStats.defense += bonusStat,
+                RuneStatistic::Speed => runesTotalBonusStats.speed += bonusStat,
             }
         }
     }

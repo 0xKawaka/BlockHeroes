@@ -7,4 +7,6 @@ mod baseHero;
 mod mapProgress;
 mod quest;
 mod usernames;
-// mod accountConfig;
+mod heroesByRank;
+mod config;
+mod summonRates;

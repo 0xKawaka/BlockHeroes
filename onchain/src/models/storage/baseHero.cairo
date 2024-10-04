@@ -9,15 +9,17 @@ use game::models::storage::{statistics, statistics::Statistics};
 pub struct BaseHero {
     #[key]
     pub heroName: felt252,
+    pub rank: u16,
     pub statistics: Statistics,
     pub skillsCount: u8,
 }
 
 fn new(
-    heroName: felt252, health: u64, attack: u64, defense: u64, speed: u64, criticalRate: u64, criticalDamage: u64, skillsCount: u8
+    heroName: felt252, rank: u16, health: u64, attack: u64, defense: u64, speed: u64, criticalRate: u64, criticalDamage: u64, skillsCount: u8
 ) -> BaseHero {
     return BaseHero {
         heroName: heroName,
+        rank: rank,
         statistics: statistics::new(health, attack, defense, speed, criticalRate, criticalDamage),
         skillsCount: skillsCount,
     };

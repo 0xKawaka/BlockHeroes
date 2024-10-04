@@ -10,9 +10,8 @@ use option::OptionTrait;
 use game::models::hero::{Hero, HeroTrait, HeroImpl};
 use game::models::battle::Battle;
 use {starknet::ContractAddress, starknet::get_block_timestamp};
-
-const timeTickEnergy: u64 = 1200;
-const timeTickPvpEnergy: u64 = 1200;
+use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+use game::models::storage::config::{ConfigType, Config};
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
@@ -31,32 +30,36 @@ pub struct Account {
     pub summonChests: u32,
 }
 
-const maxEnergy: u16 = 5;
-const maxPvpEnergy: u16 = 5;
 
-fn new(username: felt252, owner: ContractAddress) -> Account {
+fn new(username: felt252, owner: ContractAddress, world: IWorldDispatcher) -> Account {
+    let maxEnergy: u16 = get!(world, ConfigType::MaxEnergy, Config).value.try_into().unwrap();
+    let maxPvpEnergy: u16 = get!(world, ConfigType::MaxPvpEnergy, Config).value.try_into().unwrap();
+    let startingCrystals: u32 = get!(world, ConfigType::StartingCrystals, Config).value.try_into().unwrap();
+    let startingGems: u32 = get!(world, ConfigType::StartingGems, Config).value.try_into().unwrap();
+    let startingSummonChests: u32 = get!(world, ConfigType::StartingSummonChests, Config).value.try_into().unwrap();
+
     Account {
         owner: owner,
         username: username,
         energy: maxEnergy,
         pvpEnergy: maxPvpEnergy,
-        crystals: 400,
-        gems: 0,
+        crystals: startingCrystals,
+        gems: startingGems,
         lastEnergyUpdateTimestamp: get_block_timestamp(),
         lastPvpEnergyUpdateTimestamp: get_block_timestamp(),
         runesCount: 0,
         heroesCount: 0,
-        summonChests: 2,
+        summonChests: startingSummonChests,
     }
 }
 
 trait AccountTrait {
-    fn updateEnergy(ref self: Account) -> u64;
+    fn updateEnergy(ref self: Account, world: IWorldDispatcher) -> u64;
     fn increaseSummonChests(ref self: Account, summonChestsToAdd: u32);
     fn decreaseEnergy(ref self: Account, energyCost: u16);
     fn increaseEnergy(ref self: Account, energyToAdd: u16);
 
-    fn updatePvpEnergy(ref self: Account) -> u64;
+    fn updatePvpEnergy(ref self: Account, world: IWorldDispatcher) -> u64;
     fn decreasePvpEnergy(ref self: Account, energyCost: u16);
     fn increasePvpEnergy(ref self: Account, energyToAdd: u16);
 
@@ -71,8 +74,9 @@ trait AccountTrait {
 }
 
 impl AccountImpl of AccountTrait {
-    fn updateEnergy(ref self: Account) -> u64 {
+    fn updateEnergy(ref self: Account, world: IWorldDispatcher) -> u64 {
         let now = get_block_timestamp();
+        let maxEnergy: u16 = get!(world, ConfigType::MaxEnergy, Config).value.try_into().unwrap();
         
         if(self.energy >= maxEnergy) {
             self.lastEnergyUpdateTimestamp = now;
@@ -81,6 +85,8 @@ impl AccountImpl of AccountTrait {
 
         println!("lastEnergyUpdateTimestamp {}", self.lastEnergyUpdateTimestamp);
         println!("now {}", now);
+
+        let timeTickEnergy: u64 = get!(world, ConfigType::TimeTickEnergy, Config).value;
 
         let timeDiff = now - self.lastEnergyUpdateTimestamp;
         let energyToAdd = timeDiff / timeTickEnergy;
@@ -110,13 +116,16 @@ impl AccountImpl of AccountTrait {
     fn increaseEnergy(ref self: Account, energyToAdd: u16) {
         self.energy = self.energy + energyToAdd;
     }
-    fn updatePvpEnergy(ref self: Account) -> u64 {
+    fn updatePvpEnergy(ref self: Account, world: IWorldDispatcher) -> u64 {
         let now = get_block_timestamp();
-        
+        let maxPvpEnergy: u16 = get!(world, ConfigType::MaxPvpEnergy, Config).value.try_into().unwrap();
+
         if(self.pvpEnergy >= maxPvpEnergy) {
             self.lastPvpEnergyUpdateTimestamp = now;
             return self.lastPvpEnergyUpdateTimestamp;
         }
+
+        let timeTickPvpEnergy: u64 = get!(world, ConfigType::TimeTickPvpEnergy, Config).value;
 
         let timeDiff = now - self.lastPvpEnergyUpdateTimestamp;
         let energyToAdd = timeDiff / timeTickPvpEnergy;

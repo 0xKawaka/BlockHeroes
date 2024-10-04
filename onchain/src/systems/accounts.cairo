@@ -44,13 +44,14 @@ mod Accounts {
     use game::models::hero::HeroTrait;
     use game::models::{account, account::{AccountImpl, AccountTrait, Account, heroes::Heroes, runes::Runes}};
     use game::models::storage::usernames::Usernames;
+    use game::models::storage::{config::{ConfigType, Config}, heroesByRank:: HeroesByRank};
     use game::models::{hero, hero::Hero, hero::HeroImpl, hero::rune, hero::EquippedRunesImpl, hero::rune::RuneImpl, hero::rune::Rune};
     use game::models::hero::rune::{RuneStatistic, RuneRarity, RuneType};
     use game::models::events::{Event, EventKey, HeroMinted, RuneMinted, NewAccount, TimestampEnergy, TimestampPvpEnergy};
+    use game::utils::random::{rand32};
 
     use super::IAccounts;
 
-    use game::utils::random::rand32;
 
     #[abi(embed_v0)]
     impl AccountsImpl of super::IAccounts {
@@ -98,9 +99,16 @@ mod Accounts {
             let mut acc = Self::getAccount(world, accountAdrs);
             assert(acc.summonChests > 0, 'No summon chests');
             acc.summonChests -= 1;
+
             let ownedHeroesNames = Self::getOwnedHeroesNames(world, accountAdrs);
+            let totalHeroesCount: u32 = get!(world, ConfigType::TotalHeroesCount, Config).value.try_into().unwrap();
+            assert(totalHeroesCount > ownedHeroesNames.len(), 'All heroes owned');
+
+            let maxBaseHeroRank: u16 = get!(world, ConfigType::MaxBaseHeroRank, Config).value.try_into().unwrap();
+            // let randIndexRank = rand16(get_block_timestamp() + 1, maxBaseHeroRank) + 1;
+            // let heroesPossible: Array<felt252> = get!(world, randIndexRank, HeroesByRank).heroes;
             let heroesPossible: Array<felt252> = array!['sirocco', 'wellan', 'marella', 'elandor', 'diana', 'elric', 'nereus', 'rex', 'celeste', 'oakheart', 'sylvara', 'bane', 'ember', 'molten', 'solas', 'solveig', 'janus', 'horus', 'jabari', 'khamsin'];
-            assert(heroesPossible.len() > ownedHeroesNames.len(), 'All heroes owned');
+            
             let mut notOwnedHeroesIndexes: Array<u32> = Default::default();
             let mut i: u32 = 0;
             loop {
@@ -144,7 +152,7 @@ mod Accounts {
             assert(acc.username == 0x0, 'wallet already has account');
             let usernameStorage = get!(world, username, (Usernames));
             assert(usernameStorage.owner == 0.try_into().unwrap(), 'username already taken');
-            let mut acc = account::new(username, accountAdrs);
+            let mut acc = account::new(username, accountAdrs, world);
             emit!(world, NewAccount {owner: accountAdrs, username: username});
             let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
             let runesCount = Self::mintStarterRunes(world, accountAdrs);
@@ -167,14 +175,14 @@ mod Accounts {
         }
         fn decreaseEnergy(world: IWorldDispatcher, accountAdrs: ContractAddress, energyCost: u16) {
             let mut acc = Self::getAccount(world, accountAdrs);
-            let timestamp:u64 = acc.updateEnergy();
+            let timestamp:u64 = acc.updateEnergy(world);
             emit!(world, TimestampEnergy {eventKey: EventKey::TimestampEnergy, owner: accountAdrs, timestamp: timestamp});
             acc.decreaseEnergy(energyCost);
             set!(world, (acc));
         }
         fn decreasePvpEnergy(world: IWorldDispatcher, accountAdrs: ContractAddress, energyCost: u16) {
             let mut acc = Self::getAccount(world, accountAdrs);
-            let timestamp:u64 = acc.updatePvpEnergy();
+            let timestamp:u64 = acc.updatePvpEnergy(world);
             emit!(world, TimestampPvpEnergy {eventKey: EventKey::TimestampPvpEnergy, owner: accountAdrs, timestamp: timestamp});
             acc.decreasePvpEnergy(energyCost);
             set!(world, (acc));
