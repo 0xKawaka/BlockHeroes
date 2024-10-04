@@ -13,6 +13,7 @@ import AnimationsHandler from "../Animations/AnimationsHandler";
 import BitmapTextAnim from "../Animations/BitmapTextAnim";
 import BarHandler from "../BarHandler";
 import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
+import TargetBar from "./TargetBar";
 
 export default class BattleEntity implements IBattleEntity {
   Entity: Entity
@@ -29,6 +30,7 @@ export default class BattleEntity implements IBattleEntity {
   turnbar: Turnbar
   sprite: SpriteWrapper
   healthBar: HealthBar
+  targetBar: TargetBar
   displayTurnBar: HealthBar
   outlineBarHorizontal:  BarHandler
   outlineBarVertical:  BarHandler
@@ -39,6 +41,7 @@ export default class BattleEntity implements IBattleEntity {
   upscale: number
   countVisible: number
   processDamageAndHealAnimsQueuePromiseArray: Array<Promise<void>>
+  isTargetable: boolean
 
   constructor(Entity:Entity, index: number, alliesCount: number, enemiesCount: number, statusArray: Array<StatsModifier>, buffsArray: Array<StatsModifier>, battleScene: BattleScene, isAlly: boolean, animationIndexes:{[key: string]:{start:number, end:number}}, spriteWidth: number, spriteHeight: number, upscale:number) {
     this.countVisible = 0
@@ -66,6 +69,7 @@ export default class BattleEntity implements IBattleEntity {
     // this.createOutlineBars(battleScene)
     this.createBars(battleScene)
     this.initBuffsDebuffsByName(battleScene)
+    this.isTargetable = false
   }
 
   updateHealth(): void {
@@ -340,6 +344,19 @@ export default class BattleEntity implements IBattleEntity {
 
     this.healthBar = new HealthBar(battleScene, healthX, healthY, 0x2ecc71, 0x134924, healthWidth, healthHeight);
     this.displayTurnBar = new HealthBar(battleScene, turnBarX, turnBarY, 0x3498db, 0x1c506d, turnBarWidth, turnbarHeight);
+
+    let targetBarWidth = this.sprite.getWidth() * 0.75
+    let targetBarX = this.sprite.getPlaceholderX() - this.sprite.getWidth() / 2 + (this.sprite.getWidth() - targetBarWidth) / 2
+    let targetBarY = this.sprite.getPlaceholderY()
+    this.targetBar = new TargetBar(battleScene, targetBarX, targetBarY, targetBarWidth, healthHeight * 0.55);
+    this.sprite.placeholder.on('pointerover', () => {
+      if(this.isTargetable)
+        this.targetBar.highlightBar()
+    })
+    this.sprite.placeholder.on('pointerout', () => {
+      if(this.isTargetable)
+        this.targetBar.removeHighlightBar()
+    })
   }
   // createOutlineBars(battleScene: BattleScene): void {
   //   let horizontalWidth = this.sprite.getWidth() * 0.9 * 1.2
@@ -373,6 +390,13 @@ export default class BattleEntity implements IBattleEntity {
   setOutlineBarsColor(color: number, alpha: number): void {
     this.outlineBarHorizontal.setColor(color, alpha)
     this.outlineBarVertical.setColor(color, alpha)
+  }
+  setTargetable(isTargetable: boolean): void {
+    this.isTargetable = isTargetable
+    if(isTargetable)
+      this.targetBar.showBar()
+    else
+      this.targetBar.hideBar()
   }
   getFrontEntityX(): number {
     throw new Error("Method getFrontEntityX not implemented.");
@@ -418,6 +442,9 @@ export default class BattleEntity implements IBattleEntity {
   }
   getHealthBar(): HealthBar {
     return this.healthBar
+  }
+  getTargetBar(): TargetBar {
+    return this.targetBar
   }
   getScaledValue(): number {
     return this.scaleValue

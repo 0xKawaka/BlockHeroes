@@ -237,13 +237,13 @@ export default class AnimationsHandler {
   }
   
 
-  async createPlayAndWaitProjectile(targetEntity: IBattleEntity, casterEntity: IBattleEntity, startPosition: {x: number, y: number}, animation: string){
-    let {projectile, directionX} = this.createAndPlayProjectile(targetEntity, casterEntity, startPosition, animation)
+  async createPlayAndWaitProjectile(targetEntity: IBattleEntity, casterEntity: IBattleEntity, startPosition: {x: number, y: number},  endPosition: {x: number, y: number}, animation: string){
+    let {projectile, directionX} = this.createAndPlayProjectile(targetEntity, casterEntity, startPosition, endPosition, animation)
     await this.waitForCollision(projectile, targetEntity.getSprite(), directionX)
     projectile.destroy()
   }
 
-  createAndPlayProjectile(targetEntity: IBattleEntity, casterEntity: IBattleEntity, startPosition: {x: number, y: number}, animation: string): {projectile:Phaser.GameObjects.Image, directionX:number} {
+  createAndPlayProjectile(targetEntity: IBattleEntity, casterEntity: IBattleEntity, startPosition: {x: number, y: number}, endPosition: {x: number, y: number}, animation: string): {projectile:Phaser.GameObjects.Image, directionX:number} {
     let direction = new Phaser.Math.Vector2( targetEntity.getSprite().getCenterX() - startPosition.x, targetEntity.getSprite().getCenterY() - startPosition.y);
     let angle = 0;
     if(projectilesDict[animation + casterEntity.getName()].changeAngle)
@@ -254,6 +254,8 @@ export default class AnimationsHandler {
     }
     else {
       projectile = this.battle.battleScene.add.sprite(startPosition.x, startPosition.y, projectilesDict[animation + casterEntity.getName()].name)
+      if(!projectilesDict[animation + casterEntity.getName()].changeAngle && targetEntity.getSprite().getCenterX() < casterEntity.getSprite().getCenterX())
+        projectile.flipX = true;
       this.battle.battleScene.anims.create({
         key: animation + casterEntity.getName(),
         frames: this.battle.battleScene.anims.generateFrameNumbers(projectilesDict[animation + casterEntity.getName()].name),

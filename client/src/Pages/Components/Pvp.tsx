@@ -194,9 +194,9 @@ export default function Pvp({account, gameAccount, arenaAccount, heroesList, def
           <div className="LeaderboardButton" onClick={() => setShowLeaderboard(true)}>
             Leaderboard
           </div>
-          <div className="BattleHistoryButton" onClick={() => setShowDefense(true)}>
+          {/* <div className="BattleHistoryButton" onClick={() => setShowDefense(true)}>
             Battle History
-          </div>
+          </div> */}
         </div>
         <div className="PvpRankingsContainer">
         </div>

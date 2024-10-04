@@ -5,10 +5,16 @@ import manifest from "./src/dojo/manifest.json";
     manifest,
 });
 
-dojoConfig.rpcUrl = "https://api.cartridge.gg/x/blockheroesdev/katana";
-dojoConfig.toriiUrl = "https://api.cartridge.gg/x/blockheroesdev/torii";
-dojoConfig.masterAddress = "0x6267c19517dc17f8dd7c00d873f2790421667fb5e062af4660ac9580087689d";
-dojoConfig.masterPrivateKey  = "0x156d2da31751e3c9fb07ea8778af86b4931381e5f009f584265e85bc14c55e9";
+// dojoConfig.rpcUrl = "https://api.cartridge.gg/x/blockheroesdev/katana";
+// dojoConfig.toriiUrl = "https://api.cartridge.gg/x/blockheroesdev/torii";
+// dojoConfig.masterAddress = "0x70f190c20ae3ea468887ce82b86f3169a076c12b9e167997d8e5e080c5880b3";
+// dojoConfig.masterPrivateKey  = "0x3ae2c43e497f11a7bde8fef74d83199f55161ac62ae953e7e3036e33a4965d5";
+
+
+// dojoConfig.rpcUrl = "https://api.cartridge.gg/x/blockheroes/katana";
+// dojoConfig.toriiUrl = "https://api.cartridge.gg/x/blockheroes/torii";
+// dojoConfig.masterAddress = "0x5b21b14f3649a01ccf6b25cf3b87183c0075d31d5f36ad9462cee5483f269c5";
+// dojoConfig.masterPrivateKey  = "0x7e967b3a84b52726375b600157215b41bf4e361ab6db270a7b22729e95d4a91";
 
 export {dojoConfig};
 

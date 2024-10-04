@@ -7,6 +7,7 @@ import SpriteWrapper from "../Animations/SpriteWrapper";
 import AnimationsHandler from "../Animations/AnimationsHandler";
 import ISkillAnimation from "../Skill/Animations/ISkillAnimation";
 import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
+import TargetBar from "./TargetBar";
 
 export default interface IBattleEntity {
   applyDamage(value: number): void
@@ -33,6 +34,7 @@ export default interface IBattleEntity {
   getBattleSpeed(): number
   setBattleSpeed(value: number): void
   setOnCooldown(name: string): void
+  setTargetable(value: boolean): void
   getSkillIndexByName(name: string): number
   getPosition(): {x: number, y: number}
   getStatusArray(): Array<StatsModifier>
@@ -41,6 +43,7 @@ export default interface IBattleEntity {
   getTurnbar(): Turnbar
   getSprite(): SpriteWrapper
   getHealthBar(): HealthBar
+  getTargetBar(): TargetBar
   getScaledValue(): number
   getName(): string
   isStunned(): boolean

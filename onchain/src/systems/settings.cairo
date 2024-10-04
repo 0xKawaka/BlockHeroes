@@ -1,6 +1,6 @@
 // #[dojo::interface]
 // trait ISettings {
-//     fn initSettings();
+//     fn initSettings(world: IWorldDispatcher);
 // }
 
 #[dojo::contract]
@@ -14,6 +14,7 @@ mod Settings {
 
     // #[abi(embed_v0)]
     // impl SettingsImpl of super::ISettings<ContractState> {
+
     // }
 
     fn initSettings(world: IWorldDispatcher) {
@@ -26,8 +27,8 @@ mod Settings {
         EntityFactoryImpl::initBonusRunesTable(world);
         let minRankGems = array![1, 2, 4, 10];
         let gems = array![1, 2, 4, 10];
-        let minRankRange = array![5, 8, 10, 20, 30];
-        let range = array![2, 3, 4, 5, 7];
+        let minRankRange = array![5, 8, 10, 20, 30, 50, 100, 300, 500, 2000, 10000];
+        let range = array![2, 3, 4, 5, 10, 15, 20, 30, 50, 100, 300];
         ArenaImpl::initArena(world, minRankGems, gems, minRankRange, range);
         QuestsImpl::initQuests(world);
     }
@@ -37,4 +38,5 @@ mod Settings {
     ) {
         initSettings(world);
     }
+
 }

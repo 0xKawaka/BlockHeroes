@@ -146,10 +146,10 @@ mod Accounts {
             assert(usernameStorage.owner == 0.try_into().unwrap(), 'username already taken');
             let mut acc = account::new(username, accountAdrs);
             emit!(world, NewAccount {owner: accountAdrs, username: username});
-            // let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
-            // let runesCount = Self::mintStarterRunes(world, accountAdrs);
-            acc.heroesCount = 0;
-            acc.runesCount = 0;
+            let heroesCount = Self::mintStarterHeroes(world, accountAdrs);
+            let runesCount = Self::mintStarterRunes(world, accountAdrs);
+            acc.heroesCount = heroesCount;
+            acc.runesCount = runesCount;
             set!(world, (acc));
             set!(world, (Usernames {username: username, owner: accountAdrs}));
         }
@@ -334,21 +334,26 @@ mod Accounts {
             set!(
                 world,
                 (
-                Runes {owner: accountAdrs, index: 0, rune: rune::newDeterministic(0, RuneStatistic::Attack, false, RuneRarity::Common, RuneType::First)},
-                Runes {owner: accountAdrs, index: 1, rune: rune::newDeterministic(1, RuneStatistic::Attack, true, RuneRarity::Common, RuneType::Second)},
-                Runes {owner: accountAdrs, index: 2, rune: rune::newDeterministic(2, RuneStatistic::Attack, false, RuneRarity::Common, RuneType::Third)},
-                Runes {owner: accountAdrs, index: 3, rune: rune::newDeterministic(3, RuneStatistic::Defense, false, RuneRarity::Common, RuneType::Third)},
-                Runes {owner: accountAdrs, index: 4, rune: rune::newDeterministic(4, RuneStatistic::Defense, true, RuneRarity::Common, RuneType::Fourth)},
-                Runes {owner: accountAdrs, index: 5, rune: rune::newDeterministic(5, RuneStatistic::Defense, true, RuneRarity::Common, RuneType::Sixth)},
-                Runes {owner: accountAdrs, index: 6, rune: rune::newDeterministic(6, RuneStatistic::Health, false, RuneRarity::Common, RuneType::Fifth)},
-                Runes {owner: accountAdrs, index: 7, rune: rune::newDeterministic(7, RuneStatistic::Health, true, RuneRarity::Common, RuneType::Fifth)},
-                Runes {owner: accountAdrs, index: 8, rune: rune::newDeterministic(8, RuneStatistic::Health, true, RuneRarity::Common, RuneType::Second)},
-                Runes {owner: accountAdrs, index: 9, rune: rune::newDeterministic(9, RuneStatistic::Speed, false, RuneRarity::Common, RuneType::Sixth)},
-                Runes {owner: accountAdrs, index: 10, rune: rune::newDeterministic(10, RuneStatistic::Speed, false, RuneRarity::Common, RuneType::First)},
-                Runes {owner: accountAdrs, index: 11, rune: rune::newDeterministic(11, RuneStatistic::Speed, true, RuneRarity::Common, RuneType::Fourth)},
+                Runes {owner: accountAdrs, index: 0, rune: rune::newDeterministic(0, RuneStatistic::Attack, true, RuneRarity::Common, RuneType::Second)},
+                Runes {owner: accountAdrs, index: 1, rune: rune::newDeterministic(1, RuneStatistic::Defense, true, RuneRarity::Common, RuneType::Fourth)},
+                Runes {owner: accountAdrs, index: 2, rune: rune::newDeterministic(2, RuneStatistic::Health, true, RuneRarity::Common, RuneType::Fifth)},
+                Runes {owner: accountAdrs, index: 3, rune: rune::newDeterministic(3, RuneStatistic::Speed, true, RuneRarity::Common, RuneType::Fourth)},
+
+                // Runes {owner: accountAdrs, index: 0, rune: rune::newDeterministic(0, RuneStatistic::Attack, false, RuneRarity::Common, RuneType::First)},
+                // Runes {owner: accountAdrs, index: 1, rune: rune::newDeterministic(1, RuneStatistic::Attack, true, RuneRarity::Common, RuneType::Second)},
+                // Runes {owner: accountAdrs, index: 2, rune: rune::newDeterministic(2, RuneStatistic::Attack, false, RuneRarity::Common, RuneType::Third)},
+                // Runes {owner: accountAdrs, index: 3, rune: rune::newDeterministic(3, RuneStatistic::Defense, false, RuneRarity::Common, RuneType::Third)},
+                // Runes {owner: accountAdrs, index: 4, rune: rune::newDeterministic(4, RuneStatistic::Defense, true, RuneRarity::Common, RuneType::Fourth)},
+                // Runes {owner: accountAdrs, index: 5, rune: rune::newDeterministic(5, RuneStatistic::Defense, true, RuneRarity::Common, RuneType::Sixth)},
+                // Runes {owner: accountAdrs, index: 6, rune: rune::newDeterministic(6, RuneStatistic::Health, false, RuneRarity::Common, RuneType::Fifth)},
+                // Runes {owner: accountAdrs, index: 7, rune: rune::newDeterministic(7, RuneStatistic::Health, true, RuneRarity::Common, RuneType::Fifth)},
+                // Runes {owner: accountAdrs, index: 8, rune: rune::newDeterministic(8, RuneStatistic::Health, true, RuneRarity::Common, RuneType::Second)},
+                // Runes {owner: accountAdrs, index: 9, rune: rune::newDeterministic(9, RuneStatistic::Speed, false, RuneRarity::Common, RuneType::Sixth)},
+                // Runes {owner: accountAdrs, index: 10, rune: rune::newDeterministic(10, RuneStatistic::Speed, false, RuneRarity::Common, RuneType::First)},
+                // Runes {owner: accountAdrs, index: 11, rune: rune::newDeterministic(11, RuneStatistic::Speed, true, RuneRarity::Common, RuneType::Fourth)},
                 )
             );
-            return 12;
+            return 4;
         }
     }
 }

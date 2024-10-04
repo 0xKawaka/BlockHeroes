@@ -32,5 +32,5 @@ fn computeAndDistributeLoot(world: IWorldDispatcher, owner: ContractAddress, ene
 }
 
 fn hasLootedRune() -> bool {
-    return rand32(get_block_timestamp() + 111, 10) < runeLootChance;
+    return rand32(get_block_timestamp(), 10) < runeLootChance;
 }

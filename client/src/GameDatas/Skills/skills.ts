@@ -13,8 +13,8 @@ const jumpInJumpOutAndCast = new MoveAndCast("jump", "jump")
 const chargeInJumpOutAndCast = new MoveAndCast("charge", "jump")
 const runInJumpLoopOutAndCastEffect = new MoveAndCastEffect("run", "jumpLoop")
 const cast = new Cast()
-const casterProjectile = new CastProjectile("caster")
-const skyProjectile = new CastProjectile("sky")
+const casterProjectile = new CastProjectile("caster", false)
+const skyProjectileAOE = new CastProjectile("sky", true)
 const castEffectAOE = new CastAndEffect("AOE")
 const castEffectSelf = new CastAndEffect("Self")
 const castEffectTarget = new CastAndEffect("Target")
@@ -56,7 +56,7 @@ const skillAnimsDict: {[key: string]: SkillAnimationWrapper} = {
   "Astral Beam": new SkillAnimationWrapper("skill2", castEffectTarget),
   "Attack Bane": new SkillAnimationWrapper("attack", castEffectTarget),
   "Raging Fire": new SkillAnimationWrapper("skill1", castEffectTarget),
-  "Meteor Strike": new SkillAnimationWrapper("skill2", skyProjectile),
+  "Meteor Strike": new SkillAnimationWrapper("skill2", skyProjectileAOE),
   "Attack Ember": new SkillAnimationWrapper("attack", castEffectTarget),
   "Ember Infusion": new SkillAnimationWrapper("skill1", castEffectAOE),
   "Fiery Shower": new SkillAnimationWrapper("skill2", runInJumpLoopOutAndCast, 0.7),

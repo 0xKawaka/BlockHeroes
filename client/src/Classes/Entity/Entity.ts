@@ -36,6 +36,16 @@ export default class Entity {
     return -1
   }
 
+  getSkillByName(name: string): Skill | null {
+    for (let skill of this.skillArray) {
+      if (skill.name === name) {
+        return skill
+      }
+    }
+    console.log("Skill not found")
+    return null
+  }
+
   // getSkillAnim(skillName: string): ISkillAnimation {
   //   return this.skillAnimationDict[skillName]
   // }

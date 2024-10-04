@@ -4,14 +4,14 @@ class_hash = "0xa349b743d361ce4567361475a89b84a386bb383448c6926954e5fe0b525597"
 original_class_hash = "0xa349b743d361ce4567361475a89b84a386bb383448c6926954e5fe0b525597"
 abi = "manifests/dev/deployment/abis/dojo-world.json"
 address = "0x4ccbc6da0b26ca909183ad69df4cf35b3c8c8492a5a791fd5eda13ce3c55c50"
-transaction_hash = "0x5967fd69042d620f1b7c9048a2b7c38d35fd6e991e810a29ccd7eb2fb194a65"
+transaction_hash = "0x42eb40e40ee5d1d6f6538fe3fcb727c21d4ec4f7d15475dbccda46653ea3895"
 block_number = 3
 seed = "game"
 manifest_name = "dojo-world"
 
 [world.metadata]
 profile_name = "dev"
-rpc_url = "https://api.cartridge.gg/x/blockheroesdev/katana"
+rpc_url = "http://localhost:5050/"
 
 [base]
 kind = "Class"
@@ -24,8 +24,8 @@ manifest_name = "dojo-base"
 [[contracts]]
 kind = "DojoContract"
 address = "0x1f355961284c21fced60460e371443a9b3a192b3e5ae755ed9428dbbb4ba68f"
-class_hash = "0x50bfe665f5cb28bb15630967f5ddd3f70080ad8f23a585b1a0abdedc5536430"
-original_class_hash = "0x50bfe665f5cb28bb15630967f5ddd3f70080ad8f23a585b1a0abdedc5536430"
+class_hash = "0x7b3998b15a90508ae57023b4aed8a986cbc66be830893a5d57a538729105d2d"
+original_class_hash = "0x7b3998b15a90508ae57023b4aed8a986cbc66be830893a5d57a538729105d2d"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/game-Game-1a8648a1.json"
 reads = []
@@ -52,8 +52,8 @@ manifest_name = "game-Game-1a8648a1"
 [[contracts]]
 kind = "DojoContract"
 address = "0x7db0ee87b66abc2184e93e5f322d9753aa2dd71890cd1ffddfacebde2cbc49e"
-class_hash = "0x2cd399a170639c926081847ca156faa183bc9e7bf1716f6ee37d2211888dd1c"
-original_class_hash = "0x2cd399a170639c926081847ca156faa183bc9e7bf1716f6ee37d2211888dd1c"
+class_hash = "0x7f583cb4cb5e550a2f43e2d508d6d76101e41b4c097ded8a4180fe1cc43b091"
+original_class_hash = "0x7f583cb4cb5e550a2f43e2d508d6d76101e41b4c097ded8a4180fe1cc43b091"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/game-Settings-4d1bc91c.json"
 reads = []

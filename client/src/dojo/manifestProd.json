@@ -1230,12 +1230,12 @@
       }
     ],
     "address": "0x4ccbc6da0b26ca909183ad69df4cf35b3c8c8492a5a791fd5eda13ce3c55c50",
-    "transaction_hash": "0x42eb40e40ee5d1d6f6538fe3fcb727c21d4ec4f7d15475dbccda46653ea3895",
+    "transaction_hash": "0x396cf4321f4756df696bd6d2800164b98d21bcd2af56094cbeb6c963e43c33e",
     "block_number": 3,
     "seed": "game",
     "metadata": {
       "profile_name": "dev",
-      "rpc_url": "http://localhost:5050/"
+      "rpc_url": "https://api.cartridge.gg/x/blockheroesdev/katana"
     },
     "manifest_name": "dojo-world"
   },
@@ -1251,8 +1251,8 @@
     {
       "kind": "DojoContract",
       "address": "0x1f355961284c21fced60460e371443a9b3a192b3e5ae755ed9428dbbb4ba68f",
-      "class_hash": "0x7b3998b15a90508ae57023b4aed8a986cbc66be830893a5d57a538729105d2d",
-      "original_class_hash": "0x7b3998b15a90508ae57023b4aed8a986cbc66be830893a5d57a538729105d2d",
+      "class_hash": "0x1c264fcc16000b253bfa1d3b7e49b42926f40d9fec7e0ae6a3d24c3e0b623e",
+      "original_class_hash": "0x1c264fcc16000b253bfa1d3b7e49b42926f40d9fec7e0ae6a3d24c3e0b623e",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -1675,8 +1675,8 @@
     {
       "kind": "DojoContract",
       "address": "0x7db0ee87b66abc2184e93e5f322d9753aa2dd71890cd1ffddfacebde2cbc49e",
-      "class_hash": "0x7f583cb4cb5e550a2f43e2d508d6d76101e41b4c097ded8a4180fe1cc43b091",
-      "original_class_hash": "0x7f583cb4cb5e550a2f43e2d508d6d76101e41b4c097ded8a4180fe1cc43b091",
+      "class_hash": "0x11fde3d287bbdc76d3dee17a49cfbf870c8ba179d519c70817337db730f22c1",
+      "original_class_hash": "0x11fde3d287bbdc76d3dee17a49cfbf870c8ba179d519c70817337db730f22c1",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {

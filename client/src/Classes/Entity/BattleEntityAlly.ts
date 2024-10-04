@@ -12,6 +12,7 @@ import ISkillAnimation from "../Skill/Animations/ISkillAnimation";
 import SkillTooltip from "./SkillTooltip";
 import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
 import UIScene from "../../Scenes/UIScene";
+import TargetBar from "./TargetBar";
 
 
 export default class BattleEntityAlly implements IBattleEntity {
@@ -230,9 +231,10 @@ export default class BattleEntityAlly implements IBattleEntity {
   }
 
   selectSkill(name: string){
-    for(let key in  this.skillImageByName){
-      if(key === name)
+    for(let key in this.skillImageByName){
+      if(key === name) {
         this.skillSelectedImageByName[key].setVisible(true)
+      }
         // this.skillImageByName[key].setScale(this.skillScale * 1.15)
       else
         this.skillSelectedImageByName[key].setVisible(false)
@@ -256,6 +258,9 @@ export default class BattleEntityAlly implements IBattleEntity {
   // }
   setOutlineBarsColor(color: number, alpha: number): void {
     this.battleEntity.setOutlineBarsColor(color, alpha)
+  }
+  setTargetable(value: boolean): void {
+    this.battleEntity.setTargetable(value)
   }
   getFrontEntityX(): number {
     return this.battleEntity.getSprite().getPlaceholderX() + this.battleEntity.getSprite().getWidth() / 1.4
@@ -306,6 +311,9 @@ export default class BattleEntityAlly implements IBattleEntity {
 
   getHealthBar(): HealthBar {
     return this.battleEntity.getHealthBar()
+  }
+  getTargetBar(): TargetBar {
+    return this.battleEntity.getTargetBar()
   }
   getScaledValue(): number {
     return this.battleEntity.getScaledValue()

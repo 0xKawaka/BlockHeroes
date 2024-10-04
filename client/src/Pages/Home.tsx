@@ -23,7 +23,7 @@ function Home({}: HomeProps) {
       <div className="HomeContainer">
         <div className="disclaimerAndPlayContainer">
           {/* <div className="disclaimerHome">
-            We're working on an update. Stay tuned !
+            The game is currently undergoing maintenance due to an unforeseen bug. Stay tuned !
           </div> */}
 
           <Link className="GameButton" to={{pathname: '/game'}}>

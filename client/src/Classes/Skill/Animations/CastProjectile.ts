@@ -6,9 +6,11 @@ import ISkillAnimation from "./ISkillAnimation";
 
 export default class CastProjectile implements ISkillAnimation {
   projectileStartType: string
+  isAoe: boolean
 
-  constructor(projectileStartType: string) {
+  constructor(projectileStartType: string, isAoe: boolean) {
     this.projectileStartType = projectileStartType
+    this.isAoe = isAoe
   }
 
   async play(animationHandler: AnimationsHandler, battle: Battle, animation: string,  casterEntity: IBattleEntity,
@@ -17,11 +19,35 @@ export default class CastProjectile implements ISkillAnimation {
     buffsDict: {[key: number]: Array<{name: string, duration: number}>}, deathArray: Array<number>, xOffsetPercent: number): Promise<void> {
     
     await animationHandler.waitAndPlayAnim(casterEntity, animation)
-    if(this.projectileStartType === "caster") {
-      await animationHandler.createPlayAndWaitProjectile(targetEntity, casterEntity, {x: casterEntity.getSprite().getPlaceholderX(), y: casterEntity.getSprite().getCenterY()}, animation)
+    if(!this.isAoe) {
+      if(this.projectileStartType === "caster") {
+        await animationHandler.createPlayAndWaitProjectile(
+          targetEntity, casterEntity,
+          {x: casterEntity.getSprite().getPlaceholderX(), y: casterEntity.getSprite().getCenterY()},
+          {x: targetEntity.getSprite().getCenterX(), y: targetEntity.getSprite().getCenterY()},
+          animation)
+      }
+      else if(this.projectileStartType === "sky") {
+        await animationHandler.createPlayAndWaitProjectile(targetEntity, casterEntity,
+          {x: casterEntity.getSprite().getPlaceholderX(), y: 0},
+          {x: targetEntity.getSprite().getCenterX(), y: targetEntity.getSprite().getCenterY()},
+          animation)
+      }
     }
-    else if(this.projectileStartType === "sky") {
-      await animationHandler.createPlayAndWaitProjectile(targetEntity, casterEntity, {x: casterEntity.getSprite().getPlaceholderX(), y: 0}, animation)
+    else {
+      let entities = battle.getAlliesOf(targetEntity.getIndex())
+      let x = 0
+      let y = 0
+      entities.forEach(entity => {
+        x += entity.getSprite().x
+        y += entity.getSprite().y
+      });
+      x = x / entities.length
+      y = y / entities.length
+
+      if(this.projectileStartType === "sky") {
+        await animationHandler.createPlayAndWaitProjectile(targetEntity, casterEntity, {x: casterEntity.getSprite().getPlaceholderX(), y: 0}, {x: x, y: y}, animation)
+      }
     }
 
     battle.applyDamages(damageDict)

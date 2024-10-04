@@ -7,6 +7,19 @@ const fontSizeByZoom: {[key: number]: number } = {
   2: 12,
   3: 16,
   4: 19,
+  5: 22,
+  6: 25,
+  7: 28,
+  8: 31,
+  9: 34,
+  10: 37,
+  11: 40,
+  12: 43,
+  13: 46,
+  14: 49,
+  15: 52,
+  16: 55,
+  17: 58,
 }
 
 export default class SkillTooltip {

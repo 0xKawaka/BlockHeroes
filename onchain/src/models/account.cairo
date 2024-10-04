@@ -40,7 +40,7 @@ fn new(username: felt252, owner: ContractAddress) -> Account {
         username: username,
         energy: maxEnergy,
         pvpEnergy: maxPvpEnergy,
-        crystals: 1000,
+        crystals: 400,
         gems: 0,
         lastEnergyUpdateTimestamp: get_block_timestamp(),
         lastPvpEnergyUpdateTimestamp: get_block_timestamp(),

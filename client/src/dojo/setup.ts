@@ -64,7 +64,8 @@ export async function setup({ ...config }: DojoConfig) {
         await burnerManager.init();
         if (burnerManager.list().length === 0) {
             console.log("Creating new account");
-            await burnerManager.create({prefundedAmount: "1000000000000"});
+            // await burnerManager.create({prefundedAmount: "1000000000000"});
+            await burnerManager.create();
         }
     } catch (e) {
         console.error(e);

@@ -250,6 +250,8 @@ export default class Battle {
       this.selectedSkill = nameArray[1]
       this.getEntityHighestTurn().selectSkill(nameArray[1])
       this.getSkillTargetType(nameArray[1])
+      this.hideTargetBars()
+      this.showTargetBars()
     }
   }
 
@@ -260,6 +262,7 @@ export default class Battle {
         this.hasSelectedTarget = true
         
         this.getEntityHighestTurn().endSkillSelection()
+        this.hideTargetBars()
         console.log('cast ' + this.getEntityHighestTurn().getSkillIndexByName(this.selectedSkill) + ' on ' + entityClickedId)
         if(this.map == Maps.Campaign){
           await this.playTurn(this.account, this.map, this.getEntityHighestTurn().getSkillIndexByName(this.selectedSkill), entityClickedId, this.eventHandler)
@@ -296,6 +299,36 @@ export default class Battle {
         }
       }
     })
+  }
+
+  showTargetBars() {
+    if(this.skillTargetType === "enemy"){
+      for(let i = 0; i < this.battleEntities.length; i++){
+        if(this.enemiesIndexes.includes(this.battleEntities[i].getIndex())){
+          this.battleEntities[i].setTargetable(true)
+        }
+      }
+    } 
+    else if(this.skillTargetType === "ally"){
+      for(let i = 0; i < this.battleEntities.length; i++){
+        if(this.alliesIndexes.includes(this.battleEntities[i].getIndex())){
+          this.battleEntities[i].setTargetable(true)
+        }
+      }
+    } 
+    else if(this.skillTargetType === "self"){
+      for(let i = 0; i < this.battleEntities.length; i++){
+        if(this.battleEntities[i].getIndex() === this.getEntityHighestTurn().getIndex()){
+          this.battleEntities[i].setTargetable(true)
+        }
+      }
+    }
+  }
+
+  hideTargetBars() {
+    for(let i = 0; i < this.battleEntities.length; i++){
+      this.battleEntities[i].setTargetable(false)
+    }
   }
 
   updateSpeeds(speedDict:{[key: number]: number}){

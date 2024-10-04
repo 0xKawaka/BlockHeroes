@@ -7,6 +7,7 @@ import Battle from "../Battle";
 import SpriteWrapper from "../Animations/SpriteWrapper";
 import AnimationsHandler from "../Animations/AnimationsHandler";
 import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
+import TargetBar from "./TargetBar";
 
 export default class BattleEntityEnemy implements IBattleEntity {
   battleEntity: IBattleEntity
@@ -114,6 +115,9 @@ export default class BattleEntityEnemy implements IBattleEntity {
   setOnCooldown(name: string): void {
     this.battleEntity.setOnCooldown(name)
   }
+  setTargetable(value: boolean): void {
+    this.battleEntity.setTargetable(value)
+  }
   getSkillIndexByName(name: string): number {
     return this.battleEntity.getSkillIndexByName(name)
   }
@@ -140,9 +144,11 @@ export default class BattleEntityEnemy implements IBattleEntity {
   getSprite(): SpriteWrapper {
     return this.battleEntity.getSprite()
   }
-
   getHealthBar(): HealthBar {
     return this.battleEntity.getHealthBar()
+  }
+  getTargetBar(): TargetBar {
+    return this.battleEntity.getTargetBar()
   }
   getScaledValue(): number {
     return this.battleEntity.getScaledValue()

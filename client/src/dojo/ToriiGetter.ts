@@ -12,6 +12,7 @@ import RuneFactory from "../Classes/Runes/RuneFactory";
 import { HeroInfos } from "../Types/apiTypes";
 import { mapFromString } from "../GameDatas/maps";
 
+
 export default class ToriiGetter {
 
   static getGlobalQuests(accountAdrs: string, GlobalQuests: any, AccountQuests: any): GlobalQuest[] {

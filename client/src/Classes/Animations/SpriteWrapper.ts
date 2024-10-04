@@ -24,7 +24,7 @@ export default class SpriteWrapper extends Phaser.GameObjects.Sprite {
   update(){
     this.setX(this.getPlaceholderX())
     this.setY(this.getPlaceholderY())
-    if (this.target && this.placeholder.body) {
+    if (this.target && this.placeholder.body) { 
       const movingLeft = this.placeholder.body.velocity.x < 0
       const movingRight = this.placeholder.body.velocity.x > 0
       if ((movingRight && this.getPlaceholderX() >= this.target.x) ||

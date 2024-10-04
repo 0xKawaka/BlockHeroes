@@ -28,6 +28,7 @@ function getInRangeEnemiesIndexes(myRank: number): number[] {
 export default function ArenaBattleSelect({myRank, arenaFullAccounts, setEnemyAccountSelected}: ArenaBattleSelectProps) {
 
   const inRangeEnemiesIndexes = getInRangeEnemiesIndexes(myRank)
+  console.log("inRangeEnemiesIndexes :", inRangeEnemiesIndexes)
 
   return(
     <div className="ArenaBattleSelectContainer">

@@ -11,6 +11,20 @@ import LifeBarOutline from "../assets/battleUI/LifeBarOutline.png"
 import TurnBar from "../assets/battleUI/TurnBar.png"
 import TurnBarOutline from "../assets/battleUI/TurnBarOutline.png"
 import BackgroundPick from '../Classes/Camera/BackgroundPick'
+import speedBuff from '../assets/buffs/speed.png'
+import attackBuff from '../assets/buffs/attack.png'
+import defenseBuff from '../assets/buffs/defense.png'
+import regenBuff from '../assets/buffs/regen.png'
+import attackStatus from '../assets/status/attack.png'
+import defenseStatus from '../assets/status/defense.png'
+import speedStatus from '../assets/status/speed.png'
+import poisonStatus from '../assets/status/poison.png'
+import stunStatus from '../assets/status/stun.png'
+import music from '../assets/sound/music/battle.mp3'
+
+const spellAnimImages: Record<string, { default: string }> = import.meta.glob('../assets/spellAnim/*.png', { eager: true });
+const monstersImages: Record<string, { default: string }> = import.meta.glob('../assets/monsters/*.png', { eager: true });
+const backgroundsImages: Record<string, { default: string }> = import.meta.glob('../assets/backgrounds/*.png', { eager: true });
 
 export default class BattleLoader extends Phaser.Scene {
   constructor() {
@@ -21,7 +35,8 @@ export default class BattleLoader extends Phaser.Scene {
     this.createLoadingScreen()
     let map = this.registry.get('map')
     let battleId = this.registry.get('battleId')
-    let img = new URL('../assets/backgrounds/' +  getLevelBackground(map, battleId, this.sys.canvas.width) + '.png', import.meta.url).href
+    let img = backgroundsImages[`../assets/backgrounds/${getLevelBackground(map, battleId, this.sys.canvas.width)}.png`].default;
+    // let img = new URL('../assets/backgrounds/' +  getLevelBackground(map, battleId, this.sys.canvas.width) + '.png', import.meta.url).href
     this.load.image('background', img)
     this.loadMusicLoop()
     this.loadSpellAnimations()
@@ -51,14 +66,16 @@ export default class BattleLoader extends Phaser.Scene {
     let loadedNames: Array<string> = []
     for (let i = 0; i < enemiesNameArray.length; i++) {
       if (!loadedNames.includes(enemiesNameArray[i])) {
-        const spritesheet  = new URL('../assets/monsters/' + enemiesNameArray[i] + '.png', import.meta.url).href
+        let spritesheet = monstersImages[`../assets/monsters/${enemiesNameArray[i]}.png`].default;
+        // const spritesheet  = new URL('../assets/monsters/' + enemiesNameArray[i] + '.png', import.meta.url).href
         this.load.spritesheet(enemiesNameArray[i], spritesheet, getSpriteSize(enemiesNameArray[i]))
         loadedNames.push(enemiesNameArray[i])
       }
     }
     for(let i = 0; i < selectedTeam.length; i++){
       if(!loadedNames.includes(selectedTeam[i].name)){
-        const spritesheet  = new URL('../assets/monsters/' + selectedTeam[i].name + '.png', import.meta.url).href
+        let spritesheet = monstersImages[`../assets/monsters/${selectedTeam[i].name}.png`].default;
+        // const spritesheet  = new URL('../assets/monsters/' + selectedTeam[i].name + '.png', import.meta.url).href
         this.load.spritesheet(selectedTeam[i].name, spritesheet, getSpriteSize(selectedTeam[i].name))
         loadedNames.push(selectedTeam[i].name)
       }
@@ -87,14 +104,21 @@ export default class BattleLoader extends Phaser.Scene {
 
   loadSpellAnimations(){
     spellAnimInfos.forEach((spellAnimInfo) => {
-      let img = new URL('../assets/spellAnim/' + spellAnimInfo.name + '.png', import.meta.url).href
+
+      let spellName = spellAnimInfo.name;
+      let img = spellAnimImages[`../assets/spellAnim/${spellName}.png`].default;
+
+      // let img = new URL('../assets/spellAnim/' + spellAnimInfo.name + '.png', import.meta.url).href
       this.load.spritesheet(spellAnimInfo.name, img, { frameWidth: spellAnimInfo.width, frameHeight: spellAnimInfo.height })
     })
   }
 
   loadProjectiles(){
     projectileInfos.forEach((projectileInfo) => {
-      let img = new URL('../assets/spellAnim/' + projectileInfo.name + '.png', import.meta.url).href
+      let spellName = projectileInfo.name;
+      let img = spellAnimImages[`../assets/spellAnim/${spellName}.png`].default;
+
+      // let img = new URL('../assets/spellAnim/' + projectileInfo.name + '.png', import.meta.url).href
       if(projectileInfo.framerate === 0) {
         this.load.image(projectileInfo.name, img)
       }
@@ -105,29 +129,40 @@ export default class BattleLoader extends Phaser.Scene {
   }
 
   loadBuffsStatus(){
-    buffsDebuffsStats.forEach((stat: string) => {
-      let imgBuff = new URL('../assets/buffs/' + stat + '.png', import.meta.url).href
+    this.load.image("buff_speed", speedBuff)
+    this.load.image("buff_attack", attackBuff)
+    this.load.image("buff_defense", defenseBuff)
+    this.load.image("buff_regen", regenBuff)
+    this.load.image("status_attack", attackStatus)
+    this.load.image("status_defense", defenseStatus)
+    this.load.image("status_speed", speedStatus)
+    this.load.image("buff_poison", poisonStatus)
+    this.load.image("status_poison", poisonStatus)
+    this.load.image("status_stun", stunStatus)
+    // buffsDebuffsStats.forEach((stat: string) => {
+    //   let imgBuff = new URL('../assets/buffs/' + stat + '.png', import.meta.url).href
 
-      let imgDebuff = new URL('../assets/status/' + stat + '.png', import.meta.url).href
-      this.load.image("buff_" + stat, imgBuff)
-      this.load.image("status_" + stat, imgDebuff)
-    })
+    //   let imgDebuff = new URL('../assets/status/' + stat + '.png', import.meta.url).href
+    //   this.load.image("buff_" + stat, imgBuff)
+    //   this.load.image("status_" + stat, imgDebuff)
+    // })
 
-    onTurnStackableBuffNames.forEach((stackableBuffName) => {
-      let img = new URL('../assets/buffs/' + stackableBuffName + '.png', import.meta.url).href
-      this.load.image("buff_" + stackableBuffName, img)
-    })
-    onTurnStackableStatusNames.forEach((stackableStatusName) => {
-      let img = new URL('../assets/status/' + stackableStatusName + '.png', import.meta.url).href
-      this.load.image("buff_" + stackableStatusName, img)
-    })
-    let img = new URL('../assets/status/stun.png', import.meta.url).href
-    this.load.image("status_stun", img)
+    // onTurnStackableBuffNames.forEach((stackableBuffName) => {
+    //   let img = new URL('../assets/buffs/' + stackableBuffName + '.png', import.meta.url).href
+    //   this.load.image("buff_" + stackableBuffName, img)
+    // })
+    // onTurnStackableStatusNames.forEach((stackableStatusName) => {
+    //   let img = new URL('../assets/status/' + stackableStatusName + '.png', import.meta.url).href
+    //   console.log("buff_" + stackableStatusName)
+    //   this.load.image("buff_" + stackableStatusName, img)
+    // })
+    // let img = new URL('../assets/status/stun.png', import.meta.url).href
+    // this.load.image("status_stun", img)
   }
 
   loadMusicLoop(musicName: string = 'battle'){
-    let sound = new URL('../assets/sound/music/' + musicName + '.mp3', import.meta.url).href
-    this.load.audio('battleLoop', sound);
+    // let music = new URL('../assets/sound/music/' + musicName + '.mp3', import.meta.url).href
+    this.load.audio('battleLoop', music);
   }
 
   createLoadingScreen(){

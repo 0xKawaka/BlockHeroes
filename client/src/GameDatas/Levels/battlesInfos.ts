@@ -5,134 +5,54 @@ const battlesInfos = {
     {
       background: 'battle1',
       names: [
-        'nereus'
-      ],
-      levels: [
-        1
-      ],
-      ranks: [
-        1
-      ],
-      energyCost: 0
-    },
-    {
-      background: 'battle1',
-      names: [
-        'wellan',
-        'ember'
-      ],
-      levels: [
-        1,
-        1
-      ],
-      ranks: [
-        1,
-        1
-      ],
-      energyCost: 0
-    },
-    {
-      background: 'battle1',
-      names: [
-        'wellan',
-        'molten',
-        'bane'
-      ],
-      levels: [
-        2,
-        1,
-        2
-      ],
-      ranks: [
-        1,
-        1,
-        1
-      ],
-      energyCost: 0
-    },
-    {
-      background: 'battle1',
-      names: [
-        'rex'
-      ],
-      levels: [
-        7
-      ],
-      ranks: [
-        1
-      ],
-      energyCost: 0
-    },
-    {
-      background: 'battle1',
-      names: [
-        'nereus',
-        'marella',
-        'celeste'
-      ],
-      levels: [
-        3,
-        3,
-        3
-      ],
-      ranks: [
-        1,
-        1,
-        1
-      ],
-      energyCost: 0
-    },
-    {
-      background: 'battle1',
-      names: [
-        'wellan',
-        'bane',
-        'molten',
-        'ember'
-      ],
-      levels: [
-        3,
-        3,
-        3,
-        3
-      ],
-      ranks: [
-        1,
-        1,
-        1,
-        1
-      ],
-      energyCost: 0
-    },
-    {
-      background: 'battle1',
-      names: [
-        'nereus',
-        'rex',
-        'marella',
-        'celeste'
-      ],
-      levels: [
-        4,
-        4,
-        4,
-        4
-      ],
-      ranks: [
-        1,
-        1,
-        1,
-        1
-      ],
-      energyCost: 0
-    },
-    {
-      background: 'battle1',
-      names: [
-        'elric',
-        'marella',
         'sirocco',
-        'celeste'
+        'sirocco',
+        'sirocco',
+        'sirocco'
+      ],
+      levels: [
+        1,
+        1,
+        1,
+        1
+      ],
+      ranks: [
+        1,
+        1,
+        1,
+        1
+      ],
+      energyCost: 0
+    },
+    {
+      background: 'battle1',
+      names: [
+        'wellan',
+        'wellan',
+        'marella',
+        'sirocco'
+      ],
+      levels: [
+        1,
+        1,
+        1,
+        1
+      ],
+      ranks: [
+        1,
+        1,
+        1,
+        1
+      ],
+      energyCost: 1
+    },
+    {
+      background: 'battle1',
+      names: [
+        'wellan',
+        'wellan',
+        'elandor',
+        'sirocco'
       ],
       levels: [
         5,
@@ -146,21 +66,43 @@ const battlesInfos = {
         1,
         1
       ],
-      energyCost: 0
+      energyCost: 1
     },
     {
       background: 'battle1',
       names: [
-        'elric',
+        'marella',
+        'marella',
+        'elandor',
+        'sirocco'
+      ],
+      levels: [
+        10,
+        10,
+        10,
+        10
+      ],
+      ranks: [
+        1,
+        1,
+        1,
+        1
+      ],
+      energyCost: 1
+    },
+    {
+      background: 'battle1',
+      names: [
+        'marella',
+        'elandor',
         'sirocco',
-        'ember',
-        'diana'
+        'sirocco'
       ],
       levels: [
-        7,
-        7,
-        7,
-        7
+        20,
+        20,
+        20,
+        20
       ],
       ranks: [
         1,
@@ -168,20 +110,7 @@ const battlesInfos = {
         1,
         1
       ],
-      energyCost: 0
-    },
-    {
-      background: 'battle1',
-      names: [
-        'janus'
-      ],
-      levels: [
-        25
-      ],
-      ranks: [
-        1
-      ],
-      energyCost: 0
+      energyCost: 1
     }
   ]
 };
