@@ -6,7 +6,7 @@ import RunesDisplay from "./RunesDisplay"
 import StatsDisplay from "./StatsDisplay"
 import SpellsPanel from "./SpellsPanel"
 import { GameAccount } from "../../Types/toriiTypes"
-import { log } from "console"
+import star from "../../assets/icons/star.png"
 
 type HeroPanelProps = {
   gameAccount: GameAccount,
@@ -57,6 +57,11 @@ export default function HeroPanel({gameAccount, heroIndex, heroInfos, runesList,
           <div className="HeroNameLevelContainer">
             <div className="HeroName">{heroInfos.name[0].toUpperCase() + heroInfos.name.slice(1)}</div>
             <div className="HeroLevel">Lvl {heroInfos.level}</div>
+            <div className="HeroPanelStars">
+              {Array.from({ length: heroInfos.rank + 1 }).map((_, index) => (
+                <img key={index} src={star} alt="star" className="HeroPanelStar" />
+              ))}
+            </div>
           </div>
           <RunesDisplay heroInfos={heroInfos} runesList={runesList} handleRuneClick={handleRuneClick} />
           <StatsDisplay heroInfos={heroInfos} />

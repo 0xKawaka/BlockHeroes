@@ -1,0 +1,22 @@
+kind = "DojoModel"
+class_hash = "0x10885ebdee55ba7c139183494b463521d9e49a4e5ec8ea638b2f295b731f63d"
+original_class_hash = "0x10885ebdee55ba7c139183494b463521d9e49a4e5ec8ea638b2f295b731f63d"
+abi = "manifests/dev/base/abis/models/game-ArenaTeam-72603bca.json"
+tag = "game-ArenaTeam"
+qualified_path = "game::models::storage::arena::arenaTeam::arena_team"
+manifest_name = "game-ArenaTeam-72603bca"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "index"
+type = "u32"
+key = true
+
+[[members]]
+name = "heroIndex"
+type = "u32"
+key = false

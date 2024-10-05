@@ -9,17 +9,22 @@ import { useDojo } from "../dojo/useDojo.tsx";
 export default function DojoWrapper() {
   const [setupResult, setSetupResult] = useState<SetupResult | null>(null);
 
-  // Fetch the setup result once on mount
   useEffect(() => {
     setup(dojoConfig).then(setSetupResult);
   }, []);
 
   if (!setupResult) {
     console.log("Loading...");
-    return <div className="dojoWrapperLoading">Loading game...</div>;
+    return (
+      <div className="dojoWrapperLoading">
+        <div className="loading-text">Loading game</div>
+        <div className="loading-bar">
+          <div className="loading-bar-inner"></div>
+        </div>
+      </div>
+    );
   }
 
-  // Inner component to use `useDojo` after the provider has been set
   function WrappedGamePage() {
     const { setup: { toriiClient }, account } = useDojo();
     console.log("WrappedGamePage")
@@ -28,8 +33,8 @@ export default function DojoWrapper() {
 
   return (
     <DojoProvider value={setupResult}>
-      {/* Pass toriiClient and account to GamePage */}
       <WrappedGamePage />
     </DojoProvider>
   );
 }
+

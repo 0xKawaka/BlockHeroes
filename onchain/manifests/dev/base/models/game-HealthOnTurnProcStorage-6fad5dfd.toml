@@ -1,0 +1,32 @@
+kind = "DojoModel"
+class_hash = "0x62e4ff4ff470a43cbfe96c82b2eb2873f65725a4a0825030b880abf47a0fb28"
+original_class_hash = "0x62e4ff4ff470a43cbfe96c82b2eb2873f65725a4a0825030b880abf47a0fb28"
+abi = "manifests/dev/base/abis/models/game-HealthOnTurnProcStorage-6fad5dfd.json"
+tag = "game-HealthOnTurnProcStorage"
+qualified_path = "game::models::storage::battles::healthOnTurnProcStorage::health_on_turn_proc_storage"
+manifest_name = "game-HealthOnTurnProcStorage-6fad5dfd"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "map"
+type = "u16"
+key = true
+
+[[members]]
+name = "entityIndex"
+type = "u32"
+key = true
+
+[[members]]
+name = "index"
+type = "u32"
+key = true
+
+[[members]]
+name = "healthOnTurnProc"
+type = "HealthOnTurnProc"
+key = false

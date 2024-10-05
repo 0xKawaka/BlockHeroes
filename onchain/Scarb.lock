@@ -19,4 +19,10 @@ name = "game"
 version = "0.1.0"
 dependencies = [
  "dojo",
+ "origami_random",
 ]
+
+[[package]]
+name = "origami_random"
+version = "1.0.0-alpha.8"
+source = "git+https://github.com/dojoengine/origami?tag=v1.0.0-alpha.9#44b741e44846b9a1edd0167ee17c77a8fedae91e"

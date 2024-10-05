@@ -1,0 +1,17 @@
+kind = "DojoModel"
+class_hash = "0x29f4b6ce434a8435858261dc3962a97c3671d3f77bcfff205955c139a3e859b"
+original_class_hash = "0x29f4b6ce434a8435858261dc3962a97c3671d3f77bcfff205955c139a3e859b"
+abi = "manifests/dev/base/abis/models/game-HeroesByRank-5dd60875.json"
+tag = "game-HeroesByRank"
+qualified_path = "game::models::storage::heroesByRank::heroes_by_rank"
+manifest_name = "game-HeroesByRank-5dd60875"
+
+[[members]]
+name = "rank"
+type = "u16"
+key = true
+
+[[members]]
+name = "heroes"
+type = "Array<felt252>"
+key = false

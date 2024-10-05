@@ -1,0 +1,22 @@
+kind = "DojoModel"
+class_hash = "0x62e8be1ffeeab2d0bf749a5222fcd9d4bf5711de4a7d03d06052c8375ad7fbf"
+original_class_hash = "0x62e8be1ffeeab2d0bf749a5222fcd9d4bf5711de4a7d03d06052c8375ad7fbf"
+abi = "manifests/dev/base/abis/models/game-GemsRewards-7f7e8419.json"
+tag = "game-GemsRewards"
+qualified_path = "game::models::storage::arena::gemsRewards::gems_rewards"
+manifest_name = "game-GemsRewards-7f7e8419"
+
+[[members]]
+name = "index"
+type = "u32"
+key = true
+
+[[members]]
+name = "minRank"
+type = "u64"
+key = false
+
+[[members]]
+name = "gems"
+type = "u64"
+key = false

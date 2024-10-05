@@ -61,15 +61,29 @@ img {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-}
-
-.GamePageMenuButton {
   cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .GamePageMenuButtonIcon {
   image-rendering: pixelated;
   height: 13rem;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.GamePageMenuButton:hover .GamePageMenuButtonIcon {
+  transform: scale(1.1); /* Slightly enlarges the icon on hover */
+  filter: brightness(1.1); /* Makes the icon a bit brighter */
+}
+
+.GamePageMenuButton:hover .GamePageMenuButtonText {
+  transform: scale(1.1); /* Slightly enlarges the icon on hover */
+}
+
+.GamePageMenuButtonText {
+  font-size: 2rem;
+  color: white;
+  transition: transform 0.3s ease; /* Smooth transition for color change */
 }
 
 .ArrowBackContainer {

@@ -3,15 +3,37 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* position: relative; */
+  position: relative; /* Allow star positioning relative to the container */
   gap: 0.6rem;
 }
 
+.HeroMiniatureImgAndRankContainer {
+  position: relative;
+}
+.HeroMiniatureImage {
+  display: block;
+  border-radius: 8px;
+}
+
+.HeroMiniatureGrayedImage {
+  filter: grayscale(88%);
+}
 
 .HeroMiniatureLevel {
   font-size: 1.6rem;
 }
 
-.HeroMiniatureGrayedImage {
-  filter: grayscale(88%);
+/* Stars container, positioned at the bottom of the hero image */
+.HeroMiniatureStars {
+  position: absolute;
+  display: flex;
+  gap: 0; /* No gap, rely on margin for overlap */
+  top: 0;
+  left: 10%;
+}
+
+/* Style for individual star images with overlap */
+.HeroStar {
+  width: 2.1rem;
+  margin-left: -0.6rem; 
 }

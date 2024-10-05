@@ -1,0 +1,25 @@
+kind = "DojoContract"
+class_hash = "0x2819cdb1f6ac474b4ae08db648962b84cf46bc141828ae648edc899113bf2a"
+original_class_hash = "0x2819cdb1f6ac474b4ae08db648962b84cf46bc141828ae648edc899113bf2a"
+base_class_hash = "0x0"
+abi = "manifests/dev/base/abis/contracts/game-Game-1a8648a1.json"
+reads = []
+writes = []
+init_calldata = []
+tag = "game-Game"
+systems = [
+    "startPvpBattle",
+    "playArenaTurn",
+    "startBattle",
+    "playTurn",
+    "claimGlobalRewards",
+    "initPvp",
+    "setPvpTeam",
+    "equipRune",
+    "unequipRune",
+    "upgradeRune",
+    "mintHero",
+    "mintRune",
+    "createAccount",
+]
+manifest_name = "game-Game-1a8648a1"

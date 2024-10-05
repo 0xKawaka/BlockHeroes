@@ -1,0 +1,22 @@
+kind = "DojoModel"
+class_hash = "0x580b7aa0d66c1a22334418b1212fdedb86ea7eb91f5781af3912e95fe7b4c59"
+original_class_hash = "0x580b7aa0d66c1a22334418b1212fdedb86ea7eb91f5781af3912e95fe7b4c59"
+abi = "manifests/dev/base/abis/models/game-Runes-34b26885.json"
+tag = "game-Runes"
+qualified_path = "game::models::account::runes::runes"
+manifest_name = "game-Runes-34b26885"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "index"
+type = "u32"
+key = true
+
+[[members]]
+name = "rune"
+type = "Rune"
+key = false

@@ -2,22 +2,21 @@ import "./BattleOverview.css"
 import HeroMiniature from "./HeroMiniature"
 import portraitsDict from "../../assets/portraits/portraitsDict"
 import energy from "../../assets/icons/energy.png"
+import { EnemyInfos } from "../../Types/apiTypes"
 
 type BattleOverviewProps = {
-  enemiesNames: string[],
-  enemiesLevels: number[],
-  // enemiesRanks: number[],
+  enemies: EnemyInfos[],
   energyCost: number
 }
 
-export default function BattleOverview({enemiesNames, enemiesLevels, energyCost }: BattleOverviewProps) {
+export default function BattleOverview({enemies, energyCost }: BattleOverviewProps) {
 
   return(
   <div className="BattleOverview">
     <div className="EnemiesOverviewContainer">
-      {enemiesNames.map((enemyName, i) => {
+      {enemies.map((enemy, i) => {
         return (
-          <HeroMiniature key={i} image={portraitsDict[enemyName]} rank={1} level={enemiesLevels[i]} imageWidth="9rem"></HeroMiniature>
+          <HeroMiniature key={i} image={portraitsDict[enemy.name]} rank={enemy.rank} level={enemy.level} imageWidth="9rem"></HeroMiniature>
         )
       }
       )}

@@ -1,0 +1,17 @@
+kind = "DojoModel"
+class_hash = "0x40561ecee3f7d868f88d9a1f6deedf65f5d85e64f0d3bd2a167bf19bf8616bf"
+original_class_hash = "0x40561ecee3f7d868f88d9a1f6deedf65f5d85e64f0d3bd2a167bf19bf8616bf"
+abi = "manifests/dev/base/abis/models/game-Config-60017ca9.json"
+tag = "game-Config"
+qualified_path = "game::models::storage::config::config"
+manifest_name = "game-Config-60017ca9"
+
+[[members]]
+name = "key"
+type = "ConfigType"
+key = true
+
+[[members]]
+name = "value"
+type = "u64"
+key = false

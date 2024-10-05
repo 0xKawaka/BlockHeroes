@@ -24,8 +24,8 @@ manifest_name = "dojo-base"
 [[contracts]]
 kind = "DojoContract"
 address = "0x1f355961284c21fced60460e371443a9b3a192b3e5ae755ed9428dbbb4ba68f"
-class_hash = "0x7b3998b15a90508ae57023b4aed8a986cbc66be830893a5d57a538729105d2d"
-original_class_hash = "0x7b3998b15a90508ae57023b4aed8a986cbc66be830893a5d57a538729105d2d"
+class_hash = "0x2819cdb1f6ac474b4ae08db648962b84cf46bc141828ae648edc899113bf2a"
+original_class_hash = "0x2819cdb1f6ac474b4ae08db648962b84cf46bc141828ae648edc899113bf2a"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/game-Game-1a8648a1.json"
 reads = []
@@ -52,8 +52,8 @@ manifest_name = "game-Game-1a8648a1"
 [[contracts]]
 kind = "DojoContract"
 address = "0x7db0ee87b66abc2184e93e5f322d9753aa2dd71890cd1ffddfacebde2cbc49e"
-class_hash = "0x7f583cb4cb5e550a2f43e2d508d6d76101e41b4c097ded8a4180fe1cc43b091"
-original_class_hash = "0x7f583cb4cb5e550a2f43e2d508d6d76101e41b4c097ded8a4180fe1cc43b091"
+class_hash = "0x615e6cc51fd67d366f280c2d85e086fffd4c91eb8ce11ab67e458003be90b5"
+original_class_hash = "0x615e6cc51fd67d366f280c2d85e086fffd4c91eb8ce11ab67e458003be90b5"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/game-Settings-4d1bc91c.json"
 reads = []
@@ -273,8 +273,8 @@ key = false
 
 [[models]]
 kind = "DojoModel"
-class_hash = "0x15205dc9df776e52e06082fc0738ced681aafa8c5bf77f821f54e5c033533a8"
-original_class_hash = "0x15205dc9df776e52e06082fc0738ced681aafa8c5bf77f821f54e5c033533a8"
+class_hash = "0x3a788871dbedc521051a71d5b83507bc28d186f757ab3ca5b48474b95b3cdb5"
+original_class_hash = "0x3a788871dbedc521051a71d5b83507bc28d186f757ab3ca5b48474b95b3cdb5"
 abi = "manifests/dev/deployment/abis/models/game-BaseHero-17593f72.json"
 tag = "game-BaseHero"
 qualified_path = "game::models::storage::baseHero::base_hero"
@@ -284,6 +284,11 @@ manifest_name = "game-BaseHero-17593f72"
 name = "heroName"
 type = "felt252"
 key = true
+
+[[models.members]]
+name = "rank"
+type = "u16"
+key = false
 
 [[models.members]]
 name = "statistics"
@@ -366,6 +371,25 @@ key = true
 [[models.members]]
 name = "value"
 type = "u32"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x40561ecee3f7d868f88d9a1f6deedf65f5d85e64f0d3bd2a167bf19bf8616bf"
+original_class_hash = "0x40561ecee3f7d868f88d9a1f6deedf65f5d85e64f0d3bd2a167bf19bf8616bf"
+abi = "manifests/dev/deployment/abis/models/game-Config-60017ca9.json"
+tag = "game-Config"
+qualified_path = "game::models::storage::config::config"
+manifest_name = "game-Config-60017ca9"
+
+[[models.members]]
+name = "key"
+type = "ConfigType"
+key = true
+
+[[models.members]]
+name = "value"
+type = "u64"
 key = false
 
 [[models]]
@@ -535,6 +559,25 @@ key = true
 [[models.members]]
 name = "hero"
 type = "Hero"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x29f4b6ce434a8435858261dc3962a97c3671d3f77bcfff205955c139a3e859b"
+original_class_hash = "0x29f4b6ce434a8435858261dc3962a97c3671d3f77bcfff205955c139a3e859b"
+abi = "manifests/dev/deployment/abis/models/game-HeroesByRank-5dd60875.json"
+tag = "game-HeroesByRank"
+qualified_path = "game::models::storage::heroesByRank::heroes_by_rank"
+manifest_name = "game-HeroesByRank-5dd60875"
+
+[[models.members]]
+name = "rank"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "heroes"
+type = "Array<felt252>"
 key = false
 
 [[models]]
@@ -762,6 +805,25 @@ key = true
 [[models.members]]
 name = "skill"
 type = "felt252"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x72ec2bde2abf9227ddf8e9e18abaa0010aafb17660333b907d71951208b156b"
+original_class_hash = "0x72ec2bde2abf9227ddf8e9e18abaa0010aafb17660333b907d71951208b156b"
+abi = "manifests/dev/deployment/abis/models/game-SummonRates-82b066b0.json"
+tag = "game-SummonRates"
+qualified_path = "game::models::storage::summonRates::summon_rates"
+manifest_name = "game-SummonRates-82b066b0"
+
+[[models.members]]
+name = "key"
+type = "u16"
+key = true
+
+[[models.members]]
+name = "rates"
+type = "Array<u16>"
 key = false
 
 [[models]]

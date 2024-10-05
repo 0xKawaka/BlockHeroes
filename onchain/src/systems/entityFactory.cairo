@@ -103,26 +103,26 @@ mod EntityFactory {
             set!(
                 world,
                 (
-                    BaseHero { heroName: 'sirocco', rank: 1, statistics: statistics::new(1500, 190, 120, 190, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'wellan', rank: 1, statistics: statistics::new(1500, 165, 160, 175, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'marella', rank: 1, statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'elandor', rank: 1, statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'diana', rank: 1, statistics: statistics::new(1500, 185, 124, 191, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'elric', rank: 1, statistics: statistics::new(1500, 170, 160, 170, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'nereus', rank: 1, statistics: statistics::new(1500, 185, 135, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'rex', rank: 1, statistics: statistics::new(1500, 180, 160, 160, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'celeste', rank: 1, statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'oakheart', rank: 1, statistics: statistics::new(1500, 170, 160, 170, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'sylvara', rank: 1, statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'bane', rank: 1, statistics: statistics::new(1500, 190, 125, 185, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'ember', rank: 1, statistics: statistics::new(1500, 165, 155, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'molten', rank: 3, statistics: statistics::new(1500, 180, 160, 160, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'solas', rank: 3, statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'solveig', rank: 3, statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'janus', rank: 2, statistics: statistics::new(1500, 200, 110, 190, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'horus', rank: 2, statistics: statistics::new(1500, 165, 155, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'jabari', rank: 2, statistics: statistics::new(1500, 185, 135, 180, 10, 200), skillsCount: 3 },
-                    BaseHero { heroName: 'khamsin', rank: 2, statistics: statistics::new(1500, 180, 140, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'sirocco', rank: 0, statistics: statistics::new(1500, 190, 120, 190, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'wellan', rank: 0, statistics: statistics::new(1500, 165, 160, 175, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'marella', rank: 0, statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'elandor', rank: 0, statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'diana', rank: 0, statistics: statistics::new(1500, 185, 124, 191, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'elric', rank: 0, statistics: statistics::new(1500, 170, 160, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'nereus', rank: 0, statistics: statistics::new(1500, 185, 135, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'rex', rank: 0, statistics: statistics::new(1500, 180, 160, 160, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'celeste', rank: 0, statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'oakheart', rank: 0, statistics: statistics::new(1500, 170, 160, 170, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'sylvara', rank: 0, statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'bane', rank: 0, statistics: statistics::new(1500, 190, 125, 185, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'ember', rank: 0, statistics: statistics::new(1500, 165, 155, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'molten', rank: 2, statistics: statistics::new(1500, 180, 160, 160, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'solas', rank: 2, statistics: statistics::new(1500, 150, 170, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'solveig', rank: 2, statistics: statistics::new(1500, 185, 130, 185, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'janus', rank: 1, statistics: statistics::new(1500, 200, 110, 190, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'horus', rank: 1, statistics: statistics::new(1500, 165, 155, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'jabari', rank: 1, statistics: statistics::new(1500, 185, 135, 180, 10, 200), skillsCount: 3 },
+                    BaseHero { heroName: 'khamsin', rank: 1, statistics: statistics::new(1500, 180, 140, 180, 10, 200), skillsCount: 3 },
 
                 )
             )
@@ -131,9 +131,9 @@ mod EntityFactory {
             set!(
                 world,
                 (
-                    HeroesByRank { rank: 1, heroes: array!['sirocco', 'wellan', 'marella', 'elandor', 'diana', 'elric', 'nereus', 'rex', 'celeste', 'oakheart', 'sylvara', 'bane', 'ember'] },
-                    HeroesByRank { rank: 2, heroes: array!['janus', 'horus', 'jabari', 'khamsin'] },
-                    HeroesByRank { rank: 3, heroes: array!['molten', 'solas', 'solveig'] }
+                    HeroesByRank { rank: 0, heroes: array!['sirocco', 'wellan', 'marella', 'elandor', 'diana', 'elric', 'nereus', 'rex', 'celeste', 'oakheart', 'sylvara', 'bane', 'ember'] },
+                    HeroesByRank { rank: 1, heroes: array!['janus', 'horus', 'jabari', 'khamsin'] },
+                    HeroesByRank { rank: 2, heroes: array!['molten', 'solas', 'solveig'] }
                 )
             )
         }

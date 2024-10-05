@@ -91,7 +91,7 @@ function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesLis
             {battlesList !== undefined && battlesList.slice(0, mapProgress[Maps.Campaign] + 1).map((battle, i) => {
               return (  
                 <div className="BattleOverviewContainer" key={i} onClick={() => setSelectedBattleIndex(i)}>
-                  <BattleOverview enemiesNames={battle.enemies.map((enemy) => {return enemy.name})} enemiesLevels={battle.enemies.map((enemy) => {return enemy.level})} energyCost={battle.energyCost} />
+                  <BattleOverview enemies={battle.enemies} energyCost={battle.energyCost} />
                 </div>
               )
             })}

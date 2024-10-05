@@ -7,7 +7,6 @@ enum ConfigType {
     StartingCrystals,
     StartingGems,
     StartingSummonChests,
-    MaxBaseHeroRank,
     TotalHeroesCount,
 }
 
@@ -30,8 +29,7 @@ fn configTypefromU64(value: u64) -> ConfigType {
         4 => ConfigType::StartingCrystals,
         5 => ConfigType::StartingGems,
         6 => ConfigType::StartingSummonChests,
-        7 => ConfigType::MaxBaseHeroRank,
-        8 => ConfigType::TotalHeroesCount,
+        7 => ConfigType::TotalHeroesCount,
         _ => panic!("Invalid value for ConfigType"),
     }
 }

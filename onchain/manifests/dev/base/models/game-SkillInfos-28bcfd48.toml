@@ -1,0 +1,42 @@
+kind = "DojoModel"
+class_hash = "0x12e7c2128ef58937885a3ee23be41d68edfda472126517eea5118e79ce986e2"
+original_class_hash = "0x12e7c2128ef58937885a3ee23be41d68edfda472126517eea5118e79ce986e2"
+abi = "manifests/dev/base/abis/models/game-SkillInfos-28bcfd48.json"
+tag = "game-SkillInfos"
+qualified_path = "game::models::storage::skill::skillInfos::skill_infos"
+manifest_name = "game-SkillInfos-28bcfd48"
+
+[[members]]
+name = "name"
+type = "felt252"
+key = true
+
+[[members]]
+name = "cooldown"
+type = "u8"
+key = false
+
+[[members]]
+name = "damage"
+type = "Damage"
+key = false
+
+[[members]]
+name = "heal"
+type = "Heal"
+key = false
+
+[[members]]
+name = "targetType"
+type = "TargetType"
+key = false
+
+[[members]]
+name = "accuracy"
+type = "u16"
+key = false
+
+[[members]]
+name = "buffsCount"
+type = "u16"
+key = false

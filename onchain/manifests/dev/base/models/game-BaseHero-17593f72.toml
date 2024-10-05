@@ -1,0 +1,27 @@
+kind = "DojoModel"
+class_hash = "0x3a788871dbedc521051a71d5b83507bc28d186f757ab3ca5b48474b95b3cdb5"
+original_class_hash = "0x3a788871dbedc521051a71d5b83507bc28d186f757ab3ca5b48474b95b3cdb5"
+abi = "manifests/dev/base/abis/models/game-BaseHero-17593f72.json"
+tag = "game-BaseHero"
+qualified_path = "game::models::storage::baseHero::base_hero"
+manifest_name = "game-BaseHero-17593f72"
+
+[[members]]
+name = "heroName"
+type = "felt252"
+key = true
+
+[[members]]
+name = "rank"
+type = "u16"
+key = false
+
+[[members]]
+name = "statistics"
+type = "Statistics"
+key = false
+
+[[members]]
+name = "skillsCount"
+type = "u8"
+key = false

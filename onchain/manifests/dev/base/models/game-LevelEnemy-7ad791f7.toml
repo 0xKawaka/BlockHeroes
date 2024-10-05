@@ -1,0 +1,27 @@
+kind = "DojoModel"
+class_hash = "0xea0fc72193129804e1a4f1422d8b541e32528cef7dd6efd11970860cfa8515"
+original_class_hash = "0xea0fc72193129804e1a4f1422d8b541e32528cef7dd6efd11970860cfa8515"
+abi = "manifests/dev/base/abis/models/game-LevelEnemy-7ad791f7.json"
+tag = "game-LevelEnemy"
+qualified_path = "game::models::storage::level::levelEnemy::level_enemy"
+manifest_name = "game-LevelEnemy-7ad791f7"
+
+[[members]]
+name = "map"
+type = "u16"
+key = true
+
+[[members]]
+name = "level"
+type = "u16"
+key = true
+
+[[members]]
+name = "index"
+type = "u16"
+key = true
+
+[[members]]
+name = "hero"
+type = "Hero"
+key = false

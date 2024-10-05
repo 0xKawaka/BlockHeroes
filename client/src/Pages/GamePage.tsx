@@ -9,7 +9,7 @@ import summonIcon from '../assets/icons/Menu_SummonIcon.png'
 import mapIcon from '../assets/icons/Menu_MapIcon2.png'
 import questsIcon from '../assets/icons/Menu_QuestsIcon.png'
 import Summons from './Components/Summons'
-import { BaseHeroInfos, HeroesFactory } from '../Classes/Heroes/HeroesFactory'
+import { HeroesFactory } from '../Classes/Heroes/HeroesFactory'
 import { HeroBlockchain } from '../Types/blockchainTypes'
 import MyHeroes from './Components/MyHeroes'
 import RuneFactory from '../Classes/Runes/RuneFactory'
@@ -27,7 +27,7 @@ import ToriiGetter from '../dojo/ToriiGetter'
 import { GameAccount, Hero } from '../Types/toriiTypes'
 import { HeroInfos, RuneInfos } from '../Types/apiTypes'
 import { Account } from 'starknet'
-import { ArenaAccount, ArenaFullAccount, GlobalQuest } from '../Types/customTypes'
+import { ArenaAccount, ArenaFullAccount, BaseHeroInfos, GlobalQuest } from '../Types/customTypes'
 import { BurnerAccount } from '@dojoengine/create-burner'
 import { ToriiClient } from '@dojoengine/torii-client'
 import { AllyOrEnemy } from '../dojo/typescript/models.gen';
@@ -143,6 +143,7 @@ function GamePage({toriiClient, account} : GamePageProps) {
         setGlobalQuests(globalQuests);
         let toriiRunes = ToriiGetter.getAllRunes(blockchainAccount.address, gameAccount.runesCount, Runes);
         let toriiHeroes = ToriiGetter.getAllHeroes(blockchainAccount.address, gameAccount.heroesCount, Heroes);
+        console.log("toriiHeroes", toriiHeroes);
         runes = RuneFactory.createRunes(toriiRunes);
         setBaseHeroes(HeroesFactory.createBaseHeroes());
         heroes = HeroesFactory.createHeroes(toriiHeroes, runes);

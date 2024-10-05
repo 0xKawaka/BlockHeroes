@@ -102,7 +102,7 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
               if(heroInfos === undefined) return (<></>)
               return (
                 <div className="HeroMiniatureWrapper" key={i} onClick={() =>  handleHeroClick(heroId)}>
-                  <HeroMiniature image={portraitsDict[heroInfos.name]} rank={1} level={heroInfos.level} imageWidth="9rem"></HeroMiniature>
+                  <HeroMiniature image={portraitsDict[heroInfos.name]} rank={heroInfos.rank} level={heroInfos.level} imageWidth="9rem"></HeroMiniature>
                 </div>
               )
             }
@@ -115,14 +115,14 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
             {enemies == undefined && enemiesNames && enemiesLevels && enemiesNames.map((enemyName, i) => {
               return (
                 <div className="HeroMiniatureWrapper" key={i}>
-                  <HeroMiniature image={portraitsDict[enemyName]} rank={1} level={enemiesLevels[i]} imageWidth="9rem"></HeroMiniature>
+                  <HeroMiniature image={portraitsDict[enemyName]} rank={0} level={enemiesLevels[i]} imageWidth="9rem"></HeroMiniature>
                 </div>
               )
             })}
             {enemies && enemies.map((enemy, i) => {
               return (
                 <div className="HeroMiniatureWrapper" key={i}>
-                  <HeroMiniature image={portraitsDict[enemy.name]} rank={1} level={enemy.level} imageWidth="9rem"></HeroMiniature>
+                  <HeroMiniature image={portraitsDict[enemy.name]} rank={enemy.rank} level={enemy.level} imageWidth="9rem"></HeroMiniature>
                 </div>
               )
             })}

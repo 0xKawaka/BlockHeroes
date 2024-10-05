@@ -1,0 +1,42 @@
+kind = "DojoModel"
+class_hash = "0x3366b7583195591982f44d17f6710496e43dda52efffdde396fd809dd5ae0fe"
+original_class_hash = "0x3366b7583195591982f44d17f6710496e43dda52efffdde396fd809dd5ae0fe"
+abi = "manifests/dev/base/abis/models/game-BattleStorage-3e3288d7.json"
+tag = "game-BattleStorage"
+qualified_path = "game::models::storage::battles::battleStorage::battle_storage"
+manifest_name = "game-BattleStorage-3e3288d7"
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "map"
+type = "u16"
+key = true
+
+[[members]]
+name = "level"
+type = "u16"
+key = false
+
+[[members]]
+name = "entitiesCount"
+type = "u32"
+key = false
+
+[[members]]
+name = "aliveEntitiesCount"
+type = "u32"
+key = false
+
+[[members]]
+name = "isBattleOver"
+type = "bool"
+key = false
+
+[[members]]
+name = "isWaitingForPlayerAction"
+type = "bool"
+key = false

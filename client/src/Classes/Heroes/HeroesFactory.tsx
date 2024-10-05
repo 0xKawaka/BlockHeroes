@@ -6,8 +6,8 @@ import skillsDict from '../../GameDatas/Skills/skillsDict'
 import skillSets from '../../GameDatas/Skills/skillSets'
 import baseStatsDict from '../../GameDatas/Statistics/baseStats'
 import { attackBonusPerLevel, statsBonusPerLevel } from "../../GameDatas/constants";
-
-export type BaseHeroInfos = {name: string, spells: Array<Skill>, stats:HeroStats}
+import { BaseHeroInfos } from "../../Types/customTypes";
+import baseRankByHeroName from "../../GameDatas/ranks";
 
 export abstract class HeroesFactory {
   public static createBaseHeroes(): Array<BaseHeroInfos> {
@@ -16,6 +16,7 @@ export abstract class HeroesFactory {
       let baseStats = baseStatsDict[heroName];
       let baseHero: BaseHeroInfos = {
         name: heroName,
+        rank: baseRankByHeroName[heroName],
         spells: HeroesFactory.getSkills(skillSets[heroName], skillsDict),
         stats: baseStats
       }
@@ -53,11 +54,12 @@ export abstract class HeroesFactory {
 
   public static createSummonedHero(id: number, name: string): HeroInfos {
     let baseStats = HeroesFactory.computeBaseStats(1, 1, baseStatsDict[name])
+    let baseRank = baseRankByHeroName[name]
     let heroWithStatsAndSkills: HeroInfos = {
       id: id,
       name: name,
       level: 1,
-      rank: 1,
+      rank: baseRank,
       experience: 0,
       runesIds: [],
       spots: [],
@@ -80,7 +82,7 @@ export abstract class HeroesFactory {
           let enemyWithStatsAndSkills: EnemyInfos = {
             name: battle.names[i],
             level: battle.levels[i],
-            rank: battle.ranks[i],
+            rank: baseRankByHeroName[battle.names[i]],
             stats: HeroesFactory.computeBaseStats(battle.levels[i],battle.ranks[i], baseStatsDict[battle.names[i]]),
             spells: HeroesFactory.getSkills(skillSets[battle.names[i]], skillsDict),
           }

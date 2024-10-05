@@ -250,7 +250,7 @@ impl EntityImpl of EntityTrait {
         if(skillsNotOnCd.len() == 1) {
             return 0;
         }
-        let skillsNotOnCdIndex = rand8(seed, skillsNotOnCd.len());
+        let skillsNotOnCdIndex = rand8(seed, skillsNotOnCd.len().try_into().unwrap());
         let skillIndex = *skillsNotOnCd[skillsNotOnCdIndex.into()];
         return skillIndex;
     }

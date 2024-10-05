@@ -173,7 +173,7 @@ export interface BaseHero {
     heroName: BigInt;
     statistics: Statistics;
     skillsCount: Number;
-    
+    rank: Number;
 }
 export const StatisticsDefinition = {
     health: RecsType.Number,
@@ -189,6 +189,7 @@ export const BaseHeroDefinition = {
     heroName: RecsType.BigInt,
     statistics: StatisticsDefinition,
     skillsCount: RecsType.Number,
+    rank: RecsType.Number,
     
 };
 
@@ -1009,12 +1010,13 @@ export function defineContractComponents(world: World) {
                     heroName: RecsType.String,
                     statistics: StatisticsDefinition,
                     skillsCount: RecsType.Number,
+                    rank: RecsType.Number,
                 },
                 {
                     metadata: {
                         namespace: "game",
                         name: "BaseHero",
-                        types: ["felt252", "u8"],
+                        types: ["felt252", "u8", "u16"],
                         customTypes: ["Statistics"],
                     },
                 }

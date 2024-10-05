@@ -1,0 +1,17 @@
+kind = "DojoModel"
+class_hash = "0x72ec2bde2abf9227ddf8e9e18abaa0010aafb17660333b907d71951208b156b"
+original_class_hash = "0x72ec2bde2abf9227ddf8e9e18abaa0010aafb17660333b907d71951208b156b"
+abi = "manifests/dev/base/abis/models/game-SummonRates-82b066b0.json"
+tag = "game-SummonRates"
+qualified_path = "game::models::storage::summonRates::summon_rates"
+manifest_name = "game-SummonRates-82b066b0"
+
+[[members]]
+name = "key"
+type = "u16"
+key = true
+
+[[members]]
+name = "rates"
+type = "Array<u16>"
+key = false

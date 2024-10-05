@@ -44,12 +44,11 @@ mod Accounts {
     use game::models::hero::HeroTrait;
     use game::models::{account, account::{AccountImpl, AccountTrait, Account, heroes::Heroes, runes::Runes}};
     use game::models::storage::usernames::Usernames;
-    use game::models::storage::{config::{ConfigType, Config}, heroesByRank:: HeroesByRank};
+    use game::models::storage::{config::{ConfigType, Config}, heroesByRank::HeroesByRank, summonRates::SummonRates, baseHero::BaseHero};
     use game::models::{hero, hero::Hero, hero::HeroImpl, hero::rune, hero::EquippedRunesImpl, hero::rune::RuneImpl, hero::rune::Rune};
     use game::models::hero::rune::{RuneStatistic, RuneRarity, RuneType};
     use game::models::events::{Event, EventKey, HeroMinted, RuneMinted, NewAccount, TimestampEnergy, TimestampPvpEnergy};
-    use game::utils::random::{rand32};
-
+    use game::utils::random::{rand32, rand16};
     use super::IAccounts;
 
 
@@ -104,40 +103,63 @@ mod Accounts {
             let totalHeroesCount: u32 = get!(world, ConfigType::TotalHeroesCount, Config).value.try_into().unwrap();
             assert(totalHeroesCount > ownedHeroesNames.len(), 'All heroes owned');
 
-            let maxBaseHeroRank: u16 = get!(world, ConfigType::MaxBaseHeroRank, Config).value.try_into().unwrap();
-            // let randIndexRank = rand16(get_block_timestamp() + 1, maxBaseHeroRank) + 1;
-            // let heroesPossible: Array<felt252> = get!(world, randIndexRank, HeroesByRank).heroes;
-            let heroesPossible: Array<felt252> = array!['sirocco', 'wellan', 'marella', 'elandor', 'diana', 'elric', 'nereus', 'rex', 'celeste', 'oakheart', 'sylvara', 'bane', 'ember', 'molten', 'solas', 'solveig', 'janus', 'horus', 'jabari', 'khamsin'];
-            
-            let mut notOwnedHeroesIndexes: Array<u32> = Default::default();
-            let mut i: u32 = 0;
+            let summonRates: Array<u16> = get!(world, 0, SummonRates).rates;
+            let randIndexRank: u32 = rand16(get_block_timestamp(), 100).into();
+            let mut rank: u32 = summonRates.len() - 1;
+            let mut sum: u32 = 0;
             loop {
-                if i == heroesPossible.len() {
+                sum += (*summonRates[rank]).into();
+                if randIndexRank < sum {
                     break;
                 }
-                let mut j: u32 = 0;
-                let mut isOwned = false;
-                loop {
-                    if j == ownedHeroesNames.len() {
-                        break;
-                    }
-                    if heroesPossible[i] == ownedHeroesNames[j] {
-                        isOwned = true;
-                        break;
-                    }
-                    j += 1;
-                };
-                if !isOwned {
-                    notOwnedHeroesIndexes.append(i);
-                }
-                i += 1;
+                rank -= 1;
             };
-            let randIndex = rand32(get_block_timestamp(), notOwnedHeroesIndexes.len());
-            let heroName = *heroesPossible[*notOwnedHeroesIndexes[randIndex]];
-            set!(world,(Heroes {owner: accountAdrs, index: acc.heroesCount, hero: hero::new(acc.heroesCount, heroName, 1, 1)}));
-            acc.heroesCount += 1;
-            set!(world, (acc));
-            emit!(world, HeroMinted {owner: accountAdrs, id: acc.heroesCount - 1, name: heroName})
+
+            loop {
+                let rank16: u16 = rank.try_into().unwrap();
+                let heroesPossible: Array<felt252> = get!(world, rank16, HeroesByRank).heroes;
+            
+                let mut notOwnedHeroesIndexes: Array<u32> = Default::default();
+                let mut i: u32 = 0;
+                loop {
+                    if i == heroesPossible.len() {
+                        break;
+                    }
+                    let mut j: u32 = 0;
+                    let mut isOwned = false;
+                    loop {
+                        if j == ownedHeroesNames.len() {
+                            break;
+                        }
+                        if heroesPossible[i] == ownedHeroesNames[j] {
+                            isOwned = true;
+                            break;
+                        }
+                        j += 1;
+                    };
+                    if !isOwned {
+                        notOwnedHeroesIndexes.append(i);
+                    }
+                    i += 1;
+                };
+
+                if(notOwnedHeroesIndexes.len() > 0) {
+                    let randIndex = rand32(get_block_timestamp(), notOwnedHeroesIndexes.len());
+                    let heroName = *heroesPossible[*notOwnedHeroesIndexes[randIndex]];
+                    let baseRank = get!(world, heroName, BaseHero).rank;
+                    set!(world,(Heroes {owner: accountAdrs, index: acc.heroesCount, hero: hero::new(acc.heroesCount, heroName, 1, baseRank)}));
+                    acc.heroesCount += 1;
+                    set!(world, (acc));
+                    emit!(world, HeroMinted {owner: accountAdrs, id: acc.heroesCount - 1, name: heroName});
+                    break;
+                }
+                else if(rank == summonRates.len() - 1) {
+                    break;
+                }
+                else {
+                    rank += 1;
+                }
+            };
         }
         fn mintRune(world: IWorldDispatcher, accountAdrs: ContractAddress) {
             let mut acc = Self::getAccount(world, accountAdrs);
@@ -311,32 +333,32 @@ mod Accounts {
             return isOwnerOfHeroes;
         }
         fn mintStarterHeroes(world: IWorldDispatcher, accountAdrs: ContractAddress) -> u32 {
-            set!(
-                world,
-                (
-                Heroes {owner: accountAdrs, index: 0, hero: hero::new(0, 'marella', 1, 1)},
-                Heroes {owner: accountAdrs, index: 1, hero: hero::new(1, 'sirocco', 1, 1)},
-                Heroes {owner: accountAdrs, index: 2, hero: hero::new(2, 'wellan', 1, 1)},
-                Heroes {owner: accountAdrs, index: 3, hero: hero::new(3, 'elandor', 1, 1)},
-                Heroes {owner: accountAdrs, index: 4, hero: hero::new(4, 'diana', 1, 1)},
-                Heroes {owner: accountAdrs, index: 5, hero: hero::new(5, 'elric', 1, 1)},
-                Heroes {owner: accountAdrs, index: 6, hero: hero::new(6, 'nereus', 1, 1)},
-                Heroes {owner: accountAdrs, index: 7, hero: hero::new(7, 'rex', 1, 1)},
-                Heroes {owner: accountAdrs, index: 8, hero: hero::new(8, 'celeste', 1, 1)},
-                Heroes {owner: accountAdrs, index: 9, hero: hero::new(9, 'oakheart', 1, 1)},
-                Heroes {owner: accountAdrs, index: 10, hero: hero::new(10, 'sylvara', 1, 1)},
-                Heroes {owner: accountAdrs, index: 11, hero: hero::new(11, 'bane', 1, 1)},
-                Heroes {owner: accountAdrs, index: 12, hero: hero::new(12, 'ember', 1, 1)},
-                Heroes {owner: accountAdrs, index: 13, hero: hero::new(13, 'molten', 1, 1)},
-                Heroes {owner: accountAdrs, index: 14, hero: hero::new(14, 'solas', 1, 1)},
-                Heroes {owner: accountAdrs, index: 15, hero: hero::new(15, 'solveig', 1, 1)},
-                Heroes {owner: accountAdrs, index: 16, hero: hero::new(16, 'janus', 1, 1)},
-                Heroes {owner: accountAdrs, index: 17, hero: hero::new(17, 'horus', 1, 1)},
-                Heroes {owner: accountAdrs, index: 18, hero: hero::new(18, 'jabari', 1, 1)},
-                Heroes {owner: accountAdrs, index: 19, hero: hero::new(19, 'khamsin', 1, 1)},
-                )
-            );
-            return 20;
+            // set!(
+            //     world,
+            //     (
+            //     Heroes {owner: accountAdrs, index: 0, hero: hero::new(0, 'marella', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 1, hero: hero::new(1, 'sirocco', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 2, hero: hero::new(2, 'wellan', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 3, hero: hero::new(3, 'elandor', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 4, hero: hero::new(4, 'diana', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 5, hero: hero::new(5, 'elric', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 6, hero: hero::new(6, 'nereus', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 7, hero: hero::new(7, 'rex', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 8, hero: hero::new(8, 'celeste', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 9, hero: hero::new(9, 'oakheart', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 10, hero: hero::new(10, 'sylvara', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 11, hero: hero::new(11, 'bane', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 12, hero: hero::new(12, 'ember', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 13, hero: hero::new(13, 'molten', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 14, hero: hero::new(14, 'solas', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 15, hero: hero::new(15, 'solveig', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 16, hero: hero::new(16, 'janus', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 17, hero: hero::new(17, 'horus', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 18, hero: hero::new(18, 'jabari', 1, 1)},
+            //     Heroes {owner: accountAdrs, index: 19, hero: hero::new(19, 'khamsin', 1, 1)},
+            //     )
+            // );
+            return 0;
         }
         fn mintStarterRunes(world: IWorldDispatcher, accountAdrs: ContractAddress) -> u32 {
             set!(

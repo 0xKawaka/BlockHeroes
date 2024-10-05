@@ -29,8 +29,7 @@ mod Settings {
                 Config { key: ConfigType::MaxPvpEnergy, value: 5 },
                 Config { key: ConfigType::StartingCrystals, value: 400 },
                 Config { key: ConfigType::StartingGems, value: 0 },
-                Config { key: ConfigType::StartingSummonChests, value: 2 },
-                Config { key: ConfigType::MaxBaseHeroRank, value: 3 },
+                Config { key: ConfigType::StartingSummonChests, value: 22 },
                 Config { key: ConfigType::TotalHeroesCount, value: 20 },
             )
         );
@@ -56,7 +55,7 @@ mod Settings {
         QuestsImpl::initQuests(world);
         initArena(world);
         initConfig(world);
-        set!(world, SummonRates { key: 0, rates: array![1, 10, 89]});
+        set!(world, SummonRates { key: 0, rates: array![89, 10, 1]});
     }
 
 

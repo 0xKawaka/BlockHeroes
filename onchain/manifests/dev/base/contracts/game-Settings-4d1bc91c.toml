@@ -1,0 +1,11 @@
+kind = "DojoContract"
+class_hash = "0x615e6cc51fd67d366f280c2d85e086fffd4c91eb8ce11ab67e458003be90b5"
+original_class_hash = "0x615e6cc51fd67d366f280c2d85e086fffd4c91eb8ce11ab67e458003be90b5"
+base_class_hash = "0x0"
+abi = "manifests/dev/base/abis/contracts/game-Settings-4d1bc91c.json"
+reads = []
+writes = []
+init_calldata = []
+tag = "game-Settings"
+systems = []
+manifest_name = "game-Settings-4d1bc91c"

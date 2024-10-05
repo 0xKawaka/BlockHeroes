@@ -84,7 +84,7 @@ export default function PvpDefense({account, rank, heroesList, defenseArenaHeroe
               if(heroInfos === undefined) return (<div key={i}></div>)
               return (
                 <div className="HeroMiniatureWrapper" key={i} onClick={() =>  handleHeroClick(heroId)}>
-                  <HeroMiniature image={portraitsDict[heroInfos.name]} rank={1} level={heroInfos.level} imageWidth="9rem"></HeroMiniature>
+                  <HeroMiniature image={portraitsDict[heroInfos.name]} rank={heroInfos.rank} level={heroInfos.level} imageWidth="9rem"></HeroMiniature>
                 </div>
               )
             }
