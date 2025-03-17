@@ -1,5 +1,5 @@
 import { removePadding } from "../Pages/utils/stringHandler";
-import { Config, GameAccount, Hero, Rune } from "../Types/toriiTypes";
+import { ArenaAccount, ArenaTeam, Config, GameAccount, Hero, Rune } from "../Types/toriiTypes";
 import { Account, ConfigType } from "./generated/models.gen";
 import { shortString } from "starknet";
 import { Parser } from "./Parser";
@@ -231,56 +231,53 @@ function parseMapProgress(mapProgressRaw: any): {[key: number]: number} {
   }, {});
 }
 
-function parseHeroesLegacy(heroes: any[]): Hero[] {
-  return heroes.map((hero: any) => {
-    let runeIds =  Parser.parseRuneIds(hero.hero.runes);
-    let spots = Parser.parseSpots(hero.hero.runes);
-    return {
-      id: hero.hero.id,
-      name: shortString.decodeShortString(removePadding(hero.hero.name.toString())),
-      level: hero.hero.level,
-      experience: hero.hero.experience,
-      rank: hero.hero.rank,
-      runeIds: runeIds,
-      spots: spots,
-    }
-  })
+/**
+ * Parse ArenaAccount objects from raw data
+ * @param arenaAccountsRaw - Raw arena account data from Torii
+ * @returns Object mapping owner addresses to ArenaAccount objects
+ */
+function parseArenaAccountsByOwner(arenaAccountsRaw: any): {[key: string]: ArenaAccount} {
+  if (!arenaAccountsRaw || arenaAccountsRaw.length === 0) return {};
+  
+  return extractValues(arenaAccountsRaw).reduce((acc: {[key: string]: ArenaAccount}, curr: any) => {
+    if (!curr) return acc;
+    
+    acc[curr.owner] = {
+      rank: Number(curr.rank),
+      lastClaimedRewards: Number(curr.lastClaimedRewards),
+      teamSize: Number(curr.teamSize),
+    };
+    return acc;
+  }, {});
 }
 
-// The original functions are kept for backward compatibility
-function parseRunesLegacy(runes: any[]): Rune[] {
-  if (!runes || runes.length === 0) {
-    return [];
-  }
-
-  return runes.map((rune: any) => {
-    return {
-      id: Number(rune.rune.id),
-      statistic:rune.rune.statistic,
-      isPercent: Boolean(Number(rune.rune.isPercent)),
-      rank: Number(rune.rune.rank),
-      rarity: rune.rune.rarity,
-      shape: Parser.parseRuneType(rune.rune.runeType),
-      isEquipped: Boolean(Number(rune.rune.isEquipped)),
-      heroEquipped: Number(rune.rune.heroEquipped),
-      rank4Bonus: {
-        statistic: rune.rune.rank4Bonus.statistic,
-        isPercent: Boolean(Number(rune.rune.rank4Bonus.isPercent)),
-      },
-      rank8Bonus: {
-        statistic: rune.rune.rank8Bonus.statistic,
-        isPercent: Boolean(Number(rune.rune.rank8Bonus.isPercent)),
-      },
-      rank12Bonus: {
-        statistic: rune.rune.rank12Bonus.statistic,
-        isPercent: Boolean(Number(rune.rune.rank12Bonus.isPercent)),
-      },
-      rank16Bonus: {
-        statistic: rune.rune.rank16Bonus.statistic,
-        isPercent: Boolean(Number(rune.rune.rank16Bonus.isPercent)),
-      }
+/**
+ * Parse ArenaTeam objects from raw data
+ * @param arenaTeamsRaw - Raw arena team data from Torii
+ * @returns Object mapping owner addresses to ArenaTeam objects
+ */
+function parseArenaTeamsByOwner(arenaTeamsRaw: any): {[key: string]: ArenaTeam[]} {
+  if (!arenaTeamsRaw || arenaTeamsRaw.length === 0) return {};
+  
+  return extractValues(arenaTeamsRaw).reduce((acc: {[key: string]: ArenaTeam[]}, curr: any) => {
+    if (!curr) return acc;
+    
+    const owner = curr.owner;
+    if (!acc[owner]) {
+      acc[owner] = [];
     }
-  });
+    
+    acc[owner].push({
+      index: Number(curr.index),
+      heroIndex: Number(curr.heroIndex),
+    });
+    
+    return acc;
+  }, {});
 }
 
-export { parseAccount, parseConfig, parseRunes, parseHeroes, extractValues, parseMapProgress };
+
+
+
+
+export { parseAccount, parseConfig, parseRunes, parseHeroes, extractValues, parseMapProgress, parseArenaAccountsByOwner, parseArenaTeamsByOwner };

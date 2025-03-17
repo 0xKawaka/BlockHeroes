@@ -131,6 +131,27 @@ export const useSystemCalls = () => {
             return false;
         }
     };
+
+    // unction initPvp(account: Account, heroesIds: number[]): Promise<{rank: number, defenseHeroesIds: number[]}
+    // let txRes = await client.Game.initPvp({
+    //     account,
+    //     heroesIds:anyHeroesIds,
+    // });
+
+    const initPvp = async (heroesIds: number[]) => {
+        try {
+            let txRes = await client.Game.initPvp(account!, heroesIds);
+            let res: any = await account!.waitForTransaction(txRes.transaction_hash, {
+                retryInterval: 100,
+                successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+            });
+            return true;
+        } catch (error: any) {
+            console.error("Error initializing pvp:", error);
+            return false;
+        }
+    }
+
     return {
         createAccount,
         equipRune,
@@ -141,5 +162,6 @@ export const useSystemCalls = () => {
         startBattle,
         startPvpBattle,
         playTurn,
+        initPvp,
     };
 };

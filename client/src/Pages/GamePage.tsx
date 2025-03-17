@@ -4,10 +4,10 @@ import { useState, useEffect, useMemo } from 'react'
 import { useDojoSDK, useEntityId, useEntityQuery, useModel, useModels } from '@dojoengine/sdk/react'
 import { WalletAccount } from '../dojo/wallet-account'
 import { Account, ModelsMapping, Runes } from '../dojo/generated/models.gen'
-import { getConfigQuery, getGlobalQuestsPlayerQuery, getGlobalQuestsQuery, getQueryPlayer, getRunesQuery } from '../dojo/toriiQueries'
+import { getArenaAccountQuery, getArenaTeamQuery, getConfigQuery, getQueryPlayer } from '../dojo/toriiQueries'
 import { maxPvpEnergy, maxEnergy } from '../GameDatas/constants'
 import AccountOverview from './Components/AccountOverview'
-import { extractValues, parseAccount, parseConfig, parseHeroes, parseMapProgress, parseRunes } from '../dojo/parseTorii'
+import { extractValues, parseAccount, parseArenaAccountsByOwner, parseArenaTeamsByOwner, parseConfig, parseHeroes, parseMapProgress, parseRunes } from '../dojo/parseTorii'
 import Register from './Components/Register'
 
 // import WorldSelect from './Components/WorldSelect'
@@ -26,6 +26,7 @@ import Quests from './Components/Quests'
 import Summons from './Components/Summons'
 import WorldSelect from './Components/WorldSelect'
 import { worldsBattlesList } from '../GameDatas/Levels/battlesInfos'
+import { useSystemCalls } from '../dojo/useSystemCalls'
 
 function GamePage() {
   const [showMyHeroes, setShowMyHeroes] = useState<boolean>(false);
@@ -39,20 +40,20 @@ function GamePage() {
   const [stateChangesHandler, setStateChangesHandler] = useState<StateChangesHandler>(new StateChangesHandler(setShowMyHeroes, setShowWorldSelect, setIsBattleRunning))
 
   const { account } = useAccount();
-	const { client, useDojoStore } = useDojoSDK();
-	const entities = useDojoStore((state) => state.entities);
+	// const { client, useDojoStore } = useDojoSDK();
+	// const entities = useDojoStore((state) => state.entities);
 
   const entityId = useEntityId(account?.address ?? "0");
 
   useEntityQuery(getQueryPlayer(account?.address ?? "0"));
-  // useEntityQuery(getGlobalQuestsQuery());  
   useEntityQuery(getConfigQuery());
+  // useEntityQuery(getArenaAccountQuery());
+  // useEntityQuery(getArenaTeamQuery());
 
   const configRaw = useModels("game-Config");
   const config = useMemo(() => parseConfig(configRaw), [configRaw]);
 
   const globalQuestsRaw = useModels("game-GlobalQuests");
-  // Sort globalQuests by mapProgressRequired
   const globalQuests = useMemo(() => {
     const quests = extractValues(globalQuestsRaw);
     return quests.sort((a, b) => a.mapProgressRequired - b.mapProgressRequired);
@@ -72,8 +73,16 @@ function GamePage() {
   const parsedHeroes = useMemo(() => parseHeroes(heroesRaw), [heroesRaw]);
   const heroes = HeroesFactory.createHeroes(parsedHeroes, runes);
 
+  // const arenaAccountsRaw = useModels("game-ArenaAccount");
+  // const arenaAccountsByOwner = useMemo(() => parseArenaAccountsByOwner(arenaAccountsRaw), [arenaAccountsRaw]);
+  // const arenaTeamsRaw = useModels("game-ArenaTeam");
+  // const arenaTeamsByOwner = useMemo(() => parseArenaTeamsByOwner(arenaTeamsRaw), [arenaTeamsRaw]);
+
+
   const baseHeroes = HeroesFactory.createBaseHeroes();
 
+
+  const { initPvp } = useSystemCalls();
 
   useEffect(() => {
     if(gameAccount){
@@ -83,6 +92,7 @@ function GamePage() {
       let pvpEnergyHandler = new EnergyHandler(setPvpEnergy, maxPvpEnergy, config.timeTickPvpEnergy);
       pvpEnergyHandler.initEnergy(gameAccount.pvpEnergy, gameAccount.lastPvpEnergyUpdateTimestamp);
       stateChangesHandler.setPvpEnergyHandler(pvpEnergyHandler);
+      // initPvp([3, 4]);
     }
   }, [gameAccount]);
 

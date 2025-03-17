@@ -37,4 +37,16 @@ function getRunesQuery(accountAdrs: string) {
   .withEntityModels(["game-Runes"])
 }
 
-export { getQueryPlayer, getGlobalQuestsQuery, getGlobalQuestsPlayerQuery, getConfigQuery, getRunesQuery };
+function getArenaAccountQuery() {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([], [undefined], "VariableLen").build())
+  .withEntityModels(["game-ArenaAccount"])
+}
+
+function getArenaTeamQuery() {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([], [undefined], "VariableLen").build())
+  .withEntityModels(["game-ArenaTeam"])
+}
+
+export { getQueryPlayer, getGlobalQuestsQuery, getGlobalQuestsPlayerQuery, getConfigQuery, getRunesQuery, getArenaAccountQuery, getArenaTeamQuery };
