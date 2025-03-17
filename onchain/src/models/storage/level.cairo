@@ -1,2 +1,2 @@
-mod levelEnemy;
-mod levelInfos;
+pub mod levelEnemy;
+pub mod levelInfos;

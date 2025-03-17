@@ -1,15 +1,15 @@
 #[derive(Copy, Drop, Serde, Introspect)]
-enum RewardType {
+pub enum RewardType {
     Summon,
     Rune,
     Crystals,
 }
 
-trait RewardTypeTrait {
+pub trait RewardTypeTrait {
     fn toU16(self: RewardType) -> u16;
 }
 
-impl RewardTypeImpl of RewardTypeTrait {
+pub impl RewardTypeImpl of RewardTypeTrait {
     fn toU16(self: RewardType) -> u16 {
         match self {
             RewardType::Summon => 0,

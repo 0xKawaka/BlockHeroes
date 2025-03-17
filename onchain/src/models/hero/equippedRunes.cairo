@@ -1,7 +1,4 @@
-use core::option::OptionTrait;
-
 use game::models::hero::rune::{Rune, RuneImpl, RuneType};
-use debug::PrintTrait;
 
 #[derive(Introspect, Copy, Drop, Serde)]
 pub struct EquippedRunes {
@@ -19,7 +16,7 @@ pub struct EquippedRunes {
     pub sixth: u32,
 }
 
-fn new() -> EquippedRunes {
+pub fn new() -> EquippedRunes {
     EquippedRunes {
         isFirstRuneEquipped: false,
         isSecondRuneEquipped: false,
@@ -36,7 +33,7 @@ fn new() -> EquippedRunes {
     }
 }
 
-trait EquippedRunesTrait {
+pub trait EquippedRunesTrait {
     fn equipRune(ref self: EquippedRunes, ref rune: Rune, heroId: u32);
     fn handleEquipRune(ref self: EquippedRunes, isAnotherRuneAlreadyEquipped: bool, runeAlreadyEquippedId: u32, ref rune: Rune, heroId: u32);
     fn equipRuneEmptySlot(ref self: EquippedRunes, ref rune: Rune, heroId: u32);
@@ -45,7 +42,7 @@ trait EquippedRunesTrait {
     fn print(self: EquippedRunes);
 }
 
-impl EquippedRunesImpl of EquippedRunesTrait {
+pub impl EquippedRunesImpl of EquippedRunesTrait {
     fn equipRune(ref self: EquippedRunes, ref rune: Rune, heroId: u32) {
         match rune.runeType {
             RuneType::First => self.handleEquipRune(self.isFirstRuneEquipped, self.first, ref rune, heroId),
@@ -145,22 +142,22 @@ impl EquippedRunesImpl of EquippedRunesTrait {
     }
     fn print(self: EquippedRunes) {
         if(self.isFirstRuneEquipped) {
-            self.first.print();
+            println!("First rune equipped: {}", self.first);
         }
         if(self.isSecondRuneEquipped) {
-            self.second.print();
+            println!("Second rune equipped: {}", self.second);
         }
         if(self.isThirdRuneEquipped) {
-            self.third.print();
+            println!("Third rune equipped: {}", self.third);
         }
         if(self.isFourthRuneEquipped) {
-            self.fourth.print();
+            println!("Fourth rune equipped: {}", self.fourth);
         }
         if(self.isFifthRuneEquipped) {
-            self.fifth.print();
+            println!("Fifth rune equipped: {}", self.fifth);
         }
         if(self.isSixthRuneEquipped) {
-            self.sixth.print();
+            println!("Sixth rune equipped: {}", self.sixth);
         }
     }
 

@@ -1,5 +1,5 @@
 #[derive(Drop, Serde, Copy, Introspect)]
-enum ConfigType {
+pub enum ConfigType {
     TimeTickEnergy,
     TimeTickPvpEnergy,
     MaxEnergy,

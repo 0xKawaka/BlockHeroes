@@ -5,28 +5,24 @@ import SummonChestGif from "../../assets/gif/summonChest.gif"
 import { useState } from "react"
 import HeroMiniature from "./HeroMiniature"
 import portraitsDict from "../../assets/portraits/portraitsDict"
-import { useDojo } from "../../dojo/useDojo"
 import { HeroesFactory } from '../../Classes/Heroes/HeroesFactory'
 import { HeroInfos } from "../../Types/apiTypes"
-import { Account } from "starknet"
 import { GameAccount } from "../../Types/toriiTypes"
+import { useSystemCalls } from "../../dojo/useSystemCalls"
 
 type SummonsProps = {
-  account: Account,
   gameAccount: GameAccount,
-  setGameAccount: React.Dispatch<React.SetStateAction<GameAccount>>
   setShowSummons: React.Dispatch<React.SetStateAction<boolean>>
-  handleNewHeroEvent: (hero: HeroInfos) => void
 }
 
-export default function Summons({account, gameAccount, setGameAccount, setShowSummons, handleNewHeroEvent }: SummonsProps) {
+export default function Summons({gameAccount, setShowSummons}: SummonsProps) {
   console.log("summonChests", gameAccount.summonChests)
   const [isSummoning, setIsSummoning] = useState(false);
   const [showSummongAnimation, setShowSummonAnimation] = useState(false);
   const [showSummonResult, setShowSummonResult] = useState(false);
   const [heroSummoned, setHeroSummoned] = useState<HeroInfos>();
 
-  const {setup: {systemCalls: { mintHero }}} = useDojo();
+  const { mintHero } = useSystemCalls();
 
   async function handleSummon() {
     setIsSummoning(true);
@@ -41,7 +37,7 @@ export default function Summons({account, gameAccount, setGameAccount, setShowSu
       animationDone = true;
     });
 
-    const {id, name} = await mintHero(account);
+    const {id, name} = await mintHero();
     let hero = HeroesFactory.createSummonedHero(id, name.toString());
     if(!hero)
       return;
@@ -49,10 +45,8 @@ export default function Summons({account, gameAccount, setGameAccount, setShowSu
     while(!animationDone){
       await new Promise(r => setTimeout(r, 100));
     }
-    setGameAccount({...gameAccount, summonChests: gameAccount.summonChests - 1, heroesCount: gameAccount.heroesCount + 1});
     setShowSummonAnimation(false);
     setIsSummoning(false);
-    handleNewHeroEvent(hero);
   }
 
   return(

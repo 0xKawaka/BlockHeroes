@@ -24,11 +24,11 @@ export default function HeroMiniature({
           src={image}
           style={{ width: imageWidth }}
         />
-        <div className="HeroMiniatureStars">
+        {/* <div className="HeroMiniatureStars">
         {Array.from({ length: rank + 1 }).map((_, index) => (
           <img key={index} src={star} alt="star" className="HeroStar" />
         ))}
-        </div>
+        </div> */}
       </div>
           
       {level && <div className="HeroMiniatureLevel">Lvl {level}</div>}

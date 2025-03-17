@@ -1,5 +1,5 @@
-mod bonusRuneStatistics;
-mod runeStatistics;
+pub mod bonusRuneStatistics;
+pub mod runeStatistics;
 
 #[derive(Copy, Drop, Serde, Introspect)]
 pub struct Statistics {
@@ -11,7 +11,7 @@ pub struct Statistics {
     pub criticalDamage: u64,
 }
 
-fn new(health: u64, attack: u64, defense: u64, speed: u64, criticalRate: u64, criticalDamage: u64) -> Statistics {
+pub fn new(health: u64, attack: u64, defense: u64, speed: u64, criticalRate: u64, criticalDamage: u64) -> Statistics {
     Statistics {
         health,
         attack,

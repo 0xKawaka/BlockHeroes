@@ -14,7 +14,7 @@ pub struct HealthOnTurnProc {
     pub damageOrHeal: DamageOrHealEnum,
 }
 
-fn new(entityIndex: u32, value: u64, duration: u8, damageOrHeal: DamageOrHealEnum) -> HealthOnTurnProc {
+pub fn new(entityIndex: u32, value: u64, duration: u8, damageOrHeal: DamageOrHealEnum) -> HealthOnTurnProc {
     HealthOnTurnProc {
         entityIndex: entityIndex,
         value: value,
@@ -23,7 +23,7 @@ fn new(entityIndex: u32, value: u64, duration: u8, damageOrHeal: DamageOrHealEnu
     }
 }
 
-trait HealthOnTurnProcTrait {
+pub trait HealthOnTurnProcTrait {
     fn proc(ref self: HealthOnTurnProc, ref entity: Entity) -> u64;
     fn isExpired(ref self: HealthOnTurnProc) -> bool;
     fn reduceDuration(ref self: HealthOnTurnProc);
@@ -31,7 +31,7 @@ trait HealthOnTurnProcTrait {
     fn getEntityIndex(self: HealthOnTurnProc) -> u32;
 }
 
-impl HealthOnTurnProcImpl of HealthOnTurnProcTrait {
+pub impl HealthOnTurnProcImpl of HealthOnTurnProcTrait {
     fn proc(ref self: HealthOnTurnProc, ref entity: Entity) -> u64 {
         self.reduceDuration();
         let damageOrHealValue = (self.value.into() * entity.getMaxHealth()) / 100;

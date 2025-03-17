@@ -1,22 +1,14 @@
 import "./Register.css"
-import { useState, useEffect } from "react"
-import { Account } from "starknet";
-import { BurnerAccount } from "@dojoengine/create-burner"
-import { useDojo } from "../../dojo/useDojo"
-
-type RegisterProps = {
-  account: BurnerAccount,
-  setAccountSelected: React.Dispatch<React.SetStateAction<boolean>>
-  setBlockchainAccount: React.Dispatch<React.SetStateAction<Account>>
-}
+import { useState } from "react"
+import { useSystemCalls } from "../../dojo/useSystemCalls";
 
 const regex = /[^a-zA-Z0-9]/g;
 
-export default function Register({account, setAccountSelected, setBlockchainAccount}: RegisterProps) {
+export default function Register() {
   const [username, setUsername] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const {setup: {systemCalls: { createAccount }}} = useDojo();
+  const { createAccount } = useSystemCalls();
 
   function handleInputChange(event: any) {
     if(event.target.value.length > 27) return;
@@ -26,16 +18,9 @@ export default function Register({account, setAccountSelected, setBlockchainAcco
   async function handleRegister(username: string) {
     setErrorMessage('');
     setIsRegistering(true);
-    // console.log("account :", account.account.address)
-    // account.create({prefundedAmount: "1000000000000"})
-    account.create()
-    console.log("account_aftercreate :", account.account.address)
-    setBlockchainAccount(account.account)
-    let res = await createAccount(account.account, username)
+    let res = await createAccount(username)
     if(res.success) {
       console.log("Account created successfully")
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setAccountSelected(true);
     } else {
       setErrorMessage(res.error)
     }

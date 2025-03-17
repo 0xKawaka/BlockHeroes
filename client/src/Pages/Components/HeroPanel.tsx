@@ -18,7 +18,6 @@ type HeroPanelProps = {
 }
 
 export default function HeroPanel({gameAccount, heroIndex, heroInfos, runesList, setShowingHero, handleRuneClick}: HeroPanelProps) {
-  console.log(heroInfos)
   const [spellsPanelSelected, setSpellsPanelSelected] = useState<boolean>(false)
   const [statsPanelSelected, setStatsPanelSelected] = useState<boolean>(true)
 
@@ -57,11 +56,11 @@ export default function HeroPanel({gameAccount, heroIndex, heroInfos, runesList,
           <div className="HeroNameLevelContainer">
             <div className="HeroName">{heroInfos.name[0].toUpperCase() + heroInfos.name.slice(1)}</div>
             <div className="HeroLevel">Lvl {heroInfos.level}</div>
-            <div className="HeroPanelStars">
+            {/* <div className="HeroPanelStars">
               {Array.from({ length: heroInfos.rank + 1 }).map((_, index) => (
                 <img key={index} src={star} alt="star" className="HeroPanelStar" />
               ))}
-            </div>
+            </div> */}
           </div>
           <RunesDisplay heroInfos={heroInfos} runesList={runesList} handleRuneClick={handleRuneClick} />
           <StatsDisplay heroInfos={heroInfos} />

@@ -1,14 +1,10 @@
 import "./RunePanel.css"
 import {HeroInfos, RuneInfos, RunesList} from '../../Types/apiTypes'
 import RuneMiniature from "./RuneMiniature"
-import runeImg from "../../assets/runes/testRune.png"
 import runesImgDict from "../../assets/runes/runeImgDict"
 import ArrowBack from "../../assets/misc/arrowback.png"  
 import Rune from "./Rune"
 import { useState, useEffect } from 'react'
-import { log } from "console"
-import { createRuneListDict } from "../utils/runesSorterFilter"
-import { Account } from "starknet"
 import StateChangesHandler from "../State/StateChangesHandler"
 import arrowup from "../../assets/icons/arrowup.png"
 import arrowdown from "../../assets/icons/arrowdown.png"
@@ -17,7 +13,6 @@ import { GameAccount } from "../../Types/toriiTypes"
 
 
 type RunePanelProps = {
-  account: Account,
   gameAccount: GameAccount,
   runesList: Array<RuneInfos>,
   heroesList: Array<HeroInfos>,
@@ -30,7 +25,7 @@ type RunePanelProps = {
 }
 
 
-export default function RunePanel({account, gameAccount, runesList, heroesList, runeClicked, runeSpotClicked, runeListUnequiped, heroId, setShowingRunes, stateChangesHandler}: RunePanelProps) {
+export default function RunePanel({gameAccount, runesList, heroesList, runeClicked, runeSpotClicked, runeListUnequiped, heroId, setShowingRunes, stateChangesHandler}: RunePanelProps) {
   const [runeSelectedId, setRuneSelectedId] = useState<number>(-1)
   const [sortedRank, setSortedRank] = useState<string>("rank_desc")
   const [onlyEquippable, setOnlyEquippable] = useState<boolean>(false)
@@ -89,16 +84,12 @@ export default function RunePanel({account, gameAccount, runesList, heroesList, 
         {runeClicked && 
           <Rune 
           gameAccount={gameAccount}
-          runesList={runesList}
-          heroesList={heroesList}
           rune={runeClicked}
           equipped={true}
           image={runesImgDict[runeClicked.shape]}
           heroId={heroId} 
           runeSpotClicked={runeSpotClicked}
           alreadyEquippedRune={true}
-          account={account}
-          stateChangesHandler={stateChangesHandler}
            />
         }
         {!runeClicked &&
@@ -111,16 +102,12 @@ export default function RunePanel({account, gameAccount, runesList, heroesList, 
           {runeSelectedId > -1 && runeSelected &&
           <Rune 
             gameAccount={gameAccount}
-            runesList={runesList}
-            heroesList={heroesList}
             rune={runeSelected!}
             equipped={false}
             image={runesImgDict[runeSelected.shape]} 
             heroId={heroId}
             runeSpotClicked={runeSpotClicked}
             alreadyEquippedRune={runeClicked !== undefined}
-            account={account}
-            stateChangesHandler={stateChangesHandler}
             />
           }
         </div>

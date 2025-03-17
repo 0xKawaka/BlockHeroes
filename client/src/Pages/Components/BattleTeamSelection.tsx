@@ -6,17 +6,15 @@ import pvpEnergyImg from "../../assets/icons/pvpEnergy.png"
 import { useState, useEffect } from "react"
 import { HeroInfos } from "../../Types/apiTypes"
 import HeroesList from "./HeroesList"
-import { Account } from "starknet"
 import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import StateChangesHandler from "../State/StateChangesHandler"
 import { GameAccount, Hero } from "../../Types/toriiTypes"
-import { useDojo } from "../../dojo/useDojo"
 import {Maps} from "../../GameDatas/maps"
 import { pvpBattleEnergyCost } from "../../GameDatas/constants"
+import { useSystemCalls } from "../../dojo/useSystemCalls"
 
 
 type BattleTeamSelectionProps = {
-  account: Account,
   gameAccount: GameAccount,
   map:Maps,
   battleId:number,
@@ -33,11 +31,12 @@ type BattleTeamSelectionProps = {
   stateChangesHandler: StateChangesHandler
 }
 
-export default function BattleTeamSelection({account, gameAccount, map, battleId, enemies, enemiesNames, enemiesLevels, enemyAdrs, energyCost, heroesList, selectedHeroesIds, eventHandler, setSelectedHeroesIds, setPhaserRunning, stateChangesHandler }: BattleTeamSelectionProps) {
+export default function BattleTeamSelection({gameAccount, map, battleId, enemies, enemiesNames, enemiesLevels, enemyAdrs, energyCost, heroesList, selectedHeroesIds, eventHandler, setSelectedHeroesIds, setPhaserRunning, stateChangesHandler }: BattleTeamSelectionProps) {
   const [isStartingBattle, setIsStartingBattle] =  useState<boolean>(false)
   const notSelectedHeroesList = heroesList.filter(hero => !selectedHeroesIds.includes(hero.id))
 
-  const {setup: {systemCalls: { startBattle, startPvpBattle }}} = useDojo();
+  const { startBattle, startPvpBattle } = useSystemCalls();
+
 
   function handleHeroClick(heroId: number) {
     if(selectedHeroesIds.includes(heroId)){
@@ -60,10 +59,10 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
     eventHandler.reset()
     let isBattleStarted = false;
     if(map === Maps.Arena && enemyAdrs) {
-      isBattleStarted = await startPvpBattle(account, BigInt(enemyAdrs), selectedHeroesIds, eventHandler)
+      isBattleStarted = await startPvpBattle(BigInt(enemyAdrs), selectedHeroesIds, eventHandler)
     }
     else if (map === Maps.Campaign) {
-      isBattleStarted = await startBattle(account, selectedHeroesIds, map, battleId, eventHandler);
+      isBattleStarted = await startBattle(selectedHeroesIds, map, battleId, eventHandler);
     }
     if(isBattleStarted) {
       setIsStartingBattle(false)
@@ -72,7 +71,7 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
         let updateTimestamp = eventHandler.getEnergyTimestamp()
         if(updateTimestamp != undefined){
           stateChangesHandler.updateEnergyHandler(gameAccount.energy - energyCost, updateTimestamp)
-          stateChangesHandler.setGameAccount({...gameAccount, energy: gameAccount.energy - energyCost, lastEnergyUpdateTimestamp: updateTimestamp})
+          // stateChangesHandler.setGameAccount({...gameAccount, energy: gameAccount.energy - energyCost, lastEnergyUpdateTimestamp: updateTimestamp})
           console.log("account energy: ", gameAccount.energy - energyCost, " ", updateTimestamp)
         } 
       }
@@ -80,7 +79,7 @@ export default function BattleTeamSelection({account, gameAccount, map, battleId
         let updateTimestamp = eventHandler.getPvpEnergyTimestamp()
         if(updateTimestamp != undefined){
           stateChangesHandler.updatePvpEnergyHandler(gameAccount.pvpEnergy - pvpBattleEnergyCost, updateTimestamp)
-          stateChangesHandler.setGameAccount({...gameAccount, pvpEnergy: gameAccount.pvpEnergy - pvpBattleEnergyCost, lastPvpEnergyUpdateTimestamp: updateTimestamp})
+          // stateChangesHandler.setGameAccount({...gameAccount, pvpEnergy: gameAccount.pvpEnergy - pvpBattleEnergyCost, lastPvpEnergyUpdateTimestamp: updateTimestamp})
           console.log("account pvp energy: ", gameAccount.pvpEnergy - pvpBattleEnergyCost, " ", updateTimestamp)
         }
       }

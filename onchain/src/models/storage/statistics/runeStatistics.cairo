@@ -1,4 +1,4 @@
-use game::models::hero::{HeroTrait, Hero, rune::Rune, rune::RuneImpl, rune::RuneRarity, rune::RuneStatistic};
+use game::models::hero::{rune::RuneImpl, rune::RuneRarity, rune::RuneStatistic};
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
@@ -12,7 +12,7 @@ pub struct RuneStatistics {
     pub value: u32,
 }
 
-fn new(statistic: RuneStatistic, rarity: RuneRarity, isPercent: bool, value: u32) -> RuneStatistics {
+pub fn new(statistic: RuneStatistic, rarity: RuneRarity, isPercent: bool, value: u32) -> RuneStatistics {
     RuneStatistics {
         statistic,
         rarity,

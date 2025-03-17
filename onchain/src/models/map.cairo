@@ -1,5 +1,5 @@
 #[derive(Copy, Drop, Serde, Introspect)]
-enum Map {
+pub enum Map {
     Campaign,
     Arena,
 }
@@ -11,11 +11,11 @@ enum Map {
 //     }
 // }
 
-trait MapTrait {
+pub trait MapTrait {
     fn toU16(self: Map) -> u16;
 }
 
-impl MapImpl of MapTrait {
+pub impl MapImpl of MapTrait {
     fn toU16(self: Map) -> u16 {
         match self {
             Map::Campaign => 0,

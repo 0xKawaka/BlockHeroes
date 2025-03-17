@@ -7,11 +7,11 @@ pub struct TurnBar {
     pub decimals: u64,
 }
 
-fn new(entityIndex: u32, speed: u64) -> TurnBar {
+pub fn new(entityIndex: u32, speed: u64) -> TurnBar {
     TurnBar { entityIndex: entityIndex, speed: speed, turnbar: 0, incrementStep: 7, decimals: 10, }
 }
 
-trait TurnBarTrait {
+pub trait TurnBarTrait {
     fn incrementTurnbar(ref self: TurnBar);
     fn isFull(self: TurnBar) -> bool;
     fn resetTurn(ref self: TurnBar);
@@ -19,7 +19,7 @@ trait TurnBarTrait {
     fn getSpeed(self: TurnBar) -> u64;
 }
 
-impl TurnBarImpl of TurnBarTrait {
+pub impl TurnBarImpl of TurnBarTrait {
     fn incrementTurnbar(ref self: TurnBar) {
         self.turnbar += (self.speed * self.incrementStep) / self.decimals;
     }

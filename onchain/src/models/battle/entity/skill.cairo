@@ -1,6 +1,6 @@
-mod damage;
-mod heal;
-mod buff;
+pub mod damage;
+pub mod heal;
+pub mod buff;
 
 use game::models::battle::BattleTrait;
 use game::models::battle::entity::skill::buff::{BuffImpl};
@@ -10,13 +10,11 @@ use game::models::battle::entity::{Entity, EntityTrait};
 use game::models::battle::{Battle, BattleImpl};
 use game::models::events::{IdAndValue, SkillEventParams};
 
-use game::utils::iVector::VecTrait;
+use game::utils::vec::VecTrait;
 use game::utils::random::rand32;
-use game::utils::arrayHelper;
 
 use core::array::ArrayTrait;
 use starknet::get_block_timestamp;
-use debug::PrintTrait;
 
 
 #[derive(Copy, Drop, PartialEq, Serde, Introspect)]
@@ -26,7 +24,7 @@ pub enum TargetType {
 }
 
 #[derive(Copy, Drop, Serde)]
-struct Skill {
+pub struct Skill {
     name: felt252,
     cooldown: u8,
     damage: damage::Damage,
@@ -35,7 +33,7 @@ struct Skill {
     buffs: Span<buff::Buff>
 }
 
-fn new(
+pub fn new(
     name: felt252,
     cooldown: u8,
     damage: damage::Damage,
@@ -53,7 +51,7 @@ fn new(
     }
 }
 
-trait SkillTrait {
+pub trait SkillTrait {
     fn cast(self: Skill, skillIndex: u8, ref caster: Entity, ref battle: Battle) -> SkillEventParams;
     fn castOnTarget(self: Skill, skillIndex: u8, ref caster: Entity, ref target: Entity, ref battle: Battle) -> SkillEventParams;
     fn applyDamage(self: Skill, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue>;
@@ -63,18 +61,18 @@ trait SkillTrait {
     fn print(self: @Skill);
 }
 
-impl SkillImpl of SkillTrait {
+pub impl SkillImpl of SkillTrait {
     fn cast(self: Skill, skillIndex: u8, ref caster: Entity, ref battle: Battle) -> SkillEventParams {
         let mut target = self.pickTarget(caster, ref battle);
         return self.castOnTarget(skillIndex, ref caster, ref target, ref battle);
     }
     fn castOnTarget(self: Skill, skillIndex: u8, ref caster: Entity, ref target: Entity, ref battle: Battle) -> SkillEventParams {
-        PrintTrait::print('caster');
-        PrintTrait::print(caster.getIndex());
-        PrintTrait::print('target');
-        PrintTrait::print(target.getIndex());
-        PrintTrait::print('skill');
-        PrintTrait::print(self.name);
+        println!("caster");
+        println!("{}", caster.getIndex());
+        println!("target");
+        println!("{}", target.getIndex());
+        println!("skill");
+        println!("{}", self.name);
         match self.targetType {
             TargetType::Ally => {
                 assert(battle.isAllyOf(caster.getIndex(),  target.getIndex()), 'Target should be ally');
@@ -116,16 +114,16 @@ impl SkillImpl of SkillTrait {
         let mut seed = get_block_timestamp();
         if self.targetType == TargetType::Ally {
             let allies = battle.getAliveAlliesOf(caster.getIndex());
-            // PrintTrait::print('alliesLen');
-            // PrintTrait::print(allies.len());
+            // println!("alliesLen");
+            // println!("{}", allies.len());
             let randIndex = rand32(seed, allies.len());
             let entity = *allies.get(randIndex).unwrap().unbox();
             return entity;
         } else if self.targetType == TargetType::Enemy {
-            // PrintTrait::print('enemiesAliveLen');
-            // PrintTrait::print(battle.aliveEnemiesIndexes.len);
-            // PrintTrait::print('alliesAliveLen');
-            // PrintTrait::print(battle.aliveAlliesIndexes.len);
+            // println!("enemiesAliveLen");
+            // println!("{}", battle.aliveEnemiesIndexes.len);
+            // println!("alliesAliveLen");
+            // println!("{}", battle.aliveAlliesIndexes.len);
             let enemies = battle.getAliveEnemiesOf(caster.getIndex());
             let entity = *enemies.get(rand32(seed, enemies.len())).unwrap().unbox();
             return entity;
@@ -134,6 +132,11 @@ impl SkillImpl of SkillTrait {
         }
     }
     fn print(self: @Skill) {
-        (*self.name).print();
+        println!("Skill name: {}", self.name);
+        // println!("Skill cooldown: {}", self.cooldown);
+        // println!("Skill damage: {}", self.damage);
+        // println!("Skill heal: {}", self.heal);
+        // println!("Skill targetType: {}", self.targetType);
+        // println!("Skill buffs: {}", self.buffs);
     }
 }

@@ -6,41 +6,29 @@ import { GlobalQuest } from '../../Types/customTypes'
 import SummonChest from "../../assets/misc/summonChest.png"
 import ArrowBack from "../../assets/misc/arrowback.png"
 import { GameAccount } from '../../Types/toriiTypes'
-import { useDojo } from '../../dojo/useDojo'
-
+import { useSystemCalls } from '../../dojo/useSystemCalls'
 
 type QuestsProps = {
-  account: Account,
   gameAccount: GameAccount
   globalQuests: GlobalQuest[]
   mapProgress: {[key: number]: number}
-  stateChangesHandler: StateChangesHandler
   setShowQuests: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-function Quests ( {account, gameAccount, globalQuests, mapProgress, stateChangesHandler, setShowQuests } : QuestsProps) {
+function Quests ( {gameAccount, globalQuests, mapProgress, setShowQuests } : QuestsProps) {
 
   const [indexClaimingArray, setIsClaimingArray] = useState<number[]>([])
+  const { claimGlobalQuest } = useSystemCalls();
 
-  const {setup: {systemCalls: { claimGlobalRewards }}} = useDojo();
-
-  console.log("globalQuests", globalQuests)
-
-  async function claimQuest(account: Account, quest: GlobalQuest, index: number) {
-    console.log("Claiming quest", quest)
+  async function claimQuest(quest: GlobalQuest, index: number) {
     let newClaimingArray = [...indexClaimingArray]
     newClaimingArray[newClaimingArray.length] = index
     setIsClaimingArray(newClaimingArray)
-    let res = await claimGlobalRewards(account, quest.map, quest.mapProgressRequired)
+
+    let res = await claimGlobalQuest(quest.map, quest.mapProgressRequired)
     if(res) {
       console.log("Quest claimed successfully")
-      const newGlobalQuests = [...globalQuests]
-      newGlobalQuests[index].hasClaimed = true
-      stateChangesHandler.setGlobalQuests(newGlobalQuests)
-      if(quest.rewardType == "Summon") {
-        stateChangesHandler.setGameAccount({...gameAccount, summonChests: gameAccount.summonChests + quest.rewardQuantity})
-      }
     }
     newClaimingArray = newClaimingArray.filter((value) => value !== index)
     setIsClaimingArray(newClaimingArray)
@@ -76,7 +64,7 @@ function Quests ( {account, gameAccount, globalQuests, mapProgress, stateChanges
                   <div className="QuestClaimButton">Claiming...</div>
                 }
                 {mapProgress[quest.map] >= quest.mapProgressRequired && !quest.hasClaimed && !indexClaimingArray.includes(index) &&
-                  <div className="QuestClaimButton" onClick={() => claimQuest(account, quest, index)}>Claim</div>
+                  <div className="QuestClaimButton" onClick={() => claimQuest(quest, index)}>Claim</div>
                 }
                 {mapProgress[quest.map] >= quest.mapProgressRequired && quest.hasClaimed &&
                   <div className="QuestClaimButtonDisabled">Claimed</div>

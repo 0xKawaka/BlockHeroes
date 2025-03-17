@@ -1,8 +1,6 @@
-use core::box::BoxTrait;
-use core::option::OptionTrait;
-use debug::PrintTrait;
+use core::fmt::Display;
 
-fn includes<T, +PartialEq<T>>(arr: Span<T>, item: @T) -> bool {
+pub fn includes<T, +PartialEq<T>>(arr: Span<T>, item: @T) -> bool {
     let arrLen = arr.len();
     let mut i: u32 = 0;
     let mut found: bool = false;
@@ -20,15 +18,15 @@ fn includes<T, +PartialEq<T>>(arr: Span<T>, item: @T) -> bool {
     return found;
 }
 
-fn print<T, +Copy<T>, +PrintTrait<T>>(arr: Span<T>) {
+pub fn print<T, +Copy<T>, +Display<T>, +Drop<T>>(arr: Span<T>) {
     let arrLen = arr.len();
     let mut i: u32 = 0;
     loop {
         if (i >= arrLen) {
             break;
         }
-        let value = *arr[i];
-        value.print();
+        let value: T = *arr[i];
+        println!("{}", value);
         i += 1;
     }
 }

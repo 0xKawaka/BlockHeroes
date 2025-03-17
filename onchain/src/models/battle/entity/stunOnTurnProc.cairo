@@ -4,21 +4,21 @@ pub struct StunOnTurnProc {
     pub stunned: bool,
 }
 
-fn new(duration: u8) -> StunOnTurnProc {
+pub fn new(duration: u8) -> StunOnTurnProc {
     StunOnTurnProc {
         duration: duration,
         stunned: false,
     }
 }
 
-trait StunOnTurnProcTrait {
+pub trait StunOnTurnProcTrait {
     fn proc(ref self: StunOnTurnProc);
     fn setStunned(ref self: StunOnTurnProc, duration: u8);
     fn isStunned(self: StunOnTurnProc) -> bool;
     fn updateStunned(ref self: StunOnTurnProc);
 }
 
-impl StunOnTurnProcImpl of StunOnTurnProcTrait {
+pub impl StunOnTurnProcImpl of StunOnTurnProcTrait {
     fn proc(ref self: StunOnTurnProc) {
         if self.duration > 0 {
             self.duration -= 1;

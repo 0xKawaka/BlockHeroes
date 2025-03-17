@@ -14,7 +14,7 @@ pub struct BaseHero {
     pub skillsCount: u8,
 }
 
-fn new(
+pub fn new(
     heroName: felt252, rank: u16, health: u64, attack: u64, defense: u64, speed: u64, criticalRate: u64, criticalDamage: u64, skillsCount: u8
 ) -> BaseHero {
     return BaseHero {
@@ -25,7 +25,7 @@ fn new(
     };
 }
 
-trait BaseHeroTrait {
+pub trait BaseHeroTrait {
     fn computeHealth(self: BaseHero, level: u16, rank: u16) -> u64;
     fn computeAttack(self: BaseHero, level: u16, rank: u16) -> u64;
     fn computeDefense(self: BaseHero, level: u16, rank: u16) -> u64;
@@ -37,7 +37,7 @@ trait BaseHeroTrait {
     ) -> Statistics;
 }
 
-impl BaseHeroImpl of BaseHeroTrait {
+pub impl BaseHeroImpl of BaseHeroTrait {
     fn computeHealth(self: BaseHero, level: u16, rank: u16) -> u64 {
         return self.statistics.health + (self.statistics.health * (level.into() - 1) * statsBonusPerLevel / decimals);
     }

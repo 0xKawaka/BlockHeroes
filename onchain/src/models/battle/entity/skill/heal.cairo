@@ -1,5 +1,5 @@
 use core::array::ArrayTrait;
-use game::utils::iVector::VecTrait;
+use game::utils::vec::VecTrait;
 
 use game::models::battle::{Battle, BattleTrait};
 use game::models::battle::entity::{Entity, EntityImpl, EntityTrait};
@@ -21,16 +21,16 @@ pub enum HealType {
     Percent,
 }
 
-fn new(value: u64, target: bool, aoe: bool, self: bool, healType: HealType) -> Heal {
+pub fn new(value: u64, target: bool, aoe: bool, self: bool, healType: HealType) -> Heal {
     return Heal { value: value, target: target, aoe: aoe, self: self, healType: healType, };
 }
 
-trait HealTrait {
+pub trait HealTrait {
     fn apply(self: Heal, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue>;
     fn computeHeal(self: Heal, ref target: Entity) -> u64;
 }
 
-impl HealImpl of HealTrait {
+pub impl HealImpl of HealTrait {
     fn apply(self: Heal, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue> {
         let mut healByIdArray: Array<IdAndValue> = Default::default();
         if (self.value == 0) {

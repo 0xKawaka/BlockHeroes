@@ -1,5 +1,5 @@
 // #[cfg(test)]
-// mod levelsTest {
+// pub mod levelsTest {
 //     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
 //     use dojo::utils::test::{spawn_test_world, deploy_contract};
 //     // use game::systems::{levels::{Levels, Levels::LevelsImpl, ILevelsDispatcherTrait, ILevelsDispatcher}};
@@ -19,11 +19,11 @@
 //     fn test_levels() {
 //         let caller = starknet::contract_address_const::<0x0>();
 //         let world = setup_world();
-//         LevelsImpl::init(world);
+//         LevelsImpl::init(ref world);
 
-//         let energyCost = LevelsImpl::getEnergyCost(world, 0, 1);
+//         let energyCost = LevelsImpl::getEnergyCost(ref world, 0, 1);
 //         assert(energyCost == 1,'energyCost should be 1');
-//         let enemies: Array<Hero> = LevelsImpl::getEnemies(world, 0, 1);
+//         let enemies: Array<Hero> = LevelsImpl::getEnemies(ref world, 0, 1);
 //         let mut i = 0;
 //         loop {
 //             if(i >= enemies.len()) {

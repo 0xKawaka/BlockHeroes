@@ -1,32 +1,31 @@
-mod experienceHandler;
-mod lootHandler;
-mod battleFactory;
+pub mod experienceHandler;
+pub mod lootHandler;
+pub mod battleFactory;
 
 use starknet::ContractAddress;
 use game::models::battle::entity::Entity;
-use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+use dojo::world::WorldStorage;
 
-trait IBattles {
-    fn newArenaBattle(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>);
-    fn newBattle(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16);
-    fn playArenaTurn(world: IWorldDispatcher, owner: ContractAddress, spellIndex: u8, targetIndex: u32);
-    fn playTurn(world: IWorldDispatcher, owner: ContractAddress, map: u16, spellIndex: u8, targetIndex: u32);
+pub trait IBattles {
+    fn newArenaBattle(ref world: WorldStorage, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>);
+    fn newBattle(ref world: WorldStorage, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16);
+    fn playArenaTurn(ref world: WorldStorage, owner: ContractAddress, spellIndex: u8, targetIndex: u32);
+    fn playTurn(ref world: WorldStorage, owner: ContractAddress, map: u16, spellIndex: u8, targetIndex: u32);
 }
 
-mod Battles {
+pub mod Battles {
     use core::option::OptionTrait;
     use starknet::ContractAddress;
-    use game::utils::nullableVector::NullableVectorImpl;
+    use game::utils::vec::{VecTrait};
 
-    use game::models::battle::entity::skill::SkillTrait;
-    use game::models::{battle,  battle::Battle, battle::BattleImpl, battle::BattleTrait};
+    use game::models::{battle::Battle, battle::BattleImpl, battle::BattleTrait};
     use game::models::battle::entity::{Entity, EntityImpl, skill::SkillImpl};
     use game::models::battle::entity::{turnBar::TurnBarImpl};
     use game::models::battle::entity::healthOnTurnProc::{HealthOnTurnProc, HealthOnTurnProcImpl};
     use game::models::storage::battles::{healthOnTurnProcStorage::HealthOnTurnProcStorage, battleStorage::BattleStorage, entityStorage::EntityStorage, arenaBattleStorage::ArenaBattleStorage};
     use game::models::storage::arena::arenaAccount::ArenaAccount;
     use game::models::storage::mapProgress::MapProgress;
-    use game::models::events::{Event, NewBattle};
+    use game::models::events::{NewBattle};
     use game::models::map::{MapTrait, Map};
     use game::systems::levels::Levels::LevelsImpl;
     use game::systems::arena::Arena::ArenaImpl;
@@ -35,52 +34,55 @@ mod Battles {
 
     use game::systems::battles::experienceHandler;
     use game::systems::battles::lootHandler;
-    use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+    use dojo::world::WorldStorage;
+    use dojo::event::EventStorage;
+    use dojo::model::ModelStorage;
 
-    impl BattlesImpl of super::IBattles {
-        fn newArenaBattle(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>) {
-            InternalBattlesImpl::initArenaBattleStorage(world, owner, enemyOwner, allyEntities, enemyEntities);
-            let mut battle = BattleFactoryImpl::getBattle(world, owner, Map::Arena.toU16());
+    pub impl BattlesImpl of super::IBattles {
+        fn newArenaBattle(ref world: WorldStorage, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>) {
+            InternalBattlesImpl::initArenaBattleStorage(ref world, owner, enemyOwner, allyEntities, enemyEntities);
+            let mut battle = BattleFactoryImpl::getBattle(ref world, owner, Map::Arena.toU16());
             let healthsArray = battle.getHealthsArray();
-            emit!(world, (Event::NewBattle(NewBattle { owner: owner, healthsArray: healthsArray })));
-            battle.battleLoop(world);
-            InternalBattlesImpl::ifArenaBattleIsOverHandle(world, owner, battle.isBattleOver, battle.isVictory);
-            InternalBattlesImpl::storeBattleState(world, ref battle, owner, Map::Arena.toU16());
+            world.emit_event(@NewBattle { owner: owner, healthsArray: healthsArray });
+            battle.battleLoop(ref world);
+            InternalBattlesImpl::ifArenaBattleIsOverHandle(ref world, owner, battle.isBattleOver, battle.isVictory);
+            InternalBattlesImpl::storeBattleState(ref world, ref battle, owner, Map::Arena.toU16());
         }
-        fn newBattle(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16) {
-            InternalBattlesImpl::initBattleStorage(world, owner, allyEntities, enemyEntities, map, level);
-            let mut battle = BattleFactoryImpl::getBattle(world, owner, map);
+        fn newBattle(ref world: WorldStorage, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16) {
+            InternalBattlesImpl::initBattleStorage(ref world, owner, allyEntities, enemyEntities, map, level);
+            let mut battle = BattleFactoryImpl::getBattle(ref world, owner, map);
             let healthsArray = battle.getHealthsArray();
-            emit!(world, (Event::NewBattle(NewBattle { owner: owner, healthsArray: healthsArray })));
-            battle.battleLoop(world);
-            InternalBattlesImpl::ifBattleIsOverHandle(world, owner, map, battle.isBattleOver, battle.isVictory);
-            InternalBattlesImpl::storeBattleState(world, ref battle, owner, map);
+            world.emit_event(@NewBattle { owner: owner, healthsArray: healthsArray });
+            battle.battleLoop(ref world);
+            InternalBattlesImpl::ifBattleIsOverHandle(ref world, owner, map, battle.isBattleOver, battle.isVictory);
+            InternalBattlesImpl::storeBattleState(ref world, ref battle, owner, map);
         }
-        fn playArenaTurn(world: IWorldDispatcher, owner: ContractAddress, spellIndex: u8, targetIndex: u32) {
-            let mut battle = BattleFactoryImpl::getBattle(world, owner, Map::Arena.toU16());
-            battle.playTurn(world, spellIndex, targetIndex);
-            InternalBattlesImpl::ifArenaBattleIsOverHandle(world, owner, battle.isBattleOver, battle.isVictory);
-            InternalBattlesImpl::storeBattleState(world, ref battle, owner, Map::Arena.toU16());
+        fn playArenaTurn(ref world: WorldStorage, owner: ContractAddress, spellIndex: u8, targetIndex: u32) {
+            let mut battle = BattleFactoryImpl::getBattle(ref world, owner, Map::Arena.toU16());
+            battle.playTurn(ref world, spellIndex, targetIndex);
+            InternalBattlesImpl::ifArenaBattleIsOverHandle(ref world, owner, battle.isBattleOver, battle.isVictory);
+            InternalBattlesImpl::storeBattleState(ref world, ref battle, owner, Map::Arena.toU16());
         }
-        fn playTurn(world: IWorldDispatcher, owner: ContractAddress, map: u16, spellIndex: u8, targetIndex: u32) {
-            let mut battle = BattleFactoryImpl::getBattle(world, owner, map);
-            battle.playTurn(world, spellIndex, targetIndex);
-            InternalBattlesImpl::ifBattleIsOverHandle(world, owner, map, battle.isBattleOver, battle.isVictory);
-            InternalBattlesImpl::storeBattleState(world, ref battle, owner, map);
+        fn playTurn(ref world: WorldStorage, owner: ContractAddress, map: u16, spellIndex: u8, targetIndex: u32) {
+            let mut battle = BattleFactoryImpl::getBattle(ref world, owner, map);
+            battle.playTurn(ref world, spellIndex, targetIndex);
+            InternalBattlesImpl::ifBattleIsOverHandle(ref world, owner, map, battle.isBattleOver, battle.isVictory);
+            InternalBattlesImpl::storeBattleState(ref world, ref battle, owner, map);
         }
     }
 
     #[generate_trait]
     impl InternalBattlesImpl of InternalBattlesTrait {
-        fn getHeroesIdsByMap(world: IWorldDispatcher, owner: ContractAddress, map: u16) -> Array<u32> {
-            let entitiesCount = get!(world, (owner, map), BattleStorage).entitiesCount;
+        fn getHeroesIdsByMap(ref world: WorldStorage, owner: ContractAddress, map: u16) -> Array<u32> {
+            let battleStorage: BattleStorage = world.read_model((owner, map));
+            let entitiesCount = battleStorage.entitiesCount;
             let mut i: u32 = 0;
             let mut heroesIds: Array<u32> = Default::default();
             loop {
                 if( i == entitiesCount ) {
                     break;
                 }
-                let entityStorage = get!(world, (owner, map, i), EntityStorage);
+                let entityStorage: EntityStorage = world.read_model((owner, map, i));
                 if(entityStorage.entityVal.isAlly()) {
                     heroesIds.append(entityStorage.entityVal.heroId);
                 }
@@ -88,45 +90,42 @@ mod Battles {
             };
             return heroesIds;
         }
-        fn ifBattleIsOverHandle(world: IWorldDispatcher, owner: ContractAddress, map: u16, isBattleOver: bool, isVictory: bool) {
+        fn ifBattleIsOverHandle(ref world: WorldStorage, owner: ContractAddress, map: u16, isBattleOver: bool, isVictory: bool) {
             if(!isBattleOver || !isVictory) {
                 return;
             }
-            let heroesIds = Self::getHeroesIdsByMap(world, owner, map);
-            let battleStorage = get!(world, (owner, map), BattleStorage);
-            let levels = LevelsImpl::getEnemiesLevels(world, map, battleStorage.level);
-            experienceHandler::computeAndDistributeExperience(world, owner, heroesIds, @levels);
-            lootHandler::computeAndDistributeLoot(world, owner, @levels);
-            let levelProgress = get!(world, (owner, map), MapProgress).level;
-            if(levelProgress == battleStorage.level){
-                set!(world, MapProgress { owner: owner, map: map, level: battleStorage.level + 1 });
+            let heroesIds = Self::getHeroesIdsByMap(ref world, owner, map);
+            let battleStorage: BattleStorage = world.read_model((owner, map));
+            let levels = LevelsImpl::getEnemiesLevels(ref world, map, battleStorage.level);
+            experienceHandler::computeAndDistributeExperience(ref world, owner, heroesIds, @levels);
+            lootHandler::computeAndDistributeLoot(ref world, owner, @levels);
+            let levelProgress: MapProgress = world.read_model((owner, map));
+            if(levelProgress.level == battleStorage.level){
+                world.write_model(@MapProgress { owner: owner, map: map, level: battleStorage.level + 1 });
             }
         }
                 
-        fn ifArenaBattleIsOverHandle(world: IWorldDispatcher, owner: ContractAddress, isBattleOver: bool, isVictory: bool) {
+        fn ifArenaBattleIsOverHandle(ref world: WorldStorage, owner: ContractAddress, isBattleOver: bool, isVictory: bool) {
             if(!isBattleOver || !isVictory) {
                 return;
             }
-            let arenaBattleStorage = get!(world, owner, ArenaBattleStorage);
-            let arenaAccounnt = get!(world, owner, ArenaAccount);
-            ArenaImpl::swapRanks(world, owner, arenaBattleStorage.enemyOwner, arenaAccounnt.lastClaimedRewards);    
+            let arenaBattleStorage: ArenaBattleStorage = world.read_model(owner);
+            let arenaAccounnt: ArenaAccount = world.read_model(owner);
+            ArenaImpl::swapRanks(ref world, owner, arenaBattleStorage.enemyOwner, arenaAccounnt.lastClaimedRewards);    
         }
 
-        fn initArenaBattleStorage(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>) {
-            set!(world,
-                (
-                    ArenaBattleStorage {
-                        owner: owner,
-                        enemyOwner: enemyOwner,
-                    }
-                )
+        fn initArenaBattleStorage(ref world: WorldStorage, owner: ContractAddress, enemyOwner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>) {
+            world.write_model(
+                @ArenaBattleStorage {
+                    owner: owner,
+                    enemyOwner: enemyOwner,
+                }
             );
-            Self::initBattleStorage(world, owner, allyEntities, enemyEntities, Map::Arena.toU16(), 0);
+            Self::initBattleStorage(ref world, owner, allyEntities, enemyEntities, Map::Arena.toU16(), 0);
         }
-        fn initBattleStorage(world: IWorldDispatcher, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16) {
-            set!(world,
-                (
-                    BattleStorage {
+        fn initBattleStorage(ref world: WorldStorage, owner: ContractAddress, allyEntities: Array<Entity>, enemyEntities: Array<Entity>, map: u16, level: u16) {
+            world.write_model(
+                @BattleStorage {
                         owner: owner,
                         map: map,
                         level: level,
@@ -134,24 +133,21 @@ mod Battles {
                         aliveEntitiesCount: allyEntities.len() + enemyEntities.len(),
                         isBattleOver: false,
                         isWaitingForPlayerAction: false,
-                    }
-                )
+                }
             );
             let mut i: u32 = 0;
             loop {
                 if( i == allyEntities.len() ) {
                     break;
                 }
-                set!(world,
-                    (
-                        EntityStorage {
+                world.write_model(
+                    @EntityStorage {
                             owner: owner,
                             map: map,
                             entityIndex: allyEntities[i].getIndex(),
                             entityVal: *allyEntities[i],
                             healthOnTurnProcCount: 0,
-                        }
-                    )
+                    }
                 );
                 i += 1;
             };
@@ -160,26 +156,23 @@ mod Battles {
                 if( i == enemyEntities.len() ) {
                     break;
                 }
-                set!(world,
-                    (
-                        EntityStorage {
+                world.write_model(
+                    @EntityStorage {
                             owner: owner,
                             map: map,
                             entityIndex: enemyEntities[i].getIndex(),
                             entityVal: *enemyEntities[i],
                             healthOnTurnProcCount: 0,
-                        }
-                    )
+                    }
                 );
                 i += 1;
             };
         }
-        fn storeBattleState(world: IWorldDispatcher, ref battle: Battle, owner: ContractAddress, map: u16) {
-            let battleInfos = get!(world, (owner, map), BattleStorage);
+        fn storeBattleState(ref world: WorldStorage, ref battle: Battle, owner: ContractAddress, map: u16) {
+            let battleInfos: BattleStorage = world.read_model((owner, map));
 
-            set!(world,
-                (
-                    BattleStorage {
+            world.write_model(
+                @BattleStorage {
                         owner: battleInfos.owner,
                         map: battleInfos.map,
                         level: battleInfos.level,
@@ -188,7 +181,6 @@ mod Battles {
                         isBattleOver: battle.isBattleOver,
                         isWaitingForPlayerAction: battle.isWaitingForPlayerAction,
                     }
-                )
             );
 
             let mut i: u32 = 0;
@@ -197,33 +189,28 @@ mod Battles {
                     break;
                 }
                 let healthOnTurnProcsEntity: Array<HealthOnTurnProc> = battle.getHealthOnTurnProcsEntity(i);
-                set!(world,
-                    (
-                        EntityStorage {
+                world.write_model(
+                    @EntityStorage {
                             owner: battleInfos.owner,
                             map: battleInfos.map,
                             entityIndex: battle.entities.get(i).unwrap().getIndex(),
                             entityVal: battle.entities.get(i).unwrap(),
                             healthOnTurnProcCount: healthOnTurnProcsEntity.len(),
-                        },
-                    )
-                
+                    }
                 );
                 let mut j: u32 = 0;
                 loop {
                     if( j == healthOnTurnProcsEntity.len() ) {
                         break;
                     }
-                    set!(world,
-                        (
-                            HealthOnTurnProcStorage {
-                                owner: battleInfos.owner,
-                                map: battleInfos.map,
-                                entityIndex: battle.entities.get(i).unwrap().getIndex(),
-                                index: j,
-                                healthOnTurnProc: *healthOnTurnProcsEntity[j],
-                            }
-                        )
+                    world.write_model(
+                        @HealthOnTurnProcStorage {
+                            owner: battleInfos.owner,
+                            map: battleInfos.map,
+                            entityIndex: battle.entities.get(i).unwrap().getIndex(),
+                            index: j,
+                            healthOnTurnProc: *healthOnTurnProcsEntity[j],
+                        }
                     );
                     j += 1;
                 };

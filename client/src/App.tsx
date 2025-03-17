@@ -1,7 +1,6 @@
 import './App.css'
 import Home from './Pages/Home'
 import { HashRouter as Router, Route, Link, Routes } from 'react-router-dom'
-import GamePage from './Pages/GamePage'
 import DojoWrapper from './Pages/DojoWrapper'
 
 function App() {

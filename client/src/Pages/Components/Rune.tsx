@@ -1,33 +1,25 @@
-import { log } from "console"
-import RuneFactory from "../../Classes/Runes/RuneFactory"
-import { HeroInfos, RuneInfos, RunesList } from "../../Types/apiTypes"
-import StateChangesHandler from "../State/StateChangesHandler"
+import { RuneInfos } from "../../Types/apiTypes"
 import "./Rune.css"
 import RuneMiniature from "./RuneMiniature"
 import { useState, useEffect } from "react"
-import { Account } from "starknet"
 import crystalImg from "../../assets/icons/crystal.png"
-import { useDojo } from "../../dojo/useDojo"
 import { GameAccount } from "../../Types/toriiTypes"
+import { useSystemCalls } from "../../dojo/useSystemCalls"
 
 type RuneProps = {
-  account: Account,
   gameAccount: GameAccount,
-  runesList: Array<RuneInfos>,
-  heroesList: Array<HeroInfos>,
   rune: RuneInfos,
   equipped: boolean,
   image: string,
   heroId: number,
   runeSpotClicked: number,
   alreadyEquippedRune: boolean,
-  stateChangesHandler: StateChangesHandler,
 }
 
 const maxRankRune = 16
 
 
-export default function Rune({account, gameAccount, runesList, heroesList, rune, equipped, image, heroId, runeSpotClicked, alreadyEquippedRune, stateChangesHandler}: RuneProps) {
+export default function Rune({gameAccount, rune, equipped, image, heroId, runeSpotClicked, alreadyEquippedRune}: RuneProps) {
   const equippedString = equipped ? "Remove" : "Equip"
   const processEquippedString = equipped ? "Removing" : "Equiping"
 
@@ -36,7 +28,8 @@ export default function Rune({account, gameAccount, runesList, heroesList, rune,
   const [showWrongShapeTooltip, setShowWrongShapeTooltip] = useState<boolean>(false)
   const [isUpgrading, setIsUpgrading] = useState<boolean>(false)
   const [isEquipping, setIsEquipping] = useState<boolean>(false)
-  const {setup: {systemCalls: { equipRune, unequipRune, upgradeRune }}} = useDojo();
+  const { equipRune, unequipRune, upgradeRune } = useSystemCalls();
+
 
   useEffect(() => {
     if (insufficientCrystals) {
@@ -49,17 +42,13 @@ export default function Rune({account, gameAccount, runesList, heroesList, rune,
 
   async function handleEquipRune(rune: RuneInfos, heroId: number){
     setIsEquipping(true)
-    const isSuccess = await equipRune(account, rune.id, heroId)
-    if(isSuccess)
-      stateChangesHandler.updateRuneEquip(rune, heroId, runesList, heroesList)
+    const res = await equipRune(rune.id, heroId)
     setIsEquipping(false)
   }
   
   async function handleUnequipRune(rune: RuneInfos){
     setIsEquipping(true)
-    const isSuccess = await unequipRune(account, rune.id)
-    if(isSuccess)
-      stateChangesHandler.updateRuneUnequip(rune, runesList, heroesList)
+    const res = await unequipRune(rune.id)
     setIsEquipping(false)
   }
 
@@ -69,13 +58,7 @@ export default function Rune({account, gameAccount, runesList, heroesList, rune,
       return;
     }
     setIsUpgrading(true)
-    const upgradeRuneDatas = await upgradeRune(account, rune.id)
-    if(upgradeRuneDatas.success == false){
-      console.log("Upgrade rune failed")
-      return
-    }
-    stateChangesHandler.updateRuneUpgrade(rune, upgradeRuneDatas.bonus, runesList, heroesList)
-    stateChangesHandler.updateCrystals(upgradeRuneDatas.crystalCost)
+    const res =await upgradeRune(rune.id)
     setIsUpgrading(false)
   }
 

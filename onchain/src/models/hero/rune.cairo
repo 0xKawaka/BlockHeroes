@@ -1,13 +1,14 @@
-mod runeBonus;
+pub mod runeBonus;
 
-use starknet::{ContractAddress, get_block_timestamp};
-use debug::PrintTrait;
+use starknet::{get_block_timestamp};
 
 use game::models::hero::rune::runeBonus::{RuneBonus, RuneBonusTrait, RuneBonusImpl};
 use game::models::account::{Account, AccountImpl};
-use game::models::events::{Event, RuneBonusEvent, RuneUpgraded};
+use game::models::events::{RuneBonusEvent, RuneUpgraded};
 
-use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+use dojo::event::EventStorage;
+use dojo::world::WorldStorage;
+
 
 use game::utils::random::rand32;
 
@@ -32,7 +33,6 @@ pub enum RuneRarity {
     Legendary,
 }
 
-// #[derive(Copy, Drop, Serde, PrintTrait, hash::LegacyHash, Introspect)]
 #[derive(Copy, Drop, Serde, Introspect)]
 pub enum RuneStatistic {
     Health,
@@ -63,7 +63,7 @@ const RUNE_STAT_COUNT: u32 = 4;
 const RUNE_RARITY_COUNT: u32 = 5;
 const RUNE_TYPE_COUNT: u32 = 6;
 
-fn new(id: u32) -> Rune {
+pub fn new(id: u32) -> Rune {
     let seed = get_block_timestamp();
     let statistic = getRandomStat(seed);
     let isPercent = getRandomIsPercent(seed);
@@ -86,7 +86,7 @@ fn new(id: u32) -> Rune {
     }
 }
 
-fn newDeterministic(id: u32, statistic: RuneStatistic, isPercent: bool, rarity: RuneRarity, runeType: RuneType) -> Rune {
+pub fn newDeterministic(id: u32, statistic: RuneStatistic, isPercent: bool, rarity: RuneRarity, runeType: RuneType) -> Rune {
     Rune {
         id: id,
         statistic: statistic,
@@ -103,7 +103,7 @@ fn newDeterministic(id: u32, statistic: RuneStatistic, isPercent: bool, rarity: 
     }
 }
 
-fn getRandomStat(seed: u64) -> RuneStatistic {
+pub fn getRandomStat(seed: u64) -> RuneStatistic {
     let rand = rand32(seed, RUNE_STAT_COUNT);
     if rand == 0 {
         return RuneStatistic::Attack;
@@ -116,7 +116,7 @@ fn getRandomStat(seed: u64) -> RuneStatistic {
     }
     return RuneStatistic::Attack;
 }
-fn getRandomRarity(seed: u64) -> RuneRarity {
+pub fn getRandomRarity(seed: u64) -> RuneRarity {
     return RuneRarity::Common;
     // let rand = rand32(seed, RUNE_RARITY_COUNT);
     // if rand == 0 {
@@ -133,7 +133,7 @@ fn getRandomRarity(seed: u64) -> RuneRarity {
     // return RuneRarity::Common;
 }
 
-fn getRandomType(seed: u64) ->  RuneType {
+pub fn getRandomType(seed: u64) ->  RuneType {
     let rand = rand32(seed, RUNE_TYPE_COUNT);
     if rand == 0 {
         return RuneType::First;
@@ -151,7 +151,7 @@ fn getRandomType(seed: u64) ->  RuneType {
     return RuneType::First;
 }
 
-fn getRandomIsPercent(seed: u64) -> bool {
+pub fn getRandomIsPercent(seed: u64) -> bool {
     return true;
     // let rand = rand32(seed, 2);
     // if rand == 0 {
@@ -160,8 +160,8 @@ fn getRandomIsPercent(seed: u64) -> bool {
     // return false;
 }
 
-trait RuneTrait {
-    fn upgrade(ref self: Rune, world: IWorldDispatcher, ref account: Account);
+pub trait RuneTrait {
+    fn upgrade(ref self: Rune, ref world: WorldStorage, ref account: Account);
     fn setEquippedBy(ref self: Rune, heroId: u32);
     fn unequip(ref self: Rune);
     fn isEquipped(self: Rune)-> bool;
@@ -175,8 +175,8 @@ trait RuneTrait {
 
 const maxRank: u32 = 16;
 
-impl RuneImpl of RuneTrait {
-    fn upgrade(ref self: Rune, world: IWorldDispatcher, ref account: Account) {
+pub impl RuneImpl of RuneTrait {
+    fn upgrade(ref self: Rune, ref world: WorldStorage, ref account: Account) {
         assert(self.rank < maxRank, 'Rune already max rank');
 
         let crystalCost = self.computeCrystalCostUpgrade();
@@ -187,47 +187,47 @@ impl RuneImpl of RuneTrait {
         let seed = get_block_timestamp();
         if self.rank == 4 {
             self.rank4Bonus = runeBonus::new(getRandomStat(seed), getRandomIsPercent(seed));
-            emit!(world, (Event::RuneBonusEvent(RuneBonusEvent {
+            world.emit_event(@RuneBonusEvent {
                 owner: account.owner,
                 id: self.id,
                 rank: self.rank,
                 procStat: self.rank4Bonus.statisticToString(),
                 isPercent: self.rank4Bonus.isPercent,
-            })));
+            });
         } else if self.rank == 8 {
             self.rank8Bonus = runeBonus::new(getRandomStat(seed), getRandomIsPercent(seed));
-            emit!(world, (Event::RuneBonusEvent(RuneBonusEvent {
+            world.emit_event(@RuneBonusEvent {
                 owner: account.owner,
                 id: self.id,
                 rank: self.rank,
                 procStat: self.rank8Bonus.statisticToString(),
                 isPercent: self.rank8Bonus.isPercent,
-            })));
+            });
         } else if self.rank == 12 {
             self.rank12Bonus = runeBonus::new(getRandomStat(seed), getRandomIsPercent(seed));
-            emit!(world, (Event::RuneBonusEvent(RuneBonusEvent {
+            world.emit_event(@RuneBonusEvent {
                 owner: account.owner,
                 id: self.id,
                 rank: self.rank,
                 procStat: self.rank12Bonus.statisticToString(),
                 isPercent: self.rank12Bonus.isPercent,
-            })));
+            });
         } else if self.rank == 16 {
             self.rank16Bonus = runeBonus::new(getRandomStat(seed), getRandomIsPercent(seed));
-            emit!(world, (Event::RuneBonusEvent(RuneBonusEvent {
+            world.emit_event(@RuneBonusEvent {
                 owner: account.owner,
                 id: self.id,
                 rank: self.rank,
                 procStat: self.rank16Bonus.statisticToString(),
                 isPercent: self.rank16Bonus.isPercent,
-            })));
+            });
         }
-        emit!(world, (Event::RuneUpgraded(RuneUpgraded {
+        world.emit_event(@RuneUpgraded {
             owner: account.owner,
             id: self.id,
             rank: self.rank,
             crystalCost: crystalCost,
-        })));
+        });
     }
     fn setEquippedBy(ref self: Rune, heroId: u32) {
         assert(self.isEquipped() == false, 'Rune already equipped');
@@ -248,11 +248,11 @@ impl RuneImpl of RuneTrait {
         return crystalCost;
     }
     fn print(self: Rune) {
-        PrintTrait::print('Rune');
-        self.id.print();
-        self.statisticToString().print(); 
-        self.typeToString().print();
-        self.rank.print();
+        println!("Rune");
+        println!("{}", self.id);
+        println!("{}", self.statisticToString()); 
+        println!("{}", self.typeToString());
+        println!("{}", self.rank);
         self.printBonuses();
     }
     fn printBonuses(self: Rune) {

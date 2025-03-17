@@ -1,7 +1,7 @@
 use core::option::OptionTrait;
 use core::traits::Into;
-use debug::PrintTrait;
-fn rand32(seed: u64, max: u32) -> u32 {
+
+pub fn rand32(seed: u64, max: u32) -> u32 {
     let multiply: u128 = 1103515245;
     let add: u128 = 12345;
     let next = (seed.into() * multiply) + add;
@@ -10,7 +10,7 @@ fn rand32(seed: u64, max: u32) -> u32 {
     return rdm;
 }
 
-fn rand8(seed: u64, max: u8) -> u8 {
+pub fn rand8(seed: u64, max: u8) -> u8 {
     let multiply: u128 = 1103515245;
     let add: u128 = 12345;
     let next = (seed.into() * multiply) + add;
@@ -19,7 +19,7 @@ fn rand8(seed: u64, max: u8) -> u8 {
     return rdm;
 }
 
-fn rand16(seed: u64, max: u16) -> u16 {
+pub fn rand16(seed: u64, max: u16) -> u16 {
     let multiply: u128 = 1103515245;
     let add: u128 = 12345;
     let next = (seed.into() * multiply) + add;

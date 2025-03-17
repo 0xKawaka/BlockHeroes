@@ -3,7 +3,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { getComponentValue, type Entity, runQuery, Has } from "@dojoengine/recs";
 import { useDojo } from "./useDojo";
 import { Hero, Rune, GameAccount, ArenaAccount } from "../Types/toriiTypes";
-import { Parser } from "../Blockchain/Parser";
+import { Parser } from "./Parser";
 import hexToString from "../Pages/utils/hexToString";
 import { ArenaFullAccount, GlobalQuest } from "../Types/customTypes";
 import { HeroesFactory } from "../Classes/Heroes/HeroesFactory";

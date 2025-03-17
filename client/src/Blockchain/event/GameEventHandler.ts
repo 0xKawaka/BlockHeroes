@@ -1,10 +1,10 @@
 import RuneFactory from "../../Classes/Runes/RuneFactory";
 import { RuneInfos, RuneStatsDict } from "../../Types/apiTypes";
-import { Parser } from "../Parser";
+import { Parser } from "../../dojo/Parser";
 import RawEvent from "./RawEvent";
 import eventHashes from "./eventHash";
 import {NewBattleEvent, StartTurnEvent, SkillEvent, EndTurnEvent, EndBattleEvent, ExperienceGainEvent, LootEvent, RankChangeEvent} from "./eventTypes";
-import { num, shortString, Contract } from "starknet";
+import { num, shortString } from "starknet";
 import { getEntityIdFromKeys } from '@dojoengine/utils';
 
 export default class GameEventHandler {

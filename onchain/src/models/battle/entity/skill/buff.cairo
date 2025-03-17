@@ -1,8 +1,6 @@
+use game::utils::vec::VecTrait;
 use game::models::battle::{Battle, BattleTrait};
 use game::models::battle::entity::{Entity, EntityImpl, EntityTrait};
-use game::utils::nullableVector::{NullableVectorImpl};
-use debug::PrintTrait;
-
 
 #[derive(Copy, Drop, PartialEq, Serde, Introspect)]
 pub enum BuffType {
@@ -27,7 +25,7 @@ pub struct Buff {
     pub self: bool,
 }
 
-fn new(buffType: BuffType, value: u64, duration: u8, target: bool, aoe: bool, self: bool) -> Buff {
+pub fn new(buffType: BuffType, value: u64, duration: u8, target: bool, aoe: bool, self: bool) -> Buff {
     Buff {
         buffType: buffType,
         value: value,
@@ -38,7 +36,7 @@ fn new(buffType: BuffType, value: u64, duration: u8, target: bool, aoe: bool, se
     }
 }
 
-trait BuffTrait {
+pub trait BuffTrait {
     fn apply(self: Buff, ref caster: Entity, ref target: Entity, ref battle: Battle);
     fn applyByType(self: Buff, ref entity: Entity, ref battle: Battle, isStat: bool, isBonus: bool, duration: u8);
     fn applyToCaster(self: Buff, ref entity: Entity, ref battle: Battle, isStat: bool, isBonus: bool);
@@ -48,9 +46,9 @@ trait BuffTrait {
     fn isStat(self: Buff) -> bool;
 }
 
-impl BuffImpl of BuffTrait {
+pub impl BuffImpl of BuffTrait {
     fn apply(self: Buff, ref caster: Entity, ref target: Entity, ref battle: Battle) {
-        PrintTrait::print('Applying buff');
+        println!("Applying buff");
         let isBonus = self.isBonus();
         let isStat = self.isStat();
         if(self.aoe){

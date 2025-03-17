@@ -1,7 +1,4 @@
-mod arrayHelper;
-mod spanHelper;
-mod iVector;
-mod vector;
-mod nullableVector;
-mod signedIntegers;
-mod random;
+pub mod arrayHelper;
+pub mod spanHelper;
+pub mod random;
+pub mod vec;

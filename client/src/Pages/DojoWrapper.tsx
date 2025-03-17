@@ -1,19 +1,33 @@
-import { setup, SetupResult } from "../dojo/setup.ts";
-import { DojoProvider } from "../dojo/DojoContext.tsx"; // Ensure useDojo is imported
-import { dojoConfig } from "../../dojoConfig.ts";
 import GamePage from "./GamePage.tsx";
 import { useEffect, useState } from "react";
+import { dojoConfig } from "../dojo/dojoConfig.ts";
+import { setupWorld } from '../dojo/generated/contracts.gen.ts';
+import { SchemaType } from '../dojo/generated/models.gen.ts';
+import { init, SDK } from '@dojoengine/sdk';
+import { DojoSdkProvider } from '@dojoengine/sdk/react';
+import StarknetProvider from "../dojo/starknet-provider.tsx";
 import "./DojoWrapper.css";
-import { useDojo } from "../dojo/useDojo.tsx";
 
 export default function DojoWrapper() {
-  const [setupResult, setSetupResult] = useState<SetupResult | null>(null);
+  const [sdk, setSdk] = useState<SDK<SchemaType> | null>(null);
 
   useEffect(() => {
-    setup(dojoConfig).then(setSetupResult);
+    init<SchemaType>({
+      client: {
+        toriiUrl: dojoConfig.toriiUrl,
+        relayUrl: dojoConfig.relayUrl,
+        worldAddress: dojoConfig.manifest.world.address,
+      },
+      domain: {
+        name: "BLOCKHEROES",
+        version: "1.0",
+        chainId: "KATANA",
+        revision: "1",
+      },
+    }).then(setSdk);
   }, []);
 
-  if (!setupResult) {
+  if (!sdk) {
     console.log("Loading...");
     return (
       <div className="dojoWrapperLoading">
@@ -25,16 +39,11 @@ export default function DojoWrapper() {
     );
   }
 
-  function WrappedGamePage() {
-    const { setup: { toriiClient }, account } = useDojo();
-    console.log("WrappedGamePage")
-    return <GamePage toriiClient={toriiClient} account={account} />;
-  }
-
   return (
-    <DojoProvider value={setupResult}>
-      <WrappedGamePage />
-    </DojoProvider>
+    <StarknetProvider>
+      <DojoSdkProvider sdk={sdk} dojoConfig={dojoConfig} clientFn={setupWorld}>
+        <GamePage />
+      </DojoSdkProvider>
+    </StarknetProvider>
   );
 }
-

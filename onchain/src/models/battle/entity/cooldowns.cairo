@@ -5,7 +5,7 @@ pub struct Cooldowns {
     // skill3: u8,
 }
 
-fn new() -> Cooldowns {
+pub fn new() -> Cooldowns {
     Cooldowns {
         skill1: 0,
         skill2: 0,
@@ -13,13 +13,13 @@ fn new() -> Cooldowns {
     }
 }
 
-trait CooldownsTrait {
+pub trait CooldownsTrait {
     fn reduceCooldowns(ref self: Cooldowns);
     fn setCooldown(ref self: Cooldowns, skillIndex: u8, cooldown: u8);
     fn isOnCooldown(self: Cooldowns, skillIndex: u8) -> bool;
 }
 
-impl CooldownsImpl of  CooldownsTrait {
+pub impl CooldownsImpl of  CooldownsTrait {
     fn reduceCooldowns(ref self: Cooldowns) {
         if(self.skill1 > 0) {
             self.skill1 -= 1;

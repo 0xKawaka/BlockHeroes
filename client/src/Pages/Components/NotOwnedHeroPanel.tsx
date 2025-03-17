@@ -1,8 +1,8 @@
 import "./NotOwnedHeroPanel.css"
 import { useState } from 'react'
 import ArrowBack from "../../assets/misc/arrowback.png"
-import {BaseHeroInfos} from '../../Classes/Heroes/HeroesFactory'
 import SpellsPanel from "./SpellsPanel"
+import { BaseHeroInfos } from "../../Types/customTypes"
 
 
 type NotOwnedHeroPanelProps = {

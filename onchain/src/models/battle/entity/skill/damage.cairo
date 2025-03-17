@@ -1,4 +1,4 @@
-use game::utils::iVector::VecTrait;
+use game::utils::vec::VecTrait;
 use game::models::battle::{Battle, BattleTrait};
 use game::models::battle::entity::{Entity, EntityImpl, EntityTrait};
 use game::models::events::{IdAndValue};
@@ -18,16 +18,16 @@ pub enum DamageType {
     Percent,
 }
 
-fn new(value: u64, target: bool, aoe: bool, self: bool, damageType: DamageType) -> Damage {
+pub fn new(value: u64, target: bool, aoe: bool, self: bool, damageType: DamageType) -> Damage {
     return Damage { value: value, target: target, aoe: aoe, self: self, damageType: damageType, };
 }
 
-trait DamageTrait {
+pub trait DamageTrait {
     fn apply(self: Damage, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue>;
     fn computeDamage(self: Damage, ref caster: Entity, ref target: Entity) -> u64;
 }
 
-impl DamageImpl of DamageTrait {
+pub impl DamageImpl of DamageTrait {
     fn apply(self: Damage, ref caster: Entity, ref target: Entity, ref battle: Battle) -> Array<IdAndValue> {
         let mut damageByIdArray: Array<IdAndValue> = Default::default();
         if (self.value == 0) {

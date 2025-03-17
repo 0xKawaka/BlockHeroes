@@ -3,14 +3,11 @@ import "./WorldSelect.css"
 import ArrowBack from "../../assets/misc/arrowback.png"
 import { useState } from "react"
 import BattlesSelect from "./BattlesSelect"
-import { Account } from "starknet"
 import StateChangesHandler from "../State/StateChangesHandler"
-import EnergyHandler from "../Classes/EnergyHandler"
 import { GameAccount } from '../../Types/toriiTypes'
 
 
 type WorldSelectProps = {
-  account: Account,
   gameAccount: GameAccount,
   worldsBattlesList: BattlesInfosDict
   heroesList: Array<HeroInfos>
@@ -19,7 +16,7 @@ type WorldSelectProps = {
   stateChangesHandler: StateChangesHandler
 }
 
-export default function WorldSelect({account, gameAccount, worldsBattlesList, heroesList, runesList, mapProgress, stateChangesHandler }: WorldSelectProps) {
+export default function WorldSelect({gameAccount, worldsBattlesList, heroesList, runesList, mapProgress, stateChangesHandler }: WorldSelectProps) {
 
   const [worldId, setWorldId] = useState<number>(-1)
 
@@ -43,7 +40,7 @@ export default function WorldSelect({account, gameAccount, worldsBattlesList, he
       </div>
     }
     {worldId !== -1 &&
-      <BattlesSelect account={account} gameAccount={gameAccount} worldId={worldId} battlesList={worldsBattlesList[worldId]} heroesList={heroesList} runesList={runesList} setWorldId={setWorldId} mapProgress={mapProgress} stateChangesHandler={stateChangesHandler} />
+      <BattlesSelect gameAccount={gameAccount} worldId={worldId} battlesList={worldsBattlesList[worldId]} heroesList={heroesList} runesList={runesList} setWorldId={setWorldId} mapProgress={mapProgress} stateChangesHandler={stateChangesHandler} />
     }
   </div>
   )

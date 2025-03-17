@@ -2,8 +2,9 @@ use starknet::ContractAddress;
 
 use game::models::hero::rune::Rune;
 
-#[derive(Drop, starknet::Event)]
-enum Event {
+#[derive(Drop)]
+// #[dojo::event]
+pub enum Event {
     NewBattle: NewBattle,
     Skill: Skill,
     StartTurn: StartTurn,
@@ -28,162 +29,198 @@ enum Event {
     TimestampEnergy: TimestampEnergy,
 }
 
-#[derive(Drop, Serde)]
-enum EventKey {
+#[derive(Drop, Serde, Introspect)]
+pub enum EventKey {
     RuneMinted,
     TimestampEnergy,
     TimestampPvpEnergy,
 }
 
-#[derive(Destruct, Serde)]
-struct SkillEventParams {
-    casterId: u32,
-    targetId: u32,
-    skillIndex: u8,
-    damages: Array<IdAndValue>,
-    heals: Array<IdAndValue>,
+#[derive(Destruct, Serde, Introspect)]
+pub struct SkillEventParams {
+    pub casterId: u32,
+    pub targetId: u32,
+    pub skillIndex: u8,
+    pub damages: Array<IdAndValue>,
+    pub heals: Array<IdAndValue>,
 }
 
-#[derive(Drop, Serde, starknet::Event)]
-struct NewBattle {
-    owner: ContractAddress,
-    healthsArray: Array<u64>,
-}
-#[derive(Copy, Drop, Serde, starknet::Event)]
-struct BuffEvent {
-    entityId: u32,
-    name: felt252,
-    duration: u8,
-}
-#[derive(Drop, Serde, starknet::Event)]
-struct IdAndValue {
-    entityId: u32,
-    value: u64,
-}
-
-#[derive(Drop, Serde, starknet::Event)]
-struct Skill {
-    owner: ContractAddress,
-    casterId: u32,
-    targetId: u32,
-    skillIndex: u8,
-    damages: Array<IdAndValue>,
-    heals: Array<IdAndValue>,
-    deaths: Array<u32>,
-}
-
-#[derive(Drop, Serde, starknet::Event)]
-struct EndTurn {
-    owner: ContractAddress,
-    buffs: Array<BuffEvent>,
-    status: Array<BuffEvent>,
-    speeds: Array<IdAndValue>,
-}
-
-#[derive(Drop, Serde, starknet::Event)]
-struct TurnBarEvent {
-    entityId: u32,
-    value: u64,
-}
-
-#[derive(Copy, Drop, Serde, starknet::Event)]
-struct EntityBuffEvent {
-    name: felt252,
-    duration: u8,
-}
-
-#[derive(Drop, Serde, starknet::Event)]
-struct StartTurn {
-    owner: ContractAddress,
-    entityId: u32,
-    damages: Array<u64>,
-    heals: Array<u64>,
-    buffs: Array<EntityBuffEvent>,
-    status: Array<EntityBuffEvent>,
-    isDead: bool,
-}
-
-#[derive(Drop, Serde, starknet::Event)]
-struct EndBattle {
-    owner: ContractAddress,
-    playerHasWon: bool,
-}
-
-#[derive(Drop, Serde, starknet::Event)]
-struct Loot {
-    owner: ContractAddress,
-    crystals: u32,
-}
-
-#[derive(Drop, Serde, starknet::Event)]
-struct ExperienceGain {
-    owner: ContractAddress,
-    entityId: u32,
-    experienceGained: u32,
-    levelAfter: u16,
-    experienceAfter: u32,
-}
-
-#[derive(Drop, Serde, starknet::Event)]
-struct NewAccount {
-    owner: ContractAddress,
-    username: felt252,
-}
-#[derive(Drop, Serde, starknet::Event)]
-struct HeroMinted {
-    owner: ContractAddress,
-    id: u32,
-    name: felt252,
-}
-#[derive(Drop, Serde, starknet::Event)]
-struct RuneMinted {
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct NewBattle {
     #[key]
-    eventKey: EventKey,
-    owner: ContractAddress,
-    rune: Rune,
+    pub owner: ContractAddress,
+    pub healthsArray: Array<u64>,
 }
-#[derive(Drop, Serde, starknet::Event)]
-struct RuneUpgraded {
-    owner: ContractAddress,
-    id: u32,
-    rank: u32,
-    crystalCost: u32,
-}
-#[derive(Drop, Serde, starknet::Event)]
-struct RuneBonusEvent {
-    owner: ContractAddress,
-    id: u32,
-    rank: u32,
-    procStat: felt252,
-    isPercent: bool,
-}
-#[derive(Drop, Serde, starknet::Event)]
-struct ArenaDefense {
-    owner: ContractAddress,
-    heroeIds: Span<u32>,
-}
-#[derive(Drop, Serde, starknet::Event)]
-struct RankChange {
-    owner: ContractAddress,
-    rank: u64,
-}
-#[derive(Drop, Serde, starknet::Event)]
-struct InitArena {
-    owner: ContractAddress,
-    rank: u64,
-    heroeIds: Array<u32>,
-}
-#[derive(Drop, Serde, starknet::Event)]
-struct TimestampEnergy {
+#[derive(Copy, Drop, Serde)]
+#[dojo::event]
+pub struct BuffEvent {
     #[key]
-    eventKey: EventKey,
-    owner: ContractAddress,
-    timestamp: u64,
+    pub entityId: u32,
+    pub name: felt252,
+    pub duration: u8,
 }
-#[derive(Drop, Serde, starknet::Event)]
-struct TimestampPvpEnergy {
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct IdAndValue {
     #[key]
-    eventKey: EventKey,
-    owner: ContractAddress,
-    timestamp: u64,
+    pub entityId: u32,
+    pub value: u64,
+}
+
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct Skill {
+    #[key]
+    pub owner: ContractAddress,
+    pub casterId: u32,
+    pub targetId: u32,
+    pub skillIndex: u8,
+    pub damages: Array<IdAndValue>,
+    pub heals: Array<IdAndValue>,
+    pub deaths: Array<u32>,
+}
+
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct EndTurn {
+    #[key]
+    pub owner: ContractAddress,
+    pub buffs: Array<BuffEvent>,
+    pub status: Array<BuffEvent>,
+    pub speeds: Array<IdAndValue>,
+}
+
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct TurnBarEvent {
+    #[key]
+    pub entityId: u32,
+    pub value: u64,
+}
+
+#[derive(Copy, Drop, Serde)]
+#[dojo::event]
+pub struct EntityBuffEvent {
+    #[key]
+    pub name: felt252,
+    pub duration: u8,
+}
+
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct StartTurn {
+    #[key]
+    pub owner: ContractAddress,
+    pub entityId: u32,
+    pub damages: Array<u64>,
+    pub heals: Array<u64>,
+    pub buffs: Array<EntityBuffEvent>,
+    pub status: Array<EntityBuffEvent>,
+    pub isDead: bool,
+}
+
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct EndBattle {
+    #[key]
+    pub owner: ContractAddress,
+    pub playerHasWon: bool,
+}
+
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct Loot {
+    #[key]
+    pub owner: ContractAddress,
+    pub crystals: u32,
+}
+
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct ExperienceGain {
+    #[key]
+    pub owner: ContractAddress,
+    pub entityId: u32,
+    pub experienceGained: u32,
+    pub levelAfter: u16,
+    pub experienceAfter: u32,
+}
+
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct NewAccount {
+    #[key]
+    pub owner: ContractAddress,
+    pub username: felt252,
+}
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct HeroMinted {
+    #[key]
+    pub owner: ContractAddress,
+    pub id: u32,
+    pub name: felt252,
+}
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct RuneMinted {
+    #[key]
+    pub owner: ContractAddress,
+    pub rune: Rune,
+}
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct RuneUpgraded {
+    #[key]
+    pub owner: ContractAddress,
+    pub id: u32,
+    pub rank: u32,
+    pub crystalCost: u32,
+}
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct RuneBonusEvent {
+    #[key]
+    pub owner: ContractAddress,
+    pub id: u32,
+    pub rank: u32,
+    pub procStat: felt252,
+    pub isPercent: bool,
+}
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct ArenaDefense {
+    #[key]
+    pub owner: ContractAddress,
+    pub heroeIds: Span<u32>,
+}
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct RankChange {
+    #[key]
+    pub owner: ContractAddress,
+    pub rank: u64,
+}
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct InitArena {
+    #[key]
+    pub owner: ContractAddress,
+    pub rank: u64,
+    pub heroeIds: Array<u32>,
+}
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct TimestampEnergy {
+    #[key]
+    pub owner: ContractAddress,
+    pub timestamp: u64,
+}
+#[derive(Drop, Serde)]
+#[dojo::event]
+pub struct TimestampPvpEnergy {
+    #[key]
+    pub owner: ContractAddress,
+    pub timestamp: u64,
 }

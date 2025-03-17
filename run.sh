@@ -1,3 +1,3 @@
-gnome-terminal --title=katana --tab -- bash -c 'katana --invoke-max-steps 10000000 --allowed-origins "*" --disable-fee; bash' &&
-gnome-terminal --title=sozo --tab -- bash -c "cd onchain && sozo build && sozo migrate apply; bash" &&
-gnome-terminal --title=torii --tab -- bash -c 'rm -rf ./tmp/torii && torii --world 0x4ccbc6da0b26ca909183ad69df4cf35b3c8c8492a5a791fd5eda13ce3c55c50 --database ./tmp/torii --allowed-origins "*"; bash'
+gnome-terminal --title=katana --tab -- bash -c 'katana --invoke-max-steps 1000000000 --dev --dev.no-fee --http.cors_origins "*"; bash' &&
+gnome-terminal --title=sozo --tab -- bash -c "cd onchain && sozo build && sozo inspect && sozo migrate; bash" &&
+gnome-terminal --title=torii --tab -- bash -c 'rm -rf ./tmp/torii && sleep 5 && torii --world 0x02c3ad3cc69e70489c382820f5bd36a54c870742d28341e41f5f04501b36d3e0 --db-dir ./tmp/torii --http.cors_origins "*"; bash'

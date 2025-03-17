@@ -35,7 +35,7 @@ export default function AccountOverview({gameAccount, maxEnergy, maxPvpEnergy, s
       </div>
       <div className="EnergyContainer">
         <div className="EnergyValueIconContainer" onMouseOver={() => {setIsHoveringPvpEnergy(true)}} onMouseOut={() => {setIsHoveringPvpEnergy(false)}}>
-          <div className="EnergyValue">{gameAccount.pvpEnergy} / {maxEnergy}</div>
+          <div className="EnergyValue">{gameAccount.pvpEnergy} / {maxPvpEnergy}</div>
           <img className="EnergyIcon" src={pvpEnergyImg} />
         </div>
         {isHoveringPvpEnergy && gameAccount.pvpEnergy < maxPvpEnergy && <div className="EnergyTooltip">Next energy in {stateChangesHandler.getTimeUntilNextPvpEnergy()} seconds</div>}

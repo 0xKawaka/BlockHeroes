@@ -1,16 +1,14 @@
-mod runes;
-mod heroes;
-
-use debug::PrintTrait;
+pub mod runes;
+pub mod heroes;
 
 use core::traits::TryInto;
-use core::traits::Into;
-use option::OptionTrait;
 
-use game::models::hero::{Hero, HeroTrait, HeroImpl};
-use game::models::battle::Battle;
+use game::models::hero::{HeroImpl};
 use {starknet::ContractAddress, starknet::get_block_timestamp};
-use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+
+use dojo::world::WorldStorage;
+use dojo::model::ModelStorage;
+
 use game::models::storage::config::{ConfigType, Config};
 
 #[derive(Copy, Drop, Serde)]
@@ -31,12 +29,18 @@ pub struct Account {
 }
 
 
-fn new(username: felt252, owner: ContractAddress, world: IWorldDispatcher) -> Account {
-    let maxEnergy: u16 = get!(world, ConfigType::MaxEnergy, Config).value.try_into().unwrap();
-    let maxPvpEnergy: u16 = get!(world, ConfigType::MaxPvpEnergy, Config).value.try_into().unwrap();
-    let startingCrystals: u32 = get!(world, ConfigType::StartingCrystals, Config).value.try_into().unwrap();
-    let startingGems: u32 = get!(world, ConfigType::StartingGems, Config).value.try_into().unwrap();
-    let startingSummonChests: u32 = get!(world, ConfigType::StartingSummonChests, Config).value.try_into().unwrap();
+pub fn new(username: felt252, owner: ContractAddress, ref world: WorldStorage) -> Account {
+
+    let configMaxEnergy: Config = world.read_model(ConfigType::MaxEnergy);
+    let configMaxPvpEnergy: Config = world.read_model(ConfigType::MaxPvpEnergy);
+    let configStartingCrystals: Config = world.read_model(ConfigType::StartingCrystals);
+    let configStartingGems: Config = world.read_model(ConfigType::StartingGems);
+    let configStartingSummonChests: Config = world.read_model(ConfigType::StartingSummonChests);
+    let maxEnergy: u16 = configMaxEnergy.value.try_into().unwrap();
+    let maxPvpEnergy: u16 = configMaxPvpEnergy.value.try_into().unwrap();
+    let startingCrystals: u32 = configStartingCrystals.value.try_into().unwrap();
+    let startingGems: u32 = configStartingGems.value.try_into().unwrap();
+    let startingSummonChests: u32 = configStartingSummonChests.value.try_into().unwrap();
 
     Account {
         owner: owner,
@@ -53,13 +57,13 @@ fn new(username: felt252, owner: ContractAddress, world: IWorldDispatcher) -> Ac
     }
 }
 
-trait AccountTrait {
-    fn updateEnergy(ref self: Account, world: IWorldDispatcher) -> u64;
+pub trait AccountTrait {
+    fn updateEnergy(ref self: Account, ref world: WorldStorage) -> u64;
     fn increaseSummonChests(ref self: Account, summonChestsToAdd: u32);
     fn decreaseEnergy(ref self: Account, energyCost: u16);
     fn increaseEnergy(ref self: Account, energyToAdd: u16);
 
-    fn updatePvpEnergy(ref self: Account, world: IWorldDispatcher) -> u64;
+    fn updatePvpEnergy(ref self: Account, ref world: WorldStorage) -> u64;
     fn decreasePvpEnergy(ref self: Account, energyCost: u16);
     fn increasePvpEnergy(ref self: Account, energyToAdd: u16);
 
@@ -73,10 +77,11 @@ trait AccountTrait {
     fn print(self: Account);
 }
 
-impl AccountImpl of AccountTrait {
-    fn updateEnergy(ref self: Account, world: IWorldDispatcher) -> u64 {
+pub impl AccountImpl of AccountTrait {
+    fn updateEnergy(ref self: Account, ref world: WorldStorage) -> u64 {
         let now = get_block_timestamp();
-        let maxEnergy: u16 = get!(world, ConfigType::MaxEnergy, Config).value.try_into().unwrap();
+        let configMaxEnergy: Config = world.read_model(ConfigType::MaxEnergy);
+        let maxEnergy: u16 = configMaxEnergy.value.try_into().unwrap();
         
         if(self.energy >= maxEnergy) {
             self.lastEnergyUpdateTimestamp = now;
@@ -86,7 +91,8 @@ impl AccountImpl of AccountTrait {
         println!("lastEnergyUpdateTimestamp {}", self.lastEnergyUpdateTimestamp);
         println!("now {}", now);
 
-        let timeTickEnergy: u64 = get!(world, ConfigType::TimeTickEnergy, Config).value;
+        let configTimeTickEnergy: Config = world.read_model(ConfigType::TimeTickEnergy);
+        let timeTickEnergy: u64 = configTimeTickEnergy.value;
 
         let timeDiff = now - self.lastEnergyUpdateTimestamp;
         let energyToAdd = timeDiff / timeTickEnergy;
@@ -116,16 +122,18 @@ impl AccountImpl of AccountTrait {
     fn increaseEnergy(ref self: Account, energyToAdd: u16) {
         self.energy = self.energy + energyToAdd;
     }
-    fn updatePvpEnergy(ref self: Account, world: IWorldDispatcher) -> u64 {
+    fn updatePvpEnergy(ref self: Account, ref world: WorldStorage) -> u64 {
         let now = get_block_timestamp();
-        let maxPvpEnergy: u16 = get!(world, ConfigType::MaxPvpEnergy, Config).value.try_into().unwrap();
+        let configMaxPvpEnergy: Config = world.read_model(ConfigType::MaxPvpEnergy);
+        let maxPvpEnergy: u16 = configMaxPvpEnergy.value.try_into().unwrap();
 
         if(self.pvpEnergy >= maxPvpEnergy) {
             self.lastPvpEnergyUpdateTimestamp = now;
             return self.lastPvpEnergyUpdateTimestamp;
         }
 
-        let timeTickPvpEnergy: u64 = get!(world, ConfigType::TimeTickPvpEnergy, Config).value;
+        let configTimeTickPvpEnergy: Config = world.read_model(ConfigType::TimeTickPvpEnergy);
+        let timeTickPvpEnergy: u64 = configTimeTickPvpEnergy.value;
 
         let timeDiff = now - self.lastPvpEnergyUpdateTimestamp;
         let energyToAdd = timeDiff / timeTickPvpEnergy;
@@ -173,7 +181,15 @@ impl AccountImpl of AccountTrait {
         return (self.pvpEnergy, self.lastPvpEnergyUpdateTimestamp);
     }
     fn print(self: Account) {
-        self.crystals.print();
+        println!("username {}", self.username);
+        println!("energy {}", self.energy);
+        println!("pvpEnergy {}", self.pvpEnergy);
+        println!("crystals {}", self.crystals);
+        println!("gems {}", self.gems);
+        println!("runesCount {}", self.runesCount);
+        println!("heroesCount {}", self.heroesCount);
+        println!("summonChests {}", self.summonChests);
+
     }
 }
 

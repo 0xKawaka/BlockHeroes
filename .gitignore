@@ -4,7 +4,19 @@
 website/src/assets
 website/.env
 
+# Logs
+client/logs
+client/*.log
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/pnpm-debug.log*
+client/lerna-debug.log*
+
 # dependencies
+client/node_modules
+api/node_modules
+website/node_modules
 node_modules
 .pnp
 .pnp.js
@@ -30,4 +42,11 @@ website/.vercel
 onchain/target
 server
 server.txt
+sozocmd.txt
+sozocmd
+slot.txt
+slot
+
+#tmp
+tmp
 

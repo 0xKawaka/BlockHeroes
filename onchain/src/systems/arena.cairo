@@ -1,97 +1,99 @@
 use starknet::ContractAddress;
-use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+use dojo::world::WorldStorage;
 
-trait IArena {
-    fn initAccount(world: IWorldDispatcher, owner: ContractAddress, heroeIds: Array<u32>);
-    fn setTeam(world: IWorldDispatcher, owner: ContractAddress, heroeIds: Span<u32>);
-    fn swapRanks(world: IWorldDispatcher, winner: ContractAddress, looser: ContractAddress, lastClaimedRewards: u64);
-    fn setEnemyRangesByRank(world: IWorldDispatcher, minRank: Array<u64>, range: Array<u64>);
-    fn setGemsRewards(world: IWorldDispatcher, minRank: Array<u64>, gems: Array<u64>);
-    fn getGemsReward(world: IWorldDispatcher, owner: ContractAddress) -> u64;
-    fn assertEnemyInRange(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress);
-    fn getTeam(world: IWorldDispatcher, owner: ContractAddress) -> Array<u32>;
-    fn getRank(world: IWorldDispatcher, owner: ContractAddress) -> u64;
-    fn initArena(world: IWorldDispatcher, minRankGems: Array<u64>, gems: Array<u64>, minRankRange: Array<u64>, range: Array<u64>);
-    fn hasAccount(world: IWorldDispatcher, accountAdrs: ContractAddress);
-    fn hasNoAccount(world: IWorldDispatcher, accountAdrs: ContractAddress);
+pub trait IArena {
+    fn initAccount(ref world: WorldStorage, owner: ContractAddress, heroeIds: Array<u32>);
+    fn setTeam(ref world: WorldStorage, owner: ContractAddress, heroeIds: Span<u32>);
+    fn swapRanks(ref world: WorldStorage, winner: ContractAddress, looser: ContractAddress, lastClaimedRewards: u64);
+    fn setEnemyRangesByRank(ref world: WorldStorage, minRank: Array<u64>, range: Array<u64>);
+    fn setGemsRewards(ref world: WorldStorage, minRank: Array<u64>, gems: Array<u64>);
+    fn getGemsReward(ref world: WorldStorage, owner: ContractAddress) -> u64;
+    fn assertEnemyInRange(ref world: WorldStorage, owner: ContractAddress, enemyOwner: ContractAddress);
+    fn getTeam(ref world: WorldStorage, owner: ContractAddress) -> Array<u32>;
+    fn getRank(ref world: WorldStorage, owner: ContractAddress) -> u64;
+    fn initArena(ref world: WorldStorage, minRankGems: Array<u64>, gems: Array<u64>, minRankRange: Array<u64>, range: Array<u64>);
+    fn hasAccount(ref world: WorldStorage, accountAdrs: ContractAddress);
+    fn hasNoAccount(ref world: WorldStorage, accountAdrs: ContractAddress);
 }
 
-mod Arena {
-    use game::systems::arena::IArena;
+pub mod Arena {
     use {starknet::ContractAddress, starknet::get_block_timestamp};
-    use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+    use dojo::world::WorldStorage;
+    use dojo::event::EventStorage;
+    use dojo::model::ModelStorage;
     use game::models::storage::arena::{arenaAccount::ArenaAccount, arenaConfig::ArenaConfig, arenaCurrentRankIndex::ArenaCurrentRankIndex, arenaTeam::ArenaTeam, enemyRanges::EnemyRanges, gemsRewards::GemsRewards};
-    use game::models::events::{Event, InitArena, ArenaDefense, RankChange};
-    use debug::PrintTrait;
+    use game::models::events::{InitArena, ArenaDefense, RankChange};
 
-    impl ArenaImpl of super::IArena {
-        fn initAccount(world: IWorldDispatcher, owner: ContractAddress, heroeIds: Array<u32>) {
-            let arenaCurrentRank = get!(world, 0, ArenaCurrentRankIndex).currentRankIndex;
-            set!(world, ArenaAccount { owner: owner, rank: arenaCurrentRank, lastClaimedRewards: get_block_timestamp(), teamSize: heroeIds.len() });
-            set!(world, ArenaCurrentRankIndex { id: 0, currentRankIndex: arenaCurrentRank + 1 });
+    pub impl ArenaImpl of super::IArena {
+        fn initAccount(ref world: WorldStorage, owner: ContractAddress, heroeIds: Array<u32>) {
+            let arenaCurrentRankWrapper: ArenaCurrentRankIndex = world.read_model(0);
+            let arenaCurrentRank = arenaCurrentRankWrapper.currentRankIndex;
+            world.write_model(@ArenaAccount { owner: owner, rank: arenaCurrentRank, lastClaimedRewards: get_block_timestamp(), teamSize: heroeIds.len() });
+            world.write_model(@ArenaCurrentRankIndex { id: 0, currentRankIndex: arenaCurrentRank + 1 });
 
-            Self::setTeam(world, owner, heroeIds.span());
-            emit!(world, (Event::InitArena(InitArena { owner: owner, rank: arenaCurrentRank, heroeIds: heroeIds })));
+            Self::setTeam(ref world, owner, heroeIds.span());
+            world.emit_event(@InitArena { owner: owner, rank: arenaCurrentRank, heroeIds: heroeIds });
         }
 
-        fn setTeam(world: IWorldDispatcher, owner: ContractAddress, heroeIds: Span<u32>) {
+        fn setTeam(ref world: WorldStorage, owner: ContractAddress, heroeIds: Span<u32>) {
             let mut i: u32 = 0;
             loop {
                 if i >= heroeIds.len() {
                     break;
                 }
-                set!(world, ArenaTeam { owner: owner, index: i, heroIndex: *heroeIds[i] });
-                let arenaAccount = get!(world, owner, ArenaAccount);
-                set!(world, ArenaAccount { owner: owner, rank: arenaAccount.rank, lastClaimedRewards: arenaAccount.lastClaimedRewards, teamSize: heroeIds.len() });
+                world.write_model(@ArenaTeam { owner: owner, index: i, heroIndex: *heroeIds[i] });
+                let arenaAccount: ArenaAccount = world.read_model(owner);
+                world.write_model(@ArenaAccount { owner: owner, rank: arenaAccount.rank, lastClaimedRewards: arenaAccount.lastClaimedRewards, teamSize: heroeIds.len() });
                 i += 1;
             };
-            emit!(world, (Event::ArenaDefense(ArenaDefense { owner: owner, heroeIds: heroeIds })));
+            world.emit_event(@ArenaDefense { owner: owner, heroeIds: heroeIds });
         }
 
-        fn swapRanks(world: IWorldDispatcher, winner: ContractAddress, looser: ContractAddress, lastClaimedRewards: u64) {
-            let winnerAccount = get!(world, winner, ArenaAccount);
-            let looserAccount = get!(world, looser, ArenaAccount);
-            if(winnerAccount.rank < looserAccount.rank) {
+        fn swapRanks(ref world: WorldStorage, winner: ContractAddress, looser: ContractAddress, lastClaimedRewards: u64) {
+            let winnerAccountWrapper: ArenaAccount = world.read_model(winner);
+            let looserAccountWrapper: ArenaAccount = world.read_model(looser);
+            if(winnerAccountWrapper.rank < looserAccountWrapper.rank) {
                 return;
             }
-            set!(world, ArenaAccount { owner: winner, rank: looserAccount.rank, lastClaimedRewards: lastClaimedRewards, teamSize: winnerAccount.teamSize });
-            set!(world, ArenaAccount { owner: looser, rank: winnerAccount.rank, lastClaimedRewards: lastClaimedRewards, teamSize: looserAccount.teamSize });
-            emit!(world, (Event::RankChange(RankChange { owner: winner, rank: looserAccount.rank })));
-            emit!(world, (Event::RankChange(RankChange { owner: looser, rank: winnerAccount.rank })));
+            world.write_model(@ArenaAccount { owner: winner, rank: looserAccountWrapper.rank, lastClaimedRewards: lastClaimedRewards, teamSize: winnerAccountWrapper.teamSize });
+            world.write_model(@ArenaAccount { owner: looser, rank: winnerAccountWrapper.rank, lastClaimedRewards: lastClaimedRewards, teamSize: looserAccountWrapper.teamSize });
+            world.emit_event(@RankChange { owner: winner, rank: looserAccountWrapper.rank });
         }
 
-        fn setEnemyRangesByRank(world: IWorldDispatcher, minRank: Array<u64>, range: Array<u64>) {
-            let arenaConfig = get!(world, 0, ArenaConfig);
-            set!(world, ArenaConfig { id: 0, gemsRewardsLength: arenaConfig.gemsRewardsLength, enemyRangesByRankLength: minRank.len()});
+        fn setEnemyRangesByRank(ref world: WorldStorage, minRank: Array<u64>, range: Array<u64>) {
+            let arenaConfigWrapper: ArenaConfig = world.read_model(0);
+            world.write_model(@ArenaConfig { id: 0, gemsRewardsLength: arenaConfigWrapper.gemsRewardsLength, enemyRangesByRankLength: minRank.len()});
 
             let mut i: u32 = 0;
             loop {
                 if i >= minRank.len() {
                     break;
                 }
-                set!(world, EnemyRanges { index: i, minRank: *minRank[i], range: *range[i] });
+                world.write_model(@EnemyRanges { index: i, minRank: *minRank[i], range: *range[i] });
                 i += 1;
             };
 
         }
 
-        fn setGemsRewards(world: IWorldDispatcher, minRank: Array<u64>, gems: Array<u64>) {
-            let arenaConfig = get!(world, 0, ArenaConfig);
-            set!(world, ArenaConfig { id: 0, gemsRewardsLength: gems.len(), enemyRangesByRankLength: arenaConfig.enemyRangesByRankLength });
+        fn setGemsRewards(ref world: WorldStorage, minRank: Array<u64>, gems: Array<u64>) {
+            let arenaConfigWrapper: ArenaConfig = world.read_model(0);
+            world.write_model(@ArenaConfig { id: 0, gemsRewardsLength: gems.len(), enemyRangesByRankLength: arenaConfigWrapper.enemyRangesByRankLength });
 
             let mut i: u32 = 0;
             loop {
                 if i >= gems.len() {
                     break;
                 }
-                set!(world, GemsRewards { index: i, minRank: *minRank[i], gems: *gems[i] });
+                world.write_model(@GemsRewards { index: i, minRank: *minRank[i], gems: *gems[i] });
                 i += 1;
             };
         }
 
-        fn getGemsReward(world: IWorldDispatcher, owner: ContractAddress) -> u64 {            
-            let ownerRank = get!(world, owner, ArenaAccount).rank;
-            let gemsRewardsLength = get!(world, 0, ArenaConfig).gemsRewardsLength;
+        fn getGemsReward(ref world: WorldStorage, owner: ContractAddress) -> u64 {
+            let arenaAccount: ArenaAccount = world.read_model(owner);
+            let ownerRank = arenaAccount.rank;
+            let arenaConfigWrapper: ArenaConfig = world.read_model(0);
+            let gemsRewardsLength = arenaConfigWrapper.gemsRewardsLength;
             let mut i: u32 = 0;
             let mut res: u64 = 0;
 
@@ -99,7 +101,7 @@ mod Arena {
                 if i == gemsRewardsLength {
                     break;
                 }
-                let gemsReward = get!(world, i, GemsRewards);
+                let gemsReward: GemsRewards = world.read_model(0);
                 if ownerRank <= gemsReward.minRank {
                     res = gemsReward.gems;
                     break;
@@ -109,11 +111,14 @@ mod Arena {
             return res;
         }
 
-        fn assertEnemyInRange(world: IWorldDispatcher, owner: ContractAddress, enemyOwner: ContractAddress) {
-            let ownerRank = get!(world, owner, ArenaAccount).rank;
-            let enemyRank = get!(world, enemyOwner, ArenaAccount).rank;
+        fn assertEnemyInRange(ref world: WorldStorage, owner: ContractAddress, enemyOwner: ContractAddress) {
+            let arenaAccount: ArenaAccount = world.read_model(owner);
+            let ownerRank = arenaAccount.rank;
+            let arenaAccount: ArenaAccount = world.read_model(enemyOwner);
+            let enemyRank = arenaAccount.rank;
             assert(ownerRank > enemyRank, 'Can only fight higher ranks');
-            let enemyRangesByRankLength = get!(world, 0, ArenaConfig).enemyRangesByRankLength;
+            let arenaConfigWrapper: ArenaConfig = world.read_model(0);
+            let enemyRangesByRankLength = arenaConfigWrapper.enemyRangesByRankLength;
 
             let mut i: u32 = 0;
             let mut res = false;
@@ -121,7 +126,7 @@ mod Arena {
                 if i == enemyRangesByRankLength {
                     break;
                 }
-                let enemyRanges = get!(world, i, EnemyRanges);
+                let enemyRanges: EnemyRanges = world.read_model(0);
                 if ownerRank <= enemyRanges.minRank {
                     if enemyRank + enemyRanges.range >= ownerRank {
                         res = true;
@@ -133,52 +138,52 @@ mod Arena {
             assert(res, 'Enemy rank not in range');
         }
 
-        fn getRank(world: IWorldDispatcher, owner: ContractAddress) -> u64 {
-            get!(world, owner, ArenaAccount).rank
+        fn getRank(ref world: WorldStorage, owner: ContractAddress) -> u64 {
+            let arenaAccount: ArenaAccount = world.read_model(owner);
+            return arenaAccount.rank;
         }
 
-        fn getTeam(world: IWorldDispatcher, owner: ContractAddress) -> Array<u32> {
-            let account = get!(world, owner, ArenaAccount);
+        fn getTeam(ref world: WorldStorage, owner: ContractAddress) -> Array<u32> {
+            let arenaAccount: ArenaAccount = world.read_model(owner);
             let mut heroIndexes: Array<u32> = Default::default();
             let mut i: u32 = 0;
             loop {
-                if i == account.teamSize {
+                if i == arenaAccount.teamSize {
                     break;
                 }
-                heroIndexes.append(get!(world, (owner, i), ArenaTeam).heroIndex);
+                let arenaTeamWrapper: ArenaTeam = world.read_model(owner);
+                heroIndexes.append(arenaTeamWrapper.heroIndex);
                 i += 1;
             };
             return heroIndexes;
         }
 
-        fn hasAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) {
-            let acc = get!(world, accountAdrs, (ArenaAccount));
-            assert(acc.rank != 0, 'Arenaccount not found');
+        fn hasAccount(ref world: WorldStorage, accountAdrs: ContractAddress) {
+            let arenaAccount: ArenaAccount = world.read_model(accountAdrs);
+            assert(arenaAccount.rank != 0, 'Arenaccount not found');
         }
 
-        fn hasNoAccount(world: IWorldDispatcher, accountAdrs: ContractAddress) {
-            let acc = get!(world, accountAdrs, (ArenaAccount));
-            assert(acc.rank == 0, 'Arenaccount already exists');
+        fn hasNoAccount(ref world: WorldStorage, accountAdrs: ContractAddress) {
+            let arenaAccount: ArenaAccount = world.read_model(accountAdrs);
+            assert(arenaAccount.rank == 0, 'Arenaccount already exists');
         }
 
-        fn initArena(world: IWorldDispatcher, minRankGems: Array<u64>, gems: Array<u64>, minRankRange: Array<u64>, range: Array<u64>) {
-            set!(world,
-                (
-                    ArenaConfig {
+        fn initArena(ref world: WorldStorage, minRankGems: Array<u64>, gems: Array<u64>, minRankRange: Array<u64>, range: Array<u64>) {
+            world.write_model(
+                @ArenaConfig {
                         id: 0,
                         enemyRangesByRankLength: minRankRange.len(),
                         gemsRewardsLength: minRankGems.len()
                     }
-                )
             );
-            set!(world, ArenaCurrentRankIndex { id: 0, currentRankIndex: 1 });
+            world.write_model(@ArenaCurrentRankIndex { id: 0, currentRankIndex: 1 });
 
             let mut i: u32 = 0;
             loop {
                 if i == minRankGems.len() {
                     break;
                 }
-                set!(world, GemsRewards { index: i, minRank: *minRankGems[i], gems: *gems[i] });
+                world.write_model(@GemsRewards { index: i, minRank: *minRankGems[i], gems: *gems[i] });
                 i += 1;
             };
 
@@ -187,7 +192,7 @@ mod Arena {
                 if i == minRankRange.len() {
                     break;
                 }
-                set!(world, EnemyRanges { index: i, minRank: *minRankRange[i], range: *range[i] });
+                world.write_model(@EnemyRanges { index: i, minRank: *minRankRange[i], range: *range[i] });
                 i += 1;
             };
         }

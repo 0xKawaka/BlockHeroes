@@ -32,8 +32,7 @@
 
 /* Add a hover glow and scale effect to the navbar outline */
 .HomeNavbarOutline:hover {
-  box-shadow: 0 0 15px rgba(11, 83, 151, 0.8);
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 /* Navbar links */
@@ -43,7 +42,7 @@
   cursor: pointer;
   justify-content: center;
   align-items: center;
-  transition: transform 0.3s ease, filter 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .HomeNavbarLinkImage {
@@ -52,8 +51,7 @@
 
 /* Navbar link hover effect */
 .HomeNavbarLink:hover {
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+  transform: scale(1.05);
 }
 
 /* Main container styles */
@@ -112,6 +110,5 @@
 /* Hover effect for game button */
 .GameButton:hover {
   background-color: #417bb7; /* Slightly darker blue on hover */
-  box-shadow: 0 0 20px rgba(11, 83, 151, 0.8), inset 0 0 5px rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
+  transform: scale(1.02);
 }

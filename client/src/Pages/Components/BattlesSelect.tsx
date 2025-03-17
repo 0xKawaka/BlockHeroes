@@ -7,17 +7,13 @@ import ArrowBack from "../../assets/misc/arrowback.png"
 import BattlePage from "./BattlePage"
 import EntityFactory from "../../Classes/Entity/EntityFactory"
 import Entity from "../../Classes/Entity/Entity"
-import Skill from "../../Classes/Skill/Skill"
 import EndBattlePanel from "./EndBattlePanel"
-import { Account } from "starknet"
 import GameEventHandler from "../../Blockchain/event/GameEventHandler"
 import StateChangesHandler from "../State/StateChangesHandler"
-import EnergyHandler from "../Classes/EnergyHandler"
 import { GameAccount } from "../../Types/toriiTypes"
 import {Maps} from "../../GameDatas/maps"
 
 type BattleSelectProps = {
-  account: Account,
   gameAccount: GameAccount,
   worldId: number
   battlesList: Array<BattleInfos>
@@ -39,7 +35,8 @@ function computeTotalStats(baseStats: HeroStats, bonusStats: HeroStats): HeroSta
   }
 }
 
-function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesList, account, setWorldId, mapProgress, stateChangesHandler} : BattleSelectProps) {
+function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesList, setWorldId, mapProgress, stateChangesHandler} : BattleSelectProps) {
+  console.log("mapProgress", mapProgress)
   const [selectedBattleIndex, setSelectedBattleIndex] = useState<number>(-1)
   const [selectedHeroesIds, setSelectedHeroesIds] = useState<number[]>([])
   const [heroesBeforeExperienceGained, setHeroesBeforeExperienceGained] = useState<HeroInfos[]>([])
@@ -104,11 +101,11 @@ function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesLis
         <div className="ArrowBackContainer">
           <img className="ArrowBack" src={ArrowBack} onClick={() => setSelectedBattleIndex(-1)}/>
         </div>
-        <BattleTeamSelection account={account} gameAccount={gameAccount} map={Maps.Campaign} battleId={selectedBattleIndex} enemiesNames={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.name})} enemiesLevels={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.level})} energyCost={battlesList[selectedBattleIndex].energyCost} heroesList={heroesList} selectedHeroesIds={selectedHeroesIds} eventHandler={eventHandler!} setSelectedHeroesIds={setSelectedHeroesIds} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler}/>
+        <BattleTeamSelection gameAccount={gameAccount} map={Maps.Campaign} battleId={selectedBattleIndex} enemiesNames={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.name})} enemiesLevels={battlesList[selectedBattleIndex].enemies.map((enemy) => {return enemy.level})} energyCost={battlesList[selectedBattleIndex].energyCost} heroesList={heroesList} selectedHeroesIds={selectedHeroesIds} eventHandler={eventHandler!} setSelectedHeroesIds={setSelectedHeroesIds} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler}/>
       </div>
     }
     {phaserRunning &&
-      <BattlePage account={account} map={Maps.Campaign} battleId={selectedBattleIndex} selectedTeam={getSelectedTeam(selectedHeroesIds)} selectedHeroesIds={selectedHeroesIds} enemiesTeam={getEnemiesTeam(selectedBattleIndex)} heroesList={heroesList} runesList={runesList} eventHandler={eventHandler!} mapProgress={mapProgress} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler} setIsLootPanelVisible={setIsLootPanelVisible} setWinOrLose={setWinOrLose} setHeroesBeforeExperienceGained={setHeroesBeforeExperienceGained} />
+      <BattlePage map={Maps.Campaign} battleId={selectedBattleIndex} selectedTeam={getSelectedTeam(selectedHeroesIds)} selectedHeroesIds={selectedHeroesIds} enemiesTeam={getEnemiesTeam(selectedBattleIndex)} heroesList={heroesList} runesList={runesList} eventHandler={eventHandler!} mapProgress={mapProgress} setPhaserRunning={setPhaserRunning} stateChangesHandler={stateChangesHandler} setIsLootPanelVisible={setIsLootPanelVisible} setWinOrLose={setWinOrLose} setHeroesBeforeExperienceGained={setHeroesBeforeExperienceGained} />
     }
     {!phaserRunning && isLootPanelVisible &&
       <div className="OutOfBattleContainer">

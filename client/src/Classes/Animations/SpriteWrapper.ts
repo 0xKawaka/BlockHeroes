@@ -1,4 +1,5 @@
 import BattleScene from "../../Scenes/BattleScene";
+import Phaser from 'phaser';
 
 export default class SpriteWrapper extends Phaser.GameObjects.Sprite {
   target: {x: number, y: number} | null

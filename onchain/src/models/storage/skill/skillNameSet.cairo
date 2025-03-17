@@ -8,7 +8,7 @@ pub struct SkillNameSet {
     pub skill: felt252,
 }
 
-fn new(hero_name: felt252, index: u8, skill: felt252) -> SkillNameSet {
+pub fn new(hero_name: felt252, index: u8, skill: felt252) -> SkillNameSet {
     SkillNameSet {
         heroName: hero_name,
         index: index,

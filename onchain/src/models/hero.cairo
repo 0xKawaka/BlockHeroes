@@ -1,13 +1,13 @@
-mod equippedRunes;
-mod rune;
+pub mod equippedRunes;
+pub mod rune;
 
 use rune::{Rune, RuneImpl};
 use equippedRunes::{EquippedRunes, EquippedRunesImpl};
 use starknet::ContractAddress;
-use debug::PrintTrait;
 
-use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
-use game::models::events::{Event, ExperienceGain};
+use dojo::event::EventStorage;
+use dojo::world::WorldStorage;
+use game::models::events::{ExperienceGain};
 
 const levelZeroExperienceNeeded: u32 = 100;
 const bonusExperiencePercentRequirePerLevel: u32 = 50;
@@ -22,12 +22,12 @@ pub struct Hero {
     pub runes: EquippedRunes,
 }
 
-fn new(id: u32, name: felt252, level: u16, rank: u16) -> Hero {
+pub fn new(id: u32, name: felt252, level: u16, rank: u16) -> Hero {
     Hero { id:id, name: name, level: level, rank: rank, experience: 0, runes: equippedRunes::new() }
 }
 
-trait HeroTrait {
-    fn gainExperience(ref self: Hero,  world: IWorldDispatcher, experience: u32, owner: ContractAddress);
+pub trait HeroTrait {
+    fn gainExperience(ref self: Hero,  ref world: WorldStorage, experience: u32, owner: ContractAddress);
     fn equipRune(ref self: Hero, ref rune: Rune);
     fn unequipRune(ref self: Hero, ref rune: Rune);
     fn getRunes(self: Hero) -> EquippedRunes;
@@ -39,8 +39,8 @@ trait HeroTrait {
     fn print(self: @Hero);
 }
 
-impl HeroImpl of HeroTrait {
-    fn gainExperience(ref self: Hero, world: IWorldDispatcher, experience: u32, owner: ContractAddress) {
+pub impl HeroImpl of HeroTrait {
+    fn gainExperience(ref self: Hero, ref world: WorldStorage, experience: u32, owner: ContractAddress) {
         self.experience += experience;
         let mut requiredExperience = 0;
         // let previousLevel = self.level;
@@ -52,7 +52,13 @@ impl HeroImpl of HeroTrait {
             self.level += 1;
             self.experience -= requiredExperience;
         };
-        emit!(world, (Event::ExperienceGain(ExperienceGain { owner: owner, entityId: self.id, experienceGained: experience, levelAfter: self.level, experienceAfter: self.experience })));
+        world.emit_event(@ExperienceGain {
+            owner: owner,
+            entityId: self.id,
+            experienceGained: experience,
+            levelAfter: self.level,
+            experienceAfter: self.experience,
+        });
     }
     fn equipRune(ref self: Hero, ref rune: Rune) {
         self.runes.equipRune(ref rune, self.id);
@@ -80,6 +86,6 @@ impl HeroImpl of HeroTrait {
     }
 
     fn print(self: @Hero) {
-        (*self.name).print();
+        println!("Hero name: {}", self.name);
     }
 }

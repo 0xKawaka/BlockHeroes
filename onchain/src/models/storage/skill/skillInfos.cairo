@@ -1,7 +1,6 @@
 use game::models::battle::entity::skill::damage::Damage;
 use game::models::battle::entity::skill::heal::Heal;
 use game::models::battle::entity::skill::TargetType;
-use game::models::battle::entity::Entity;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]

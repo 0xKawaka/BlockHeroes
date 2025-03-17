@@ -1,9 +1,9 @@
-mod statistics;
-mod turnBar;
-mod skill;
-mod healthOnTurnProc;
-mod stunOnTurnProc;
-mod cooldowns;
+pub mod battleStatistics;
+pub mod turnBar;
+pub mod skill;
+pub mod healthOnTurnProc;
+pub mod stunOnTurnProc;
+pub mod cooldowns;
 
 use game::models::battle::entity::turnBar::{TurnBar};
 use game::models::battle::entity::healthOnTurnProc::{DamageOrHealEnum};
@@ -11,24 +11,23 @@ use game::models::battle::entity::stunOnTurnProc::{StunOnTurnProcImpl};
 use game::models::battle::entity::skill::{SkillImpl, buff::BuffType};
 use game::models::battle::entity::cooldowns::{CooldownsImpl, CooldownsTrait};
 
-use game::models::battle::entity::statistics::statistic::{StatisticTrait, Statistic};
-use game::models::battle::entity::{stunOnTurnProc::StunOnTurnProcTrait, statistics::StatisticsTrait};
+use game::models::battle::entity::battleStatistics::{BattleStatisticsTrait, BattleStatisticsImpl, battleStatistic::{BattleStatisticTrait, BattleStatisticImpl}};
+use game::models::battle::entity::{stunOnTurnProc::StunOnTurnProcTrait};
 use game::models::battle::BattleTrait;
-use game::models::battle::entity::statistics::{StatisticsImpl, statModifier::StatModifier};
 use game::models::battle::entity::turnBar::TurnBarTrait;
 use game::models::battle::{Battle, BattleImpl};
 
-use game::utils::signedIntegers::integerTrait::IntegerTrait;
-use game::utils::nullableVector::{VecTrait, NullableVector};
-use game::utils::signedIntegers::{i64::i64, i64::i64Impl};
+use game::utils::vec::VecTrait;
+
 use game::utils::random::{rand8};
 
-use game::models::events::{Event, Skill, EndTurn, EntityBuffEvent};
-use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
+use game::models::events::{Skill, EndTurn, EntityBuffEvent};
+
+use dojo::world::WorldStorage;
+use dojo::event::EventStorage;
 
 use core::box::BoxTrait;
 use starknet::get_block_timestamp;
-use debug::PrintTrait;
 
 
 
@@ -44,18 +43,18 @@ pub struct Entity {
     pub heroId: u32,
     pub name: felt252,
     pub turnBar: turnBar::TurnBar,
-    pub statistics: statistics::Statistics,
+    pub statistics: battleStatistics::BattleStatistics,
     pub cooldowns: cooldowns::Cooldowns,
     pub stunOnTurnProc: stunOnTurnProc::StunOnTurnProc,
     pub allyOrEnemy: AllyOrEnemy,
 }
 
-fn new(index: u32, heroId: u32, name: felt252, health: u64, attack: u64, defense: u64, speed: u64, criticalChance: u64, criticalDamage:u64, allyOrEnemy: AllyOrEnemy) -> Entity {
+pub fn new(index: u32, heroId: u32, name: felt252, health: u64, attack: u64, defense: u64, speed: u64, criticalChance: u64, criticalDamage:u64, allyOrEnemy: AllyOrEnemy) -> Entity {
     Entity {
         index: index,
         heroId: heroId,
         name: name,
-        statistics: statistics::new(health, attack, defense, speed, criticalChance, criticalDamage),
+        statistics: battleStatistics::new(health, attack, defense, speed, criticalChance, criticalDamage),
         turnBar: turnBar::new(index, speed),
         cooldowns: cooldowns::new(),
         stunOnTurnProc: stunOnTurnProc::new(0),
@@ -63,10 +62,10 @@ fn new(index: u32, heroId: u32, name: felt252, health: u64, attack: u64, defense
     }
 }
 
-trait EntityTrait {
-    fn playTurn(ref self: Entity, world: IWorldDispatcher, ref battle: Battle);
-    fn playTurnPlayer(ref self: Entity, world: IWorldDispatcher, skillIndex: u8, targetIndex: u32, ref battle: Battle);
-    fn endTurn(ref self: Entity, world: IWorldDispatcher, ref battle: Battle);
+pub trait EntityTrait {
+    fn playTurn(ref self: Entity, ref world: WorldStorage, ref battle: Battle);
+    fn playTurnPlayer(ref self: Entity, ref world: WorldStorage, skillIndex: u8, targetIndex: u32, ref battle: Battle);
+    fn endTurn(ref self: Entity, ref world: WorldStorage, ref battle: Battle);
     fn die(ref self: Entity, ref battle: Battle);
     fn pickSkill(ref self: Entity, skillsCount: u8) -> u8;
     fn takeDamage(ref self: Entity, damage: u64);
@@ -101,27 +100,25 @@ trait EntityTrait {
     fn print(self: @Entity);
 }
 
-impl EntityImpl of EntityTrait {
-    fn playTurn(ref self: Entity, world: IWorldDispatcher, ref battle: Battle) {
+pub impl EntityImpl of EntityTrait {
+    fn playTurn(ref self: Entity, ref world: WorldStorage, ref battle: Battle) {
         if(self.isDead()) {
             self.die(ref battle);
             return;
         }
         self.setMaxHealthIfHealthIsGreater();
-        println!("Health {} {}", self.getHealth().sign, self.getHealth().mag);
+        println!("Health {}", self.getHealth());
 
         self.cooldowns.reduceCooldowns();
         if(self.isStunned()){
             println!("Stunned");
-            self.endTurn(world, ref battle);
+            self.endTurn(ref world, ref battle);
             return;
         }
         else {
             match self.allyOrEnemy {
                 AllyOrEnemy::Ally => {
                     battle.waitForPlayerAction();
-                    // self.name.print();
-                    // self.index.print();
                     battle.entities.set(self.getIndex(), self);
                 },
                 AllyOrEnemy::Enemy => {
@@ -129,7 +126,7 @@ impl EntityImpl of EntityTrait {
                     let skillIndex = self.pickSkill(skillSet.len().try_into().unwrap());
                     let skill = *skillSet.get(skillIndex.into()).unwrap().unbox();
                     let skillEventParams = skill.cast(skillIndex, ref self, ref battle);
-                    emit!(world, (Event::Skill(Skill {
+                    world.emit_event(@Skill {
                         owner: battle.owner,
                         casterId: skillEventParams.casterId,
                         targetId: skillEventParams.targetId,
@@ -137,20 +134,20 @@ impl EntityImpl of EntityTrait {
                         damages: skillEventParams.damages,
                         heals: skillEventParams.heals,
                         deaths: battle.checkAndProcessDeadEntities(),
-                    })));
-                    self.endTurn(world, ref battle);
+                    });
+                    self.endTurn(ref world, ref battle);
                 },
             }
         }
     }
-    fn playTurnPlayer(ref self: Entity, world: IWorldDispatcher, skillIndex: u8, targetIndex: u32, ref battle: Battle) {
+    fn playTurnPlayer(ref self: Entity, ref world: WorldStorage, skillIndex: u8, targetIndex: u32, ref battle: Battle) {
         let mut target = battle.getEntityByIndex(targetIndex);
         assert(!target.isDead(), 'Target is dead');
         assert(!self.cooldowns.isOnCooldown(skillIndex), 'Skill is on cooldown');
         let skillSet = battle.skillSets.get(self.index).unwrap().unbox();
         let skill = *skillSet.get(skillIndex.into()).unwrap().unbox();
         let skillEventParams = skill.castOnTarget(skillIndex, ref self, ref target, ref battle);
-        emit!(world,(Event::Skill(Skill {
+        world.emit_event(@Skill {
             owner: battle.owner,
             casterId: skillEventParams.casterId,
             targetId: skillEventParams.targetId,
@@ -158,20 +155,20 @@ impl EntityImpl of EntityTrait {
             damages: skillEventParams.damages,
             heals: skillEventParams.heals,
             deaths: battle.checkAndProcessDeadEntities(),
-        })));
-        self.endTurn(world, ref battle);
+        });
+        self.endTurn(ref world, ref battle);
     }
-    fn endTurn(ref self: Entity, world: IWorldDispatcher, ref battle: Battle) {
+    fn endTurn(ref self: Entity, ref world: WorldStorage, ref battle: Battle) {
         // self.setMaxHealthIfHealthIsGreater();
         self.processEndTurnProcs(ref battle);
         self.turnBar.resetTurn();
         battle.entities.set(self.getIndex(), self);
-        emit!(world, (Event::EndTurn(EndTurn {
+        world.emit_event(@EndTurn {
             owner: battle.owner,
             buffs: battle.getEventBuffsArray(),
             status: battle.getEventStatusArray(),
             speeds: battle.getEventSpeedsArray(),
-        })));
+        });
     }
     fn die(ref self: Entity, ref battle: Battle) {
         println!("Death {}", self.index);
@@ -255,18 +252,19 @@ impl EntityImpl of EntityTrait {
         return skillIndex;
     }
     fn takeDamage(ref self: Entity, damage: u64) {
-        self.statistics.health -= i64Impl::new(damage, false);
+        self.statistics.health -= damage.try_into().unwrap();
     }
     fn takeHeal(ref self: Entity, heal: u64) {
-        self.statistics.health += i64Impl::new(heal, false);
+        self.statistics.health += heal.try_into().unwrap();
         self.setMaxHealthIfHealthIsGreater();
     }
     fn takeHealAllowOverheal(ref self: Entity, heal: u64) {
-        self.statistics.health += i64Impl::new(heal, false);
+        self.statistics.health += heal.try_into().unwrap();
     }
     fn setMaxHealthIfHealthIsGreater(ref self: Entity) {
-        if(!self.getHealth().sign && self.getHealth().mag > self.getMaxHealth()) {
-            self.statistics.health = i64Impl::new(self.getMaxHealth(), false);
+        let maxHeathSigned: i64 = self.getMaxHealth().try_into().unwrap();
+        if(self.statistics.health > maxHeathSigned) {
+            self.statistics.health = maxHeathSigned;
         }
     }
     fn incrementTurnbar(ref self: Entity) {
@@ -301,7 +299,8 @@ impl EntityImpl of EntityTrait {
     }
     fn isDead(self: @Entity) -> bool {
         // println!("isDead health: {} {}", self.statistics.getHealth().sign, self.statistics.getHealth().mag);
-        if (self.statistics.getHealth().min(i64Impl::new(0, false)) == self.statistics.getHealth()) {
+        if(self.statistics.getHealth() < 0) {
+        // if (self.statistics.getHealth().min(i64Impl::new(0, false)) == self.statistics.getHealth()) {
             return true;
         }
         return false;
@@ -314,14 +313,14 @@ impl EntityImpl of EntityTrait {
     }
     fn getEventStatisticsBuffsArray(self: Entity) -> Array<EntityBuffEvent> {
         let mut buffsArray: Array<EntityBuffEvent> = Default::default();
-        if(self.statistics.attack.getBonusValue() > 0 && self.statistics.attack.bonus.duration > 0) {
-            buffsArray.append(EntityBuffEvent { name: 'attack', duration: self.statistics.attack.bonus.duration });
+        if(self.statistics.attack.getBonusValue() > 0 && self.statistics.attack.getBonusDuration() > 0) {
+            buffsArray.append(EntityBuffEvent { name: 'attack', duration: self.statistics.attack.getBonusDuration() });
         }
-        if(self.statistics.defense.getBonusValue() > 0 && self.statistics.defense.bonus.duration > 0) {
-            buffsArray.append(EntityBuffEvent { name: 'defense', duration: self.statistics.defense.bonus.duration });
+        if(self.statistics.defense.getBonusValue() > 0 && self.statistics.defense.getBonusDuration() > 0) {
+            buffsArray.append(EntityBuffEvent { name: 'defense', duration: self.statistics.defense.getBonusDuration() });
         }
-        if(self.statistics.speed.getBonusValue() > 0 && self.statistics.speed.bonus.duration > 0) {
-            buffsArray.append(EntityBuffEvent { name: 'speed', duration: self.statistics.speed.bonus.duration });
+        if(self.statistics.speed.getBonusValue() > 0 && self.statistics.speed.getBonusDuration() > 0) {
+            buffsArray.append(EntityBuffEvent { name: 'speed', duration: self.statistics.speed.getBonusDuration() });
         }
         return buffsArray;
     }
@@ -334,14 +333,14 @@ impl EntityImpl of EntityTrait {
     }
     fn getEventStatisticsStatusArray(self: Entity) -> Array<EntityBuffEvent> {
         let mut statusArray: Array<EntityBuffEvent> = Default::default();
-        if(self.statistics.attack.getMalusValue() > 0 && self.statistics.attack.malus.duration > 0) {
-            statusArray.append(EntityBuffEvent { name: 'attack', duration: self.statistics.attack.malus.duration });
+        if(self.statistics.attack.getMalusValue() > 0 && self.statistics.attack.getMalusDuration() > 0) {
+            statusArray.append(EntityBuffEvent { name: 'attack', duration: self.statistics.attack.getMalusDuration() });
         }
-        if(self.statistics.defense.getMalusValue() > 0 && self.statistics.defense.malus.duration > 0) {
-            statusArray.append(EntityBuffEvent { name: 'defense', duration: self.statistics.defense.malus.duration });
+        if(self.statistics.defense.getMalusValue() > 0 && self.statistics.defense.getMalusDuration() > 0) {
+            statusArray.append(EntityBuffEvent { name: 'defense', duration: self.statistics.defense.getMalusDuration() });
         }
-        if(self.statistics.speed.getMalusValue() > 0 && self.statistics.speed.malus.duration > 0) {
-            statusArray.append(EntityBuffEvent { name: 'speed', duration: self.statistics.speed.malus.duration });
+        if(self.statistics.speed.getMalusValue() > 0 && self.statistics.speed.getMalusDuration() > 0) {
+            statusArray.append(EntityBuffEvent { name: 'speed', duration: self.statistics.speed.getMalusDuration() });
         }
         return statusArray;
     }
@@ -374,8 +373,8 @@ impl EntityImpl of EntityTrait {
     }
 
     fn print(self: @Entity) {
-        (*self.name).print();
-        (*self.index).print();
+        println!("Entity name: {}", self.name);
+        println!("Entity index: {}", self.index);
         self.statistics.print();
     }
 }

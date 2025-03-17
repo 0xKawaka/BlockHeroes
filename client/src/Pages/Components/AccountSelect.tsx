@@ -1,4 +1,4 @@
-import { Account } from "starknet"
+import { Account, AccountInterface } from "starknet"
 import "./AccountSelect.css"
 import { useState, useEffect } from "react"
 import Register from "./Register"
@@ -6,13 +6,10 @@ import { BurnerAccount } from "@dojoengine/create-burner"
 import { GameAccount } from "../../Types/toriiTypes"
 
 type AccountSelectProps = {
-  account: BurnerAccount,
-  setAccountSelected: React.Dispatch<React.SetStateAction<boolean>>
-  setBlockchainAccount: React.Dispatch<React.SetStateAction<Account>>
-  allAccountsDict: {[key: string]: GameAccount}
+  account: AccountInterface,
 }
 
-export default function AccountSelect({account, allAccountsDict, setAccountSelected, setBlockchainAccount}: AccountSelectProps) {
+export default function AccountSelect({account}: AccountSelectProps) {
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [removePopup, setRemovePopup] = useState<boolean>(false);
   const [adrsToRemove, setAdrsToRemove] = useState<string>("");

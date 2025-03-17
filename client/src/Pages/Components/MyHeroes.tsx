@@ -5,14 +5,12 @@ import {HeroesStatsDict, HeroInfos, RuneInfos, RunesList} from '../../Types/apiT
 import RunePanel from "./RunePanel"
 import HeroesList from "./HeroesList"
 import ArrowBack from "../../assets/misc/arrowback.png"
-import { Account } from 'starknet'
 import StateChangesHandler from '../State/StateChangesHandler'
-import { BaseHeroInfos } from '../../Classes/Heroes/HeroesFactory'
 import NotOwnedHeroPanel from './NotOwnedHeroPanel'
 import { GameAccount } from '../../Types/toriiTypes'
+import { BaseHeroInfos } from '../../Types/customTypes'
 
 type MyHeroesProps = {
-  account: Account,
   gameAccount: GameAccount
   heroesList: Array<HeroInfos>
   runesList: Array<RuneInfos>
@@ -30,7 +28,7 @@ function getHeroById(heroId:number, heroesList:Array<HeroInfos>){
 }
 
 
-function MyHeroes ( {account, gameAccount, heroesList, runesList, baseHeroes, stateChangesHandler } : MyHeroesProps) {
+function MyHeroes ( {gameAccount, heroesList, runesList, baseHeroes, stateChangesHandler } : MyHeroesProps) {
   const [showingHero, setShowingHero] = useState<boolean>(false)
   const [heroId, setHeroId] = useState<number>(-1)
   const [heroNotOwned, setHeroNotOwned] = useState<BaseHeroInfos>()
@@ -88,7 +86,7 @@ function MyHeroes ( {account, gameAccount, heroesList, runesList, baseHeroes, st
       <NotOwnedHeroPanel heroInfos={heroNotOwned} setShowingHero={setShowingHero}></NotOwnedHeroPanel>
     }
     {showingRunes &&
-      <RunePanel account={account} gameAccount={gameAccount} runesList={runesList} heroesList={heroesList} runeClicked={getRuneEquipped(heroInfos!, runeSpotClicked)} runeSpotClicked={runeSpotClicked} runeListUnequiped={runeListUnequiped} heroId={heroId} setShowingRunes={setShowingRunes} stateChangesHandler={stateChangesHandler}></RunePanel>
+      <RunePanel gameAccount={gameAccount} runesList={runesList} heroesList={heroesList} runeClicked={getRuneEquipped(heroInfos!, runeSpotClicked)} runeSpotClicked={runeSpotClicked} runeListUnequiped={runeListUnequiped} heroId={heroId} setShowingRunes={setShowingRunes} stateChangesHandler={stateChangesHandler}></RunePanel>
     }
 
   </div>)

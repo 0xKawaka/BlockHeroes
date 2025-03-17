@@ -1,4 +1,4 @@
-import { Account, Contract, shortString } from "starknet"
+import { Account } from "starknet"
 // import {AccountsAdrs, PvpAdrs} from './data/contracts'
 // import AccountsAbi from './abi/Accounts.json'
 // import PvpAbi from './abi/Pvp.json'
