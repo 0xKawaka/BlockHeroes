@@ -13,7 +13,7 @@ pub struct DailyQuests {
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-pub struct DailyQuestsSetttings {
+pub struct DailyQuestsSettings {
     #[key]
     pub index: u16,
     pub arenaFightsRequired: u32,

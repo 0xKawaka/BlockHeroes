@@ -13,16 +13,28 @@ function getQueryPlayer(accountAdrs: string) {
   ).includeHashedKeys()
 }
 
+function getAccountFixedLenQuery(accountAdrs: string) {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([], [addAddressPadding(accountAdrs)], "FixedLen").build()).includeHashedKeys()
+  .withEntityModels(["game-Account"])
+}
+
+function getAccountVariableLenQuery(accountAdrs: string) {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([], [addAddressPadding(accountAdrs)], "VariableLen").build()).includeHashedKeys()
+  .withEntityModels(["game-AccountQuests", "game-MapProgress", "game-Runes"])
+}
+
+function getUndefinedKeysQuery() {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([], [undefined], "VariableLen").build()).includeHashedKeys()
+  .withEntityModels(["game-Config", "game-GlobalQuests", "game-Heroes", "game-ArenaAccount", "game-ArenaTeam"])
+}
+
 function getGlobalQuestsQuery() {
   return new ToriiQueryBuilder()
   .withClause(KeysClause([], [undefined], "VariableLen").build())
   .withEntityModels(["game-GlobalQuests"])
-}
-
-function getGlobalQuestsPlayerQuery(globalQuestsIds: string[]) {
-  return new ToriiQueryBuilder()
-  .withClause(KeysClause([], globalQuestsIds, "VariableLen").build())
-  .withEntityModels(["game-AccountQuests"])
 }
 
 function getConfigQuery() {
@@ -31,10 +43,24 @@ function getConfigQuery() {
   .withEntityModels(["game-Config"])
 }
 
+function getAccountQuestsQuery(accountAdrs: string) {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([ModelsMapping.AccountQuests], [accountAdrs], "VariableLen").build())
+}
+
+function getAccountQuery(accountAdrs: string) {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([ModelsMapping.Account], [addAddressPadding(accountAdrs)], "FixedLen").build()).includeHashedKeys()
+}
+
 function getRunesQuery(accountAdrs: string) {
   return new ToriiQueryBuilder()
-  .withClause(KeysClause([], [accountAdrs], "VariableLen").build())
-  .withEntityModels(["game-Runes"])
+  .withClause(KeysClause([ModelsMapping.Runes], [accountAdrs], "VariableLen").build())
+}
+
+function getMapProgressQuery(accountAdrs: string) {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([ModelsMapping.MapProgress], [accountAdrs], "VariableLen").build())
 }
 
 function getArenaAccountQuery() {
@@ -49,4 +75,10 @@ function getArenaTeamQuery() {
   .withEntityModels(["game-ArenaTeam"])
 }
 
-export { getQueryPlayer, getGlobalQuestsQuery, getGlobalQuestsPlayerQuery, getConfigQuery, getRunesQuery, getArenaAccountQuery, getArenaTeamQuery };
+function getHeroesQuery() {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([], [undefined], "VariableLen").build())
+  .withEntityModels(["game-Heroes"])
+}
+
+export { getQueryPlayer, getGlobalQuestsQuery, getAccountQuestsQuery, getConfigQuery, getAccountQuery, getRunesQuery, getMapProgressQuery, getArenaAccountQuery, getArenaTeamQuery, getHeroesQuery, getAccountFixedLenQuery, getAccountVariableLenQuery, getUndefinedKeysQuery };

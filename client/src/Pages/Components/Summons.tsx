@@ -16,7 +16,6 @@ type SummonsProps = {
 }
 
 export default function Summons({gameAccount, setShowSummons}: SummonsProps) {
-  console.log("summonChests", gameAccount.summonChests)
   const [isSummoning, setIsSummoning] = useState(false);
   const [showSummongAnimation, setShowSummonAnimation] = useState(false);
   const [showSummonResult, setShowSummonResult] = useState(false);

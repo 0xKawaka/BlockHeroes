@@ -26,6 +26,9 @@ export abstract class HeroesFactory {
   }
 
   public static createHeroes(heroes: Array<HeroBlockchain>, runes: Array<RuneInfos>): Array<HeroInfos> {
+    if(!heroes) {
+      return [];
+    }
     let heroesWithStatsAndSkills = new Array<HeroInfos>();
     heroes.forEach((hero) => {
       let heroWithStatsAndSkills: HeroInfos = this.createHero(hero, runes)

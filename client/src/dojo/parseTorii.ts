@@ -223,6 +223,34 @@ function parseHeroes(heroesRaw: any): Hero[] {
     .filter(Boolean) as Hero[]; // Remove any null entries and assert type
 }
 
+function parseHeroesByOwner(heroesRaw: any): {[key: string]: Hero[]} {
+  if (!heroesRaw || heroesRaw.length === 0) return {};
+
+  return extractValues(heroesRaw).reduce((acc: {[key: string]: Hero[]}, curr: any) => {
+    if (!curr) return acc;
+
+    const owner = curr.owner;
+    if (!acc[owner]) {
+      acc[owner] = [];
+    }
+
+    let runeIds = Parser.parseRuneIds(curr.hero.runes);
+    let spots = Parser.parseSpots(curr.hero.runes);
+
+    acc[owner].push({
+      id: Number(curr.hero.id),
+      name: shortString.decodeShortString(removePadding(curr.hero.name.toString())),
+      level: Number(curr.hero.level),
+      experience: Number(curr.hero.experience),
+      rank: Number(curr.hero.rank),
+      runeIds: runeIds,
+      spots: spots,
+    });
+    
+    return acc;
+  }, {});
+}
+
 function parseMapProgress(mapProgressRaw: any): {[key: number]: number} {
   if (!mapProgressRaw || mapProgressRaw.length === 0) return {0: 0};
   return extractValues(mapProgressRaw).reduce((acc, curr) => {
@@ -280,4 +308,4 @@ function parseArenaTeamsByOwner(arenaTeamsRaw: any): {[key: string]: ArenaTeam[]
 
 
 
-export { parseAccount, parseConfig, parseRunes, parseHeroes, extractValues, parseMapProgress, parseArenaAccountsByOwner, parseArenaTeamsByOwner };
+export { parseAccount, parseConfig, parseRunes, parseHeroes, extractValues, parseMapProgress, parseArenaAccountsByOwner, parseArenaTeamsByOwner, parseHeroesByOwner };

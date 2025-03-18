@@ -2,32 +2,32 @@ use starknet::ContractAddress;
 
 use game::models::hero::rune::Rune;
 
-#[derive(Drop)]
+// #[derive(Drop)]
 // #[dojo::event]
-pub enum Event {
-    NewBattle: NewBattle,
-    Skill: Skill,
-    StartTurn: StartTurn,
-    EndTurn: EndTurn,
-    EndBattle: EndBattle,
+// pub enum Event {
+//     NewBattle: NewBattle,
+//     Skill: Skill,
+//     StartTurn: StartTurn,
+//     EndTurn: EndTurn,
+//     EndBattle: EndBattle,
 
-    Loot: Loot,
-    ExperienceGain: ExperienceGain,
+//     Loot: Loot,
+//     ExperienceGain: ExperienceGain,
 
-    NewAccount: NewAccount,
-    HeroMinted: HeroMinted,
+//     NewAccount: NewAccount,
+//     HeroMinted: HeroMinted,
 
-    RuneMinted: RuneMinted,
-    RuneUpgraded: RuneUpgraded,
-    RuneBonusEvent: RuneBonusEvent,
+//     RuneMinted: RuneMinted,
+//     RuneUpgraded: RuneUpgraded,
+//     RuneBonusEvent: RuneBonusEvent,
 
-    ArenaDefense: ArenaDefense,
-    RankChange: RankChange,
-    InitArena: InitArena,
+//     ArenaDefense: ArenaDefense,
+//     RankChange: RankChange,
+//     InitArena: InitArena,
 
-    TimestampPvpEnergy: TimestampPvpEnergy,
-    TimestampEnergy: TimestampEnergy,
-}
+//     TimestampPvpEnergy: TimestampPvpEnergy,
+//     TimestampEnergy: TimestampEnergy,
+// }
 
 #[derive(Drop, Serde, Introspect)]
 pub enum EventKey {
