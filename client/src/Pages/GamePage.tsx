@@ -66,7 +66,6 @@ function GamePage() {
   const mapProgress = useMemo(() => parseMapProgress(mapProgressRaw), [mapProgressRaw]);
 
   const gameAccountRaw = useModel(playerEntityId, ModelsMapping.Account);
-  console.log("gameAccountRaw", gameAccountRaw)
   const gameAccount = useMemo(() => parseAccount(gameAccountRaw as Account), [gameAccountRaw]);
   const runesRaw = useModels("game-Runes");
   const parsedRunes = useMemo(() => parseRunes(runesRaw), [runesRaw]);

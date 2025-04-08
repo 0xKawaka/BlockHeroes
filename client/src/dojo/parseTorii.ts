@@ -21,6 +21,7 @@ function parseAccount(account: Account): GameAccount | null {
         runesCount: Number(account.runesCount),
         heroesCount: Number(account.heroesCount),
         summonChests: Number(account.summonChests),
+        lastBattleId: Number(account.lastBattleId),
     }
 }
 
