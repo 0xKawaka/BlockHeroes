@@ -1,4 +1,4 @@
-import { BlockchainRune } from "../../Types/blockchainTypes"
+import { BlockchainRune } from "./blockchainTypes"
 
 type NewBattleEvent = {owner: string, healthsArray: number[]}
 type StartTurnEvent = {owner: string, entityId: number, damages: number[], heals: number[], buffs: Array<{name: string, duration: number}>, status: Array<{name: string, duration: number}>, isDead: boolean}
@@ -10,4 +10,5 @@ type ExperienceGainEvent = {owner: string,  entityId: number, experienceGained: 
 type LootEvent = {owner: string, crystals: number}
 type RuneMintedEvent = {owner: string, blockchainRune: BlockchainRune}
 type RankChangeEvent = {owner: string, rank: number}
-export type {NewBattleEvent, StartTurnEvent, SkillEvent, EndTurnEvent, EndBattleEvent, RuneBonusEvent, ExperienceGainEvent, LootEvent, RuneMintedEvent, RankChangeEvent }
+
+export type {NewBattleEvent, StartTurnEvent, SkillEvent, EndTurnEvent, EndBattleEvent, RuneBonusEvent, ExperienceGainEvent, LootEvent, RuneMintedEvent, RankChangeEvent}

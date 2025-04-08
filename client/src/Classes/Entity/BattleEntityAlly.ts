@@ -10,7 +10,7 @@ import SpriteWrapper from "../Animations/SpriteWrapper";
 import AnimationsHandler from "../Animations/AnimationsHandler";
 import ISkillAnimation from "../Skill/Animations/ISkillAnimation";
 import SkillTooltip from "./SkillTooltip";
-import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
+import { StartTurnEvent } from "../../Types/eventTypes";
 import UIScene from "../../Scenes/UIScene";
 import TargetBar from "./TargetBar";
 

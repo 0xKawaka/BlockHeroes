@@ -3,6 +3,7 @@ import { ArenaAccount, ArenaTeam, Config, GameAccount, Hero, Rune } from "../Typ
 import { Account, ConfigType } from "./generated/models.gen";
 import { shortString } from "starknet";
 import { Parser } from "./Parser";
+import { NewBattleEvent } from "../Types/eventTypes";
 
 function parseAccount(account: Account): GameAccount | null {
   if(!account) {
@@ -304,8 +305,15 @@ function parseArenaTeamsByOwner(arenaTeamsRaw: any): {[key: string]: ArenaTeam[]
   }, {});
 }
 
+function parseNewBattle(newBattleRaw: any): NewBattleEvent {
+  console.log("newBattleRaw", newBattleRaw)
+  if (!newBattleRaw || newBattleRaw.length === 0) return {owner: "", healthsArray: []};
+  return {
+    owner: newBattleRaw.owner,
+    healthsArray: newBattleRaw.healthsArray,
+  };
+}
 
 
 
-
-export { parseAccount, parseConfig, parseRunes, parseHeroes, extractValues, parseMapProgress, parseArenaAccountsByOwner, parseArenaTeamsByOwner, parseHeroesByOwner };
+export { parseAccount, parseConfig, parseRunes, parseHeroes, extractValues, parseMapProgress, parseArenaAccountsByOwner, parseArenaTeamsByOwner, parseHeroesByOwner, parseNewBattle };

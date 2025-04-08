@@ -12,7 +12,7 @@ import SpriteWrapper from "../Animations/SpriteWrapper";
 import AnimationsHandler from "../Animations/AnimationsHandler";
 import BitmapTextAnim from "../Animations/BitmapTextAnim";
 import BarHandler from "../BarHandler";
-import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
+import { StartTurnEvent } from "../../Types/eventTypes";
 import TargetBar from "./TargetBar";
 
 export default class BattleEntity implements IBattleEntity {

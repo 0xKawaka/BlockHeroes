@@ -1,7 +1,7 @@
 {
   "world": {
-    "class_hash": "0x7c9469d45a9cdbab775035afb48e1fa73fb35ab059fcb9dfb0a301aa973e783",
-    "address": "0x2c3ad3cc69e70489c382820f5bd36a54c870742d28341e41f5f04501b36d3e0",
+    "class_hash": "0x75fc75bcd1a7f8b4bf64b74978b0f89c8cee44bb755c1dae6f82284756451ec",
+    "address": "0x4bddbe615769ef401d3fe11cd22df859aae8cad5d634ca039ccf9c0c64f087c",
     "seed": "game",
     "name": "Dojo starter",
     "entrypoints": [
@@ -1312,8 +1312,8 @@
   },
   "contracts": [
     {
-      "address": "0x128a1000b9e44e705ee2546081b99bbaa75f6568a1d459e5358ef1a7b1dbee8",
-      "class_hash": "0x36b4b2410f5f66b92e50d234665233a12da824b81a11e59502b208cb399aacd",
+      "address": "0x5d55cf9d853f7f47a37f193a463b5eec6108744c2c9e3dff6bf5b6dfe1d45f",
+      "class_hash": "0x29f4048738ea82459163a4cc2d0972bb34451b2b5dece251c4dd0a0451aae01",
       "abi": [
         {
           "type": "impl",
@@ -1690,8 +1690,8 @@
       ]
     },
     {
-      "address": "0x9d0fa3c5c78d135c43ac3ec28916ca0d74103008bda3b7ea8ec8a91b0da91d",
-      "class_hash": "0x3958acc16d6513c5a76a31b4aaa555b39bcff0a6f3e782a92c7a2bd7aeed53a",
+      "address": "0x352098e0063788f006d135c91b4787aa1a3690a87fbec5c13b432774a8e95fc",
+      "class_hash": "0x7db31091e878aa34d5a1cb306a7ed16d6a3ac2dd7432db3fad3a8f22239934e",
       "abi": [
         {
           "type": "impl",
@@ -1871,175 +1871,175 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x4ae66c027db4192ab5986650286869a19c3df8d261c3ade46104a1655f40754",
+      "class_hash": "0x4fa47d9db5d7481060f53036e2cdbb60a12586cc410627d4ad5796b22246a60",
       "tag": "game-Account",
       "selector": "0x29dd3dd71ad696771fe0227c7286feb9670981fb138bcffd2800de6eb2436fc"
     },
     {
       "members": [],
-      "class_hash": "0x3f32b1868c135169678c09f6c9a517e0095634e567828126af625284e43ccd7",
+      "class_hash": "0x26b941ecc36835cd74049dfa66dcb06136c17842dbffb80da7e5faa01b722a",
       "tag": "game-AccountQuests",
       "selector": "0x28c6c5cce3794e935c8a4cedf22d0f24bf8c3dde601a255f557398b7d3dd154"
     },
     {
       "members": [],
-      "class_hash": "0x78321e073309b27ad4ab094cfe3f18730f76ed01c26e511fcf043ccf28df040",
+      "class_hash": "0x6432d441c9f658d66cd7df86988a09528ce5c37b7765a3ad6ac9a670ad80aa9",
       "tag": "game-ArenaAccount",
       "selector": "0x1173c59883b8dc56a72a646dc18e0188189dba2f6c8fd8cffb57378d5bad524"
     },
     {
       "members": [],
-      "class_hash": "0x1d04d42f3e484ff491fbe470572778f1d907eb8ee6137136bfeeb23f9e5a6a0",
+      "class_hash": "0x1c29632ddf9b4f01a56dec0fe2d49eae58630712ab533da39cec86aefe96a2a",
       "tag": "game-ArenaBattleStorage",
       "selector": "0x1b5875341817d8f6a25bb5c8a95322f7c622e4dc27a3a630e2b508fac2718ee"
     },
     {
       "members": [],
-      "class_hash": "0x6cc7959ae2df7e78e79f38442178788a0c383940bc9e5744a187931605edba8",
+      "class_hash": "0x2f1bd2940794df8c9250c06c2c70e6133f71dbf67e05276a00709192ec971c4",
       "tag": "game-ArenaConfig",
       "selector": "0x55fabecf4ed489b1992f67741deadaf085a6c3af65e11637de9c7fac283ddec"
     },
     {
       "members": [],
-      "class_hash": "0x44bedf1f8f3d76087fd301f1748bdb3914ef8de1b4fa2d1bae0ad09160bb897",
+      "class_hash": "0x354bad8bb87aded25d4ba3e23405b0315769e779ffb78c38d047e6d74e635ef",
       "tag": "game-ArenaCurrentRankIndex",
       "selector": "0x59625102c5b0100d28d12817baac82d6c4ef2f79ddffd6b19415d6cc6142e62"
     },
     {
       "members": [],
-      "class_hash": "0x5e4c07b3c2d8b139a265a5d5f005eb3d7a33bd398a21d0736448b4e94fa1736",
+      "class_hash": "0x5040c153e90defe7f2da67145681f7c0a428e9fe424ba584c3cb17734b3cc45",
       "tag": "game-ArenaTeam",
       "selector": "0x72603bcaddb7679e6cb3f4b43b64f194623cb942e6bbdccc6c3ec36993e527a"
     },
     {
       "members": [],
-      "class_hash": "0x444f104b2a27698a74b2cd1580ffc74aacedb5166f2bc21c704ff88ed4a6bc3",
+      "class_hash": "0x11a0edbe72bf42bebd3b80a8fdd17f49481cfd3c4bac2455fe8f531eef49a91",
       "tag": "game-BaseHero",
       "selector": "0x17593f72e00c0a27c4f0d877646f54b1df1ab3624b14531ad03b524c44fbb95"
     },
     {
       "members": [],
-      "class_hash": "0xa9498b93199b965a2803bf7cffd9456fbc19d244e7cbeea7ad7f4b314cca10",
+      "class_hash": "0xdad1eaf3a36726ac1edf146dae375e7b0feb9639be206ea8216980af12d666",
       "tag": "game-BattleStorage",
       "selector": "0x3e3288d7e3aaf4c6786e5fbcd39b61d29a8076fd407886720f7c96b567095a8"
     },
     {
       "members": [],
-      "class_hash": "0x3db4713d51c4bd5453ea70047146280c8e2eeb2174a05c59eadab13bc1d45c4",
+      "class_hash": "0x8fa1252f6b624d798cbf75ddcd070f6aa6c59a636e1037e59523d48070b82b",
       "tag": "game-BonusRuneStatistics",
       "selector": "0x597cd1c6628581abcc7020501f63aad56e6fb4a9e6385f947931b7ae24a3560"
     },
     {
       "members": [],
-      "class_hash": "0x4603dacfdf71bb52b6d112492273af0231dcb2fdc37f7cdf5d024281c138800",
+      "class_hash": "0x2f42cedbd6faf1c94710da4011f8be4006041a49e36542df4232b1a483e089b",
       "tag": "game-Config",
       "selector": "0x60017ca9cae7737553f7ca7dc77dfabb61af5625d7159f6cc9785e8ac54b393"
     },
     {
       "members": [],
-      "class_hash": "0x37fbe8bd210fb8972f3d902ae312ccd6f1889a7e448bc5994a1c59b143a2a5f",
+      "class_hash": "0x6e3a9fd725fc464f3bc68c9b1adb6066897517b489822ace5917e6fb8ff6b11",
       "tag": "game-EnemyRanges",
       "selector": "0x28af341450fe0007bf1bae62f79b29d568098149fe3986f69d17ee3ac9b689c"
     },
     {
       "members": [],
-      "class_hash": "0x5377e105f17df1870d4d43991add3fd93f089b42eea323b5ef696e3da9c6221",
+      "class_hash": "0x5ee24e073b4222c11fd4d1655c4c3df395372432055550bb3a9e2864653c6d8",
       "tag": "game-EntityStorage",
       "selector": "0x4113cc43b3b55daa8f43b32b24e99030ec9703ebbebf99f96fb003d4fd7f61a"
     },
     {
       "members": [],
-      "class_hash": "0x5a8523ef7ba354ff597583dd1d44eafa3eb4290246ad14fa7e081294b574421",
+      "class_hash": "0x236f9d1f956636bc30b51072205ec0d77a7f2045d6f2e6f836174702272f7e0",
       "tag": "game-GemsRewards",
       "selector": "0x7f7e84199a400ee13e0bee6d85f61692c220bf15c2422be95783e4403cbc6db"
     },
     {
       "members": [],
-      "class_hash": "0x59a2736585e9479d2d24f42976ed57ba2b59bd7d8d3af24a9280c7c78c1a920",
+      "class_hash": "0x6387e3fd3012aad0f3a9b2967b08c3da66effc83a1a2af77e473387d6063543",
       "tag": "game-GlobalQuests",
       "selector": "0x26e30eaca9267f9c8246ef13e459644d4c935b42e692cd4317274f0c4ca00bc"
     },
     {
       "members": [],
-      "class_hash": "0x1e1a8efb99b0e91ca23800ad1e8247e36a04bbc38cec8760350bb0a00e48253",
+      "class_hash": "0x2f09a321572de3d3a734941a559115d38df903714c726e6bb2655f91c417fc1",
       "tag": "game-HealthOnTurnProcStorage",
       "selector": "0x6fad5dfd3af432206eacdd00670c94248a8359c90913da48ac4f90dcec34cba"
     },
     {
       "members": [],
-      "class_hash": "0x7d1e5a75a59ed4eca8d7cea911c2a9be9d51b15686fbf0814e84a28dee449fa",
+      "class_hash": "0x4f41a9a325a5c642cb7ce1bc49d40c42add90c0c635d95f69800a521ff2b52c",
       "tag": "game-Heroes",
       "selector": "0x3404b465a5cdace816bd37392bb6e6d6b9a520f75bf7820ec61850eb5743971"
     },
     {
       "members": [],
-      "class_hash": "0x70d0258c3919b939522a649b2e4cb86748ad05f4d5e1c0a29113a1e97cb9392",
+      "class_hash": "0x45fa7f9efb1335a7870dd6367f13f514061bd826cf7c9e81de95c6415f53eae",
       "tag": "game-HeroesByRank",
       "selector": "0x5dd608750afcdc9bf51e1ad873bf26d47d15d9aa7094fb14c8845343922c5ab"
     },
     {
       "members": [],
-      "class_hash": "0xbf2784f614a861fb9005614c20308258db4f648de51c21f88062ed53c80dc2",
+      "class_hash": "0x74b689b7a45f46376f8be3846c1ac24c6d90524d894ec24f7543186a31f1956",
       "tag": "game-LevelEnemy",
       "selector": "0x7ad791f778e25d3761a6e84deeb8bc1dd94d4205d6b09c25dd2ef4427eefc4f"
     },
     {
       "members": [],
-      "class_hash": "0x30b513ce4a3bca60786fbf66192f6fa84070d1916d847b892761600cc4b933d",
+      "class_hash": "0x31af8c3464f3b21f8f9fa3e5fbc9a4ebb64b9c29204c12d59805a4640faf73a",
       "tag": "game-LevelInfos",
       "selector": "0x305d29c641729ff37afeeb6c899ba5def8603e7ca039e4d0ff28b826a5daf56"
     },
     {
       "members": [],
-      "class_hash": "0xcb0d99b34a53e3856426eb3c0e0e46b676b42b0f423da61443ee147d9e993b",
+      "class_hash": "0x5e6c73dea64c46d28880fb60a29e31c2700040f94990d8975bd5edd61097c64",
       "tag": "game-MapProgress",
       "selector": "0x1bbf0d3ad009921094a4512a8fb19e4147e93cf3bf248dffb65cbc597584113"
     },
     {
       "members": [],
-      "class_hash": "0xe694bbbc2db36038cd16771c3fe6732f380c803a43df9019a30fa653e9edb5",
+      "class_hash": "0x5e19dba4907e114ec9d4f02f4b8d8907b09016a7e44a7fae749d28a8cbd0ea8",
       "tag": "game-RuneStatistics",
       "selector": "0x52b3fecd2392f5dbb76a5c9029c2977552f5ddf66f638b6eb9542322f369410"
     },
     {
       "members": [],
-      "class_hash": "0x5da5f767b1b2fa67864c24a36bdeebe6ca117c75dd90ba59e0eb60327245834",
+      "class_hash": "0x6b6426517a5c2b548d1e6c4f1b025dab288080197e3e5373d56f530a499bccb",
       "tag": "game-Runes",
       "selector": "0x34b26885894365116d1c513a8408d6f797cc087d998a8ca65ae02e1737a92c9"
     },
     {
       "members": [],
-      "class_hash": "0x7f9f220276c1de055d5bec4d3df6e6471b4ee0157c7f92e2f36334f2f41555e",
+      "class_hash": "0x242571915f25380968750809775161629429aac260a0eb07809d6bb8abd492a",
       "tag": "game-SkillBuff",
       "selector": "0x4cc3679b6c695addd6e64602908a4b95de317a0d6d1db6d11b5b03e230c351a"
     },
     {
       "members": [],
-      "class_hash": "0x5a3271135cf2fc232c15d21ecd43ac72ef5600deb402e5cb3f7992301bc7b9f",
+      "class_hash": "0x217a313897017ce6e29d842312b7247fa8fe30d751615a667fab0981134e3bb",
       "tag": "game-SkillInfos",
       "selector": "0x28bcfd4897faa1407cb62df86c2354720a3acdc2f2e9f6f827a73b5ff17d4e0"
     },
     {
       "members": [],
-      "class_hash": "0x77fe4d720e262a3b37e1c4d7e2026ff205e701c2a6e98dc3b07089f6ee0ae46",
+      "class_hash": "0x36243af1c34afa4a78307c31903aa1373d8a8e5aa29c55c4329f51e84a5dfd8",
       "tag": "game-SkillNameSet",
       "selector": "0x578ae399e226b847efb0bd0c4d7d6f98100696631e125aa974c1d2d56038d43"
     },
     {
       "members": [],
-      "class_hash": "0x345296e8bae039258e698f515c11d161fe09fcdf4b218a0a93a10858e462bd1",
+      "class_hash": "0x2a43d916c3cee48f890f22cbda3658413c38023f473c28e11a3359ba26a58aa",
       "tag": "game-SummonRates",
       "selector": "0x82b066b0977fc54d716d01fb7edcf918505508972dbf870096fb9a07e11978"
     },
     {
       "members": [],
-      "class_hash": "0x319ac2378ed7f62beed8cc7e9f702d66279020a6078c4c698f0c66c31629502",
+      "class_hash": "0x828c6c5093436cf11719698a6731af01f7d9e573def0eb1afcf07c41d56fed",
       "tag": "game-TurnTimelineStorage",
       "selector": "0x64578fafa1132cade1a6cd5be0ef9ae8aa9774b9acd3fe813a055d65a5ec39f"
     },
     {
       "members": [],
-      "class_hash": "0x4333715ad5614070e3a392697d9e7753ad2b9887c0892c1783a0918622d96cf",
+      "class_hash": "0x52ef7f3f1364984b307bdcbdb343af59d047f15f299e329888b3533d151570a",
       "tag": "game-Usernames",
       "selector": "0x6fb0237929857ba27f39ea8096ac87be6b2852516803b1e191146842913203d"
     }
@@ -2047,127 +2047,127 @@
   "events": [
     {
       "members": [],
-      "class_hash": "0x1bac40e190fa97838ee51cff98709de734d6710ed00961031d4e414ded3c5d",
+      "class_hash": "0x117d2aeb991a1663c9a5fca002cc5174dd61f32d216cf16fd2e94f7d52161ad",
       "tag": "game-ArenaDefense",
       "selector": "0x1cc0bd1ca1a6a7926ef5dfd1d0038177cb9303c9cd0874f39aad31ec06d2423"
     },
     {
       "members": [],
-      "class_hash": "0x2efea20ad042aaecf836706f4d8c7064970ca62d49e1d36960d8d745c519625",
+      "class_hash": "0x2b9cdcb022a1ddab50dbe3c87f3c898554c4ab27245afcac89526c39d243479",
       "tag": "game-BuffEvent",
       "selector": "0x6c47aeb9140f952643a9bd4292957a417ceece73555792052d700329f851fbb"
     },
     {
       "members": [],
-      "class_hash": "0x53cbf9f6a9e7933923cf3fb3bd111b6676d9642d124652184eaf9037d672fc6",
+      "class_hash": "0x18cba4e4a2764b4c17b23a09ed87e7474b4225cfb3c25c829e59830ab25115a",
       "tag": "game-EndBattle",
       "selector": "0x146f26749561afbd95f3e026190f5e1b21a8b1aaa33ca0b7fe94afc2b3187dc"
     },
     {
       "members": [],
-      "class_hash": "0x268def03be13fa108a80f05cff438e265b2575d91bf058fcac257788683c4a2",
+      "class_hash": "0x736605f04477a6bd416c47c32494de64b2df3b07f97d2753c585fedd5c57fc8",
       "tag": "game-EndTurn",
       "selector": "0x32655d86f85a6c0d4440669178a7cc0f3af034b1566d9729ede1af94be621a7"
     },
     {
       "members": [],
-      "class_hash": "0x194ab61e9c09ce1668ca6d69c3ab5ee7f8f7e9a2d0972f6c439d538e00ea065",
+      "class_hash": "0x78d34aa134e994891d9268f2d84be50dff08952e3dfea85c60d5a10138faae2",
       "tag": "game-EntityBuffEvent",
       "selector": "0x28cdac9339320f4dee4a61cf07ed38663e06b6198bb0577cb2e9c7be2a5e71"
     },
     {
       "members": [],
-      "class_hash": "0xda2068cdfcac563345e2e5afac6437945c6709d02ca8592528a132806b1093",
+      "class_hash": "0x1fa53a1c668d1b8a8e6a951c2d021028dcbcb30f719d9cbfd641ee68b951d2f",
       "tag": "game-ExperienceGain",
       "selector": "0x2f69071a6da6586e23417ea21196c4a9bfc107d765f3012a878c960d09430d5"
     },
     {
       "members": [],
-      "class_hash": "0x7834df360c2a7c3c148f96c8b3c690c96cffc0a4734b79d5f1d8eb357a413f9",
+      "class_hash": "0x3e6014f65b3d146141f35216c07d4414dbd9ac5e8492633d3263077f4dcf1a1",
       "tag": "game-HeroMinted",
       "selector": "0x5cd4feeb919f749d2113780b85846908c9a465426a11b003cdaf99cac7f493c"
     },
     {
       "members": [],
-      "class_hash": "0x354b6d094ed413f30f57725e83858f98e12d221e30331c02b18a7a0c101e6d",
+      "class_hash": "0x75c4fe035c5adace8162633bbfa39db37526959412d335f867aae8b5e5acd55",
       "tag": "game-IdAndValue",
       "selector": "0x720f3fbb74580b61d3118bc6f96b386ab3b20d1209d42b4949cdece448bf392"
     },
     {
       "members": [],
-      "class_hash": "0x2ed07ab813c36ce4b951c12850ddfa386cc9fb8627327ab9e4a15203cbdc7a7",
+      "class_hash": "0x70d155dc776068171061662629b8477bab131961fd9ebb4508e547ec56fc635",
       "tag": "game-InitArena",
       "selector": "0x66bd85003c9ccad845b9076b000e39b9c5ac0c6456b16a921274f4a11f23c6a"
     },
     {
       "members": [],
-      "class_hash": "0x3b88e694a8d7bf412827da359665beb0d45c297552b2a653e5a089d0b6a5af2",
+      "class_hash": "0x5515c5623e1ec4407e556035782e73e7ea8eeb0471b5d1120e063ee21f1e97a",
       "tag": "game-Loot",
       "selector": "0x66cb9c470f0c2f8eb52063831913bc28a5d2cc0095ee008d9afa4729ef7ff00"
     },
     {
       "members": [],
-      "class_hash": "0x7e021da12100f1b604073af592d5dfc88259f82dae220d860c9059d24493352",
+      "class_hash": "0x54d44498e7ffe3340cc5901605e5c6c13f850244b314929d20959dd0b7d0b1a",
       "tag": "game-NewAccount",
       "selector": "0x65cdf5ede2c5320dc30fab276e156e4253ca7deede70c190212847aa1a47fcc"
     },
     {
       "members": [],
-      "class_hash": "0x317e2d1a538ad340d19ce81132a6539ac00318de81016ae92b62418993e46f0",
+      "class_hash": "0x26868236ba4bbe54b49f1a9240906b58da0187b219e79f3a1fce6ebe0e2e0e2",
       "tag": "game-NewBattle",
       "selector": "0x21aceb8cab0621476df75e3efd66d07c4d790b6e2eb5c92d9150b3d3a2c6603"
     },
     {
       "members": [],
-      "class_hash": "0x23eee39a4f2a52bfd1677c8be2b4de3fc9fc4bed398a82140a0a3bd4008d6db",
+      "class_hash": "0x4a16e9ea8d513527587f286e339b9c2e00014f4d273be350b87339927bdcba7",
       "tag": "game-RankChange",
       "selector": "0xe22a1d364a089c6f33799ae1ea6e07c836d786174f2bb4a65f6092063cb96d"
     },
     {
       "members": [],
-      "class_hash": "0x9be3187e368e6aeed648401071ddea3e0f8bc52205bc78010389500b0db28d",
+      "class_hash": "0x288ed1a57492cdaa75dd42bf7950a9c468b48117edd7639f0573b6dc835aa2b",
       "tag": "game-RuneBonusEvent",
       "selector": "0x794178c7631196bc290e8bfc9e5181d0e91ac489ec0081bf269a8ec9db97190"
     },
     {
       "members": [],
-      "class_hash": "0xaea0af7ae241c0c83e437cb48a0ecd74834ad91685ec43eef59d77dab5402f",
+      "class_hash": "0xaeba59c753e7f028893b98d205ec9ed37ee338bdd413a89dfa6cdb2acf345f",
       "tag": "game-RuneMinted",
       "selector": "0x6d85c5ad96a5a0ecb1c17c6cbc0aad1b4a433075ae1018ad576191cb818fc99"
     },
     {
       "members": [],
-      "class_hash": "0x56b4cd1b8e81f954085770f559a3ebc45260b7e9c4e0cbf24f7799128852d48",
+      "class_hash": "0x342deff815076e4aa4fb8939dfaa2a6912acb32f7caa63da4abf7fde1054a0f",
       "tag": "game-RuneUpgraded",
       "selector": "0x2bbedb1d70a04b1a27421adb46ec09fb3f1872b840a1a9d4cc2eb9918d6dd6b"
     },
     {
       "members": [],
-      "class_hash": "0x27cc16683fb6988121fc876000dc0d17dff6c76b48354e8712635ad3b3829e7",
+      "class_hash": "0x720f4448e07034832788b77520f630b08dd4e45428e3df05ef1e91accaf2634",
       "tag": "game-Skill",
       "selector": "0x5f54c1131e227c06bfd2efdb9cfcc29caa76c066d5cffa05383502e7b2b2735"
     },
     {
       "members": [],
-      "class_hash": "0x480aab5969212c2461bba23dbcc463b3607a271d7e1abc56b5166bcd27eefc5",
+      "class_hash": "0x27694f0c3a4704f34de9024ca83d6ffdccf4a9cd50100fc550140f461174020",
       "tag": "game-StartTurn",
       "selector": "0x6925ced2bed882a0dde1df155f98d4722cbd6b1ab353db7434904ca89d0355a"
     },
     {
       "members": [],
-      "class_hash": "0x38f77654eeecbffdd662718bd84da1fa021531b57ab6e8a2c3a1d85ab098cd7",
+      "class_hash": "0x68f66814a885c38bc88da2a9a8df59ecd8af9adf4240012a89a0f1364e59405",
       "tag": "game-TimestampEnergy",
       "selector": "0x1866ca3eed92ab9f491e43915b3e908fc37fb5762d5d89a49b1d3bd3aa8ae42"
     },
     {
       "members": [],
-      "class_hash": "0xef4c6e9697d9050dbad5a1be666d28d0d987fdaae2a8151e468f8d1fdf39d6",
+      "class_hash": "0x285430dd930e72bb67f872a9e60abc0178895e036eaf2092809063b82cba613",
       "tag": "game-TimestampPvpEnergy",
       "selector": "0x16d7a2ff0fe99f281c44903e5433dfb57d847f23583a7e515163a8f4572666b"
     },
     {
       "members": [],
-      "class_hash": "0x162f98ba2a2991d5b794249aa441394a6913accb3d98d35bb8555bc20c6c617",
+      "class_hash": "0x6410ba01fb025084c4be1b91e137c45925b5ab31d5c5d262277289299d11331",
       "tag": "game-TurnBarEvent",
       "selector": "0x21fd46fab7f1871d740d993e56275884bc834f1a645894ae68f41a1e8f5c7bd"
     }

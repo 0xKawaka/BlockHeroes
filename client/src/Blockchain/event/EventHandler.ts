@@ -1,5 +1,5 @@
 import RawEvent from "./RawEvent";
-import { RuneBonusEvent } from "./eventTypes";
+import { RuneBonusEvent } from "../../Types/eventTypes";
 import { shortString }  from "starknet";
 
 export default abstract class EventHandler {

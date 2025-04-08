@@ -36,7 +36,6 @@ function computeTotalStats(baseStats: HeroStats, bonusStats: HeroStats): HeroSta
 }
 
 function BattlesSelect ({gameAccount, worldId, battlesList, heroesList, runesList, setWorldId, mapProgress, stateChangesHandler} : BattleSelectProps) {
-  console.log("mapProgress", mapProgress)
   const [selectedBattleIndex, setSelectedBattleIndex] = useState<number>(-1)
   const [selectedHeroesIds, setSelectedHeroesIds] = useState<number[]>([])
   const [heroesBeforeExperienceGained, setHeroesBeforeExperienceGained] = useState<HeroInfos[]>([])

@@ -6,7 +6,7 @@ import HealthBar from "./HealthBar";
 import Battle from "../Battle";
 import SpriteWrapper from "../Animations/SpriteWrapper";
 import AnimationsHandler from "../Animations/AnimationsHandler";
-import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
+import { StartTurnEvent } from "../../Types/eventTypes";
 import TargetBar from "./TargetBar";
 
 export default class BattleEntityEnemy implements IBattleEntity {

@@ -1,4 +1,4 @@
-import { RuneBonusEvent } from "../../Blockchain/event/eventTypes";
+import { RuneBonusEvent } from "../../Types/eventTypes";
 import { RuneInfos, RuneStatsDict } from "../../Types/apiTypes";
 import { BlockchainRune } from "../../Types/blockchainTypes";
 import runeStatsDict from "../../GameDatas/Statistics/runeStats";

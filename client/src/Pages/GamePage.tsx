@@ -1,13 +1,13 @@
 import { useAccount } from '@starknet-react/core'
 import './GamePage.css'
 import { useState, useEffect, useMemo } from 'react'
-import { useDojoSDK, useEntityId, useEntityQuery, useModel, useModels } from '@dojoengine/sdk/react'
+import { useDojoSDK, useEntityId, useEntityQuery, useEventQuery, useModel, useModels } from '@dojoengine/sdk/react'
 import { WalletAccount } from '../dojo/wallet-account'
 import { Account, ModelsMapping, Runes } from '../dojo/generated/models.gen'
-import { getAccountFixedLenQuery, getAccountQuery, getAccountQuestsQuery, getAccountVariableLenQuery, getConfigQuery, getHeroesQuery, getMapProgressQuery, getRunesQuery, getUndefinedKeysQuery } from '../dojo/toriiQueries'
+import { getAccountFixedLenQuery, getAccountQuery, getAccountQuestsQuery, getAccountVariableLenQuery, getConfigQuery, getEventsFromTxHashQuery, getEventsQuery, getHeroesQuery, getMapProgressQuery, getRunesQuery, getUndefinedKeysQuery } from '../dojo/toriiQueries'
 import { maxPvpEnergy, maxEnergy } from '../GameDatas/constants'
 import AccountOverview from './Components/AccountOverview'
-import { extractValues, parseAccount, parseArenaAccountsByOwner, parseArenaTeamsByOwner, parseConfig, parseHeroes, parseHeroesByOwner, parseMapProgress, parseRunes } from '../dojo/parseTorii'
+import { extractValues, parseAccount, parseArenaAccountsByOwner, parseArenaTeamsByOwner, parseConfig, parseHeroes, parseHeroesByOwner, parseMapProgress, parseNewBattle, parseRunes } from '../dojo/parseTorii'
 import Register from './Components/Register'
 
 // import WorldSelect from './Components/WorldSelect'
@@ -28,6 +28,7 @@ import WorldSelect from './Components/WorldSelect'
 import { worldsBattlesList } from '../GameDatas/Levels/battlesInfos'
 import { useSystemCalls } from '../dojo/useSystemCalls'
 import { addAddressPadding } from 'starknet'
+import { NewBattleEvent } from '../Types/eventTypes'
 
 function GamePage() {
   const [showMyHeroes, setShowMyHeroes] = useState<boolean>(false);
@@ -44,11 +45,12 @@ function GamePage() {
 	// const { client, useDojoStore } = useDojoSDK();
 	// const entities = useDojoStore((state) => state.entities);
 
-  const entityId = useEntityId(account?.address ?? "0");
+  const playerEntityId = useEntityId(account?.address ?? "0");
 
   useEntityQuery(getAccountFixedLenQuery(account?.address ?? "0"));
   useEntityQuery(getAccountVariableLenQuery(account?.address ?? "0"));  
   useEntityQuery(getUndefinedKeysQuery());
+  // useEventQuery(getEventsQuery(account?.address ?? "0"));
 
   const configRaw = useModels("game-Config");
   const config = useMemo(() => parseConfig(configRaw), [configRaw]);
@@ -63,7 +65,7 @@ function GamePage() {
   const mapProgressRaw = useModels("game-MapProgress");
   const mapProgress = useMemo(() => parseMapProgress(mapProgressRaw), [mapProgressRaw]);
 
-  const gameAccountRaw = useModel(entityId, ModelsMapping.Account);
+  const gameAccountRaw = useModel(playerEntityId, ModelsMapping.Account);
   // console.log("gameAccountRaw", gameAccountRaw)
   const gameAccount = useMemo(() => parseAccount(gameAccountRaw as Account), [gameAccountRaw]);
   const runesRaw = useModels("game-Runes");
@@ -73,15 +75,17 @@ function GamePage() {
   const heroesRaw = useModels("game-Heroes");
   const heroesByOwner = useMemo(() => parseHeroesByOwner(heroesRaw), [heroesRaw]);
   const heroes = HeroesFactory.createHeroes(heroesByOwner[addAddressPadding(account?.address ?? "0")], runes);
+  const baseHeroes = HeroesFactory.createBaseHeroes();
 
   // const arenaAccountsRaw = useModels("game-ArenaAccount");
   // const arenaAccountsByOwner = useMemo(() => parseArenaAccountsByOwner(arenaAccountsRaw), [arenaAccountsRaw]);
   // const arenaTeamsRaw = useModels("game-ArenaTeam");
   // const arenaTeamsByOwner = useMemo(() => parseArenaTeamsByOwner(arenaTeamsRaw), [arenaTeamsRaw]);
 
+  // let txHashId = useEntityId(txHash);
 
-  const baseHeroes = HeroesFactory.createBaseHeroes();
-
+  // const newBattleRaw = useModel(playerEntityId, ModelsMapping.NewBattle);
+  // const newBattle = useMemo(() => parseNewBattle(newBattleRaw), [newBattleRaw]);
 
   // const { initPvp } = useSystemCalls();
 

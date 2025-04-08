@@ -59,10 +59,12 @@ export default function BattleTeamSelection({gameAccount, map, battleId, enemies
     eventHandler.reset()
     let isBattleStarted = false;
     if(map === Maps.Arena && enemyAdrs) {
-      isBattleStarted = await startPvpBattle(BigInt(enemyAdrs), selectedHeroesIds, eventHandler)
+      const result = await startPvpBattle(BigInt(enemyAdrs), selectedHeroesIds, eventHandler)
+      isBattleStarted = result.success;
     }
     else if (map === Maps.Campaign) {
-      isBattleStarted = await startBattle(selectedHeroesIds, map, battleId, eventHandler);
+      const result = await startBattle(selectedHeroesIds, map, battleId, eventHandler);
+      isBattleStarted = result.success;
     }
     if(isBattleStarted) {
       setIsStartingBattle(false)

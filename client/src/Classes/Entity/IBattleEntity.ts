@@ -6,7 +6,7 @@ import Battle from "../Battle";
 import SpriteWrapper from "../Animations/SpriteWrapper";
 import AnimationsHandler from "../Animations/AnimationsHandler";
 import ISkillAnimation from "../Skill/Animations/ISkillAnimation";
-import { StartTurnEvent } from "../../Blockchain/event/eventTypes";
+import { StartTurnEvent } from "../../Types/eventTypes";
 import TargetBar from "./TargetBar";
 
 export default interface IBattleEntity {

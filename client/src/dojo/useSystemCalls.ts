@@ -94,11 +94,11 @@ export const useSystemCalls = () => {
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
             console.log("start battle event", res.events)
-            eventHandler.parseAndStore(res.events);
-            return true;
+            // eventHandler.parseAndStore(res.events);
+            return {success: true, txHash: txRes.transaction_hash};
         } catch (error: any) {
             console.error("Error starting battle:", error);
-            return false;
+            return {success: false, txHash: ""};
         }
     };
     const startPvpBattle = async (enemyAdrs: bigint, heroesIds: number[], eventHandler: GameEventHandler) => {
@@ -108,11 +108,11 @@ export const useSystemCalls = () => {
                 retryInterval: 100,
                 successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
             });
-            eventHandler.parseAndStore(res.events);
-            return true;
+            // eventHandler.parseAndStore(res.events);
+            return {success: true, txHash: txRes.transaction_hash};
         } catch (error: any) {
             console.error("Error starting pvp battle:", error);
-            return false;
+            return {success: false, txHash: ""};
         }
     };
 

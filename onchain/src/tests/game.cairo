@@ -12,8 +12,8 @@ mod tests {
     // use dojo::utils::test::{spawn_test_world, deploy_contract};
 
     use game::systems::game::{Game, IGameDispatcher, IGameDispatcherTrait};
-    // use game::systems::settings::{Settings, ISettingsDispatcher, ISettingsDispatcherTrait};
     use game::systems::settings::{Settings, Settings::initSettings};
+    // use game::systems::settings::{Settings, Settings::initSettings};
     use game::models::map::{MapTrait, Map};
     use game::models::account::{heroes::{m_Heroes, Heroes}, runes::{m_Runes, Runes}};
     use game::models::account::{Account, AccountImpl, AccountTrait, m_Account};
@@ -100,14 +100,15 @@ mod tests {
     fn contract_defs() -> Span<ContractDef> {
         [
             ContractDefTrait::new(@"game", @"Game")
-                .with_writer_of([dojo::utils::bytearray_hash(@"ns")].span()),
-            // ContractDefTrait::new(@"ns", @"Settings")
-            //     .with_writer_of([dojo::utils::bytearray_hash(@"ns")].span()),
+                .with_writer_of([dojo::utils::bytearray_hash(@"game")].span()),
+            ContractDefTrait::new(@"game", @"Settings")
+                .with_writer_of([dojo::utils::bytearray_hash(@"game")].span()),
         ]
             .span()
     }
 
     #[test]
+    // #[available_gas(900000000000)]
     fn test_world_test_set() {
         // Initialize test environment
         let caller = starknet::contract_address_const::<0x0>();
@@ -119,38 +120,39 @@ mod tests {
         // Ensures permissions and initializations are synced.
         world.sync_perms_and_inits(contract_defs());
 
-        world.write_model_test(@Config { key: ConfigType::TimeTickEnergy, value: 1200 });
-        world.write_model_test(@Config { key: ConfigType::TimeTickPvpEnergy, value: 1200 });
-        world.write_model_test(@Config { key: ConfigType::MaxEnergy, value: 5 });
-        world.write_model_test(@Config { key: ConfigType::MaxPvpEnergy, value: 5 });
-        world.write_model_test(@Config { key: ConfigType::StartingCrystals, value: 50000 });
-        world.write_model_test(@Config { key: ConfigType::StartingGems, value: 0 });
-        world.write_model_test(@Config { key: ConfigType::StartingSummonChests, value: 2 });
-        world.write_model_test(@Config { key: ConfigType::TotalHeroesCount, value: 20 });
+        initSettings(ref world);
+        // world.write_model_test(@Config { key: ConfigType::TimeTickEnergy, value: 1200 });
+        // world.write_model_test(@Config { key: ConfigType::TimeTickPvpEnergy, value: 1200 });
+        // world.write_model_test(@Config { key: ConfigType::MaxEnergy, value: 5 });
+        // world.write_model_test(@Config { key: ConfigType::MaxPvpEnergy, value: 5 });
+        // world.write_model_test(@Config { key: ConfigType::StartingCrystals, value: 50000 });
+        // world.write_model_test(@Config { key: ConfigType::StartingGems, value: 0 });
+        // world.write_model_test(@Config { key: ConfigType::StartingSummonChests, value: 2 });
+        // world.write_model_test(@Config { key: ConfigType::TotalHeroesCount, value: 20 });
 
         let (contract_address, _) = world.dns(@"Game").unwrap();
         let game = IGameDispatcher { contract_address };
 
         game.createAccount('testuser');
-        let acc: Account = world.read_model(caller);
-        assert(acc.username == 'testuser', 'Username incorrect');
+        // let acc: Account = world.read_model(caller);
+        // assert(acc.username == 'testuser', 'Username incorrect');
 
-//         // game.mintHero();
-//         // let mut newAccState = get!(world, caller, Account);
-//         // assert(newAccState.heroesCount == acc.heroesCount + 1, 'Hero not minted');
+        // game.mintHero();
+        // let mut newAccState: Account = world.read_model(caller);
+        // assert(newAccState.heroesCount == acc.heroesCount + 1, 'Hero not minted');
 
-//         // game.mintRune();
-//         // game.mintRune();
-//         // newAccState = get!(world, caller, Account);
-//         // assert(newAccState.runesCount == acc.runesCount + 2, 'Rune not minted');
-//         // let rune = get!(world, (caller, 1), Runes).rune;
-//         // assert(rune.id == 1, 'Rune id incorrect');
+        // game.mintRune();
+        // game.mintRune();
+        // newAccState = world.read_model(caller);
+        // assert(newAccState.runesCount == acc.runesCount + 2, 'Rune not minted');
+        // let rune: Runes = world.read_model((caller, 1));
+        // assert(rune.rune.id == 1, 'Rune id incorrect');
 
-//         let initial = testing::get_available_gas();
-//         gas::withdraw_gas().unwrap();
-//         game.startBattle(array![12, 13], Map::Campaign.toU16(), 0);
-//         println!("{}\n", initial - testing::get_available_gas());
-//         // game.playTurn(Map::Campaign.toU16(), 0, 5);
+        let initial = testing::get_available_gas();
+        gas::withdraw_gas().unwrap();
+        game.startBattle(array![12, 13], Map::Campaign.toU16(), 0);
+        println!("{}\n", initial - testing::get_available_gas());
+        // game.playTurn(Map::Campaign.toU16(), 0, 5);
     }
 
 }

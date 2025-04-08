@@ -208,6 +208,7 @@ pub fn newNullableVecFromArray<T, +Drop<T>, +Copy<T>>(array: Array<T>) -> Nullab
             break;
         }
         vec.push(*array[i]);
+        i = i + 1;
     };
     vec
 }

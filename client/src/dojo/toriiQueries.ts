@@ -81,4 +81,16 @@ function getHeroesQuery() {
   .withEntityModels(["game-Heroes"])
 }
 
-export { getQueryPlayer, getGlobalQuestsQuery, getAccountQuestsQuery, getConfigQuery, getAccountQuery, getRunesQuery, getMapProgressQuery, getArenaAccountQuery, getArenaTeamQuery, getHeroesQuery, getAccountFixedLenQuery, getAccountVariableLenQuery, getUndefinedKeysQuery };
+function getEventsQuery(accountAdrs: string) {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([], [addAddressPadding(accountAdrs)], "VariableLen").build())
+  .includeHashedKeys()
+}
+
+function getEventsFromTxHashQuery(txHash: string) {
+  return new ToriiQueryBuilder()
+  .withClause(KeysClause([], [txHash], "VariableLen").build())
+  .includeHashedKeys()
+}
+
+export { getQueryPlayer, getGlobalQuestsQuery, getAccountQuestsQuery, getConfigQuery, getAccountQuery, getRunesQuery, getMapProgressQuery, getArenaAccountQuery, getArenaTeamQuery, getHeroesQuery, getAccountFixedLenQuery, getAccountVariableLenQuery, getUndefinedKeysQuery, getEventsQuery, getEventsFromTxHashQuery };
