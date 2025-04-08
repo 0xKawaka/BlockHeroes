@@ -5,7 +5,7 @@ use starknet::ContractAddress;
 const levelZeroExperienceGiven: u32 = 100;
 const bonusExperiencePercentEnemyGivesPerLevel: u32 = 20;
 
-pub fn computeAndDistributeExperience(ref world: WorldStorage, owner: ContractAddress, heroesIndexes: Array<u32>, enemyLevels: @Array<u16>) {
+pub fn computeAndDistributeExperience(ref world: WorldStorage, owner: ContractAddress, heroesIndexes: Array<u32>, enemyLevels: @Array<u16>, battleId: u32) {
     let totalExperience = computeExperienceAmount(enemyLevels);
     let experiencePerHero = totalExperience / heroesIndexes.len();
     let mut i: u32 = 0;
@@ -14,7 +14,7 @@ pub fn computeAndDistributeExperience(ref world: WorldStorage, owner: ContractAd
             break;
         }
         println!("Adding {} experience to hero {}", experiencePerHero, *heroesIndexes[i]);
-        AccountsImpl::addExperienceToHeroId(ref world, owner, *heroesIndexes[i], experiencePerHero);
+        AccountsImpl::addExperienceToHeroId(ref world, owner, *heroesIndexes[i], experiencePerHero, battleId);
         i += 1;
     };
 }

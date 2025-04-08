@@ -7,6 +7,7 @@ pub struct BattleStorage {
     pub owner: ContractAddress,
     #[key]
     pub map: u16,
+    pub battleId: u32,
     pub level: u16,
     pub entitiesCount: u32,
     pub aliveEntitiesCount: u32,

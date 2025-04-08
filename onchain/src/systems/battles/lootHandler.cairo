@@ -9,7 +9,7 @@ const baseCrystalsGivenPerEnemy: u32 = 200;
 const crystalsBonusPercentPerLevel: u32 = 20;
 const runeLootChance: u32 = 10;
 
-pub fn computeAndDistributeLoot(ref world: WorldStorage, owner: ContractAddress, enemyLevels: @Array<u16>) {
+pub fn computeAndDistributeLoot(ref world: WorldStorage, owner: ContractAddress, battleId: u32, enemyLevels: @Array<u16>) {
     let mut totalLevel: u32 = 0;
     let mut i: u32 = 0;
     let enemiesLen = enemyLevels.len();
@@ -28,6 +28,7 @@ pub fn computeAndDistributeLoot(ref world: WorldStorage, owner: ContractAddress,
     }
     world.emit_event(@Loot {
         owner: owner,
+        battleId: battleId,
         crystals: crystals,
     });
 }

@@ -27,7 +27,7 @@ pub fn new(id: u32, name: felt252, level: u16, rank: u16) -> Hero {
 }
 
 pub trait HeroTrait {
-    fn gainExperience(ref self: Hero,  ref world: WorldStorage, experience: u32, owner: ContractAddress);
+    fn gainExperience(ref self: Hero,  ref world: WorldStorage, experience: u32, owner: ContractAddress, battleId: u32);
     fn equipRune(ref self: Hero, ref rune: Rune);
     fn unequipRune(ref self: Hero, ref rune: Rune);
     fn getRunes(self: Hero) -> EquippedRunes;
@@ -40,7 +40,7 @@ pub trait HeroTrait {
 }
 
 pub impl HeroImpl of HeroTrait {
-    fn gainExperience(ref self: Hero, ref world: WorldStorage, experience: u32, owner: ContractAddress) {
+    fn gainExperience(ref self: Hero, ref world: WorldStorage, experience: u32, owner: ContractAddress, battleId: u32) {
         self.experience += experience;
         let mut requiredExperience = 0;
         // let previousLevel = self.level;
@@ -54,6 +54,7 @@ pub impl HeroImpl of HeroTrait {
         };
         world.emit_event(@ExperienceGain {
             owner: owner,
+            battleId: battleId,
             entityId: self.id,
             experienceGained: experience,
             levelAfter: self.level,

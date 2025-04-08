@@ -10,12 +10,13 @@ pub trait IAccounts {
     fn mintHero(ref world: WorldStorage, accountAdrs: ContractAddress);
     fn mintRune(ref world: WorldStorage, accountAdrs: ContractAddress);
     fn createAccount(ref world: WorldStorage, username: felt252, accountAdrs: ContractAddress);
-    fn addExperienceToHeroId(ref world: WorldStorage, accountAdrs: ContractAddress, heroId: u32, experience: u32);
+    fn addExperienceToHeroId(ref world: WorldStorage, accountAdrs: ContractAddress, heroId: u32, experience: u32, battleId: u32);
     fn increaseSummonChests(ref world: WorldStorage, accountAdrs: ContractAddress, summonChestsToAdd: u32);
     fn decreaseEnergy(ref world: WorldStorage, accountAdrs: ContractAddress, energyCost: u16);
     fn decreasePvpEnergy(ref world: WorldStorage, accountAdrs: ContractAddress, energyCost: u16);
     fn increaseCrystals(ref world: WorldStorage, accountAdrs: ContractAddress, crystalsToAdd: u32);
     fn decreaseCrystals(ref world: WorldStorage, accountAdrs: ContractAddress, crystalsToSub: u32);
+    fn incrementAndGetLastBattleId(ref world: WorldStorage, accountAdrs: ContractAddress) -> u32;
     fn getOwnedHeroesNames(ref world: WorldStorage, accountAdrs: ContractAddress) -> Array<felt252>;
     fn getAccount(ref world: WorldStorage, accountAdrs: ContractAddress) -> Account;
     fn getHero(ref world: WorldStorage, accountAdrs: ContractAddress, heroId: u32) -> Hero;
@@ -179,12 +180,12 @@ pub mod Accounts {
             world.write_model(@acc);
             world.write_model(@Usernames {username: username, owner: accountAdrs});
         }
-        fn addExperienceToHeroId(ref world: WorldStorage, accountAdrs: ContractAddress, heroId: u32, experience: u32) {
+        fn addExperienceToHeroId(ref world: WorldStorage, accountAdrs: ContractAddress, heroId: u32, experience: u32, battleId: u32) {
             let acc = Self::getAccount(ref world, accountAdrs);
             assert(acc.heroesCount > heroId, 'heroId out of range');
             let mut heroWrapper: Heroes = world.read_model((accountAdrs, heroId));
             let mut hero = heroWrapper.hero;
-            hero.gainExperience(ref world, experience, accountAdrs);
+            hero.gainExperience(ref world, experience, accountAdrs, battleId);
             world.write_model(@Heroes {owner: accountAdrs, index: heroId, hero: hero});
         }
         fn increaseSummonChests(ref world: WorldStorage, accountAdrs: ContractAddress, summonChestsToAdd: u32) {
@@ -218,6 +219,12 @@ pub mod Accounts {
             acc.decreaseCrystals(crystalsToSub);
             world.write_model(@acc);
         }
+        fn incrementAndGetLastBattleId(ref world: WorldStorage, accountAdrs: ContractAddress) -> u32 {
+            let mut acc = Self::getAccount(ref world, accountAdrs);
+            acc.lastBattleId += 1;
+            world.write_model(@acc);
+            return acc.lastBattleId;
+        }
         fn getOwnedHeroesNames(ref world: WorldStorage, accountAdrs: ContractAddress) -> Array<felt252> {
             let acc: Account = world.read_model(accountAdrs);
             let mut heroes: Array<felt252> = Default::default();
@@ -233,11 +240,9 @@ pub mod Accounts {
             };
             return heroes;
         }
-
-
         fn getAccount(ref world: WorldStorage, accountAdrs: ContractAddress) -> Account {
             let acc: Account = world.read_model(accountAdrs);
-            assert(acc.owner == accountAdrs, 'Account not created');
+            assert(acc.username != 0x0, 'Account not created');
             return acc;
         }
         fn getRune(ref world: WorldStorage, accountAdrs: ContractAddress, runeId: u32) -> Rune {
@@ -323,7 +328,7 @@ pub mod Accounts {
         }
         fn hasAccount(ref world: WorldStorage, accountAdrs: ContractAddress) {
             let acc: Account = world.read_model(accountAdrs);
-            assert(acc.username != 0x0, 'Account not found');
+            assert(acc.username != 0x0, 'Account not created');
         }
         fn isOwnerOfHeroes(ref world: WorldStorage, accountAdrs: ContractAddress, heroesIndexes: Span<u32>) -> bool {
             let acc: Account = world.read_model(accountAdrs);

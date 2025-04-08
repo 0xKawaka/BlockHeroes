@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useDojoSDK, useEntityId, useEntityQuery, useEventQuery, useModel, useModels } from '@dojoengine/sdk/react'
 import { WalletAccount } from '../dojo/wallet-account'
 import { Account, ModelsMapping, Runes } from '../dojo/generated/models.gen'
-import { getAccountFixedLenQuery, getAccountQuery, getAccountQuestsQuery, getAccountVariableLenQuery, getConfigQuery, getEventsFromTxHashQuery, getEventsQuery, getHeroesQuery, getMapProgressQuery, getRunesQuery, getUndefinedKeysQuery } from '../dojo/toriiQueries'
+import { getAccountFixedLenQuery, getAccountQuery, getAccountQuestsQuery, getAccountVariableLenQuery, getConfigQuery, getEventsQuery, getHeroesQuery, getMapProgressQuery, getRunesQuery, getUndefinedKeysQuery } from '../dojo/toriiQueries'
 import { maxPvpEnergy, maxEnergy } from '../GameDatas/constants'
 import AccountOverview from './Components/AccountOverview'
 import { extractValues, parseAccount, parseArenaAccountsByOwner, parseArenaTeamsByOwner, parseConfig, parseHeroes, parseHeroesByOwner, parseMapProgress, parseNewBattle, parseRunes } from '../dojo/parseTorii'
@@ -66,7 +66,7 @@ function GamePage() {
   const mapProgress = useMemo(() => parseMapProgress(mapProgressRaw), [mapProgressRaw]);
 
   const gameAccountRaw = useModel(playerEntityId, ModelsMapping.Account);
-  // console.log("gameAccountRaw", gameAccountRaw)
+  console.log("gameAccountRaw", gameAccountRaw)
   const gameAccount = useMemo(() => parseAccount(gameAccountRaw as Account), [gameAccountRaw]);
   const runesRaw = useModels("game-Runes");
   const parsedRunes = useMemo(() => parseRunes(runesRaw), [runesRaw]);

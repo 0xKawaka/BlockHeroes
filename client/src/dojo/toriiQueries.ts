@@ -22,13 +22,13 @@ function getAccountFixedLenQuery(accountAdrs: string) {
 function getAccountVariableLenQuery(accountAdrs: string) {
   return new ToriiQueryBuilder()
   .withClause(KeysClause([], [addAddressPadding(accountAdrs)], "VariableLen").build()).includeHashedKeys()
-  .withEntityModels(["game-AccountQuests", "game-MapProgress", "game-Runes"])
+  .withEntityModels(["game-AccountQuests", "game-MapProgress", "game-Runes", "game-Heroes"])
 }
 
 function getUndefinedKeysQuery() {
   return new ToriiQueryBuilder()
   .withClause(KeysClause([], [undefined], "VariableLen").build()).includeHashedKeys()
-  .withEntityModels(["game-Config", "game-GlobalQuests", "game-Heroes", "game-ArenaAccount", "game-ArenaTeam"])
+  .withEntityModels(["game-Config", "game-GlobalQuests", "game-ArenaAccount", "game-ArenaTeam"])
 }
 
 function getGlobalQuestsQuery() {
@@ -87,10 +87,4 @@ function getEventsQuery(accountAdrs: string) {
   .includeHashedKeys()
 }
 
-function getEventsFromTxHashQuery(txHash: string) {
-  return new ToriiQueryBuilder()
-  .withClause(KeysClause([], [txHash], "VariableLen").build())
-  .includeHashedKeys()
-}
-
-export { getQueryPlayer, getGlobalQuestsQuery, getAccountQuestsQuery, getConfigQuery, getAccountQuery, getRunesQuery, getMapProgressQuery, getArenaAccountQuery, getArenaTeamQuery, getHeroesQuery, getAccountFixedLenQuery, getAccountVariableLenQuery, getUndefinedKeysQuery, getEventsQuery, getEventsFromTxHashQuery };
+export { getQueryPlayer, getGlobalQuestsQuery, getAccountQuestsQuery, getConfigQuery, getAccountQuery, getRunesQuery, getMapProgressQuery, getArenaAccountQuery, getArenaTeamQuery, getHeroesQuery, getAccountFixedLenQuery, getAccountVariableLenQuery, getUndefinedKeysQuery, getEventsQuery };

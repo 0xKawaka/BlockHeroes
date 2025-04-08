@@ -128,6 +128,7 @@ pub impl EntityImpl of EntityTrait {
                     let skillEventParams = skill.cast(skillIndex, ref self, ref battle);
                     world.emit_event(@Skill {
                         owner: battle.owner,
+                        battleId: battle.battleId,
                         casterId: skillEventParams.casterId,
                         targetId: skillEventParams.targetId,
                         skillIndex: skillIndex,
@@ -149,6 +150,7 @@ pub impl EntityImpl of EntityTrait {
         let skillEventParams = skill.castOnTarget(skillIndex, ref self, ref target, ref battle);
         world.emit_event(@Skill {
             owner: battle.owner,
+            battleId: battle.battleId,
             casterId: skillEventParams.casterId,
             targetId: skillEventParams.targetId,
             skillIndex: skillIndex,
@@ -165,6 +167,7 @@ pub impl EntityImpl of EntityTrait {
         battle.entities.set(self.getIndex(), self);
         world.emit_event(@EndTurn {
             owner: battle.owner,
+            battleId: battle.battleId,
             buffs: battle.getEventBuffsArray(),
             status: battle.getEventStatusArray(),
             speeds: battle.getEventSpeedsArray(),

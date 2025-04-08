@@ -34,9 +34,10 @@ pub struct Battle {
     pub isVictory: bool,
     pub isWaitingForPlayerAction: bool,
     pub owner: ContractAddress,
+    pub battleId: u32,
 }
 
-pub fn new(entities: Array<Entity>, aliveEntities: Array<u32>, deadEntities: Array<u32>, turnTimeline: Array<u32>, allies: Array<u32>, enemies: Array<u32>, healthOnTurnProcs: Array<HealthOnTurnProc>, skillSets : Array<Array<Skill>>, isBattleOver: bool, isWaitingForPlayerAction: bool, owner: ContractAddress) -> Battle {
+pub fn new(entities: Array<Entity>, aliveEntities: Array<u32>, deadEntities: Array<u32>, turnTimeline: Array<u32>, allies: Array<u32>, enemies: Array<u32>, healthOnTurnProcs: Array<HealthOnTurnProc>, skillSets : Array<Array<Skill>>, isBattleOver: bool, isWaitingForPlayerAction: bool, owner: ContractAddress, battleId: u32) -> Battle {
 // fn new(entities: Array<Entity>, aliveEntities: Array<u32>, deadEntities: Array<u32>, turnTimeline: Array<u32>, allies: Array<u32>, enemies: Array<u32>, healthOnTurnProcs: Array<HealthOnTurnProc>, skillSets : Array<Array<Skill>>, alliesTauntingIndexes: Array<u32>, enemiesTauntingIndexes: Array<u32>, isBattleOver: bool, isWaitingForPlayerAction: bool, owner: ContractAddress) -> Battle {
     let alliesSpan = allies.span();
     let enemiesSpan = enemies.span();
@@ -58,6 +59,7 @@ pub fn new(entities: Array<Entity>, aliveEntities: Array<u32>, deadEntities: Arr
         isVictory: false,
         isWaitingForPlayerAction: isWaitingForPlayerAction,
         owner: owner,
+        battleId: battleId,
     };
     return battle;
 }
@@ -118,6 +120,7 @@ pub trait BattleTrait {
     fn getHealthsArray(ref self: Battle) -> Array<u64>;
     fn getEntityByIndex(ref self: Battle, entityIndex: u32) -> Entity;
     fn getOwner(self: Battle) -> ContractAddress;
+    fn getBattleId(self: Battle) -> u32;
     fn printAllEntities(ref self: Battle);
     fn printTurnTimeline(ref self: Battle);
     fn print(ref self: Battle);
@@ -184,6 +187,7 @@ pub impl BattleImpl of BattleTrait {
         };
         world.emit_event(@StartTurn {
             owner: self.owner,
+            battleId: self.battleId,
             entityId: entity.getIndex(),
             damages: damageArray,
             heals: healArray,
@@ -349,6 +353,7 @@ pub impl BattleImpl of BattleTrait {
             println!("All allies dead");
             world.emit_event(@EndBattle {
                 owner: self.owner,
+                battleId: self.battleId,
                 playerHasWon: false,
             });
             self.isBattleOver = true;
@@ -359,6 +364,7 @@ pub impl BattleImpl of BattleTrait {
             println!("All enemies dead");
             world.emit_event(@EndBattle {
                 owner: self.owner,
+                battleId: self.battleId,
                 playerHasWon: true,
             });
             self.isBattleOver = true;
@@ -758,6 +764,9 @@ pub impl BattleImpl of BattleTrait {
             println!("Entity speed : {}", entity.getSpeed());
             i = i + 1;
         };
+    }
+    fn getBattleId(self: Battle) -> u32 {
+        return self.battleId;
     }
     fn print(ref self: Battle) {
         self.printAllEntities();

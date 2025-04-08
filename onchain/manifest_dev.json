@@ -1312,8 +1312,8 @@
   },
   "contracts": [
     {
-      "address": "0x5d55cf9d853f7f47a37f193a463b5eec6108744c2c9e3dff6bf5b6dfe1d45f",
-      "class_hash": "0x29f4048738ea82459163a4cc2d0972bb34451b2b5dece251c4dd0a0451aae01",
+      "address": "0x4f34608cc185b41d38d878f9dba8cba04a04be277e5d5fae7c9e54b57add2ec",
+      "class_hash": "0x799747b04b4b8a71bffbb089ce104e51775010d8b158393187314b992cfdd06",
       "abi": [
         {
           "type": "impl",
@@ -1871,7 +1871,7 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x4fa47d9db5d7481060f53036e2cdbb60a12586cc410627d4ad5796b22246a60",
+      "class_hash": "0x7f27d381c860fea321a0d3bb32dbeceabe93c09b6f18af1fe1097f906934d15",
       "tag": "game-Account",
       "selector": "0x29dd3dd71ad696771fe0227c7286feb9670981fb138bcffd2800de6eb2436fc"
     },
@@ -1919,7 +1919,7 @@
     },
     {
       "members": [],
-      "class_hash": "0xdad1eaf3a36726ac1edf146dae375e7b0feb9639be206ea8216980af12d666",
+      "class_hash": "0x4092121b11803192a8f64fc8090e695a9826530fb17ba6df335a474713d0fc",
       "tag": "game-BattleStorage",
       "selector": "0x3e3288d7e3aaf4c6786e5fbcd39b61d29a8076fd407886720f7c96b567095a8"
     },
@@ -2053,31 +2053,19 @@
     },
     {
       "members": [],
-      "class_hash": "0x2b9cdcb022a1ddab50dbe3c87f3c898554c4ab27245afcac89526c39d243479",
-      "tag": "game-BuffEvent",
-      "selector": "0x6c47aeb9140f952643a9bd4292957a417ceece73555792052d700329f851fbb"
-    },
-    {
-      "members": [],
-      "class_hash": "0x18cba4e4a2764b4c17b23a09ed87e7474b4225cfb3c25c829e59830ab25115a",
+      "class_hash": "0x1842a385725252e73cdc7a9ac975f32a009c2ae83a8dc4bd94b54317b96a375",
       "tag": "game-EndBattle",
       "selector": "0x146f26749561afbd95f3e026190f5e1b21a8b1aaa33ca0b7fe94afc2b3187dc"
     },
     {
       "members": [],
-      "class_hash": "0x736605f04477a6bd416c47c32494de64b2df3b07f97d2753c585fedd5c57fc8",
+      "class_hash": "0x398abce870ae65ac5e3e4e724676b58de3c98160e39df439e8f9374fe89a1a",
       "tag": "game-EndTurn",
       "selector": "0x32655d86f85a6c0d4440669178a7cc0f3af034b1566d9729ede1af94be621a7"
     },
     {
       "members": [],
-      "class_hash": "0x78d34aa134e994891d9268f2d84be50dff08952e3dfea85c60d5a10138faae2",
-      "tag": "game-EntityBuffEvent",
-      "selector": "0x28cdac9339320f4dee4a61cf07ed38663e06b6198bb0577cb2e9c7be2a5e71"
-    },
-    {
-      "members": [],
-      "class_hash": "0x1fa53a1c668d1b8a8e6a951c2d021028dcbcb30f719d9cbfd641ee68b951d2f",
+      "class_hash": "0xa77bdda7a29b28b875a23ebfe7a2f4e795bf7335d2c2fda1a6abdb631d5f4f",
       "tag": "game-ExperienceGain",
       "selector": "0x2f69071a6da6586e23417ea21196c4a9bfc107d765f3012a878c960d09430d5"
     },
@@ -2089,19 +2077,13 @@
     },
     {
       "members": [],
-      "class_hash": "0x75c4fe035c5adace8162633bbfa39db37526959412d335f867aae8b5e5acd55",
-      "tag": "game-IdAndValue",
-      "selector": "0x720f3fbb74580b61d3118bc6f96b386ab3b20d1209d42b4949cdece448bf392"
-    },
-    {
-      "members": [],
       "class_hash": "0x70d155dc776068171061662629b8477bab131961fd9ebb4508e547ec56fc635",
       "tag": "game-InitArena",
       "selector": "0x66bd85003c9ccad845b9076b000e39b9c5ac0c6456b16a921274f4a11f23c6a"
     },
     {
       "members": [],
-      "class_hash": "0x5515c5623e1ec4407e556035782e73e7ea8eeb0471b5d1120e063ee21f1e97a",
+      "class_hash": "0x714bc115a7ef012069d3c41169e384c8cafb8dcf6500d4d85ec002cfcba1eeb",
       "tag": "game-Loot",
       "selector": "0x66cb9c470f0c2f8eb52063831913bc28a5d2cc0095ee008d9afa4729ef7ff00"
     },
@@ -2113,7 +2095,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x26868236ba4bbe54b49f1a9240906b58da0187b219e79f3a1fce6ebe0e2e0e2",
+      "class_hash": "0x2f8e290af525b2865461f28ae5eebdf481078f729d8e46617e9142de6e39aeb",
       "tag": "game-NewBattle",
       "selector": "0x21aceb8cab0621476df75e3efd66d07c4d790b6e2eb5c92d9150b3d3a2c6603"
     },
@@ -2143,13 +2125,13 @@
     },
     {
       "members": [],
-      "class_hash": "0x720f4448e07034832788b77520f630b08dd4e45428e3df05ef1e91accaf2634",
+      "class_hash": "0x5079456a57cec1f40fbfb940c0f443e6efabb441b57cbfc145b4cf52af1427c",
       "tag": "game-Skill",
       "selector": "0x5f54c1131e227c06bfd2efdb9cfcc29caa76c066d5cffa05383502e7b2b2735"
     },
     {
       "members": [],
-      "class_hash": "0x27694f0c3a4704f34de9024ca83d6ffdccf4a9cd50100fc550140f461174020",
+      "class_hash": "0xb9e49a9b26b859b7d53f581c8354b2d27ee63fc9401a0a8e6386093e796de2",
       "tag": "game-StartTurn",
       "selector": "0x6925ced2bed882a0dde1df155f98d4722cbd6b1ab353db7434904ca89d0355a"
     },
@@ -2164,12 +2146,6 @@
       "class_hash": "0x285430dd930e72bb67f872a9e60abc0178895e036eaf2092809063b82cba613",
       "tag": "game-TimestampPvpEnergy",
       "selector": "0x16d7a2ff0fe99f281c44903e5433dfb57d847f23583a7e515163a8f4572666b"
-    },
-    {
-      "members": [],
-      "class_hash": "0x6410ba01fb025084c4be1b91e137c45925b5ab31d5c5d262277289299d11331",
-      "tag": "game-TurnBarEvent",
-      "selector": "0x21fd46fab7f1871d740d993e56275884bc834f1a645894ae68f41a1e8f5c7bd"
     }
   ],
   "external_contracts": []

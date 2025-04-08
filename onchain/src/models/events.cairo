@@ -45,27 +45,26 @@ pub struct SkillEventParams {
     pub heals: Array<IdAndValue>,
 }
 
+#[derive(Drop, Serde, Introspect)]
+pub struct IdAndValue {
+    pub entityId: u32,
+    pub value: u64,
+}
+
 #[derive(Drop, Serde)]
 #[dojo::event]
 pub struct NewBattle {
     #[key]
     pub owner: ContractAddress,
+    #[key]
+    pub battleId: u32,
     pub healthsArray: Array<u64>,
 }
-#[derive(Copy, Drop, Serde)]
-#[dojo::event]
+#[derive(Copy, Drop, Serde, Introspect)]
 pub struct BuffEvent {
-    #[key]
     pub entityId: u32,
     pub name: felt252,
     pub duration: u8,
-}
-#[derive(Drop, Serde)]
-#[dojo::event]
-pub struct IdAndValue {
-    #[key]
-    pub entityId: u32,
-    pub value: u64,
 }
 
 #[derive(Drop, Serde)]
@@ -73,6 +72,9 @@ pub struct IdAndValue {
 pub struct Skill {
     #[key]
     pub owner: ContractAddress,
+    #[key]
+    pub battleId: u32,
+    #[key]
     pub casterId: u32,
     pub targetId: u32,
     pub skillIndex: u8,
@@ -86,23 +88,21 @@ pub struct Skill {
 pub struct EndTurn {
     #[key]
     pub owner: ContractAddress,
+    #[key]
+    pub battleId: u32,
     pub buffs: Array<BuffEvent>,
     pub status: Array<BuffEvent>,
     pub speeds: Array<IdAndValue>,
 }
 
-#[derive(Drop, Serde)]
-#[dojo::event]
+#[derive(Drop, Serde, Introspect)]
 pub struct TurnBarEvent {
-    #[key]
     pub entityId: u32,
     pub value: u64,
 }
 
-#[derive(Copy, Drop, Serde)]
-#[dojo::event]
+#[derive(Copy, Drop, Serde, Introspect)]
 pub struct EntityBuffEvent {
-    #[key]
     pub name: felt252,
     pub duration: u8,
 }
@@ -112,6 +112,9 @@ pub struct EntityBuffEvent {
 pub struct StartTurn {
     #[key]
     pub owner: ContractAddress,
+    #[key]
+    pub battleId: u32,
+    #[key]
     pub entityId: u32,
     pub damages: Array<u64>,
     pub heals: Array<u64>,
@@ -125,6 +128,8 @@ pub struct StartTurn {
 pub struct EndBattle {
     #[key]
     pub owner: ContractAddress,
+    #[key]
+    pub battleId: u32,
     pub playerHasWon: bool,
 }
 
@@ -133,6 +138,8 @@ pub struct EndBattle {
 pub struct Loot {
     #[key]
     pub owner: ContractAddress,
+    #[key]
+    pub battleId: u32,
     pub crystals: u32,
 }
 
@@ -141,6 +148,9 @@ pub struct Loot {
 pub struct ExperienceGain {
     #[key]
     pub owner: ContractAddress,
+    #[key]
+    pub battleId: u32,
+    #[key]
     pub entityId: u32,
     pub experienceGained: u32,
     pub levelAfter: u16,

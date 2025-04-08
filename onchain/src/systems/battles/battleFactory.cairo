@@ -11,8 +11,8 @@ pub mod BattleFactory {
 
 
     pub trait IBattleFactory {
-        fn getBattle(ref world: WorldStorage, owner: ContractAddress, map: u16) -> Battle;
-        fn newBattleFromBattleInfos(ref world: WorldStorage, owner: ContractAddress, map: u16, entitiesCount: u32, isWaitingForPlayerAction: bool) -> Battle;
+        fn getBattle(ref world: WorldStorage, owner: ContractAddress, battleId: u32, map: u16) -> Battle;
+        fn newBattleFromBattleInfos(ref world: WorldStorage, owner: ContractAddress, battleId: u32, map: u16, entitiesCount: u32, isWaitingForPlayerAction: bool) -> Battle;
         fn getAlliesAndEnemies(ref world: WorldStorage, owner: ContractAddress, entities: Span<Entity>) -> (Array<u32>, Array<u32>);
         fn getAlivesAndDeadEntities(ref world: WorldStorage, owner: ContractAddress, entities: Span<Entity>) -> (Array<u32>, Array<u32>);
         fn getEntities(ref world: WorldStorage, owner: ContractAddress, map: u16, entitiesCount: u32) -> Array<Entity>;
@@ -20,11 +20,11 @@ pub mod BattleFactory {
     }
 
     pub impl BattleFactoryImpl of IBattleFactory {
-        fn getBattle(ref world: WorldStorage, owner: ContractAddress, map: u16) -> Battle {
+        fn getBattle(ref world: WorldStorage, owner: ContractAddress, battleId: u32, map: u16) -> Battle {
             let battleInfos: BattleStorage = world.read_model((owner, map));
-            return Self::newBattleFromBattleInfos(ref world, owner, map, battleInfos.entitiesCount, battleInfos.isWaitingForPlayerAction);
+            return Self::newBattleFromBattleInfos(ref world, owner, battleId, map, battleInfos.entitiesCount, battleInfos.isWaitingForPlayerAction);
         }
-        fn newBattleFromBattleInfos(ref world: WorldStorage, owner: ContractAddress, map: u16, entitiesCount: u32, isWaitingForPlayerAction: bool) -> Battle {
+        fn newBattleFromBattleInfos(ref world: WorldStorage, owner: ContractAddress, battleId: u32, map: u16, entitiesCount: u32, isWaitingForPlayerAction: bool) -> Battle {
             let entitiesArray = Self::getEntities(ref world, owner, map, entitiesCount);
             let entities = entitiesArray.span();
             let (aliveEntities, deadEntities) = Self::getAlivesAndDeadEntities(ref world, owner, entities);
@@ -42,7 +42,7 @@ pub mod BattleFactory {
                 i += 1;
             };
             let skillSets = SkillFactoryImpl::getSkillSets(ref world, entitiesNames);
-            let battle = battle::new(entitiesArray, aliveEntities, deadEntities, turnTimeline, allies, enemies, healthOnTurnProcs, skillSets, false, isWaitingForPlayerAction, owner);
+            let battle = battle::new(entitiesArray, aliveEntities, deadEntities, turnTimeline, allies, enemies, healthOnTurnProcs, skillSets, false, isWaitingForPlayerAction, owner, battleId);
             return battle;
 
         }

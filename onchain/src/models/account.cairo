@@ -26,6 +26,7 @@ pub struct Account {
     pub runesCount: u32,
     pub heroesCount: u32,
     pub summonChests: u32,
+    pub lastBattleId: u32,
 }
 
 
@@ -54,6 +55,7 @@ pub fn new(username: felt252, owner: ContractAddress, ref world: WorldStorage) -
         runesCount: 0,
         heroesCount: 0,
         summonChests: startingSummonChests,
+        lastBattleId: 0,
     }
 }
 

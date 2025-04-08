@@ -15,6 +15,7 @@ export interface Account {
 	runesCount: BigNumberish;
 	heroesCount: BigNumberish;
 	summonChests: BigNumberish;
+	lastBattleId: BigNumberish;
 }
 
 // Type definition for `game::models::account::AccountValue` struct
@@ -29,6 +30,7 @@ export interface AccountValue {
 	runesCount: BigNumberish;
 	heroesCount: BigNumberish;
 	summonChests: BigNumberish;
+	lastBattleId: BigNumberish;
 }
 
 // Type definition for `game::models::account::heroes::Heroes` struct
@@ -303,6 +305,7 @@ export interface ArenaBattleStorageValue {
 export interface BattleStorage {
 	owner: string;
 	map: BigNumberish;
+	battleId: BigNumberish;
 	level: BigNumberish;
 	entitiesCount: BigNumberish;
 	aliveEntitiesCount: BigNumberish;
@@ -312,6 +315,7 @@ export interface BattleStorage {
 
 // Type definition for `game::models::storage::battles::battleStorage::BattleStorageValue` struct
 export interface BattleStorageValue {
+	battleId: BigNumberish;
 	level: BigNumberish;
 	entitiesCount: BigNumberish;
 	aliveEntitiesCount: BigNumberish;
@@ -570,15 +574,10 @@ export interface BuffEvent {
 	duration: BigNumberish;
 }
 
-// Type definition for `game::models::events::BuffEventValue` struct
-export interface BuffEventValue {
-	name: BigNumberish;
-	duration: BigNumberish;
-}
-
 // Type definition for `game::models::events::EndBattle` struct
 export interface EndBattle {
 	owner: string;
+	battleId: BigNumberish;
 	playerHasWon: boolean;
 }
 
@@ -590,6 +589,7 @@ export interface EndBattleValue {
 // Type definition for `game::models::events::EndTurn` struct
 export interface EndTurn {
 	owner: string;
+	battleId: BigNumberish;
 	buffs: Array<BuffEvent>;
 	status: Array<BuffEvent>;
 	speeds: Array<IdAndValue>;
@@ -608,14 +608,10 @@ export interface EntityBuffEvent {
 	duration: BigNumberish;
 }
 
-// Type definition for `game::models::events::EntityBuffEventValue` struct
-export interface EntityBuffEventValue {
-	duration: BigNumberish;
-}
-
 // Type definition for `game::models::events::ExperienceGain` struct
 export interface ExperienceGain {
 	owner: string;
+	battleId: BigNumberish;
 	entityId: BigNumberish;
 	experienceGained: BigNumberish;
 	levelAfter: BigNumberish;
@@ -624,7 +620,6 @@ export interface ExperienceGain {
 
 // Type definition for `game::models::events::ExperienceGainValue` struct
 export interface ExperienceGainValue {
-	entityId: BigNumberish;
 	experienceGained: BigNumberish;
 	levelAfter: BigNumberish;
 	experienceAfter: BigNumberish;
@@ -649,11 +644,6 @@ export interface IdAndValue {
 	value: BigNumberish;
 }
 
-// Type definition for `game::models::events::IdAndValueValue` struct
-export interface IdAndValueValue {
-	value: BigNumberish;
-}
-
 // Type definition for `game::models::events::InitArena` struct
 export interface InitArena {
 	owner: string;
@@ -670,6 +660,7 @@ export interface InitArenaValue {
 // Type definition for `game::models::events::Loot` struct
 export interface Loot {
 	owner: string;
+	battleId: BigNumberish;
 	crystals: BigNumberish;
 }
 
@@ -692,6 +683,7 @@ export interface NewAccountValue {
 // Type definition for `game::models::events::NewBattle` struct
 export interface NewBattle {
 	owner: string;
+	battleId: BigNumberish;
 	healthsArray: Array<BigNumberish>;
 }
 
@@ -757,6 +749,7 @@ export interface RuneUpgradedValue {
 // Type definition for `game::models::events::Skill` struct
 export interface Skill {
 	owner: string;
+	battleId: BigNumberish;
 	casterId: BigNumberish;
 	targetId: BigNumberish;
 	skillIndex: BigNumberish;
@@ -767,7 +760,6 @@ export interface Skill {
 
 // Type definition for `game::models::events::SkillValue` struct
 export interface SkillValue {
-	casterId: BigNumberish;
 	targetId: BigNumberish;
 	skillIndex: BigNumberish;
 	damages: Array<IdAndValue>;
@@ -778,6 +770,7 @@ export interface SkillValue {
 // Type definition for `game::models::events::StartTurn` struct
 export interface StartTurn {
 	owner: string;
+	battleId: BigNumberish;
 	entityId: BigNumberish;
 	damages: Array<BigNumberish>;
 	heals: Array<BigNumberish>;
@@ -788,7 +781,6 @@ export interface StartTurn {
 
 // Type definition for `game::models::events::StartTurnValue` struct
 export interface StartTurnValue {
-	entityId: BigNumberish;
 	damages: Array<BigNumberish>;
 	heals: Array<BigNumberish>;
 	buffs: Array<EntityBuffEvent>;
@@ -818,115 +810,115 @@ export interface TimestampPvpEnergyValue {
 	timestamp: BigNumberish;
 }
 
-// Type definition for `game::models::events::TurnBarEvent` struct
-export interface TurnBarEvent {
-	entityId: BigNumberish;
-	value: BigNumberish;
-}
-
-// Type definition for `game::models::events::TurnBarEventValue` struct
-export interface TurnBarEventValue {
-	value: BigNumberish;
-}
-
 // Type definition for `game::models::battle::entity::AllyOrEnemy` enum
-export type AllyOrEnemy = {
-	Ally: string;
-	Enemy: string;
-}
+export const allyOrEnemy = [
+	'Ally',
+	'Enemy',
+] as const;
+export type AllyOrEnemy = { [key in typeof allyOrEnemy[number]]: string };
 export type AllyOrEnemyEnum = CairoCustomEnum;
 
 // Type definition for `game::models::battle::entity::healthOnTurnProc::DamageOrHealEnum` enum
-export type DamageOrHealEnum = {
-	Damage: string;
-	Heal: string;
-}
+export const damageOrHealEnum = [
+	'Damage',
+	'Heal',
+] as const;
+export type DamageOrHealEnum = { [key in typeof damageOrHealEnum[number]]: string };
 export type DamageOrHealEnumEnum = CairoCustomEnum;
 
 // Type definition for `game::models::battle::entity::skill::TargetType` enum
-export type TargetType = {
-	Ally: string;
-	Enemy: string;
-}
+export const targetType = [
+	'Ally',
+	'Enemy',
+] as const;
+export type TargetType = { [key in typeof targetType[number]]: string };
 export type TargetTypeEnum = CairoCustomEnum;
 
 // Type definition for `game::models::battle::entity::skill::buff::BuffType` enum
-export type BuffType = {
-	SpeedUp: string;
-	SpeedDown: string;
-	AttackUp: string;
-	AttackDown: string;
-	DefenseUp: string;
-	DefenseDown: string;
-	Poison: string;
-	Regen: string;
-	Stun: string;
-}
+export const buffType = [
+	'SpeedUp',
+	'SpeedDown',
+	'AttackUp',
+	'AttackDown',
+	'DefenseUp',
+	'DefenseDown',
+	'Poison',
+	'Regen',
+	'Stun',
+] as const;
+export type BuffType = { [key in typeof buffType[number]]: string };
 export type BuffTypeEnum = CairoCustomEnum;
 
 // Type definition for `game::models::battle::entity::skill::damage::DamageType` enum
-export type DamageType = {
-	Flat: string;
-	Percent: string;
-}
+export const damageType = [
+	'Flat',
+	'Percent',
+] as const;
+export type DamageType = { [key in typeof damageType[number]]: string };
 export type DamageTypeEnum = CairoCustomEnum;
 
 // Type definition for `game::models::battle::entity::skill::heal::HealType` enum
-export type HealType = {
-	Flat: string;
-	Percent: string;
-}
+export const healType = [
+	'Flat',
+	'Percent',
+] as const;
+export type HealType = { [key in typeof healType[number]]: string };
 export type HealTypeEnum = CairoCustomEnum;
 
 // Type definition for `game::models::hero::rune::RuneRarity` enum
-export type RuneRarity = {
-	Common: string;
-	Uncommon: string;
-	Rare: string;
-	Epic: string;
-	Legendary: string;
-}
+export const runeRarity = [
+	'Common',
+	'Uncommon',
+	'Rare',
+	'Epic',
+	'Legendary',
+] as const;
+export type RuneRarity = { [key in typeof runeRarity[number]]: string };
 export type RuneRarityEnum = CairoCustomEnum;
 
 // Type definition for `game::models::hero::rune::RuneStatistic` enum
-export type RuneStatistic = {
-	Health: string;
-	Attack: string;
-	Defense: string;
-	Speed: string;
-}
+export const runeStatistic = [
+	'Health',
+	'Attack',
+	'Defense',
+	'Speed',
+] as const;
+export type RuneStatistic = { [key in typeof runeStatistic[number]]: string };
 export type RuneStatisticEnum = CairoCustomEnum;
 
 // Type definition for `game::models::hero::rune::RuneType` enum
-export type RuneType = {
-	First: string;
-	Second: string;
-	Third: string;
-	Fourth: string;
-	Fifth: string;
-	Sixth: string;
-}
+export const runeType = [
+	'First',
+	'Second',
+	'Third',
+	'Fourth',
+	'Fifth',
+	'Sixth',
+] as const;
+export type RuneType = { [key in typeof runeType[number]]: string };
 export type RuneTypeEnum = CairoCustomEnum;
 
 // Type definition for `game::models::storage::config::ConfigType` enum
-export type ConfigType = {
-	TimeTickEnergy: string;
-	TimeTickPvpEnergy: string;
-	MaxEnergy: string;
-	MaxPvpEnergy: string;
-	StartingCrystals: string;
-	StartingGems: string;
-	StartingSummonChests: string;
-	TotalHeroesCount: string;
-}
+export const configType = [
+	'TimeTickEnergy',
+	'TimeTickPvpEnergy',
+	'MaxEnergy',
+	'MaxPvpEnergy',
+	'StartingCrystals',
+	'StartingGems',
+	'StartingSummonChests',
+	'TotalHeroesCount',
+] as const;
+export type ConfigType = { [key in typeof configType[number]]: string };
 export type ConfigTypeEnum = CairoCustomEnum;
 
 // Type definition for `game::models::storage::quest::rewardType::RewardType` enum
-export type RewardType = {
-	Summon: string;
-	Rune: string;
-	Crystals: string;
-}
+export const rewardType = [
+	'Summon',
+	'Rune',
+	'Crystals',
+] as const;
+export type RewardType = { [key in typeof rewardType[number]]: string };
 export type RewardTypeEnum = CairoCustomEnum;
 
 export interface SchemaType extends ISchemaType {
@@ -1008,19 +1000,16 @@ export interface SchemaType extends ISchemaType {
 		ArenaDefense: ArenaDefense,
 		ArenaDefenseValue: ArenaDefenseValue,
 		BuffEvent: BuffEvent,
-		BuffEventValue: BuffEventValue,
 		EndBattle: EndBattle,
 		EndBattleValue: EndBattleValue,
 		EndTurn: EndTurn,
 		EndTurnValue: EndTurnValue,
 		EntityBuffEvent: EntityBuffEvent,
-		EntityBuffEventValue: EntityBuffEventValue,
 		ExperienceGain: ExperienceGain,
 		ExperienceGainValue: ExperienceGainValue,
 		HeroMinted: HeroMinted,
 		HeroMintedValue: HeroMintedValue,
 		IdAndValue: IdAndValue,
-		IdAndValueValue: IdAndValueValue,
 		InitArena: InitArena,
 		InitArenaValue: InitArenaValue,
 		Loot: Loot,
@@ -1045,8 +1034,6 @@ export interface SchemaType extends ISchemaType {
 		TimestampEnergyValue: TimestampEnergyValue,
 		TimestampPvpEnergy: TimestampPvpEnergy,
 		TimestampPvpEnergyValue: TimestampPvpEnergyValue,
-		TurnBarEvent: TurnBarEvent,
-		TurnBarEventValue: TurnBarEventValue,
 	},
 }
 export const schema: SchemaType = {
@@ -1063,6 +1050,7 @@ export const schema: SchemaType = {
 			runesCount: 0,
 			heroesCount: 0,
 			summonChests: 0,
+			lastBattleId: 0,
 		},
 		AccountValue: {
 			username: 0,
@@ -1075,6 +1063,7 @@ export const schema: SchemaType = {
 			runesCount: 0,
 			heroesCount: 0,
 			summonChests: 0,
+			lastBattleId: 0,
 		},
 		Heroes: {
 			owner: "",
@@ -1391,6 +1380,7 @@ export const schema: SchemaType = {
 		BattleStorage: {
 			owner: "",
 			map: 0,
+			battleId: 0,
 			level: 0,
 			entitiesCount: 0,
 			aliveEntitiesCount: 0,
@@ -1398,6 +1388,7 @@ export const schema: SchemaType = {
 			isWaitingForPlayerAction: false,
 		},
 		BattleStorageValue: {
+			battleId: 0,
 			level: 0,
 			entitiesCount: 0,
 			aliveEntitiesCount: 0,
@@ -1649,12 +1640,9 @@ export const schema: SchemaType = {
 			name: 0,
 			duration: 0,
 		},
-		BuffEventValue: {
-			name: 0,
-			duration: 0,
-		},
 		EndBattle: {
 			owner: "",
+			battleId: 0,
 			playerHasWon: false,
 		},
 		EndBattleValue: {
@@ -1662,6 +1650,7 @@ export const schema: SchemaType = {
 		},
 		EndTurn: {
 			owner: "",
+			battleId: 0,
 			buffs: [{ entityId: 0, name: 0, duration: 0, }],
 			status: [{ entityId: 0, name: 0, duration: 0, }],
 			speeds: [{ entityId: 0, value: 0, }],
@@ -1675,18 +1664,15 @@ export const schema: SchemaType = {
 			name: 0,
 			duration: 0,
 		},
-		EntityBuffEventValue: {
-			duration: 0,
-		},
 		ExperienceGain: {
 			owner: "",
+			battleId: 0,
 			entityId: 0,
 			experienceGained: 0,
 			levelAfter: 0,
 			experienceAfter: 0,
 		},
 		ExperienceGainValue: {
-			entityId: 0,
 			experienceGained: 0,
 			levelAfter: 0,
 			experienceAfter: 0,
@@ -1704,9 +1690,6 @@ export const schema: SchemaType = {
 			entityId: 0,
 			value: 0,
 		},
-		IdAndValueValue: {
-			value: 0,
-		},
 		InitArena: {
 			owner: "",
 			rank: 0,
@@ -1718,6 +1701,7 @@ export const schema: SchemaType = {
 		},
 		Loot: {
 			owner: "",
+			battleId: 0,
 			crystals: 0,
 		},
 		LootValue: {
@@ -1732,6 +1716,7 @@ export const schema: SchemaType = {
 		},
 		NewBattle: {
 			owner: "",
+			battleId: 0,
 			healthsArray: [0],
 		},
 		NewBattleValue: {
@@ -1839,6 +1824,7 @@ export const schema: SchemaType = {
 		},
 		Skill: {
 			owner: "",
+			battleId: 0,
 			casterId: 0,
 			targetId: 0,
 			skillIndex: 0,
@@ -1847,7 +1833,6 @@ export const schema: SchemaType = {
 			deaths: [0],
 		},
 		SkillValue: {
-			casterId: 0,
 			targetId: 0,
 			skillIndex: 0,
 			damages: [{ entityId: 0, value: 0, }],
@@ -1856,6 +1841,7 @@ export const schema: SchemaType = {
 		},
 		StartTurn: {
 			owner: "",
+			battleId: 0,
 			entityId: 0,
 			damages: [0],
 			heals: [0],
@@ -1864,7 +1850,6 @@ export const schema: SchemaType = {
 			isDead: false,
 		},
 		StartTurnValue: {
-			entityId: 0,
 			damages: [0],
 			heals: [0],
 			buffs: [{ name: 0, duration: 0, }],
@@ -1884,13 +1869,6 @@ export const schema: SchemaType = {
 		},
 		TimestampPvpEnergyValue: {
 			timestamp: 0,
-		},
-		TurnBarEvent: {
-			entityId: 0,
-			value: 0,
-		},
-		TurnBarEventValue: {
-			value: 0,
 		},
 	},
 };
@@ -1983,19 +1961,16 @@ export enum ModelsMapping {
 	ArenaDefense = 'game-ArenaDefense',
 	ArenaDefenseValue = 'game-ArenaDefenseValue',
 	BuffEvent = 'game-BuffEvent',
-	BuffEventValue = 'game-BuffEventValue',
 	EndBattle = 'game-EndBattle',
 	EndBattleValue = 'game-EndBattleValue',
 	EndTurn = 'game-EndTurn',
 	EndTurnValue = 'game-EndTurnValue',
 	EntityBuffEvent = 'game-EntityBuffEvent',
-	EntityBuffEventValue = 'game-EntityBuffEventValue',
 	ExperienceGain = 'game-ExperienceGain',
 	ExperienceGainValue = 'game-ExperienceGainValue',
 	HeroMinted = 'game-HeroMinted',
 	HeroMintedValue = 'game-HeroMintedValue',
 	IdAndValue = 'game-IdAndValue',
-	IdAndValueValue = 'game-IdAndValueValue',
 	InitArena = 'game-InitArena',
 	InitArenaValue = 'game-InitArenaValue',
 	Loot = 'game-Loot',
@@ -2020,6 +1995,4 @@ export enum ModelsMapping {
 	TimestampEnergyValue = 'game-TimestampEnergyValue',
 	TimestampPvpEnergy = 'game-TimestampPvpEnergy',
 	TimestampPvpEnergyValue = 'game-TimestampPvpEnergyValue',
-	TurnBarEvent = 'game-TurnBarEvent',
-	TurnBarEventValue = 'game-TurnBarEventValue',
 }
